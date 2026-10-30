@@ -2,1024 +2,276 @@
 <html lang="ar" dir="rtl">
 <head>
 <meta charset="utf-8">
+<title>النجاة</title>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>الرماد الأخير — The Last Ash</title>
 <style>
-:root{
-  --bg:#050403;--panel:#0f0b08;--panel2:#18110c;--line:#281f15;
-  --ink:#f5ebd9;--dim:#9e876a;--amber:#d49742;--red:#a8382e;
-  --sand:#c9a227;--blue:#4a7c8c;--green:#5a8a3a;--violet:#7a5c8a;
-}
+:root{--bg:#f4efe6;--fg:#2a2118;--card:#fff;--mut:#7a6a58;--ac:#b5541c;--bd:#d9cdbb;color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#15110d;--fg:#eee4d4;--card:#221b14;--mut:#a39482;--ac:#e0813f;--bd:#3a2f24;color-scheme:dark}}
 *{box-sizing:border-box}
-html,body{height:100%}
-body{
-  margin:0;background:radial-gradient(circle at 50% -20%,#241609 0%,#050403 60%);
-  color:var(--ink);font-family:"Segoe UI",Tahoma,"Noto Naskh Arabic",system-ui,sans-serif;
-  display:flex;justify-content:center;padding:14px 12px 70px;
-  -webkit-font-smoothing:antialiased;overflow-x:hidden;
-}
-#particles{position:fixed;inset:0;pointer-events:none;z-index:1;overflow:hidden}
-.particle{position:absolute;width:2px;height:2px;background:var(--amber);border-radius:50%;opacity:0;animation:fall linear infinite;box-shadow:0 0 3px var(--amber)}
-@keyframes fall{0%{transform:translateY(-20px);opacity:0}10%{opacity:.4}90%{opacity:.2}100%{transform:translateY(100vh) translateX(30px);opacity:0}}
-#app{width:100%;max-width:820px;position:relative;z-index:2}
-
-#topbar{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;gap:6px;flex-wrap:wrap}
-#chapterLabel{font-size:11px;letter-spacing:2px;color:var(--amber);font-weight:700;padding:6px 12px;background:linear-gradient(180deg,#1e1610,#14100c);border:1px solid var(--line);border-radius:20px;white-space:nowrap}
-#controls{display:flex;gap:5px;flex-wrap:wrap}
-#controls button{background:linear-gradient(180deg,#1c1610,#14100c);color:var(--ink);border:1px solid var(--line);border-radius:8px;padding:6px 9px;font-size:11px;cursor:pointer;font-family:inherit;transition:all .15s}
-#controls button:hover{border-color:var(--amber);background:#241a12}
-#controls button.off{opacity:.45}
-
-#hud{display:grid;grid-template-columns:repeat(5,1fr);gap:5px;margin-bottom:10px}
-@media(max-width:560px){#hud{grid-template-columns:repeat(3,1fr)}}
-.chip{background:linear-gradient(180deg,var(--panel2),var(--panel));border:1px solid var(--line);border-radius:9px;padding:6px 7px;display:flex;flex-direction:column;gap:3px;min-width:0;transition:all .3s}
-.chip.crit{border-color:var(--red);animation:pulse 1.3s infinite}
-@keyframes pulse{0%,100%{box-shadow:0 0 0 0 rgba(168,56,46,.4)}50%{box-shadow:0 0 0 6px rgba(168,56,46,0)}}
-.chip .lbl{font-size:9px;color:var(--dim);letter-spacing:.3px}
-.chip .val{font-size:12px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.bar{height:4px;background:#1f1812;border-radius:99px;overflow:hidden;margin-top:2px}
-.bar i{display:block;height:100%;border-radius:99px;transition:width .55s ease}
-
-#worldMap{background:#0b0806;border:1px solid var(--line);border-radius:10px;padding:8px 10px;margin-bottom:10px;display:flex;align-items:center;justify-content:space-between;gap:4px;overflow-x:auto}
-.map-node{font-size:10px;color:var(--dim);display:flex;align-items:center;gap:3px;white-space:nowrap}
-.map-node.active{color:var(--amber);font-weight:700;text-shadow:0 0 6px rgba(212,151,66,.4)}
-.map-line{flex:1;height:1px;background:var(--line);min-width:8px}
-
-.card{background:var(--panel);border:1px solid var(--line);border-radius:14px;overflow:hidden;margin-bottom:12px;box-shadow:0 18px 55px rgba(0,0,0,.6)}
-#sceneImg{width:100%;height:200px;position:relative;border-bottom:1px solid var(--line);overflow:hidden;transition:background 1.1s ease}
-#sceneImg::after{content:'';position:absolute;inset:0;background:linear-gradient(180deg,transparent 55%,rgba(0,0,0,.65))}
-#sceneImg .mood-icon{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-size:54px;opacity:.42;filter:blur(1px);animation:float 4s ease-in-out infinite}
-@keyframes float{0%,100%{transform:translate(-50%,-50%)}50%{transform:translate(-50%,-56%)}}
-@media(max-width:520px){#sceneImg{height:150px}.mood-icon{font-size:38px}}
-.avatar{position:absolute;bottom:10px;right:12px;width:46px;height:46px;background:linear-gradient(135deg,#2a1a10,#1a1008);border:2px solid var(--amber);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:22px;z-index:2}
-.card-body{padding:22px 20px}
-#scene{line-height:2.15;font-size:15.5px;min-height:90px}
-#scene p{margin:0 0 15px;opacity:0;transform:translateY(6px);transition:all .5s ease}
-#scene p:last-child{margin-bottom:0}
-.speaker{color:var(--amber);font-weight:700}
-.hl{color:var(--sand);font-weight:600}
-.warn-txt{color:var(--red);font-weight:600}
-.thought{display:block;background:rgba(122,92,138,.08);border-right:2px solid var(--violet);padding:8px 12px;border-radius:0 6px 6px 0;font-style:italic;color:#b8a8c8;font-size:13.5px;margin:8px 0}
-[dir="ltr"] .thought{border-right:none;border-left:2px solid var(--violet);border-radius:6px 0 0 6px}
-.fact{background:rgba(74,124,140,.06);border-right:2px solid var(--blue);padding:8px 12px;border-radius:0 6px 6px 0;font-size:12.5px;color:#9ab8c8;margin:10px 0;line-height:1.8}
-[dir="ltr"] .fact{border-right:none;border-left:2px solid var(--blue);border-radius:6px 0 0 6px}
-
-#choices{display:flex;flex-direction:column;gap:8px}
-.choice{width:100%;text-align:right;cursor:pointer;background:linear-gradient(180deg,#1c1610,#14100c);color:var(--ink);border:1px solid var(--line);border-radius:11px;padding:13px 15px;font-size:14.5px;font-family:inherit;line-height:1.6;transition:all .2s;display:flex;align-items:center;gap:10px}
-[dir="ltr"] .choice{text-align:left}
-.choice:hover{background:linear-gradient(180deg,#281e15,#1b140f);border-color:var(--amber);transform:translateX(-3px)}
-[dir="ltr"] .choice:hover{transform:translateX(3px)}
-.choice .bullet{flex:0 0 auto;width:7px;height:7px;border-radius:50%;background:var(--amber);opacity:.8}
-.choice .preview{font-size:10.5px;color:var(--dim);margin-right:auto;padding-right:6px;display:none}
-[dir="ltr"] .choice .preview{margin-right:0;margin-left:auto;padding-right:0;padding-left:6px}
-.choice:hover .preview{display:inline}
-.choice.req{opacity:.5;cursor:not-allowed}
-
-#companionDisplay{margin-bottom:10px;display:none}
-.companion-box{background:#130e0a;border:1px solid var(--amber);border-radius:9px;padding:10px 12px;display:flex;align-items:center;gap:10px;font-size:12.5px;color:var(--sand)}
-.companion-box.wounded{border-color:var(--red);color:#e0a8a8}
-.companion-box span{font-size:18px}
-.companion-box .status{font-size:10.5px;color:var(--dim);margin-top:2px}
-
-#chapterBanner{position:fixed;inset:0;background:rgba(5,4,3,.95);z-index:100;display:none;align-items:center;justify-content:center;flex-direction:column;gap:12px;animation:fadeIn .4s ease}
-#chapterBanner.show{display:flex}
-#chapterBanner h1{color:var(--amber);font-size:24px;margin:0;text-align:center;padding:0 18px;line-height:1.6}
-#chapterBanner .num{font-size:11px;color:var(--dim);letter-spacing:3px}
-@keyframes fadeIn{from{opacity:0}to{opacity:1}}
-
-.modal{position:fixed;inset:0;background:rgba(0,0,0,.92);z-index:200;display:none;align-items:center;justify-content:center;padding:16px;animation:fadeIn .3s ease}
-.modal.show{display:flex}
-.modal-content{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:20px;max-width:600px;width:100%;max-height:82vh;overflow-y:auto}
-.modal-content h2{margin:0 0 14px;color:var(--amber);font-size:18px}
-.inv-grid,.market-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:8px;margin-bottom:12px}
-.inv-item,.market-item{background:#140e0a;border:1px solid var(--line);border-radius:9px;padding:10px;display:flex;flex-direction:column;gap:4px;align-items:center;text-align:center}
-.inv-item .icon,.market-item .icon{font-size:22px}
-.inv-item .name,.market-item .name{font-size:12px;font-weight:700}
-.inv-item .desc,.market-item .desc{font-size:10.5px;color:var(--dim);line-height:1.35}
-.inv-item button,.market-item button{margin-top:auto;background:var(--amber);color:#000;border:none;padding:4px 10px;border-radius:5px;font-size:11px;font-weight:700;cursor:pointer}
-.empty-msg{color:var(--dim);font-size:13px;text-align:center;padding:20px;grid-column:1/-1}
-.modal-content button.close-btn{background:#1c1610;color:var(--ink);border:1px solid var(--line);border-radius:9px;padding:9px 18px;cursor:pointer;font-family:inherit;margin-top:10px;width:100%}
-.modal-content button.close-btn:hover{border-color:var(--amber)}
-.diary-entry{border-right:2px solid var(--amber);padding:8px 12px;margin-bottom:8px;font-size:13px;line-height:1.85;color:var(--dim);background:rgba(212,151,66,.02);border-radius:0 7px 7px 0}
-[dir="ltr"] .diary-entry{border-right:none;border-left:2px solid var(--amber);border-radius:7px 0 0 7px}
-.diary-entry .when{color:var(--amber);font-size:11px;margin-bottom:3px;font-weight:700}
-
-.ach-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:8px;margin-bottom:12px}
-.ach-item{background:#140e0a;border:1px solid var(--line);border-radius:9px;padding:10px 6px;text-align:center}
-.ach-item.unlocked{border-color:var(--amber);background:rgba(212,151,66,.06)}
-.ach-item.locked{opacity:.4}
-.ach-item .ic{font-size:22px;margin-bottom:3px}
-.ach-item .tt{font-size:11px;font-weight:700}
-.ach-item .ds{font-size:9.5px;color:var(--dim);margin-top:2px}
-
-.eg-grid{display:grid;gap:8px}
-.eg-item{background:#140e0a;border:1px solid var(--line);border-radius:9px;padding:12px;display:flex;gap:10px;align-items:center}
-.eg-item.found{border-color:var(--amber)}
-.eg-item.locked{opacity:.4}
-.eg-item .ic{font-size:26px}
-.eg-item .tt{font-weight:700;font-size:13px;margin-bottom:2px}
-.eg-item .ds{font-size:11px;color:var(--dim)}
-
-.ending-h{font-size:22px;font-weight:700;margin:0 0 12px;line-height:1.5}
-.ending-h.peace{color:var(--sand)}
-.ending-h.dark{color:var(--red)}
-.ending-h.broken{color:#8a7a5a}
-.ending-h.martyr{color:var(--green)}
-.quote{border-right:3px solid var(--amber);padding:10px 14px;color:var(--dim);font-style:italic;margin:14px 0;background:rgba(212,151,66,.04);border-radius:0 8px 8px 0;line-height:1.75}
-[dir="ltr"] .quote{border-right:none;border-left:3px solid var(--amber);border-radius:8px 0 0 8px}
-.stats-box{background:#0b0806;border:1px solid var(--line);border-radius:10px;padding:14px;margin:14px 0;font-size:12.5px;line-height:1.9}
-.stats-box .row{display:flex;justify-content:space-between;padding:3px 0;color:var(--dim)}
-.stats-box .row span:last-child{color:var(--ink);font-weight:600}
-.analysis{background:rgba(122,92,138,.06);border:1px solid rgba(122,92,138,.3);border-radius:9px;padding:12px;margin:12px 0;font-size:13px;line-height:1.85;color:#c8b8d8}
-.analysis h4{margin:0 0 6px;color:var(--violet);font-size:14px}
-
-#toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%) translateY(80px);background:#18110c;border:1px solid var(--amber);color:var(--ink);padding:10px 18px;border-radius:11px;font-size:12.5px;z-index:150;transition:transform .4s ease;pointer-events:none;max-width:90%;text-align:center}
-#toast.show{transform:translateX(-50%) translateY(0)}
-
-#achPop{position:fixed;top:14px;left:50%;transform:translateX(-50%) translateY(-120px);background:linear-gradient(135deg,#2a1a10,#1a1008);border:2px solid var(--amber);padding:12px 20px;border-radius:12px;z-index:180;display:flex;align-items:center;gap:10px;box-shadow:0 15px 40px rgba(0,0,0,.7);transition:transform .5s cubic-bezier(.4,0,.2,1);pointer-events:none}
-#achPop.show{transform:translateX(-50%) translateY(0)}
-#achPop .ic{font-size:28px}
-#achPop .tx{font-size:12px}
-#achPop .tx strong{display:block;color:var(--amber);font-size:13px}
+html,body{margin:0;background:var(--bg);color:var(--fg);font-family:"Segoe UI",Tahoma,"Noto Naskh Arabic",Arial,sans-serif}
+#app{max-width:560px;margin:0 auto;padding:14px 16px 30px}
+h1{font-size:2.2rem;margin:30px 0 6px;color:var(--ac)}
+.ch{font-size:.85rem;color:var(--ac);margin:4px 0 10px;font-weight:bold}
+.st{display:grid;grid-template-columns:1fr 1fr;gap:8px 12px;background:var(--card);border:1px solid var(--bd);border-radius:12px;padding:10px;font-size:.8rem}
+.bar{height:7px;background:var(--bd);border-radius:4px;overflow:hidden;margin-top:3px}
+.bar i{display:block;height:100%;transition:width .5s}
+.tx{font-size:1.1rem;line-height:2;margin:18px 2px;white-space:pre-line;animation:f .6s}
+.btn{display:block;width:100%;text-align:right;margin:9px 0;padding:14px;font:inherit;font-size:1rem;background:var(--card);color:var(--fg);border:1px solid var(--bd);border-radius:12px;cursor:pointer}
+.btn:active{border-color:var(--ac)}
+.art{width:100%;border-radius:14px;display:block;margin:10px 0 0;border:1px solid var(--bd)}
+.fact{background:var(--card);border-right:4px solid var(--ac);padding:10px 12px;border-radius:8px;font-size:.88rem;line-height:1.8;color:var(--mut);margin:6px 0 12px}
+#mb{position:fixed;left:12px;top:calc(10px + env(safe-area-inset-top,0px));width:40px;height:40px;border-radius:50%;border:1px solid var(--bd);background:var(--card);color:var(--fg);font-size:1.1rem;cursor:pointer;z-index:5}
+.bt{display:flex;gap:6px;margin:0 0 8px 46px;flex-wrap:wrap}
+.bt button{font:inherit;font-size:.78rem;padding:6px 10px;border-radius:8px;border:1px solid var(--bd);background:var(--card);color:var(--fg);cursor:pointer}
+#pn{position:fixed;inset:0;background:rgba(0,0,0,.7);display:none;align-items:center;justify-content:center;padding:16px;z-index:9}
+#pn.on{display:flex}
+#pn>div{background:var(--bg);color:var(--fg);border:1px solid var(--bd);border-radius:14px;padding:16px;max-width:520px;width:100%;max-height:80vh;overflow:auto}
+.it2{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:8px 0;border-bottom:1px solid var(--bd)}
+#cb{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(10,8,6,.92);color:#f0c27a;font-size:1.6rem;font-weight:bold;text-align:center;padding:20px;opacity:0;pointer-events:none;transition:opacity .5s;z-index:8}
+#cb.show{opacity:1}
+#tt{position:fixed;bottom:calc(20px + env(safe-area-inset-bottom,0px));left:50%;transform:translateX(-50%);background:var(--card);border:1px solid var(--ac);color:var(--fg);padding:10px 16px;border-radius:12px;font-size:.85rem;opacity:0;transition:opacity .3s;pointer-events:none;z-index:10;max-width:90%;text-align:center}
+#tt.on{opacity:1}
+.mp{display:flex;align-items:center;gap:4px;font-size:.7rem;color:var(--mut);margin:0 0 8px;overflow-x:auto;white-space:nowrap}
+.mp .on{color:var(--ac);font-weight:bold}.mp .ps{color:#3a8f6b}.mp i{flex:1;height:1px;background:var(--bd);min-width:8px}
+.cp{background:var(--card);border:1px solid var(--ac);border-radius:10px;padding:8px 12px;margin:0 0 8px;font-size:.82rem}
+#ptc{position:fixed;inset:0;pointer-events:none;z-index:1;overflow:hidden}
+.pt{position:absolute;width:2px;height:2px;background:var(--ac);border-radius:50%;opacity:0;animation:fl linear infinite}
+@keyframes fl{0%{transform:translateY(-20px);opacity:0}10%{opacity:.4}100%{transform:translateY(100vh);opacity:0}}
+[dir=ltr] .bt{margin:0 46px 8px 0}
+[dir=ltr] #mb{left:auto;right:12px}
+[dir=ltr] .btn{text-align:left}
+[dir=ltr] .fact{border-right:0;border-left:4px solid var(--ac)}
+.pri{background:var(--ac);color:#fff;border:0;text-align:center}
+.mut{color:var(--mut);font-size:.9rem;line-height:1.8}
+.end{border:1px solid var(--ac);border-radius:12px;padding:6px 14px}
+@keyframes f{from{opacity:0;transform:translateY(8px)}to{opacity:1}}
 </style>
 </head>
-<body dir="rtl">
-<div id="particles"></div>
-<div id="app">
-  <div id="topbar">
-    <span id="chapterLabel">الفصل الأول · دارفور</span>
-    <div id="controls">
-      <button id="langBtn" onclick="toggleLang()">EN</button>
-      <button id="invBtn">🎒 (<span id="invCount">0</span>)</button>
-      <button id="marketBtn">🛒</button>
-      <button id="diaryBtn">📔</button>
-      <button id="achBtn">🏆</button>
-      <button id="egBtn">🎭</button>
-      <button id="saveBtn">💾</button>
-      <button id="loadBtn">📂</button>
-      <button id="soundBtn">🔊</button>
-    </div>
-  </div>
-
-  <div id="worldMap">
-    <div class="map-node" id="m-darfur">🌄 <span data-i18n="m_darfur">دارفور</span></div>
-    <div class="map-line"></div>
-    <div class="map-node" id="m-desert">🏜️ <span data-i18n="m_desert">الصحراء</span></div>
-    <div class="map-line"></div>
-    <div class="map-node" id="m-market">🛒 <span data-i18n="m_market">أم درمان</span></div>
-    <div class="map-line"></div>
-    <div class="map-node" id="m-khartoum">🏙️ <span data-i18n="m_khartoum">الخرطوم</span></div>
-    <div class="map-line"></div>
-    <div class="map-node" id="m-fasher">🔥 <span data-i18n="m_fasher">الفاشر</span></div>
-    <div class="map-line"></div>
-    <div class="map-node" id="m-borders">🚪 <span data-i18n="m_borders">الحدود</span></div>
-  </div>
-
-  <div id="companionDisplay"></div>
-  <div id="hud"></div>
-
-  <div class="card">
-    <div id="sceneImg"><span class="mood-icon"></span><div class="avatar" id="avatarIcon">👦</div></div>
-    <div class="card-body"><div id="scene"></div></div>
-  </div>
-  <div id="choices"></div>
-</div>
-
-<div id="chapterBanner"><span class="num" id="chNum"></span><h1 id="chTitle"></h1></div>
-
-<div id="invModal" class="modal"><div class="modal-content">
-  <h2 data-i18n="inv_title">🎒 الحقيبة</h2>
-  <div id="invList" class="inv-grid"></div>
-  <button class="close-btn" onclick="closeModal('invModal')" data-i18n="close">إغلاق</button>
-</div></div>
-
-<div id="marketModal" class="modal"><div class="modal-content">
-  <h2 data-i18n="market_title">🛒 السوق</h2>
-  <div id="marketList" class="market-grid"></div>
-  <button class="close-btn" onclick="closeModal('marketModal')" data-i18n="close">إغلاق</button>
-</div></div>
-
-<div id="diaryModal" class="modal"><div class="modal-content">
-  <h2 data-i18n="diary_title">📔 مذكرات الرحلة</h2>
-  <div id="diaryList"></div>
-  <button class="close-btn" onclick="closeModal('diaryModal')" data-i18n="close">إغلاق</button>
-</div></div>
-
-<div id="achModal" class="modal"><div class="modal-content">
-  <h2 data-i18n="ach_title">🏆 الإنجازات</h2>
-  <div id="achGrid" class="ach-grid"></div>
-  <button class="close-btn" onclick="closeModal('achModal')" data-i18n="close">إغلاق</button>
-</div></div>
-
-<div id="egModal" class="modal"><div class="modal-content">
-  <h2 data-i18n="eg_title">🎭 معرض النهايات</h2>
-  <div id="egGrid" class="eg-grid"></div>
-  <button class="close-btn" onclick="closeModal('egModal')" data-i18n="close">إغلاق</button>
-</div></div>
-
-<div id="achPop"><span class="ic">🏆</span><div class="tx"><strong data-i18n="ach_pop">إنجاز!</strong><span id="achPopTxt"></span></div></div>
-<div id="toast"></div>
-
+<body>
+<div id="ptc"></div><div id="app"></div><div id="pn" onclick="if(event.target===this)this.classList.remove('on')"></div><div id="cb"></div><div id="tt"></div><button id="mb" onclick="snd()" aria-label="الموسيقى">🔇</button>
 <script>
-/* ================= i18n & STRINGS ================= */
-let lang = 'ar';
-const i18n = {
-  ar: {
-    m_darfur: 'دارفور', m_desert: 'الصحراء', m_market: 'أم درمان', m_khartoum: 'الخرطوم', m_fasher: 'الفاشر', m_borders: 'الحدود',
-    inv_title: '🎒 الحقيبة', market_title: '🛒 السوق', diary_title: '📔 مذكرات الرحلة', ach_title: '🏆 الإنجازات', eg_title: '🎭 معرض النهايات',
-    close: 'إغلاق', ach_pop: 'إنجاز!', use: 'استخدام', buy: 'شراء', empty_inv: 'الحقيبة فارغة.', empty_diary: 'لم تُدون أي ذكرى بعد.',
-    locked: 'مغلق', unknown: '؟؟؟', unselected_eg: 'غير مكتشفة', desc_eg: 'أكمل الرحلة',
-    age: 'العمر', water: '💧 ماء', food: '🍲 شبع', health: '❤️ صحة', hope: '✨ أمل',
-    chapters: {
-      1: 'دارفور · ٢٠٠٣', 2: 'الطريق إلى الخرطوم', 3: 'أم درمان · الرصيف', 4: 'الخرطوم · الصعود', 5: 'البيت والأسرة',
-      6: '١٥ أبريل ٢٠٢٣', 7: 'الفاشر · الحصار', 8: 'غرف الطوارئ', 9: 'الحدود', 10: 'الخاتمة'
-    }
-  },
-  en: {
-    m_darfur: 'Darfur', m_desert: 'Desert', m_market: 'Omdurman', m_khartoum: 'Khartoum', m_fasher: 'Al-Fashir', m_borders: 'Borders',
-    inv_title: '🎒 Inventory', market_title: '🛒 Market', diary_title: '📔 Journal', ach_title: '🏆 Achievements', eg_title: '🎭 Endings Gallery',
-    close: 'Close', ach_pop: 'Achievement Unlocked!', use: 'Use', buy: 'Buy', empty_inv: 'Inventory is empty.', empty_diary: 'No entries yet.',
-    locked: 'Locked', unknown: '???', unselected_eg: 'Undiscovered', desc_eg: 'Complete the journey',
-    age: 'Age', water: '💧 Water', food: '🍲 Food', health: '❤️ Health', hope: '✨ Hope',
-    chapters: {
-      1: 'Darfur · 2003', 2: 'Road to Khartoum', 3: 'Omdurman · Pavement', 4: 'Khartoum · Rise', 5: 'Home & Family',
-      6: 'April 15, 2023', 7: 'Al-Fashir · Siege', 8: 'Emergency Rooms', 9: 'Borders', 10: 'Epilogue'
-    }
-  }
+const S={
+d0:["الفصل الأول: دارفور","وُلدتَ في قرية قرب الفاشر، بين أشجار الهجليج وحقول الدخن. في ليلة الحصاد وضع أبوك في يدك سبحته الخشبية القديمة وقال: «ما دمتَ تحفظ اسمك واسم قريتك، فلن تضيع».\n\nكانت أمك تغني في الفناء، والنار تفوح بالقهوة والبخور... ثم جاء الصيف الذي تغيّر فيه كل شيء.",[["علّق السبحة حول عنقك","d0b",{p:10,F:"sb"}],["ضعها في جيبك واركض للعب","d0b",{}]]],
+d1:["","أنت طفل في دارفور. كل صباح تستيقظ على صوت الرصاص ودوي الانفجارات. الليلة الماضية احترق بيت جيرانكم.\n\nقال أبوك بصوت منخفض: «لا بقاء هنا. سنرحل نحو النجاة قبل الفجر».",[["ساعد أمك في حمل الخبز والماء","d2",{f:10,F:"water"}],["ودّع كلبك الصغير","d2",{p:5}]]],
+d2:["","مشيتم ليلتين. في المنعطف الثالث ظهرت سيارات بلا لوحات، وفوقها رجال ملثمون بالسلاح: الجنجويد.",[["اختبئ خلف الصخرة","d3",{}],["تمسّك بيد أمك","d3",{p:-5}]]],
+d3:["","علت الصرخات والطلقات. وحين هدأ كل شيء، لم يبق من أسرتك أحد غيرك.\n\nأنت وحدك الآن.",[["ابقَ مختبئًا حتى يبتعدوا","jd",{p:-25,h:-10}],["اركض نحو الأشجار","jd",{p:-25,h:-20}]]],
+d4:["","وراء الشجر رأيت سيارة لاند كروزر ورجلًا بزي عسكري يتحدث بالهاتف. إنه «المارشال»، يجنّد الجنجويد لحساب جهات في الجيش لزعزعة المنطقة.",[["تسلّل إلى صندوق السيارة","d5",{}],["اخرج وتوسّل إليه","x1",{}]]],
+d5:["","من شقّ الصندوق سمعته يقول إنه ذاهب إلى الخرطوم: يرفع تقاريره ويستلم عمولاته وسلاحه. السيارة تهتز على الطريق، وعطشك يشتد.",[["اشرب من قارورة مهملة وخذ حقيبة إسعاف وجدتها في الصندوق","d5b",{f:10,F:"med"}],["اصبر على العطش","d5b",{f:-15,h:-10}],["اسحب دفترًا جلديًا صغيرًا لمحتَه بجانبك دون أن يراك","d5b",{p:5,F:"ldg"}]]],
+d6:["","بعد أيام وصلتم العاصمة. توقفت السيارة قرب سوق. لصغر حجمك لم يلحظك أحد.\n\nقفزت وجريت.",[["تابع","m1",{}]]],
+m1:["الفصل الثاني: الخرطوم","سوق صاخب. ناس تضحك وتشتري وتبيع. لا قتل ولا موت!\n\nلكن بطنك يؤلمك.",[["اطلب المال من المارة","m2",{}],["ابحث عن عمل","m3",{}]]],
+m2:["","مرّ العشرات. بعضهم أشاح بوجهه، وبعضهم قال: «يلا يا ولد». لم يعطك أحد شيئًا.",[["جرّب العمل بدل التسوّل","m3",{f:-10,p:-10}]]],
+m3:["","عرض عليك صاحب مطعم صغير غسل الصحون مقابل وجبة وبعض الجنيهات.",[["اعمل بإخلاص","m3b",{f:30,m:30,h:-5}],["اعمل واخطف وجبة إضافية","m3b",{f:40,m:20,p:-5}]]],
+m4:["","بعد مدة طردك صاحب المطعم، لأنه أراد مكانك لقريب له.",[["ارحل بصمت","s1",{p:-5}],["احتجّ عليه","s1",{p:-10,h:-5}]]],
+s1:["","اشتريت بما جمعته مواد تنظيف بالتجزئة: صابون وكلور ومعطّر، وجلست على الرصيف. صار الرصيف بيتك.",[["اجلس قرب المسجد","s1b",{m:40}],["جُب الأحياء","s1b",{m:30,h:-10}]]],
+s2:["","مرّت سنتان من الصيف الحارق والمطر والجوع. صار معك مبلغ لا بأس به.",[["ادّخر المبلغ","u1",{m:20,f:-10}],["اشترِ بضاعة ووزّعها على من عرفتهم؛ يدفعون لك كل يوم","u1",{m:50,p:10}]]],
+s3:["","بعد سنة اشتريت دراجة، وصرت تبيع التسالي والفول السوداني والدوم والقنقليز، وتنام في الطرقات.",[["اعمل ليلًا ونهارًا","s4",{m:60,h:-15}],["اعمل وخذ قسطًا من الراحة","s4",{m:40,h:5}]]],
+s4:["","بعد سنين الكفاح اشتريت ركشة وبدأت تنقل الناس.",[["انقلهم بإنصاف","s5",{m:50,p:10}],["ارفع الأجرة على المضطرين","s5",{m:80,p:-10}]]],
+s5:["","ثم جاء اليوم الذي اشتريت فيه حافلة صغيرة «كريز». سنين وسنين وأنت تعمل عليها، ثم اشتريت بيتًا في أطراف العاصمة وحفظتَ وثائق ملكيتهما في حقيبتك.",[["تابع","s5b",{h:5,F:"docs"}]]],
+s6:["","اجتهدت وتزوجت، ورُزقت بأبناء. كان البيت يضحك. نسيت أن الحزن يمكن أن يعود.\n\nوفكرت أن تشتري حافلة ثانية.",[["تابع","s6b",{}]]],
+r1:["الفصل الثالث: ديسمبر","في ديسمبر 2018 اختفى الخبز من الأفران وطالت صفوف الوقود وارتفعت الأسعار. خرج الناس إلى الشوارع يهتفون: «حرية، سلام، وعدالة».\n\nتقف حافلتك قرب الميدان، وشبان كثيرون يركضون بإصابات.",[["انقل الجرحى مجانًا","r2",{p:10,h:-10,F:"hero"}],["واصل عملك لتحمي رزقك","r2",{m:40}]]],
+r2:["","في أبريل 2019 سقط حكم البشير، وامتلأ الميدان أمام القيادة العامة بالخيام والأغاني والرسوم على الجدران. لأول مرة منذ طفولتك شعرت أن الخوف يمكن أن يُهزم.\n\nثم في الثالث من يونيو فُضّ الاعتصام بالرصاص وسقط كثيرون.",[["احتفظ بالأمل رغم كل شيء","s6",{p:10}],["أغلق قلبك: السياسة لا تطعم أحدًا","s6",{p:-10}]]],
+q1:["","رمضان 2023. الشائعات تسري: حشود عسكرية في الأحياء، وتحرّكات ليلية، وتوتر بين الجيش وقوات الدعم السريع. الجيران يتهامسون ويخزّنون.",[["خزّن ماءً وطعامًا ووقودًا","w1",{m:-30,F:"st"}],["لا تقلق، وأعدّ عيدًا جميلًا لأسرتك","w1",{p:5}]]],
+w1:["الفصل الرابع: الحرب مرة أخرى","في اليوم الذي اشتريتها فيه، اندلعت الحرب في الخرطوم.\n\nنفس الدوي. نفس الرائحة. نفس الخوف الذي هربت منه طفلًا.",[["ابقَ في البيت مع أسرتك","jw",{}],["اهرب بهم من الحي","jw",{}]]],
+w2:["","اقتحمت المجموعات المسلحة الحي. سُرق كل ما تملك، حتى الحافلتان. طُردتم من منزلكم.\n\nوفي ساعات لا توصف فقدت زوجتك وأولادك.",[["قاوم بيدين خاليتين","x2",{}],["لا تقاوم لتبقى حيًا","e1",{p:-30}]]],
+d5b:["","وسط العتمة تحرّك شيء بجانبك: ولد في سنك يُدعى عثمان، كان مختبئًا قبلك بين الأكياس وعيناه واسعتان من الخوف. همس:\n— «لا تتحرك... إن سمعنا الرجال قتلونا».\nكان يرتجف من العطش.",[["اقتسم معه قربة الماء","d6",{p:10,F:"os",X:"water"},"water"],["اطلب منه أن يبقى معك وإن لم تملك ماءً","d6",{p:5,F:"os"}],["ابتعد وراقبه بحذر","d6",{p:-5}]]],
+u1:["","أم درمان صباحًا: رائحة البهارات والجلود وصيحات الباعة. عند باب السوق وجدتَ ثلاث فرص في يوم واحد، ولا تتسع قوتك إلا لواحدة.",[["احمل بضائع التجار على ظهرك: تعب لكنه مال","u2",{m:60,h:-10,f:-5}],["ساعد بائعة عجوز في فرش بضاعتها مقابل وجبة وكلمة طيبة","u2",{f:20,p:10,F:"zn"}],["بِع المناديل والبخور في الزحام","u2",{m:35,p:5}]]],
+u2:["","عند الغروب جلستَ تعدّ ما كسبتَ. مرّ بك رجل يبيع الدراجات المستعملة وقال: «الشاب الذي يدّخر اليوم يركب غدًا».",[["ادّخر لشراء دراجة","s3",{m:20}],["أعطِ جزءًا من مالك لمن هو أحوج منك","s3",{m:-20,p:15}]]],
+g1:["","في غرفة طوارئ الحي جلس شبان من لجنة المقاومة حول كشف بأسماء الأسر: من يحتاج دواءً، من فقد أباه، من ينقصه الماء. قالت لك فتاة بحقيبة ظهر:\n— «ما معنا مال، معنا بعضنا. تعال».",[["وزّع الطعام والماء على البيوت الجريحة","h1",{f:-5,h:-5,p:15,F:"er"}],["ساعد في تسجيل الأسماء والأدوية لينتقل المرضى","h1",{p:12,F:"er"}]]],
+k1:["الفصل: ود مدني","وصلتَ ود مدني بعد أيام من الطريق. المدينة التي كانت هادئة امتلأت بنازحي الخرطوم: المدارس مأوًى، وعلى الأرصفة أسر تنام، والأسعار تتضاعف كل أسبوع. لكن الناس هنا فتحوا بيوتهم وأبوابهم.\n\nولأول مرة منذ شهور سمعتَ ضحكة طفل.",[["افتح كشك شاي صغيرًا عند محطة الحافلات","jk",{m:25,p:10,F:"ks"}],["ساعد الأستاذة هالة في تعليم أطفال المأوى القراءة","jk",{p:15,F:"hl"}],["انتظر هدوءًا لا يجيء","jk",{p:-5}]]],
+k2:["","ديسمبر 2023. بدأ الهمس: الجيش ينسحب، والدعم السريع على مشارف الجزيرة. ثم انفجر الخبر عند الفجر. خرج الناس مرة ثانية إلى الطرق: أمهات يحملن صغارهن، وشيوخ على العربات، وسيارات تتزاحم على الجسر.\n\nمن أول مرة شعرتَ أن الأرض تتحرك من تحتك.",[["اهرب مع آخر الحافلات نحو القضارف","gd",{h:-10,f:-10}],["ساعد عجوزًا لا تقوى على المشي حتى تلحق بالقافلة","gd",{h:-15,f:-10,p:15,F:"el"}],["اختبئ في المدرسة وانتظر أن يمرّ الوقت","w3",{p:-10}]]],
+gd:["","وصلتَ القضارف ليلًا. استقبلتك مدرسة صارت مأوًى، ونام الناس على الأرض متجاورين. جلس إلى جوارك شاب يحمل راديو صغيرًا يلتقط نشرة الأخبار: هدنة؟ مفاوضات؟ لا أحد يعرف.\n\nقال لك المتطوعون: «الحرب بعيدة هنا، والخوف قريب».",[["ابقَ في المأوى وساعد المتطوعين","fin",{f:5,p:10}],["واصل نحو الحدود بحثًا عن عبور","bd",{h:-5}]]],
+fs1:["الفصل: الفاشر","وصلتَ الفاشر بعد أسابيع من الطريق. المدينة التي وُلدتَ قربها محاصرة منذ شهور: لا قوافل تدخل، والسوق شبه خالٍ، والناس يطبخون أوراق الأشجار وعلف الحيوانات. طفل بجانب الطريق يسأل بصوت خافت: «معك خبز؟».",[["اقتسم ما معك مع الطفل وأمه","jf",{f:-15,p:10,F:"fk"}],["اتجه مباشرة نحو غرفة الطوارئ","jf",{p:5}]]],
+fs2:["","في زقاق ضيق وجدتَ مطبخًا جماعيًا تديره غرفة طوارئ. قالت لك طبيبة شابة:\n— «ما معنا إلا قدر واحد وصبر. نحتاج متبرعين بالدم».\nعلى سرير خشبي رجل يتنفس بصعوبة.",[["تبرّع بدمك لإنقاذ المصاب ولو أنهكك ذلك","fs3",{h:-30,p:15,F:"sac"}],["وزّع الطعام والماء على المنتظرين","fs3",{f:-10,p:12,F:"fk"}],["خذ ما تحتاجه وارحل قبل أن يشتد الحصار","fs3",{f:15,p:-10}]]],
+fs3:["","دوّت المدافع من جديد. اقتحمت القوات الأطراف، وتحدثت التقارير لاحقًا عن مجازر وهروب جماعي. خرج الناس في الظلام يحملون صغارهم وما استطاعوا.\nنظرتَ خلفك آخر مرة، ثم تذكّرتَ وصية أبيك: «لا تلتفت».",[["ضمّد جراح من بجانبك بحقيبة الإسعاف","bd",{h:-5,p:15,F:"fk",X:"med"},"med"],["امضِ مع الجموع نحو الحدود","bd",{h:-10,f:-10}]]],
+s5b:["","ليلة ممطرة على طريق أم درمان. أوقف الحافلةَ ثلاثةُ شبان ملثمين وطلبوا المفاتيح. في المقعد الخلفي امرأة حامل وطفلان نائمان، والمطر يطرق السقف.\nقال أحدهم: «انزل بهدوء ولا يصيبك شيء».",[["حاورهم: «أنا من دارفور وأعرف الجوع، فخذوا ما شئتم من جيبي واتركوا الحافلة»","r1",{p:15,F:"hum"},null,.6],["اضغط على الوقود وانطلق بأقصى سرعة","r1",{p:5},null,.5],["سلّمهم المفاتيح واحمِ من في الحافلة","r1",{m:-80,p:-10}]]],
+q4:["","في الصباح نادوك إلى غرفة القائد: رجل بدين خلف مكتب خشبي، وعلى المكتب علبة سجائر ومسدس وراديو يبثّ أخبارًا. نظر إليك طويلًا وقال: «أنت من دارفور؟ لهجتك تفضحك».\nكان الصمت أثقل من الضرب.",[["أخرج الدفتر الجلدي وضعه على المكتب","p4",{p:20,h:10,F:"ld2",X:"ldg"},"ldg"],["أخرج سبحة أبيك واذكر اسمه","p4",{p:15},"sb"],["قل إنك سائق لا شأن لك","p4",{p:-5}],["حدّثه عن أبنائك الذين فقدتهم","p4",{p:10,h:-5}]]],
+d3b:["","في اليوم الثالث لمحتَ راعيًا عجوزًا اسمه آدم يسوق عنزات هزيلة. ناولك حفنة تمر وقال: «يا ولدي، أرى سيارة بلا لوحات تمرّ كل أسبوع. لا تقترب من الرجال الذين يضحكون وبأيديهم أسلحة».",[["اسمع نصيحته وابقَ معه ليلة","d4",{p:10,f:10,F:"ad"}],["اشكره وامضِ وحدك","d4",{}]]],
+s6c:["","يوم جمعة على ضفة النيل عند المقرن، حيث يلتقي الأزرق بالأبيض. يوسف يطارد كرة، ومريم تبني بيتًا من الرمل وتقول: «هذا بيتنا الجديد يا بابا». ضحكت آمنة بصوت عالٍ لأول مرة منذ شهور.",[["اشترِ لهم الآيس كريم وعلّمهم السباحة","q1",{p:12,m:-15,F:"joy"}],["ابقَ على العتبة تحسب الديون","q1",{m:20,p:-5}]]],
+d0b:["","جدّتك حواء تجلس تحت شجرة الهجليج وتحكي للأطفال حكاية «الشجرة التي لا تُقطع»: كلما قطعها الغزاة نبتت من جذورها.\n— «الناس مثلها يا ولدي. اقطعهم ينبتون في مكان آخر».\nثم تهمس: «إن اضطررتَ للرحيل فاحمل اسمك معك».",[["اسألها: وماذا لو لم تبقَ لي جذور؟","d1",{p:10,F:"gr"}],["ضع رأسك على كتفها صامتًا","d1",{p:5,h:5}]]],
+m3b:["","في المطبخ كان الطباخ عمّ إدريس، عجوز بلا أسنان تقريبًا، يراقبك وأنت تغسل. في آخر الليل ناولك صحنًا من العدس وقال:\n— «تغسل كأنك تهرب من شيء. الرزق صبر يا ولد. من أين أنت؟»\nلم تعرف هل تقول الحقيقة.",[["احكِ له كل شيء عن دارفور","m4",{p:10,f:10,F:"id tea"}],["قل إنك يتيم من الأطراف وكفى","m4",{p:-5}]]],
+s1b:["","في الليالي الباردة كان ينام بجانبك على الرصيف ولد في سنك اسمه سلمان، يبيع المناديل. اقتسم معك غطاءً ممزقًا وقال:\n— «في الشارع من لا أحد له يصير أخًا لمن لا أحد له».",[["اقتسم معه ما تربحه كل يوم","js",{m:-15,p:15,F:"sl"}],["احتفظ بمالك: الأمان أولًا","js",{m:10,p:-10}]]],
+s6b:["","مساء الجمعة جلست زوجتك آمنة على عتبة الدار والأولاد، يوسف ومريم، يتسابقون في حلّ واجباتهم تحت ضوء المصباح. سألتك بهدوء:\n— «أراك أحيانًا تحدّق في الفراغ. ما الذي تحمله وحدك؟»\nضحك الصغار من بعيد، وكان قلبك ثقيلًا.",[["احكِ لها عن دارفور وعن أهلك","s6c",{p:15,F:"told"}],["ابتسم وغيّر الحديث: الماضي ماضٍ","s6c",{p:-5}]]],
+h1:["","في فصل من المدرسة حوّل متطوعون غرفة إلى مستشفى ميداني بلا كهرباء، يعملون على ضوء الهواتف. نادتك الطبيبة الشابة نهى بعينين محمرّتين من السهر:\n— «أحتاج يدين إضافيتين. المصابون كثر والدواء لا يكفي».\nرأيت طفلًا محمومًا وأمه تبكي.",[["ساعد في حمل المصابين وتهدئة الأطفال","e2",{h:-10,p:15,F:"dr"}],["ابتعد: لا طاقة لك على رؤية المزيد","e2",{p:-10,h:5}]]],
+q3:["","جاءوا بفتى في الخامسة عشرة اسمه ياسر، يرتجف. ضربه حارس لأنه طلب ماءً. نظر إليك كمن يبحث عن أبٍ يحتمي به.",[["ضمّه إليك وتحمّل الضرب عنه","p2",{h:-15,p:20,F:"ys"}],["ابتعد حتى لا تُضرب","p2",{p:-15}]]],
+z1:["","في الطريق مررت بحيّك القديم: سور بيتك مثقوب بالرصاص والباب مخلوع. وجدتَ في الركن حقيبة مدرسية صغيرة مغطاة بالغبار عليها اسم «مريم».\n\nجلستَ على العتبة طويلًا.",[["احملها معك","o2",{p:10,F:"bag"}],["اتركها: لا تحتمل أن تحملها","o2",{p:-5}]]],
+bd:["","وقفتَ أمام مفترق الطرق الأخير. ثلاث وجهات، ولكل منها ثمنها:",[["🇪🇬 شمالًا نحو مصر مع وثائقك","jb",{h:-10,f:-10,C:"eg",F:"b"},"docs"],["🇪🇬 شمالًا نحو مصر بلا وثائق، عبر مهرّب","jb",{h:-25,f:-20,C:"eg",F:"b"},"!docs"],["🇹🇩 غربًا نحو تشاد عبر أرض دارفور","jb",{h:-20,f:-15,p:10,C:"td",F:"b"}],["🇸🇸 جنوبًا مع النيل الأبيض نحو جنوب السودان","jb",{h:-15,f:-15,p:5,C:"ss",F:"b"}]]],
+e1:["الحصار والنزوح","لجأتَ مع عشرات الهاربين إلى مدرسة مهجورة في الحي. انقطعت الكهرباء ثم المياه ثم شبكة الهاتف، وصارت الأسواق نهبًا.\n\nجاءتك جارتك أم حسن، امرأة ستينية كانت تبيع الشاي عند ناصية الشارع، وفي يدها وعاء صغير:\n— «يا ولدي، البئر عند آخر الحي ما زال فيه ماء، لكن القنّاصة يراقبون الطريق. حفيدي عطشان».\n\nنظرتَ إلى جالونك شبه الفارغ.",[["شاركها مياهك واذهب معها إلى البئر","je",{f:-10,h:-10,p:15,F:"um"}],["اعتذر: لا يكفيك أنت","je",{p:-15,f:5}],["انضم إلى غرفة طوارئ الحي التي بدأها الشباب","g1",{p:10}]]],
+e2:["","اجتمع الناس على حافلة صغيرة نحو ود مدني. عند الحاجز الأخير وقف شاب مسلح يطلب الهويات والهواتف، ثم نظر إلى وجهك وقال بنبرة تتغيّر:\n— «من أين أنت؟».\n\nصمت الركاب.",[["أجب بهدوء وبلا تحدٍّ","k1",{h:-10}],["اعرض وثائقك لتثبت من أنت","k1",{p:5},"docs"],["ارفع صوتك محتجًّا","x4",{}],["قف بين أم حسن وبينه واحمِها","k1",{p:15,h:-15},"um"]]],
+q2:["","في الليل همس لك رجل نحيل بنظارات مكسورة:\n— «أنا الأستاذ صلاح، كنت مدرّس تاريخ في أم درمان. هنا يريدون أن ننسى أسماءنا، فلنحفظها. أنا صلاح. وأنت؟»",[["قل له اسمك واسم قريتك كما علّمك أبوك","q3",{p:15}],["اصمت، فالثقة هنا خطر","q3",{p:-5}]]],
+w3:["","اقتادك الجنجويد إلى معسكر وسجنوك فيه. لا أحد يعرف أنك هنا.",[["تابع","p1",{}]]],
+p1:["الفصل الخامس: السجن","زنزانة مزدحمة، رغيف واحد لكل خمسة رجال. بجانبك جريح يئنّ.",[["اقتسم رغيفك معه","q2",{f:-15,p:15,F:"sh"}],["كل رغيفك وحدك","q2",{f:10,p:-15}]]],
+p2:["","جاء حارس يبحث عن من يحفر خندقًا، والمتخلّف يُضرب.",[["تطوّع للعمل","jp",{f:15,h:-20}],["اختبئ بين الناس","jp",{h:-10,p:-5}]]],
+p3:["","حارس شاب منهك يجلس بعيدًا ويحدّث نفسه. يبدو أنه تعب من هذه الحرب.",[["حدّثه بهدوء وذكّره بأمّه","q4",{p:15}],["اسرق مفتاحه","p4",{p:10,h:5},null,.4,"x3"],["تظاهر بالمرض","q4",{h:-5}],["أخرج سبحة أبيك وحدّثه عن أبيك","q4",{p:20},"sb"]]],
+p4:["","في الليل أصاب قصف جدار السجن، وانفتحت ثغرة صغيرة.",[["اهرب الآن","o1",{h:-15},null,.65,"x8"],["انتظر، وخطّط مع رفيقين","o1",{p:10,h:-5}]]],
+o1:["الفصل السادس: الخرطوم الجريحة","خرجت إلى مدينة مدمّرة. لا بيت ولا مال ولا أسرة. الجوع ينهش.",[["اذهب إلى مطبخ جماعي (تكية) يديره متطوعون","z1",{f:25,p:10}],["ابحث عن طعام بين الأنقاض","z1",{f:10,h:-15}]]],
+o2:["","اشتد الحصار وقلّ الغذاء. تسمع همسًا عن مفاوضات وهدنة، وربما سلام.",[["ساعد المتطوعين في توزيع الماء والخبز","fin",{p:15,f:5,h:-10}],["اعبر الحدود: اختر وجهتك","bd",{p:5}],["اجلس وانتظر","fin",{p:-10}],["عُد نحو الفاشر مسقط رأسك لتبحث عمّن بقي","fs1",{h:-10,f:-10,p:5}]]]
 };
-
-function toggleLang(){
-  lang = (lang === 'ar') ? 'en' : 'ar';
-  document.body.dir = (lang === 'ar') ? 'rtl' : 'ltr';
-  $('langBtn').textContent = (lang === 'ar') ? 'EN' : 'عربي';
-  document.querySelectorAll('[data-i18n]').forEach(el => {
-    const k = el.getAttribute('data-i18n');
-    if(i18n[lang][k]) el.textContent = i18n[lang][k];
-  });
-  render();
-  updateHUD();
-}
-
-/* ================= MOODS ================= */
-const MOODS={
-  war:{sky1:'#3a0d08',sky2:'#0a0403',icon:'🔥'},
-  darfur:{sky1:'#5c2a10',sky2:'#1a0f08',icon:'🌄'},
-  attack:{sky1:'#4a1a08',sky2:'#0f0604',icon:'⚠️'},
-  desert:{sky1:'#c98e3f',sky2:'#5c3a1a',icon:'🏜️'},
-  city:{sky1:'#1a2233',sky2:'#0a0d15',icon:'🏙️'},
-  market:{sky1:'#6a3a18',sky2:'#2a1508',icon:'🛒'},
-  work:{sky1:'#3a2a1a',sky2:'#15100a',icon:'🔧'},
-  home:{sky1:'#4a3a2a',sky2:'#1a120a',icon:'🏠'},
-  prison:{sky1:'#1a1a1a',sky2:'#050505',icon:'⛓️'},
-  hope:{sky1:'#8a6a2a',sky2:'#2a2010',icon:'✨'},
-  peace:{sky1:'#7a9a5a',sky2:'#2a3a1a',icon:'🕊️'},
-  dark:{sky1:'#1a1010',sky2:'#050303',icon:'🌑'},
-  famine:{sky1:'#5a3a10',sky2:'#1a0f05',icon:'🍂'},
-  border:{sky1:'#8a7040',sky2:'#2a2010',icon:'🚪'}
+const X={
+x1:"توسّلت إليه، لكنه لم يرَ فيك غير شاهد. انتهت رحلتك.",
+x2:"قاومت بيدين خاليتين. كانت شجاعتك أكبر من قدرتك. انتهت رحلتك.",
+x4:"رفعتَ صوتك فلم يحتمل الحاجز احتجاجك. انتهت رحلتك.",
+x8:"أمسكوا بك عند الثغرة قبل أن تبتعد خطوات. انتهت رحلتك.",
+x3:"أمسكوا بك وأنت تمدّ يدك إلى المفتاح. انتهت رحلتك."
 };
-
-const AVATARS={child:'👦',teen:'🧑',adult:'👨',elder:'👴',prisoner:'🧔'};
-
-/* ================= ITEMS ================= */
-const ITEMS={
-  water:{name:{ar:'قربة ماء',en:'Water Pouch'},icon:'💧',desc:{ar:'+٣٠ ماء. ضرورية للبقاء.',en:'+30 Water. Essential.'},price:40,use:s=>{s.water=Math.min(100,s.water+30);toast(lang==='ar'?'💧 شربت ماءً.. ارتوى جسدك.':'💧 Drank water.. revitalized.')}},
-  food:{name:{ar:'كسرة وملاح',en:'Bread & Stew'},icon:'🍲',desc:{ar:'+٣٥ شبع. تسد الجوع.',en:'+35 Food. Fights hunger.'},price:80,use:s=>{s.food=Math.min(100,s.food+35);toast(lang==='ar'?'🍲 أكلت.. سكن جوعك.':'🍲 Ate.. hunger eased.')}},
-  medicine:{name:{ar:'دواء',en:'Medicine'},icon:'💊',desc:{ar:'+٤٠ صحة. تعالج الجروح.',en:'+40 Health. Heals wounds.'},price:150,use:s=>{s.health=Math.min(100,s.health+40);toast(lang==='ar'?'💊 تعافيت.':'💊 Recovered.')}},
-  tea:{name:{ar:'شاي وبلح',en:'Tea & Dates'},icon:'🍵',desc:{ar:'+٢٠ أمل. ترفع المعنويات.',en:'+20 Hope. Lifts spirits.'},price:60,use:s=>{s.hope=Math.min(100,s.hope+20);toast(lang==='ar'?'🍵 شاي بالهيل.. ارتفع أملك.':'🍵 Tea.. hope rose.')}},
-  blanket:{name:{ar:'بطانية',en:'Blanket'},icon:'🛏️',desc:{ar:'+٢٥ طاقة. دفء الليل.',en:'+25 Energy. Night warmth.'},price:120,use:s=>{s.energy=Math.min(100,s.energy+25);toast(lang==='ar'?'🛏️ دفء.. استعدت طاقتك.':'🛏️ Warmth.. energy restored.')}}
-};
-
-/* ================= ACHIEVEMENTS ================= */
-const ACHS={
-  survive_darfur:{icon:'🌅',title:{ar:'نجاة دارفور',en:'Darfur Survival'},desc:{ar:'خرجت من قريتك',en:'Left your village'}},
-  reach_khartoum:{icon:'🏙️',title:{ar:'الوصول',en:'Arrival'},desc:{ar:'بلغت الخرطوم',en:'Reached Khartoum'}},
-  find_uthman:{icon:'👦',title:{ar:'الرفيق',en:'Companion'},desc:{ar:'أنقذت عثمان',en:'Rescued Uthman'}},
-  uthman_alive:{icon:'🤝',title:{ar:'رفيق الدرب',en:'Life Bond'},desc:{ar:'عثمان نجا معك',en:'Uthman survived with you'}},
-  uthman_lost:{icon:'💔',title:{ar:'الفقد',en:'Loss'},desc:{ar:'فقدت عثمان',en:'Lost Uthman'}},
-  build_empire:{icon:'🚌',title:{ar:'الكريز',en:'The Bus'},desc:{ar:'امتلكت حافلتك',en:'Owned your bus'}},
-  family:{icon:'💍',title:{ar:'الأسرة',en:'Family'},desc:{ar:'تزوجت وأنجبت',en:'Married and had children'}},
-  lost_all:{icon:'🔥',title:{ar:'الخسارة',en:'Ruin'},desc:{ar:'فقدت كل شيء',en:'Lost everything'}},
-  fasher:{icon:'🔥',title:{ar:'الفاشر',en:'Al-Fashir'},desc:{ar:'شهدت الحصار',en:'Witnessed the siege'}},
-  err_join:{icon:'🤲',title:{ar:'غرفة الطوارئ',en:'Emergency Room'},desc:{ar:'انضممت للمتطوعين',en:'Joined volunteers'}},
-  save_someone:{icon:'💚',title:{ar:'التضحية',en:'Sacrifice'},desc:{ar:'أنقذت حياة',en:'Saved a life'}},
-  end_witness:{icon:'📖',title:{ar:'الشاهد',en:'The Witness'},desc:{ar:'نهاية الشاهد',en:'Witness Ending'}},
-  end_crossing:{icon:'🚪',title:{ar:'العبور',en:'The Crossing'},desc:{ar:'نهاية العبور',en:'Crossing Ending'}},
-  end_renewed:{icon:'🌱',title:{ar:'من جديد',en:'Renewed'},desc:{ar:'نهاية البداية',en:'Renewal Ending'}},
-  end_broken:{icon:'💔',title:{ar:'المنكسر',en:'Broken'},desc:{ar:'نهاية الضياع',en:'Broken Ending'}},
-  end_martyr:{icon:'🌹',title:{ar:'التضحية',en:'Martyr'},desc:{ar:'نهاية الشهادة',en:'Martyr Ending'}},
-  end_ash:{icon:'🥀',title:{ar:'الرماد',en:'The Ash'},desc:{ar:'نهاية الفناء',en:'Ash Ending'}}
-};
-
-const ENDINGS=[
-  {id:'witness',icon:'📖',title:{ar:'الشاهد',en:'The Witness'},desc:{ar:'حفظت الأسماء',en:'Kept the names alive'}},
-  {id:'crossing',icon:'🚪',title:{ar:'العبور',en:'The Crossing'},desc:{ar:'عبرت الحدود',en:'Crossed the border'}},
-  {id:'renewed',icon:'🌱',title:{ar:'من جديد',en:'Renewed'},desc:{ar:'نجوت وحدك',en:'Survived anew'}},
-  {id:'broken',icon:'💔',title:{ar:'المنكسر',en:'Broken'},desc:{ar:'نجا جسدك لا روحك',en:'Body survived, soul broken'}},
-  {id:'martyr',icon:'🌹',title:{ar:'التضحية',en:'Martyr'},desc:{ar:'أنقذت غيرك',en:'Saved another'}},
-  {id:'ash',icon:'🥀',title:{ar:'الرماد',en:'The Ash'},desc:{ar:'لم تنجُ',en:'Consumed by ash'}}
-];
-
-/* ================= STATE ================= */
-let S={};
-const SAVE_KEY='rimad_v12_save';
-const ACH_KEY='rimad_v12_ach';
-const EG_KEY='rimad_v12_eg';
-
-function newState(){
-  return{
-    water:70,food:70,health:100,hope:75,energy:80,humanity:60,
-    money:180,age:8,chapter:1,node:'intro',
-    inventory:['water','food'],
-    uthman:null,
-    flags:{},diary:[],stats:{choices:0,kind:0,cruel:0},mapNode:'m-darfur'
-  };
-}
-
-function getAch(){try{return JSON.parse(localStorage.getItem(ACH_KEY)||'[]')}catch(e){return[]}}
-function unlockAch(k){
-  const a=getAch();if(a.includes(k))return;
-  a.push(k);localStorage.setItem(ACH_KEY,JSON.stringify(a));
-  showAchPop(ACHS[k]);
-}
-function showAchPop(a){
-  if(!a)return;
-  const p=$('achPop');
-  const tTitle = typeof a.title==='object'?a.title[lang]:a.title;
-  const tDesc = typeof a.desc==='object'?a.desc[lang]:a.desc;
-  $('achPopTxt').textContent=tTitle+' — '+tDesc;
-  p.querySelector('.ic').textContent=a.icon;
-  p.classList.add('show');tone(659,.12);setTimeout(()=>tone(880,.15),120);
-  setTimeout(()=>p.classList.remove('show'),2600);
-}
-function getEg(){try{return JSON.parse(localStorage.getItem(EG_KEY)||'[]')}catch(e){return[]}}
-function markEnding(id){
-  const f=getEg();if(!f.includes(id)){f.push(id);localStorage.setItem(EG_KEY,JSON.stringify(f))}
-}
-
-/* ================= AUDIO ================= */
-let audioCtx=null,soundOn=true,amb=[];
-function tone(f,d=0.15,t='sine',v=0.035){
-  if(!soundOn)return;
-  try{
-    if(!audioCtx)audioCtx=new(window.AudioContext||window.webkitAudioContext)();
-    const o=audioCtx.createOscillator(),g=audioCtx.createGain();
-    o.type=t;o.frequency.value=f;
-    g.gain.setValueAtTime(v,audioCtx.currentTime);
-    g.gain.exponentialRampToValueAtTime(.001,audioCtx.currentTime+d);
-    o.connect(g);g.connect(audioCtx.destination);
-    o.start();o.stop(audioCtx.currentTime+d);
-  }catch(e){}
-}
-function stopAmb(){amb.forEach(n=>{try{n.o.stop();n.l.stop()}catch(e){}});amb=[]}
-function startAmb(m){
-  if(!soundOn)return;
-  try{
-    if(!audioCtx)audioCtx=new(window.AudioContext||window.webkitAudioContext)();
-    stopAmb();
-    const map={war:[110,165],darfur:[146,220],desert:[164,246],city:[196,294],market:[174,261],work:[130,195],home:[220,330],prison:[98,147],hope:[261,392],peace:[329,440],dark:[110,165],famine:[87,130],border:[164,220]};
-    const f=map[m]||map.darfur;
-    f.forEach((fr,i)=>{
-      const o=audioCtx.createOscillator(),g=audioCtx.createGain(),l=audioCtx.createOscillator(),lg=audioCtx.createGain();
-      o.type='sine';o.frequency.value=fr;
-      g.gain.setValueAtTime(.006,audioCtx.currentTime);
-      l.frequency.value=.1+i*.05;lg.gain.value=1.3;
-      l.connect(lg);lg.connect(o.frequency);l.start();
-      o.connect(g);g.connect(audioCtx.destination);o.start();
-      amb.push({o,g,l});
-    });
-  }catch(e){}
-}
-
-/* ================= HELPERS ================= */
-const $=id=>document.getElementById(id);
-function clamp(s){
-  s.water=Math.max(0,Math.min(100,s.water));
-  s.food=Math.max(0,Math.min(100,s.food));
-  s.health=Math.max(0,Math.min(100,s.health));
-  s.hope=Math.max(0,Math.min(100,s.hope));
-  s.energy=Math.max(0,Math.min(100,s.energy));
-  s.humanity=Math.max(0,Math.min(100,s.humanity));
-  s.money=Math.max(0,s.money);
-}
-function toast(m){const t=$('toast');t.textContent=m;t.classList.add('show');clearTimeout(t._t);t._t=setTimeout(()=>t.classList.remove('show'),2200)}
-function addDiary(s,t,w){s.diary.push({text:t,when:w||(lang==='ar'?'عمر '+s.age:'Age '+s.age)})}
-function addItem(s,id){if(!s.inventory.includes(id)){s.inventory.push(id);toast('🎁 '+ITEMS[id].name[lang]);updateInvUI()}}
-
-/* ================= HUD ================= */
-function updateHUD(){
-  const rep=S.humanity>65?(lang==='ar'?'نقي':'Pure'):S.humanity<35?(lang==='ar'?'قاسي':'Harsh'):(lang==='ar'?'متوازن':'Balanced');
-  const cw=S.water<25?' crit':'',cf=S.food<25?' crit':'',ch=S.health<25?' crit':'';
-  $('hud').innerHTML=`
-    <div class="chip"><span class="lbl">${i18n[lang].age}</span><span class="val">${S.age}</span></div>
-    <div class="chip${cw}"><span class="lbl">${i18n[lang].water}</span><div class="bar"><i style="width:${S.water}%;background:var(--blue)"></i></div></div>
-    <div class="chip${cf}"><span class="lbl">${i18n[lang].food}</span><div class="bar"><i style="width:${S.food}%;background:var(--sand)"></i></div></div>
-    <div class="chip${ch}"><span class="lbl">${i18n[lang].health}</span><div class="bar"><i style="width:${S.health}%;background:var(--red)"></i></div></div>
-    <div class="chip"><span class="lbl">${i18n[lang].hope}</span><div class="bar"><i style="width:${S.hope}%;background:var(--amber)"></i></div></div>
-  `;
-  updateInvUI();updateCompUI();
-}
-
-function updateCompUI(){
-  const box=$('companionDisplay');
-  if(!S.uthman||!S.uthman.alive){box.style.display='none';return}
-  box.style.display='block';
-  const u=S.uthman;
-  const bondLabel=u.bond>70?(lang==='ar'?'أخ':'Brother'):u.bond>40?(lang==='ar'?'صديق':'Friend'):(lang==='ar'?'رفيق مضطر':'Companion');
-  const woundText=u.wounded?(lang==='ar'?'· مصاب':'· Wounded'):'';
-  box.innerHTML=`<div class="companion-box ${u.wounded?'wounded':''}">
-    <span>${u.wounded?'🤕':'👥'}</span>
-    <div>
-      <b>${lang==='ar'?'عثمان':'Uthman'}</b> · ${bondLabel} ${woundText}
-      <div class="status">${lang==='ar'?'الرابطة':'Bond'}: ${u.bond}% · ${u.wounded?(lang==='ar'?'يحتاج دواءً':'Needs medicine'):(lang==='ar'?'بصحة جيدة':'Healthy')}</div>
-    </div>
-  </div>`;
-}
-
-/* ================= INVENTORY & MARKET ================= */
-function updateInvUI(){
-  const list=$('invList');if(!list)return;
-  $('invCount').textContent=S.inventory.length;
-  if(S.inventory.length===0){list.innerHTML=`<div class="empty-msg">${i18n[lang].empty_inv}</div>`;return}
-  list.innerHTML=S.inventory.map(id=>{
-    const it=ITEMS[id];
-    return `<div class="inv-item"><span class="icon">${it.icon}</span><span class="name">${it.name[lang]}</span><span class="desc">${it.desc[lang]}</span><button onclick="useItem('${id}')">${i18n[lang].use}</button></div>`;
-  }).join('');
-}
-function useItem(id){
-  const it=ITEMS[id];if(!it)return;
-  it.use(S);
-  const i=S.inventory.indexOf(id);
-  if(i>-1)S.inventory.splice(i,1);
-  updateHUD();updateInvUI();
-}
-function buyItem(id){
-  const it=ITEMS[id];
-  if(S.money<it.price){toast(lang==='ar'?'❌ لا يكفيك المال':'❌ Not enough money');return}
-  S.money-=it.price;addItem(S,id);toast('🛍️ '+it.name[lang]);updateHUD();updateMarketUI();
-}
-function updateMarketUI(){
-  const list=$('marketList');if(!list)return;
-  list.innerHTML=Object.keys(ITEMS).map(id=>{
-    const it=ITEMS[id];
-    return `<div class="market-item"><span class="icon">${it.icon}</span><span class="name">${it.name[lang]}</span><span class="desc">${it.desc[lang]}</span><span style="color:var(--amber);font-weight:700;font-size:11px">${it.price} ج</span><button onclick="buyItem('${id}')">${i18n[lang].buy}</button></div>`;
-  }).join('');
-}
-
-/* ================= MAP ================= */
-function setMap(id){S.mapNode=id;document.querySelectorAll('.map-node').forEach(e=>e.classList.remove('active'));const el=$(id);if(el)el.classList.add('active')}
-
-/* ================= MODALS ================= */
-function openModal(id){$(id).classList.add('show')}
-function closeModal(id){$(id).classList.remove('show')}
-$('invBtn').onclick=()=>openModal('invModal');
-$('marketBtn').onclick=()=>{updateMarketUI();openModal('marketModal')};
-$('diaryBtn').onclick=()=>{
-  $('diaryList').innerHTML=S.diary.length===0?`<div class="empty-msg">${i18n[lang].empty_diary}</div>`:S.diary.map(d=>`<div class="diary-entry"><div class="when">${d.when}</div>${d.text}</div>`).join('');
-  openModal('diaryModal');
-};
-$('achBtn').onclick=()=>{
-  const u=getAch();
-  $('achGrid').innerHTML=Object.entries(ACHS).map(([k,a])=>{
-    const on=u.includes(k);
-    const aTitle = typeof a.title==='object'?a.title[lang]:a.title;
-    const aDesc = typeof a.desc==='object'?a.desc[lang]:a.desc;
-    return `<div class="ach-item ${on?'unlocked':'locked'}"><div class="ic">${on?a.icon:'🔒'}</div><div class="tt">${on?aTitle:i18n[lang].unknown}</div><div class="ds">${on?aDesc:i18n[lang].locked}</div></div>`;
-  }).join('');
-  openModal('achModal');
-};
-$('egBtn').onclick=()=>{
-  const f=getEg();
-  $('egGrid').innerHTML=ENDINGS.map(e=>{
-    const on=f.includes(e.id);
-    const eTitle = typeof e.title==='object'?e.title[lang]:e.title;
-    const eDesc = typeof e.desc==='object'?e.desc[lang]:e.desc;
-    return `<div class="eg-item ${on?'found':'locked'}"><div class="ic">${on?e.icon:'🔒'}</div><div><div class="tt">${on?eTitle:i18n[lang].unselected_eg}</div><div class="ds">${on?eDesc:i18n[lang].desc_eg}</div></div></div>`;
-  }).join('');
-  openModal('egModal');
-};
-$('saveBtn').onclick=()=>{try{localStorage.setItem(SAVE_KEY,JSON.stringify(S));toast(lang==='ar'?'✅ تم الحفظ':'✅ Saved')}catch(e){toast('❌')}};
-$('loadBtn').onclick=()=>{try{const d=localStorage.getItem(SAVE_KEY);if(!d){toast(lang==='ar'?'⚠️ لا يوجد حفظ':'⚠️ No save');return}S=JSON.parse(d);clamp(S);render();updateHUD();updateCompUI();toast(lang==='ar'?'📂 تم التحميل':'📂 Loaded')}catch(e){toast('❌')}};
-$('soundBtn').onclick=function(){
-  soundOn=!soundOn;
-  this.textContent=soundOn?'🔊':'🔇';
-  this.classList.toggle('off',!soundOn);
-  if(!soundOn)stopAmb();else startAmb(getMood(S.node));
-  toast(soundOn?(lang==='ar'?'الصوت مفعل':'Sound On'):(lang==='ar'?'الصوت مكتوم':'Sound Off'));
-};
-
-/* ================= PARTICLES ================= */
-function initParticles(){
-  const c=$('particles');
-  for(let i=0;i<20;i++){
-    const p=document.createElement('div');p.className='particle';
-    p.style.left=Math.random()*100+'%';
-    p.style.animationDuration=(9+Math.random()*13)+'s';
-    p.style.animationDelay=Math.random()*10+'s';
-    c.appendChild(p);
-  }
-}
-
-/* ================= SCENES ================= */
-const scenes={};
-function def(id,o){scenes[id]=o}
-const sceneEl=$('scene'),choicesEl=$('choices'),imgEl=$('sceneImg'),chLabel=$('chapterLabel'),avatarEl=$('avatarIcon');
-
-function getMood(id){return scenes[id]?.mood||'darfur'}
-
-function setMood(m){
-  const x=MOODS[m]||MOODS.darfur;
-  imgEl.style.background=`linear-gradient(180deg,${x.sky1} 0%,${x.sky2} 100%)`;
-  imgEl.querySelector('.mood-icon').textContent=x.icon;
-  startAmb(m);
-  if(S.age<12)avatarEl.textContent=AVATARS.child;
-  else if(S.age<18)avatarEl.textContent=AVATARS.teen;
-  else if(S.age<55)avatarEl.textContent=AVATARS.adult;
-  else avatarEl.textContent=AVATARS.elder;
-}
-
-function showBanner(ch){
-  $('chNum').textContent=(lang==='ar'?'الفصل ':'Chapter ')+ch;
-  $('chTitle').textContent=i18n[lang].chapters[ch]||'';
-  $('chapterBanner').classList.add('show');
-  tone(392,.15);setTimeout(()=>tone(523,.18),130);setTimeout(()=>tone(659,.22),280);
-  setTimeout(()=>$('chapterBanner').classList.remove('show'),1700);
-}
-
-function drain(){
-  S.water=Math.max(0,S.water-5);
-  S.food=Math.max(0,S.food-4);
-  if(S.uthman&&S.uthman.alive){
-    S.water=Math.max(0,S.water-3);
-    S.food=Math.max(0,S.food-2);
-  }
-  if(S.water===0){S.health=Math.max(0,S.health-8);toast(lang==='ar'?'⚠️ عطش شديد!':'⚠️ Severe thirst!')}
-  if(S.food===0){S.health=Math.max(0,S.health-6);toast(lang==='ar'?'⚠️ جوع قاتل!':'⚠️ Severe hunger!')}
-  if(S.uthman&&S.uthman.alive&&S.uthman.wounded){
-    S.uthman.bond=Math.max(0,S.uthman.bond-3);
-    if(S.uthman.bond<=0){S.uthman.alive=false;toast(lang==='ar'?'💔 مات عثمان.':'💔 Uthman passed away.');unlockAch('uthman_lost')}
-  }
-}
-
-function render(){
-  const sc=scenes[S.node];if(!sc)return;
-  if(sc.chapter&&sc.chapter!==S.chapter){S.chapter=sc.chapter;showBanner(S.chapter)}
-  chLabel.textContent=(lang==='ar'?'الفصل ':'Chapter ')+S.chapter+' · '+i18n[lang].chapters[S.chapter].split(' · ')[0];
-  setMood(sc.mood||'darfur');
-  if(sc.map)setMap(sc.map);
-
-  const txt=typeof sc.text==='function'?sc.text(S):(sc.text[lang]||sc.text.ar);
-  sceneEl.innerHTML=txt.split('\n').filter(l=>l.trim()).map(l=>`<p>${l}</p>`).join('');
-  sceneEl.querySelectorAll('p').forEach((p,i)=>setTimeout(()=>{p.style.opacity='1';p.style.transform='none'},50+i*80));
-
-  choicesEl.innerHTML='';
-  sc.choices.forEach(c=>{
-    if(c.if&&!c.if(S))return;
-    const b=document.createElement('button');
-    b.className='choice';
-    const dis=c.lock&&c.lock(S);
-    if(dis)b.classList.add('req');
-    const cText = typeof c.t==='object'?c.t[lang]:c.t;
-    const cHint = c.hint? (typeof c.hint==='object'?c.hint[lang]:c.hint):'';
-    b.innerHTML=`<span class="bullet"></span><span>${cText}</span><span class="preview">${cHint}</span>`;
-    if(!dis)b.onclick=()=>handleChoice(c);
-    choicesEl.appendChild(b);
-  });
-
-  updateHUD();
-}
-
-function handleChoice(c){
-  tone(440,.08);
-  if(c.do)c.do(S);
-  S.stats.choices++;clamp(S);
-  if(S.health<=0&&c.to!=='ending'){S.node='death';updateHUD();render();return}
-  drain();
-  if(S.health<=0){S.node='death';updateHUD();render();return}
-  S.node=c.to;
-  updateHUD();render();window.scrollTo({top:0,behavior:'smooth'});
-}
-
-/* ============================================================
-   SCENE DEFINITIONS (BILINGUAL)
-   ============================================================ */
-
-def('intro',{chapter:1,mood:'darfur',map:'m-darfur',
-text:{
-  ar:`في دارفور، عام ٢٠٠٣، وُلد طفل في قرية صغيرة قرب الفاشر.
-هذه ليست قصته وحده — هذه قصة مئات الآلاف الذين شُرّدوا، وقُتلوا، وبَقُوا.
-ستعيش هنا قرارات صعبة. ستشعر بالجوع والعطش والخوف.
-<span class="warn-txt">تنبيه:</span> اللعبة تتناول الحرب والمجاعة والفقد بصدق.`,
-  en:`In Darfur, 2003, a child was born in a small village near Al-Fashir.
-This is not just his story—it is the story of hundreds of thousands displaced, killed, and surviving.
-You will make hard choices. You will feel hunger, thirst, and fear.
-<span class="warn-txt">Note:</span> The game deals with war, famine, and loss honestly.`
-},
-choices:[{t:{ar:'ابدأ الرحلة',en:'Begin Journey'},to:'village'}]});
-
-def('village',{chapter:1,mood:'darfur',map:'m-darfur',
-text:{
-  ar:`قريتنا تقع بين أشجار الهجليج وحقول الدخن. عمرك ثمانية أعوام.
-أمك تغني في الفناء عند الفجر. أبوك يمسح عرق جبينه بثوبه الأبيض.
-ثم جاء فبراير. في مارس وأبريل، جاء الرد: طائرات تحلق منخفضة، ثم رجال على خيول وجمال.
-أمك تقول لك: <span class="speaker">«لا تنظر إلى السماء. انظر إلى الأرض، واجرِ.»</span>`,
-  en:`Our village lies between desert dates and millet fields. You are eight years old.
-Your mother sings at dawn. Your father wipes his brow.
-Then came February. In March and April, the response came: low-flying planes, then men on horses and camels.
-Your mother tells you: <span class="speaker">«Do not look at the sky. Look at the ground, and run.»</span>`
-},
-choices:[
-{t:{ar:'تذهب مع أمك لجلب الماء من البئر',en:'Go with mother for water'},do:s=>{s.energy-=8;s.hope-=3;addItem(s,'water');addDiary(s,lang==='ar'?'ذهبت مع أمي إلى البئر.':'Went to the well with mother.')},to:'well',hint:{ar:'ماء +',en:'Water +'}},
-{t:{ar:'تبقى مع أبيك في الحوش',en:'Stay with father'},do:s=>{s.hope-=2},to:'raid',hint:{ar:'أمل -',en:'Hope -'}}]});
-
-def('well',{chapter:1,mood:'attack',map:'m-darfur',
-text:{
-  ar:`البئر على بعد ربع ساعة. في الطريق رأيت جسد رجل ملقى.
-أمك سحبتك من يدك وغطّت عينيك بكفها الخشنة.
-حين سمعت صوت الحوافر والصيحات، نظرت إليك أمك نظرة لن تنسى: <span class="speaker">«اجرِ. لا تلتفت.»</span>`,
-  en:`The well is a 15-minute walk. On the way, you saw a fallen body.
-Your mother pulled your hand and covered your eyes.
-Hearing hooves and shouts, she looked at you unforgettably: <span class="speaker">«Run. Do not look back.»</span>`
-},
-choices:[
-{t:{ar:'تجري بأقصى ما تستطيع',en:'Run as fast as you can'},do:s=>{s.energy-=20;s.water-=10;s.hope-=5},to:'raid',hint:{ar:'طاقة -',en:'Energy -'}},
-{t:{ar:'تتجمّد من الخوف',en:'Freeze in fear'},do:s=>{s.hope-=10;s.health-=5},to:'raid',hint:{ar:'أمل --',en:'Hope --'}}]});
-
-def('raid',{chapter:1,mood:'war',map:'m-darfur',
-text:{
-  ar:`دفعك أبوك من النافذة الخلفية صارخاً: <span class="speaker">«لا تلتفت!»</span>
-سمعت خلفك ما لا يوصف. ركضت حتى انقطع نفسك. حين توقفت، كنت وحدك.
-<span class="thought">💭 كلمة أبيك الأخيرة في أذنك: لا تلتفت.</span>`,
-  en:`Your father pushed you out the back window shouting: <span class="speaker">«Do not look back!»</span>
-You heard the unspeakable behind you. You ran until breathless. When you stopped, you were alone.
-<span class="thought">💭 Your father's last words ring in your ear: Do not look back.</span>`
-},
-choices:[
-{t:{ar:'تجري في الوادي حتى ينقطع نفسك',en:'Run down the valley'},do:s=>{s.energy-=25;s.health-=5;s.water-=12;s.hope-=10;addDiary(s,lang==='ar'?'تركت قريتي. لم ألتفت.':'Left my village. Didn\'t look back.');unlockAch('survive_darfur')},to:'valley',hint:{ar:'طاقة --',en:'Energy --'}},
-{t:{ar:'تختبئ في حفرة تحت شجرة',en:'Hide in a pit'},do:s=>{s.health-=8;s.hope-=6;addDiary(s,lang==='ar'?'اختبأت ساعات.':'Hid for hours.');unlockAch('survive_darfur')},to:'valley',hint:{ar:'صحة -',en:'Health -'}}]});
-
-def('valley',{chapter:2,mood:'desert',map:'m-desert',
-text:{
-  ar:`مشيت. الليل غطّى الوادي والصمت كان أسوأ من الصوت.
-عمرك ٨ سنوات. ليس معك سوى قميص نوم وقربة ماء.
-في الصباح، توقفت شاحنة عسكرية قديمة. رجل ضخم نظر إليك:
-<span class="speaker">«هذا؟ صغير جداً.»</span>`,
-  en:`You walked. Night covered the valley, and silence was worse than sound.
-You are 8. Only a nightshirt and water pouch.
-In the morning, an old military truck stopped. A huge man looked at you:
-<span class="speaker">«This one? Too small.»</span>`
-},
-choices:[
-{t:{ar:'تصعد بصمت وتجلس في المؤخرة',en:'Climb aboard silently'},do:s=>{s.energy-=10;s.hope-=3},to:'marshall',hint:{ar:'طاقة -',en:'Energy -'}},
-{t:{ar:'تقول إنك تعرف الطرق',en:'Say you know the roads'},do:s=>{s.flags.useful=true;s.hope+=3},to:'marshall',hint:{ar:'أمل +',en:'Hope +'}}]});
-
-def('marshall',{chapter:2,mood:'desert',map:'m-desert',
-text:{
-  ar:`تعلّمت أن الرجل يُنادى «المارشال». كان يتحدث عن صفقات وتقارير وشحنات تتجه للخرطوم.
-هذا الرجل يمشي في طريقين. والذين يمشون في طريقين يعرفون أشياء كثيرة.
-في نقطة التفتيش الأخيرة، سألوه عنك. قال: <span class="speaker">«هذا؟ غنيمتي.»</span>`,
-  en:`You learned the man is called "The Marshal". He spoke of deals, reports, and shipments to Khartoum.
-This man walks two paths. Those who walk two paths know many things.
-At the last checkpoint, they asked about you. He said: <span class="speaker">«This? My spoils.»</span>`
-},
-choices:[
-{t:{ar:'تصمت وتستجمع قوتك',en:'Stay silent & rest'},do:s=>{s.energy+=15;s.health+=3},to:'arrival',hint:{ar:'طاقة +',en:'Energy +'}},
-{t:{ar:'تراقب وتتعلم الأسماء',en:'Observe and learn names'},do:s=>{s.flags.observer=true;s.hope+=3},to:'arrival',hint:{ar:'أمل +',en:'Hope +'}}]});
-
-def('arrival',{chapter:3,mood:'city',map:'m-market',
-text:{
-  ar:`الخرطوم. أول ما أدهشك: لا دخان. لا طائرات.
-نساء يضحكن في السوق. أطفال يجرون خلف كرة.
-توقفت الشاحنة عند سوق أم درمان (١٩١٧). نزل المارشال وغاب بين الناس.`,
-  en:`Khartoum. What struck you most: no smoke, no planes.
-Women laughing in the market. Children chasing a ball.
-The truck stopped at Omdurman market (1917). The Marshal stepped out and vanished.`
-},
-choices:[
-{t:{ar:'تقفز من الشاحنة فوراً',en:'Jump off immediately'},do:s=>{s.health-=3;unlockAch('reach_khartoum')},to:'market',hint:{ar:'صحة -',en:'Health -'}},
-{t:{ar:$ar='تنتظر حتى يغيب ثم تقفز',en:'Wait until he leaves'},do:s=>{s.hope+=2;unlockAch('reach_khartoum')},to:'market',hint:{ar:'أمل +',en:'Hope +'}}]});
-
-def('market',{chapter:3,mood:'market',map:'m-market',
-text:{
-  ar:`الشارع طويل والوجوه كثيرة. الجوع يمزق أمعاءك.
-لأول مرة مددت يدك طلباً للطعام. مرّ العشرات. بعضهم أسرع في الخطو.
-واحد فقط توقف، نظر إليك، ثم مشى.`,
-  en:`The street is long, faces are endless. Hunger tears at your gut.
-For the first time, you held out your hand. Dozens passed. Some quickened their pace.
-Only one stopped, looked at you, then walked away.`
-},
-choices:[
-{t:{ar:'تمدّ يدك للمارّة',en:'Beg passersby'},do:s=>{s.hope-=10;s.humanity-=3;s.food-=5;addDiary(s,lang==='ar'?'مددت يدي. لم ينظر إليّ أحد.':'Begged. No one looked.')},to:'beg',hint:{ar:'أمل -',en:'Hope -'}},
-{t:{ar:'تبحث عن عمل في مطعم',en:'Find work in a restaurant'},do:s=>{},to:'dishes',hint:{ar:'كرامة',en:'Dignity'}}]});
-
-def('beg',{chapter:3,mood:'market',map:'m-market',
-text:{
-  ar:`في اليوم الثاني أعطاك عجوز نصف رغيف. في اليوم الثالث، صبي بصندوق أحذية قال: <span class="speaker">«تعال. أعلّمك.»</span>
-أنقذ حياتك. في الشهر السادس صار عندك 300 جنيه.`,
-  en:`On the second day, an old man gave you half a loaf. On the third day, a boy with a wooden box said: <span class="speaker">«Come. I will teach you.»</span>
-He saved your life. By month six, you had 300 pounds.`
-},
-choices:[
-{t:{ar:'تذهب إلى المطعم وتطلب أي عمل',en:'Go to the restaurant for work'},do:s=>{s.hope-=3;s.energy-=10;s.money+=300},to:'dishes',hint:{ar:'طاقة -',en:'Energy -'}}]});
-
-def('dishes',{chapter:3,mood:'work',map:'m-market',
-text:{
-  ar:`في مطعم الحاج محمود، وقفت وقلت: <span class="speaker">«أنا أغسل الصحون وأنام في المخزن.»</span>
-ستة أشهر من العمل الصامت. ثم قال لك ببرود: <span class="speaker">«ما بقى لي شغل ليك.»</span>`,
-  en:`At Haj Mahmoud's restaurant, you said: <span class="speaker">«I wash dishes and sleep in the store.»</span>
-Six months of silent work. Then he said coldly: <span class="speaker">«I have no more work for you.»</span>`
-},
-choices:[
-{t:{ar:'تحكِ له كل شيء عن دارفور',en:'Tell him everything about Darfur'},do:s=>{s.money+=500;s.hope+=8;s.humanity+=5;addDiary(s,lang==='ar'?'حكيت للحاج محمود قصتي.':'Told Haj Mahmoud my story.')},to:'fired',hint:{ar:'أمل +',en:'Hope +'}},
-{t:{ar:'تأخذ أجرك وتمشي بصمت',en:'Take your wage and leave'},do:s=>{s.money+=350;s.hope-=3},to:'fired',hint:{ar:'مال',en:'Money'}}]});
-
-def('fired',{chapter:3,mood:'market',map:'m-market',
-text:{
-  ar:`اشتريت بالمال صابوناً وخرقة ودلواً. جلست في ركن السوق: «أغسل لك حذاءك؟»
-بعد سنتين صار عندك 6000 جنيه.`,
-  en:`You bought soap, a rag, and a bucket. Sat in a market corner: «Shall I clean your shoes?»
-After two years, you had 6,000 pounds.`
-},
-choices:[
-{t:{ar:'تواصل العمل عامين كاملين',en:'Continue working for 2 years'},do:s=>{s.money+=6000;s.energy-=15;s.age=10;addDiary(s,lang==='ar'?'سنتان على الرصيف.':'Two years on the pavement.');unlockAch('reach_khartoum')},to:'uthman_meet',hint:{ar:'مال ++',en:'Money ++'}}]});
-
-def('uthman_meet',{chapter:3,mood:'market',map:'m-market',
-text:{
-  ar:`في ليلة باردة، سمعت بكاءً خافتم خلف صندوق خشبي. طفل في الخامسة، يرتجف في ثياب ممزقة. كيس فول سوداني أمامه. لم يبع شيئاً.
-قال بصوت مرتجف: <span class="speaker">«اسمي عثمان.»</span>`,
-  en:`On a cold night, you heard soft weeping behind a wooden box. A 5-year-old boy shivering in rags, a bag of peanuts before him. He sold nothing.
-He whispered: <span class="speaker">«My name is Uthman.»</span>`
-},
-choices:[
-{t:{ar:'تأخذه معك وتطعمه وتعلمه',en:'Take him in, feed & teach him'},do:s=>{
-  s.uthman={name:'Uthman',bond:80,wounded:false,alive:true};
-  s.hope+=15;s.humanity+=10;s.food-=15;s.water-=10;s.money-=100;
-  addDiary(s,lang==='ar'?'وجدت عثمان وأخذته معي.':'Found Uthman and took him in.');
-  unlockAch('find_uthman');
-},to:'network',hint:{ar:'رفيق 👥',en:'Companion 👥'}},
-{t:{ar:'تعطيه نصف رغيفك وتتركه',en:'Give him half your bread & leave'},do:s=>{
-  s.food-=5;s.humanity-=5;s.hope-=5;
-},to:'network',hint:{ar:'بلا رفيق',en:'Alone'}}]});
-
-def('network',{chapter:4,mood:'work',map:'m-market',
-text:function(s){
-const c=s.uthman&&s.uthman.alive?(lang==='ar'?'\n\nعثمان بجانبك كل يوم. غدا أخاك الصغير.':'\n\nUthman is by your side every day. He became your little brother.'):'';
-return {
-  ar:`بعد سنتين، صار في جيبك 12000 جنيه.
-وزّعتها على أطفال الطرقات وقلت لهم: <span class="speaker">«كل واحد في ركنه، ونقتسم بالعدل.»</span>${c}`,
-  en:`Two years later, you had 12,000 pounds.
-Distributed tools to street kids and said: <span class="speaker">«Each in their corner, we share fairly.»</span>${c}`
-};},
-choices:[
-{t:{ar:'تكون عادلاً معهم',en:'Be fair with them'},do:s=>{s.flags.fair=true;s.hope+=15;s.humanity+=12;s.money+=14000},to:'bike',hint:{ar:'ضمير',en:'Conscience'}},
-{t:{ar:'تأخذ أكثر مما ينبغي',en:'Take more than your share'},do:s=>{s.flags.harsh=true;s.hope-=12;s.humanity-=15;s.money+=25000},to:'bike',hint:{ar:'مال',en:'Money'}}]});
-
-def('bike',{chapter:4,mood:'work',map:'m-market',
-text:{
-  ar:`سنة أخرى. اشتريت دراجة. أنت، طفل دارفور الحافي، تبيع التسالي والفول.
-الرصيف صار لك.`,
-  en:`Another year. Bought a bicycle. You, the barefoot Darfur child, selling peanuts.
-The pavement became yours.`
-},
-choices:[
-{t:{ar:'تواصل الادخار بصبر',en:'Save patiently'},do:s=>{s.money+=45000;s.energy-=15;s.age=14},to:'rickshaw',hint:{ar:'مال',en:'Money'}},
-{t:{ar:'توسّع في البضاعة بجرأة',en:'Expand boldly'},do:s=>{s.money+=75000;s.energy-=25;s.hope+=4;s.age=14},to:'rickshaw',hint:{ar:'مال +',en:'Money +'}}]});
-
-def('rickshaw',{chapter:4,mood:'city',map:'m-khartoum',
-text:{
-  ar:`ثم اشتريت ركشة. صرت تنقل الناس، توصّل المريض ليلاً، وتعيد الأطفال للمدارس. أصبحت جزءاً من نبض الخرطوم.`,
-  en:`Then you bought a rickshaw. Transporting people, taking patients at night, school children. You became Khartoum's heartbeat.`
-},
-choices:[
-{t:{ar:'تواصل العمل سنوات',en:'Work for years'},do:s=>{s.money+=150000;s.hope+=8;s.age=22},to:'bus',hint:{ar:'تقدم',en:'Progress'}}]});
-
-def('bus',{chapter:4,mood:'work',map:'m-khartoum',
-text:{
-  ar:`في الـ٢٨، وقفت أمام حافلة «كريز» مستعملة. دفعت ثمنها كاملاً. أسميتها «فجر الأمل».
-ثلاثون سنة من صندوق شاحنة إلى مقعد سائق.`,
-  en:`At 28, you stood before a used bus. Paid in full. Named it "Dawn of Hope".
-30 years from a truck bed to a driver's seat.`
-},
-choices:[
-{t:{ar:'تكمل — امتلكت الحافلة',en:'Own the bus'},do:s=>{s.money+=900000;s.hope+=12;s.humanity+=3;s.age=28;addItem(s,'medicine');unlockAch('build_empire')},to:'house',hint:{ar:'إنجاز',en:'Achievement'}}]});
-
-def('house',{chapter:5,mood:'home',map:'m-khartoum',
-text:{
-  ar:`بنيت بيتاً في أطراف العاصمة. غرفتان وباب حديدي. أول ليلة نمت فيها، بكيت لا خوفاً، بل طمأنينة.`,
-  en:`Built a house on the capital's edge. Two rooms and an iron door. First night, you wept not in fear, but peace.`
-},
-choices:[
-{t:{ar:'تحتفل مع الجيران',en:'Celebrate with neighbors'},do:s=>{s.money+=400000;s.hope+=5},to:'marriage',hint:{ar:'استقرار',en:'Stability'}}]});
-
-def('marriage',{chapter:5,mood:'home',map:'m-khartoum',
-text:{
-  ar:`تزوجت آمنة. أنجبتما محمد ومريم.
-كنت تقول لهما: <span class="speaker">«أبوكم جاء من دارفور في صندوق شاحنة. ولم يعد خائفاً.»</span>`,
-  en:`Married Amna. Had Muhammad and Maryam.
-You told them: <span class="speaker">«Your father came from Darfur in a truck bed, and is no longer afraid.»</span>`
-},
-choices:[
-{t:{ar:'عش السنوات بهدوء وامتنان',en:'Live peacefully'},do:s=>{s.hope+=15;s.health+=10;s.age=40;unlockAch('family')},to:'dream',hint:{ar:'سلام',en:'Peace'}}]});
-
-def('dream',{chapter:5,mood:'home',map:'m-khartoum',
-text:{
-  ar:`مرت السنوات بأمان. ذهبت في صباح ١٥ أبريل ٢٠٢٣ لتوقيع أوراق حافلة ثانية.
-وفي تلك اللحظة بالذات...`,
-  en:`Years passed safely. On April 15, 2023, you went to sign papers for a second bus.
-And at that very moment...`
-},
-choices:[{t:{ar:'...',en:'...'},to:'war'}]});
-
-def('war',{chapter:6,mood:'war',map:'m-khartoum',
-text:{
-  ar:`١٥ أبريل ٢٠٢٣. طائرات ومدفعية ودخان أسود.
-اندلع القتال بين الجيش والدعم السريع. ثلاثون سنة من التعب، راحت في دقائق.`,
-  en:`April 15, 2023. Planes, artillery, black smoke.
-Fighting erupted between the army and RSF. 30 years of toil vanished in minutes.`
-},
-choices:[
-{t:{ar:'تجري إلى البيت',en:'Rush home'},do:s=>{s.health-=10;s.energy-=20},to:'loot',hint:{ar:'صحة -',en:'Health -'}},
-{t:{ar:'تتصل بآمنة أولاً',en:'Call Amna first'},do:s=>{s.hope-=8},to:'loot',hint:{ar:'أمل -',en:'Hope -'}}]});
-
-def('loot',{chapter:6,mood:'attack',map:'m-khartoum',
-text:{
-  ar:`وصلت والحي دخان. الباب مهشم. الحافلة والبيت وكل ما ملكت نهب.
-دخلت الغرفة. خرجت وحدك. صرخت ولم يسمعك أحد.`,
-  en:`Arrived to a smoking neighborhood. Door smashed. Bus, house, everything looted.
-Entered the room. Emerged alone. Screamed, no one heard.`
-},
-choices:[
-{t:{ar:'...',en:'...'},do:s=>{s.money=0;s.hope-=15;unlockAch('lost_all')},to:'uthman_saves'}]});
-
-def('uthman_saves',{chapter:6,mood:'dark',map:'m-khartoum',
-text:function(s){
-if(s.uthman&&s.uthman.alive){
-  return {
-    ar:`بينما كنت تزحف بين الأنقاض، ظهر عثمان (٢٣ عاماً): <span class="speaker">«قمت معي من الشارع. لن أتركك في النار.»</span> سحبك من بين الحطام.`,
-    en:`Crawling through rubble, 23-year-old Uthman appeared: <span class="speaker">«You pulled me off the street. I won't leave you in the fire.»</span> He pulled you out.`
-  };
-}
-return {ar:'وبقيْت وحدك في الرماد.',en:'You remained alone in the ash.'};},
-choices:[
-{t:{ar:'...',en:'...'},do:s=>{if(s.uthman&&s.uthman.alive){s.hope+=10;s.humanity+=5}s.health-=5},to:'fasher_road'}]});
-
-def('fasher_road',{chapter:7,mood:'famine',map:'m-fasher',
-text:{
-  ar:`لم يكن أمامك سوى الفاشر. الفاشر محاصرة منذ أشهر. لا طعام، لا دواء، مجاعة معلنة.
-رأيت أطفالاً يأكلون أوراق الأشجار.`,
-  en:`Only Al-Fashir remained. Besieged for months. No food, no medicine, declared famine.
-You saw children eating tree leaves.`
-},
-choices:[
-{t:{ar:'تتوجه نحو غرف الطوارئ',en:'Head to Emergency Rooms'},do:s=>{s.hope+=5},to:'err_room',hint:{ar:'أمل +',en:'Hope +'}},
-{t:{ar:'تحاول الفرار عبر نقطة تفتيش',en:'Try escaping via checkpoint'},do:s=>{s.money-=200;s.health-=10},to:'checkpoint_bribe',hint:{ar:'خطر',en:'Danger'}}]});
-
-def('err_room',{chapter:8,mood:'hope',map:'m-fasher',
-text:{
-  ar:`في زقاق ضيق، وجدت «غرفة طوارئ» يدار فيها مطبخ جماعي.
-طبيبة شابة قالت: <span class="speaker">«ما معنا مال. معنا بعضنا. تعال.»</span>
-تطوعت لتوزيع الطعام ونقل الجرحى.`,
-  en:`In a narrow alley, an "Emergency Room" running a community kitchen.
-A young doctor said: <span class="speaker">«No money. We have each other. Come.»</span>
-You volunteered to distribute food and carry wounded.`
-},
-choices:[
-{t:{ar:'تنضم إليهم وتتبرع بالدم للجرحى',en:'Join & donate blood to wounded'},do:s=>{
-  s.humanity+=20;s.hope+=15;s.health-=15;s.flags.joined_err=true;
-  unlockAch('err_join');unlockAch('save_someone');
-},to:'fasher_fall',hint:{ar:'تضحية كبرى',en:'Great Sacrifice'}},
-{t:{ar:'تأخذ طعاماً وترحل',en:'Take food & leave'},do:s=>{s.food+=20;s.humanity-=10},to:'escape_fasher',hint:{ar:'نجاة فردية',en:'Survival'}}]});
-
-def('fasher_fall',{chapter:8,mood:'dark',map:'m-fasher',
-text:{
-  ar:`سقطت الفاشر. رصدت الأمم المتحدة مؤشرات إبادة جماعية ومجازر مروعة.
-خرجت مع عثمان نحو الحدود، لا تحميكما سوى الأقدار.`,
-  en:`Al-Fashir fell. UN reported indicators of genocide and horrific massacres.
-You escaped with Uthman toward the border, protected only by fate.`
-},
-choices:[
-{t:{ar:'المسير نحو الحدود',en:'March to the border'},do:s=>{s.health-=15},to:'borders'}]});
-
-def('checkpoint_bribe',{chapter:7,mood:'attack',map:'m-fasher',
-text:{
-  ar:`عند نقطة التفتيش، طلب المسلح مالاً طائلاً. دفعت ما بقي لك لتعبر.`,
-  en:`At the checkpoint, a gunman demanded a heavy bribe. You paid your last coins to pass.`
-},
-choices:[{t:{ar:'العبور',en:'Cross'},to:'escape_fasher'}]});
-
-def('escape_fasher',{chapter:8,mood:'desert',map:'m-fasher',
-text:{ar:'هربت نحو الحدود الغربية.',en:'Escaped toward western borders.'},choices:[{t:{ar:'الحدود',en:'Borders'},to:'borders'}]});
-
-def('borders',{chapter:9,mood:'border',map:'m-borders',
-text:function(s){
-return {
-  ar:`وقفت أمام مفترق الطرق الأخير:
-🇪🇬 مصر · 🇹🇩 تشاد · 🇸🇸 جنوب السودان. أكثر من ٤ ملايين لاجئ. أي طريق تختار؟`,
-  en:`You stood before the final crossroads:
-🇪🇬 Egypt · 🇹🇩 Chad · 🇸🇸 South Sudan. Over 4 million refugees. Which path?`
-};},
-choices:[
-{t:{ar:'🇪🇬 شمالاً نحو مصر',en:'🇪🇬 North to Egypt'},do:s=>{s.flags.border='north';s.hope+=20;s.health-=15;addDiary(s,lang==='ar'?'عبرت نحو مصر.':'Crossed to Egypt.')},to:'ending',hint:{ar:'أمان',en:'Safety'}},
-{t:{ar:'🇹🇩 غرباً نحو تشاد',en:'🇹🇩 West to Chad'},do:s=>{s.flags.border='west';s.hope+=15;s.health-=20;addDiary(s,lang==='ar'?'عبرت نحو تشاد.':'Crossed to Chad.')},to:'ending',hint:{ar:'جذور',en:'Roots'}},
-{t:{ar:'🇸🇸 جنوباً نحو جنوب السودان',en:'🇸🇸 South to South Sudan'},do:s=>{s.flags.border='south';s.hope+=10;s.health-=20;addDiary(s,lang==='ar'?'نزلت جنوباً.':'Headed south.')},to:'ending',hint:{ar:'النيل',en:'Nile'}}]});
-
-/* ============================================================
-   ENDINGS
-   ============================================================ */
-def('ending',{chapter:10,mood:'hope',map:'m-borders',
-text:function(s){
-  const uthAlive=s.uthman&&s.uthman.alive;
-  const score=s.hope+s.humanity+(uthAlive?20:0)+(s.flags.joined_err?15:0);
-
-  const sBox=`<div class="stats-box">
-    <div class="row"><span>${lang==='ar'?'القرارات':'Choices'}</span><span>${s.stats.choices}</span></div>
-    <div class="row"><span>${lang==='ar'?'عثمان':'Uthman'}</span><span>${uthAlive?(lang==='ar'?'حي':'Alive'):(lang==='ar'?'مفقود':'Lost')}</span></div>
-    <div class="row"><span>${lang==='ar'?'غرفة الطوارئ':'ER'}</span><span>${s.flags.joined_err?(lang==='ar'?'نعم':'Yes'):(lang==='ar'?'لا':'No')}</span></div>
-    <div class="row"><span>${lang==='ar'?'الأمل':'Hope'}</span><span>${s.hope}%</span></div>
-    <div class="row"><span>${lang==='ar'?'الإنسانية':'Humanity'}</span><span>${s.humanity}%</span></div>
-  </div>`;
-
-  if(s.flags.sacrifice){
-    markEnding('martyr');unlockAch('end_martyr');
-    return {
-      ar:`<div class="ending-h martyr">🌹 التضحية</div>
-        لم تصل إلى الحدود. في غرفة الطوارئ، حين سُئلت عن الدم والجريح، قدمت كل ما تملك.
-        ثم سقطت، وعثمان يبكي بجانبك. أنت أنقذت أحداً. هذا يكفي.
-        <span class="quote">«بعض الناس لا يعيشون ليروا السلام. يعيشون ليصنعوه لغيرهم.»</span>
-        ${sBox}`,
-      en:`<div class="ending-h martyr">🌹 The Martyr</div>
-        You never reached the border. In the ER, you gave your blood and strength.
-        Then you fell, Uthman weeping beside you. You saved someone. That is enough.
-        <span class="quote">«Some do not live to see peace. They live to make it for others.»</span>
-        ${sBox}`
-    };
-  }
-
-  if(score>=115&&uthAlive&&s.flags.joined_err){
-    markEnding('witness');unlockAch('end_witness');unlockAch('uthman_alive');
-    return {
-      ar:`<div class="ending-h peace">📖 الشاهد</div>
-        عبرت الحدود ومعك عثمان. بدأت تكتب أسماء من فقدت ومن نجا.
-        حين سألك طفل: <span class="speaker">«من أنت؟»</span> قلت: <span class="speaker">«أنا من الفاشر. وهذه حكايتنا.»</span>
-        <span class="quote">«النجاة ليست أن تبقى حياً فقط. النجاة أن تحفظ الأسماء.»</span>
-        ${sBox}`,
-      en:`<div class="ending-h peace">📖 The Witness</div>
-        You crossed with Uthman. You began writing the names of the lost and saved.
-        When a child asked: <span class="speaker">«Who are you?»</span> You said: <span class="speaker">«I am from Al-Fashir. This is our story.»</span>
-        <span class="quote">«Survival is not just staying alive. It is keeping the names.»</span>
-        ${sBox}`
-    };
-  }
-
-  if(uthAlive&&score>=70){
-    markEnding('renewed');unlockAch('end_renewed');unlockAch('uthman_alive');
-    return {
-      ar:`<div class="ending-h peace">🌱 من جديد</div>
-        عبرت الحدود مع عثمان. بدأت من جديد في المخيم. تعرف كيف تبدأ من الصفر.
-        من نجا يحمل أمانة من لم ينجُ.
-        <span class="quote">«بعض البشر يولدون مرتين: مرة من أمهاتهم، ومرة من رحم الحروب.»</span>
-        ${sBox}`,
-      en:`<div class="ending-h peace">🌱 Renewed</div>
-        You crossed with Uthman. Started anew in the camp. You know how to rebuild.
-        Those who survive carry the duty of those who didn't.
-        <span class="quote">«Some are born twice: once from their mothers, once from the womb of war.»</span>
-        ${sBox}`
-    };
-  }
-
-  markEnding('crossing');unlockAch('end_crossing');
-  return {
-    ar:`<div class="ending-h peace">🚪 العبور</div>
-      عبرت الحدود وحدك. بدأت تزرع في أرض الشتات. عثمان في القلب، والوطن في الذاكرة.
-      <span class="quote">«الرماد يهطل، لكن تحته نار لا تطفأ.»</span>
-      ${sBox}`,
-    en:`<div class="ending-h peace">Crossing</div>
-      You crossed alone. Began planting in the diaspora. Uthman in your heart, homeland in memory.
-      <span class="quote">«Ash falls, but underneath is an unquenchable fire.»</span>
-      ${sBox}`
-  };
-},
-choices:[{t:{ar:'ابدأ من جديد',en:'Restart'},do:s=>{Object.assign(s,newState());updateHUD();updateCompUI();},to:'intro'}]});
-
-def('death',{chapter:10,mood:'dark',map:'m-borders',
-text:function(s){
-  markEnding('ash');unlockAch('end_ash');
-  return {
-    ar:`<div class="ending-h dark">🥀 الرماد الأخير</div>
-      انهار جسدك. سقطت على رمال الطريق. لا أحد كان بجانبك.
-      <span class="quote">«تذكرهم. تذكر أنهم كانوا هنا.»</span>`,
-    en:`<div class="ending-h dark">🥀 The Last Ash</div>
-      Your body collapsed. You fell on the roadside. No one was beside you.
-      <span class="quote">«Remember them. Remember they were here.»</span>`
-  };
-},
-choices:[{t:{ar:'حاول مرة أخرى',en:'Try Again'},do:s=>{Object.assign(s,newState());updateHUD();updateCompUI();},to:'intro'}]});
-
-/* ================= INIT ================= */
-initParticles();
-S=newState();
-render();
-updateHUD();
-updateCompUI();
+const F={d1:"منذ 2003 اندلع نزاع دارفور، وارتبطت ميليشيات الجنجويد بعمليات قتل وتهجير واسعة بحق المدنيين؛ قُدّر أن مئات الآلاف قُتلوا ونزح ملايين.",m1:"الخرطوم تلتقي فيها النيلان الأزرق والأبيض عند المقرن، وقصدها كثيرون هربًا من حروب الأقاليم.",s2:"الباعة المتجولون وستات الشاي والاقتصاد غير الرسمي يعيلون جزءًا كبيرًا من الأسر السودانية.",r2:"أطاحت الاحتجاجات التي بدأت في ديسمبر 2018 بحكم عمر البشير في أبريل 2019، وفُضّ اعتصام القيادة العامة بعنف في 3 يونيو 2019.",w1:"اندلع القتال بين الجيش وقوات الدعم السريع في 15 أبريل 2023، وانتقل إلى أحياء الخرطوم السكنية، ونزح لاحقًا ملايين السودانيين داخل البلاد وخارجها.",h1:"خرجت نسبة كبيرة من المستشفيات في مناطق القتال عن الخدمة، وعمل أطباء ومتطوعون في ظروف قاسية.",bd:"عبر ملايين السودانيين إلى مصر وتشاد وجنوب السودان وغيرها هربًا من الحرب، وواجه كثيرون طرقًا شاقة وانتظارًا طويلًا عند المعابر.",k1:"استقبلت ود مدني بعد اندلاع الحرب مئات الآلاف من نازحي الخرطوم، وكانت من أكثر المدن أمانًا قبل سقوطها.",k2:"في ديسمبر 2023 دخلت قوات الدعم السريع ولاية الجزيرة وسقطت ود مدني، فنزح مئات الآلاف مرة ثانية.",gd:"أكدت جهات دولية في 2024 حدوث مجاعة في مخيم زمزم بشمال دارفور، وقدّرت وكالات أممية أن ملايين السودانيين يحتاجون إلى غذاء عاجل.",w2:"رعت السعودية وأمريكا محادثات جدة في 2023، لكن الهدن المتتالية انهارت مرارًا.",p1:"وثّقت منظمات حقوقية احتجازًا تعسفيًا وظروفًا قاسية في أماكن الاحتجاز بمناطق القتال.",o2:"تفشّت الكوليرا وحمى الضنك في مناطق النزوح، وانقطع الإنترنت والاتصالات عن البلاد لفترات.",fs1:"حاصرت قوات الدعم السريع الفاشر منذ مايو 2024 وانقطعت عنها الإمدادات، وتحدثت جهات أممية عن مجاعة في مخيمات حولها.",fs3:"تحدثت تقارير أممية وحقوقية عن مجازر وانتهاكات واسعة بعد دخول قوات الدعم السريع الفاشر في أواخر 2025.",e2:"تحدثت تقارير حقوقية عن انتهاكات وتوقيفات تعسفية عند الحواجز خلال الحرب.",o1:"أقام شباب لجان المقاومة غرف الطوارئ، وهي مبادرات تطوعية وفّرت الغذاء والدواء والإجلاء للمدنيين، ورُشّحت لجائزة نوبل للسلام."};
+const AK={jd:"desert",js:"street",je:"ruin",jp:"prison",jb:"road",jf:"ruin",jk:"market",jw:"war",d3b:"desert",s6c:"city",q4:"prison",fs1:"ruin",fs2:"ruin",fs3:"war",k1:"market",k2:"war",gd:"ruin",u1:"market",u2:"market",g1:"ruin",d5b:"road",bd:"road",q3:"prison",z1:"ruin",h1:"ruin",e1:"ruin",e2:"road",q2:"prison",d3:"night",d4:"night",d5:"road",d6:"city",w1:"war",w2:"war",w3:"war",o2:"ruin",peace:"peace",dark:"dark"};
+const AC={desert:["#f08a3c","#fbe4b5"],night:["#1b1230","#d9531e"],road:["#e8a15a","#f7d9a0"],city:["#4f9fd0","#fbe3b0"],market:["#6cb4e0","#fde7b8"],street:["#79b8d8","#fde7b8"],war:["#2d1f1f","#b9442a"],prison:["#15151a","#3a3a44"],ruin:["#6b5b52","#d9a77a"],peace:["#f7c97a","#cfe8f0"],dark:["#100d0b","#3a2f2a"]};
+const AE={
+desert:`<circle cx="270" cy="62" r="24" fill="#fff3c4"/><path d="M0 118Q90 88 180 116T360 108V150H0z" fill="#8a5326"/><path d="M0 134Q120 112 230 132T360 128V150H0z" fill="#5c3516"/><path d="M60 130v-34M60 108l-16-14M60 104l18-16" stroke="#2a1a0c" stroke-width="3"/><ellipse cx="60" cy="88" rx="30" ry="9" fill="#2a1a0c"/><g fill="#1c1209"><rect x="180" y="116" width="5" height="14"/><circle cx="182" cy="112" r="3"/><rect x="192" y="119" width="4" height="11"/><circle cx="194" cy="116" r="2.5"/></g>`,
+night:`<g fill="#fff" opacity=".7"><circle cx="40" cy="20" r="1.5"/><circle cx="120" cy="35" r="1"/><circle cx="300" cy="18" r="1.5"/></g><circle cx="150" cy="105" r="55" fill="#ff7a1a" opacity=".35"/><path d="M0 128h360v22H0z" fill="#120b08"/><g fill="#1a0f0a"><path d="M110 128v-24l20-14 20 14v24z"/><path d="M170 128v-20l16-12 16 12v20z"/><path d="M240 128v-26l22-14 22 14v26z"/></g><path d="M130 100q-14-26 4-46 2 20 14 28 6-10 2-22 22 22 2 44z" fill="#ff9a1f"/><path d="M262 100q-10-20 3-34 2 14 10 20 4-8 1-16 14 16 2 30z" fill="#ffc83d"/>`,
+road:`<circle cx="290" cy="45" r="20" fill="#fff3c4"/><path d="M0 105Q100 85 200 104T360 98V150H0z" fill="#a8672e"/><path d="M0 128h360v22H0z" fill="#6b3e1a"/><g fill="#1f130a"><rect x="110" y="94" width="86" height="24" rx="4"/><rect x="128" y="80" width="46" height="16" rx="4"/><circle cx="130" cy="120" r="9"/><circle cx="178" cy="120" r="9"/></g><path d="M70 118q-30-8-60 4 30 4 60 8z" fill="#e7c28a" opacity=".6"/>`,
+city:`<circle cx="290" cy="50" r="22" fill="#fff3c4"/><path d="M0 118h360v32H0z" fill="#2c7fb8"/><path d="M0 128q90-10 180 0t180 0" stroke="#bfe4f5" stroke-width="2" fill="none"/><g fill="#33404d"><rect x="20" y="70" width="26" height="48"/><rect x="52" y="86" width="22" height="32"/><rect x="82" y="58" width="22" height="60"/><path d="M130 118V70q16-24 32 0v48z"/><rect x="176" y="40" width="9" height="78"/><circle cx="180" cy="38" r="6"/><rect x="220" y="76" width="30" height="42"/><rect x="258" y="92" width="24" height="26"/></g>`,
+market:`<path d="M10 70h80l-10 22H20z" fill="#d6452f"/><path d="M110 64h86l-10 24h-66z" fill="#2f7fd6"/><path d="M220 70h80l-10 22h-60z" fill="#e8a317"/><path d="M0 120h360v30H0z" fill="#9c7a4a"/><g fill="#2a1a10"><rect x="30" y="92" width="4" height="28"/><rect x="66" y="92" width="4" height="28"/><rect x="130" y="88" width="4" height="32"/><rect x="170" y="88" width="4" height="32"/><rect x="240" y="92" width="4" height="28"/><rect x="276" y="92" width="4" height="28"/><circle cx="100" cy="100" r="5"/><rect x="95" y="106" width="10" height="20" rx="3"/><circle cx="210" cy="104" r="4"/><rect x="206" y="109" width="9" height="17" rx="3"/></g><circle cx="320" cy="30" r="16" fill="#fff3c4"/>`,
+street:`<circle cx="60" cy="40" r="18" fill="#fff3c4"/><path d="M0 112h360v38H0z" fill="#4a4a50"/><path d="M0 132h360" stroke="#fde7b8" stroke-width="2" stroke-dasharray="14 12"/><g fill="#22303a"><rect x="190" y="82" width="110" height="34" rx="6"/><circle cx="215" cy="118" r="9"/><circle cx="278" cy="118" r="9"/></g><g fill="#fde7b8"><rect x="198" y="88" width="20" height="14"/><rect x="224" y="88" width="20" height="14"/><rect x="250" y="88" width="20" height="14"/></g><g fill="none" stroke="#22303a" stroke-width="3"><path d="M26 120l16-22 20 22"/><circle cx="26" cy="120" r="7"/><circle cx="62" cy="120" r="7"/></g>`,
+war:`<path d="M60 130Q40 60 80 20Q70 60 100 40Q96 90 90 130z" fill="#111" opacity=".6"/><path d="M230 130Q210 70 250 30Q240 70 270 50Q268 100 262 130z" fill="#111" opacity=".6"/><circle cx="180" cy="120" r="50" fill="#e0551e" opacity=".35"/><path d="M0 128h360v22H0z" fill="#0d0807"/><g fill="#171010"><path d="M110 128V86h18v10h14v32z"/><path d="M180 128V70h12v14h20v44z"/><path d="M270 128V96h24v32z"/></g>`,
+prison:`<circle cx="300" cy="40" r="14" fill="#e8ecf4" opacity=".85"/><g fill="#0a0a0d"><rect x="40" y="0" width="10" height="150"/><rect x="110" y="0" width="10" height="150"/><rect x="180" y="0" width="10" height="150"/><rect x="250" y="0" width="10" height="150"/><rect x="320" y="0" width="10" height="150"/><rect x="0" y="40" width="360" height="8"/><rect x="0" y="110" width="360" height="8"/></g>`,
+ruin:`<circle cx="300" cy="44" r="18" fill="#fff0cc" opacity=".8"/><path d="M0 125h360v25H0z" fill="#3a2e28"/><g fill="#4a3c34"><path d="M20 125V80l22-8v53z"/><path d="M80 125V95h16l6-14 14 8v36z"/><path d="M200 125V70h18l8 14h16v41z"/><path d="M290 125V100h26v25z"/></g><g fill="#120d0a"><circle cx="150" cy="108" r="5"/><rect x="146" y="113" width="8" height="16" rx="3"/></g>`,
+peace:`<circle cx="180" cy="86" r="34" fill="#fff3c4"/><g stroke="#fff3c4" stroke-width="2" opacity=".6"><path d="M180 30v-14M130 46l-10-10M230 46l10-10M110 86H90M250 86h20"/></g><path d="M0 108q90-22 180 0t180 0V150H0z" fill="#4a8f5e"/><path d="M0 128h360v22H0z" fill="#2c7fb8"/><path d="M262 40q10-14 28-8-6 6-8 16 12-2 18-12-4 18-22 24-10 0-16-20z" fill="#fff"/>`,
+dark:`<g fill="#fff" opacity=".5"><circle cx="60" cy="30" r="1.5"/><circle cx="200" cy="20" r="1"/><circle cx="300" cy="40" r="1.5"/></g><path d="M0 125h360v25H0z" fill="#050403"/><g fill="#050403"><circle cx="180" cy="104" r="6"/><rect x="174" y="110" width="12" height="20" rx="4"/></g>`};
+const ASH=[30,90,150,210,270,330].map((x,i)=>`<circle cx="${x}" cy="-5" r="1.6" fill="#ddd" opacity=".6"><animate attributeName="cy" from="-5" to="155" dur="${5+i}s" repeatCount="indefinite"/></circle>`).join("");
+function K(n){return AK[n]||({d:"desert",m:"market",s:"street",p:"prison",o:"ruin",w:"war",r:"city",q:"city"})[n[0]]||"desert"}
+function art(n){const k=K(n),c=AC[k];
+return `<svg class="art" viewBox="0 0 360 150" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="g" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${c[0]}"/><stop offset="1" stop-color="${c[1]}"/></linearGradient></defs><rect width="360" height="150" fill="url(#g)"/>${AE[k]}${s&&s.h<35?`<rect width="360" height="150" fill="#400" opacity=".28"/>`:""}${k==="war"||k==="night"?ASH:""}</svg>`}
+let au,mu=0,wm=0,iv;
+const SC=[293.7,311.1,370,392,440,466.2,554.4],WS=[146.8,155.6,164.8,207.7];
+let nz,bp,ng;
+function nzs(){const b=au.createBuffer(1,au.sampleRate*2,au.sampleRate),d=b.getChannelData(0);for(let i=0;i<d.length;i++)d[i]=Math.random()*2-1;nz=au.createBufferSource();nz.buffer=b;nz.loop=true;bp=au.createBiquadFilter();bp.type="bandpass";bp.frequency.value=500;ng=au.createGain();ng.gain.value=.04;nz.connect(bp);bp.connect(ng);ng.connect(au.destination);nz.start()}
+function mood(k){wm=["war","night","prison","dark"].includes(k)?1:0;if(!ng)return;const f={desert:600,road:500,market:1500,city:900,street:1000,war:220,night:260,prison:300,ruin:400,peace:1800,dark:200}[k]||500;bp.frequency.setTargetAtTime(f,au.currentTime,1);ng.gain.setTargetAtTime(k==="war"?.12:k==="market"?.06:.04,au.currentTime,1)}
+function pl(f,v){const o=au.createOscillator(),g=au.createGain(),x=au.currentTime;o.type="triangle";o.frequency.value=f;g.gain.setValueAtTime(0.0001,x);g.gain.linearRampToValueAtTime(v,x+.05);g.gain.exponentialRampToValueAtTime(.0001,x+2.6);o.connect(g);g.connect(au.destination);o.start(x);o.stop(x+2.7)}
+function snd(){
+ try{
+  if(mu){clearInterval(iv);au.close();mu=0;ng=null}else{
+   au=new (window.AudioContext||window.webkitAudioContext)();au.resume();mu=1;pl(440,.25);nzs();if(id)mood(K(id));
+   iv=setInterval(()=>{const a=wm?WS:SC;pl(a[Math.floor(Math.random()*a.length)],wm?.22:.18);if(Math.random()<.35)pl(a[0]/2,.2)},1700)}
+ }catch(e){mu=0}
+ document.getElementById("mb").textContent=mu?"🔊":"🔇"}
+const IT={water:["💧","قربة ماء","تروي العطش وتعيد الحيوية"],med:["💊","حقيبة إسعاف","تداوي الجراح"],tea:["🍵","شاي وبلح","دفء يرفع الأمل"],docs:["📜","وثائق ملكيتك","ثلاثون عامًا من الكفاح، وقد تُثبت من أنت"]};
+const AH={d6:["reach","🏙️","الوصول","بلغتَ الخرطوم"],d5b:["os","👥","الرفيق","وجدتَ عثمان في الصندوق"],s6:["bus","🚌","الكريز","امتلكتَ حافلتك وبيتك"],s6b:["fam","💍","الأسرة","كوّنتَ أسرة"],w2:["lost","🔥","الخسارة","فقدتَ كل شيء"],p4:["esc","⛓️","الهروب","فررتَ من السجن"],g1:["err","🤲","غرفة الطوارئ","انضممتَ إلى المتطوعين"],k2:["wm","🏙️","ود مدني","نجوتَ من سقوط ود مدني"],z1:["bag","🎒","حقيبة مريم","وجدتَ حقيبة مريم"],fs1:["fsh","🔥","الفاشر","عدتَ إلى الفاشر"],bd:["cross","🚪","العبور","وقفتَ أمام الحدود"]};
+const EG=[["martyr","🌹","التضحية"],["witness","📖","الشاهد"],["er","🤲","غرفة الطوارئ"],["border","🚪","العبور"],["peace","🕊️","سلام ينقذك"],["heart","🥀","رماد القلب"],["hunger","💀","حرب لا تنتهي"],["ledger","📒","الدفتر"],["death","💔","سقوط على الطريق"]];
+function ld2(k){try{return JSON.parse(localStorage.getItem(k)||"[]")}catch(e){return[]}}
+function ach(a){try{const u=ld2("najat_ach");if(u.includes(a[0]))return;u.push(a[0]);localStorage.setItem("najat_ach",JSON.stringify(u));toast("🏆 "+a[2]+" — "+a[3])}catch(e){}}
+function mk(i){try{const u=ld2("najat_eg");if(!u.includes(i)){u.push(i);localStorage.setItem("najat_eg",JSON.stringify(u))}}catch(e){}}
+const TL=[["fs1","2024","حاصرت قوات الدعم السريع الفاشر منذ مايو 2024."],["fs3","أواخر 2025","تقارير عن مجازر ونزوح جماعي بعد دخول القوات المدينة."],["d1","2003","اندلع نزاع دارفور، وارتبطت ميليشيات الجنجويد بعمليات قتل وتهجير واسعة."],["r2","2018 – 2019","ثورة ديسمبر وسقوط حكم البشير، ثم فض اعتصام القيادة العامة في 3 يونيو 2019."],["w1","15 أبريل 2023","اندلاع القتال بين الجيش وقوات الدعم السريع في الخرطوم."],["w2","2023","محادثات جدة وهدن تنهار، ووثّقت تقارير أممية عنفًا واسعًا استهدف مجموعات عرقية في الجنينة بغرب دارفور."],["k2","ديسمبر 2023","سقوط ود مدني ونزوح مئات الآلاف مرة ثانية."],["o2","2024","انقطاعات الاتصال، وتفشي الكوليرا، ومجاعة مؤكدة في مخيم زمزم، وحصار طويل للفاشر."],["o2","2025","أعلن الجيش استعادة مناطق في وسط الخرطوم، لكن الحرب والجوع استمرا في مناطق كثيرة."]];
+const PR={water:25,med:60,tea:30,docs:150},BM=["w1","w2","e1","h1","e2"],MN=["🌄 دارفور","🏜️ الطريق","🛒 أم درمان","🏙️ الخرطوم","🔥 الفاشر","🚪 الحدود"];
+const DY={q4:"قالوا لي: لهجتك تفضحك.",s5b:"ليلة الطريق: ثلاثة ملثمين وحافلتي.",fs1:"عدتُ إلى الفاشر والجوع في كل بيت.",fs3:"لم ألتفت، كما أمرني أبي.",k1:"في ود مدني سمعتُ ضحكة طفل لأول مرة منذ شهور.",k2:"هربنا مرة ثانية، والأرض تتحرك من تحتي.",gd:"في القضارف نام الناس متجاورين، والحرب بعيدة والخوف قريب.",u2:"في أم درمان تعلمتُ أن المدينة تأكل من لا صاحب له.",g1:"انضممتُ إلى غرفة طوارئ الحي: لا مال معنا، معنا بعضنا.",h1:"ساعدتُ في مستشفى ميداني بلا كهرباء.",q3:"رأيتُ فتى يرتجف في السجن ولم أعرف ما أفعل.",z1:"وجدتُ حقيبة مريم تحت الغبار.",bd:"وقفتُ أمام مفترق الطرق الأخير.",d5b:"وجدتُ في الصندوق ولدًا آخر اسمه عثمان.",d1:"رحلنا قبل الفجر، وحملتُ خبزًا وماءً.",d3:"فقدتُ أسرتي. لم يبقَ لي إلا اسمي.",d6:"وصلتُ الخرطوم ولا أحد يعرفني.",m4:"طُردتُ من المطعم، لكن عمّ إدريس علّمني أن الرزق صبر.",s2:"سنتان على الرصيف بين الحرّ والمطر.",s5:"اشتريتُ حافلة وبيتًا. صرتُ رجلًا مستقرًا.",r2:"حلمنا بوطن في الميدان، وسقط كثيرون.",w1:"عاد الصوت الذي هربتُ منه طفلًا.",w3:"اقتادوني بعد أن فقدتُ كل شيء.",p4:"ثغرة في الجدار... وربما حياة.",o1:"خرجتُ إلى مدينة جريحة."};
+const BT={eg:"عبور الحدود إلى مصر",td:"العودة إلى الجذور في تشاد",ss:"النيل نحو الجنوب"};
+const BE={eg:"مشيتَ أيامًا بين الغبار والعطش حتى لاح العلم عند المعبر. أمسكت يدك يدٌ من متطوعي الهلال الأحمر وناولتك ماءً. صرتَ لاجئًا بلا بيت، لكنك حيّ، وفي جيبك حكايات من لم يعبروا.",td:"عبرتَ غربًا نحو تشاد، قريبًا من تراب دارفور الذي خرجتَ منه طفلًا. في مخيم اللجوء رأيتَ وجوهًا تشبه وجه أمك، وبدأتَ تزرع من جديد بين الخيام.",ss:"نزلتَ جنوبًا مع مجرى النيل الأبيض بين المستنقعات والأعشاب العالية. كان الطريق قاسيًا، لكنك بلغتَ بر الأمان وأخذتَ أنفاسك؛ فحين تُغلق المدن تفتح الأنهار للناجين طريقًا."};
+function MPI(n){return n==="d5"||n==="d5b"?1:n==="d6"||n[0]==="m"||n[0]==="u"?2:n[0]==="d"?0:n==="bd"||n==="fin"?5:n.slice(0,2)==="fs"?4:3}
+function MAP(){const a=MPI(id);return `<div class="mp">${MN.map((x,i)=>`<span class="${i<a?"ps":i==a?"on":""}">${x}</span>`).join("<i></i>")}</div>`}
+function CP(){const c=s.os?["عثمان","يعينك في جمع المال وعبور الحدود"]:s.sl?["سلمان","أخوك في الرصيف"]:0;return c?`<div class="cp">👥 <b>رفيق الرحلة: ${c[0]}</b> · ${c[1]}</div>`:""}
+function buy(k,p){if(s.m<p)return toast("❌ لا يكفيك المال");s.m-=p;s[k]=1;sfx(523);toast("🛍️ اشتريت "+IT[k][1]);pn("mk");render(S[id])}
+function toast(m){const e=document.getElementById("tt");e.textContent=m;e.classList.add("on");clearTimeout(e.t);e.t=setTimeout(()=>e.classList.remove("on"),2200)}
+function ban(x){const e=document.getElementById("cb");e.textContent=x;e.classList.add("show");sfx(392);setTimeout(()=>e.classList.remove("show"),1700)}
+function sfx(f){if(mu)pl(f,.12)}
+function BTN(){return `<div class="bt"><button onclick="pn('inv')">🎒 الحقيبة</button><button onclick="pn('tl')">🕰️ الأحداث</button><button onclick="pn('ac')">🏆</button><button onclick="pn('eg')">🎭</button><button onclick="lng()">🌐 ${LG==="ar"?"EN":"AR"}</button><button onclick="pn('mk')">🛒 السوق</button><button onclick="pn('dy')">📔 المذكرات</button><button onclick="sv()">💾 حفظ</button><button onclick="ld()">📂 تحميل</button></div>`}
+function pn(k){const e=document.getElementById("pn");let h="";
+ if(k==="inv"){const a=Object.keys(IT).filter(x=>s[x]);h="<h3>🎒 الحقيبة</h3>"+(a.length?a.map(x=>`<div class="it2"><span>${IT[x][0]} <b>${IT[x][1]}</b><br><small>${IT[x][2]}</small></span><button class="btn" style="width:auto;margin:0" onclick="use('${x}')">استخدم</button></div>`).join(""):"<p class=mut>الحقيبة فارغة.</p>")}
+ else if(k==="ac"){const u=ld2("najat_ach");h="<h3>🏆 الإنجازات</h3>"+Object.values(AH).map(a=>`<div class="it2"><span>${u.includes(a[0])?a[1]:"🔒"} <b>${u.includes(a[0])?a[2]:"؟؟؟"}</b><br><small>${u.includes(a[0])?a[3]:"مغلق"}</small></span></div>`).join("")}
+ else if(k==="eg"){const u=ld2("najat_eg");h="<h3>🎭 معرض النهايات</h3>"+EG.map(a=>`<div class="it2"><span>${u.includes(a[0])?a[1]:"🔒"} <b>${u.includes(a[0])?a[2]:"غير مكتشفة"}</b></span></div>`).join("")}
+ else if(k==="tl"){const a=TL.filter(x=>s.vs&&s.vs[x[0]]);h="<h3>🕰️ ما حدث في الواقع</h3>"+(a.length?a.map(x=>`<div class="fact"><b>${x[1]}</b><br>${x[2]}</div>`).join(""):"<p class=mut>تُفتح الأحداث كلما تقدمت في القصة.</p>")}
+ else if(k==="mk"){const x=BM.includes(id)?3:1;h="<h3>"+(x>1?"🛒 السوق السوداء (الأسعار ×3)":"🛒 السوق")+`<br><small>معك: ${s.m} جنيه</small></h3>`+Object.keys(PR).map(y=>`<div class="it2"><span>${IT[y][0]} <b>${IT[y][1]}</b><br><small>${PR[y]*x} جنيه</small></span><button class="btn" style="width:auto;margin:0" onclick="buy('${y}',${PR[y]*x})">اشترِ</button></div>`).join("")}
+ else h="<h3>📔 مذكرات الرحلة</h3>"+(s.dy.length?s.dy.map(x=>`<div class="fact">${x}</div>`).join(""):"<p class=mut>لم تدوّن شيئًا بعد.</p>");
+ e.innerHTML="<div>"+h+`<button class="btn pri" onclick="document.getElementById('pn').classList.remove('on')">إغلاق</button></div>`;e.classList.add("on")}
+function use(k){const u={water:()=>{s.f=cl(s.f+25);s.h=cl(s.h+5);s.e=cl(s.e+30)},med:()=>{s.h=cl(s.h+40)},tea:()=>{s.p=cl(s.p+15);s.e=cl(s.e+10)},docs:()=>toast("تتأمل وثائقك... ثلاثون عامًا من الكفاح.")};u[k]();if(k!=="docs")s[k]=0;sfx(523);pn("inv");render(S[id])}
+function sv(){try{localStorage.setItem("najat",JSON.stringify({s,id}));toast("✅ تم حفظ التقدم")}catch(e){toast("تعذّر الحفظ")}}
+function ld(){try{const d=JSON.parse(localStorage.getItem("najat"));if(!d)return toast("لا يوجد حفظ سابق");s=d.s;s.e??=90;s.c??=60;id=d.id;render(S[id]);toast("📂 تم استرجاع التقدم")}catch(e){toast("تعذّر التحميل")}}
+let LG="ar",SM=null,TC={},tbusy=0,tq=null;
+try{TC=JSON.parse(localStorage.getItem("najat_tr")||"{}")}catch(e){}
+const ARX=/[\u0600-\u06FF]/;
+async function tr(list){
+ const need=list.filter(x=>!(x in TC));
+ for(let i=0;i<need.length;i+=25){
+  const ch=need.slice(i,i+25);
+  const r=await SM("Translate each Arabic string from a Sudan war-survival story game into natural, literary English. Keep emoji, numbers, newlines and any HTML tags unchanged. Reply with ONLY a JSON array of strings, the same length and order.\n"+JSON.stringify(ch),{modelTier:"quick"});
+  let a;try{a=JSON.parse(r.text.replace(/```json|```/g,"").trim())}catch(e){continue}
+  ch.forEach((x,j)=>{if(a[j])TC[x]=a[j]})}
+ try{localStorage.setItem("najat_tr",JSON.stringify(TC))}catch(e){}}
+function tnodes(){const w=document.createTreeWalker(document.body,NodeFilter.SHOW_TEXT,{acceptNode:n=>n.parentNode.closest("script,style")?2:ARX.test(n.nodeValue)?1:3}),a=[];while(w.nextNode())a.push(w.currentNode);return a}
+async function tdom(){
+ if(LG!=="en"||!SM||tbusy)return;tbusy=1;
+ try{const ns=tnodes();if(ns.length){await tr([...new Set(ns.map(n=>n.nodeValue.trim()))]);ns.forEach(n=>{const k=n.nodeValue.trim();if(TC[k]){n.__a=n.nodeValue;n.nodeValue=n.nodeValue.replace(k,()=>TC[k])}})}}
+ catch(e){toast("Translation unavailable: "+((e&&e.code)||"error"))}
+ tbusy=0;if(LG==="en"&&tnodes().some(n=>TC[n.nodeValue.trim()]))tdom()}
+function untr(){const w=document.createTreeWalker(document.body,NodeFilter.SHOW_TEXT);while(w.nextNode()){const n=w.currentNode;if(n.__a){n.nodeValue=n.__a;n.__a=null}}}
+async function lng(){
+ if(LG==="ar"){
+  try{SM=SM||(typeof claude!=="undefined"?await claude.use("sample"):null)}catch(e){}
+  if(!SM)return toast("الترجمة تحتاج فتح اللعبة داخل Claude");
+  LG="en";document.documentElement.dir="ltr";document.documentElement.lang="en";toast("Translating…");tdom()
+ }else{LG="ar";document.documentElement.dir="rtl";document.documentElement.lang="ar";untr()}}
+new MutationObserver(()=>{if(LG==="en"){clearTimeout(tq);tq=setTimeout(tdom,200)}}).observe(document.body,{childList:true,subtree:true,characterData:true});
+let s,id,snap,app=document.getElementById("app");
+const cl=v=>Math.max(0,Math.min(100,v));
+function bar(n,v,c,txt){return `<div>${n}: ${txt??v}<div class="bar"><i style="width:${v}%;background:${c}"></i></div></div>`}
+function stats(){return `<div class="st">${bar("الصحة",s.h,"#c0392b")}${bar("الشبع",s.f,"#d4a017")}${bar("الأمل",s.p,"#3a8f6b")}${bar("الطاقة",s.e,"#4a7c8c")}${bar("الضمير",s.c,"#8e6bbf")}<div>المال: ${s.m} جنيه${s.sb?" · 📿":""}</div></div>`}
+function intro(){
+ app.innerHTML=`${art("d1")}<h1>النجاة</h1><p class="mut">لعبة قصصية عن رحلة إنسان سوداني بين حربين.</p><p class="tx">من دارفور إلى الخرطوم، ومن الفقر إلى الكفاح، ثم الحرب من جديد. كل قرار تتخذه يحدد جوعك وصحتك وأملك.\n\nنهاية اللعبة: إما سلام ينقذك، أو حرب تستمر فتموت جوعًا.</p><p class="mut">تنبيه: القصة خيالية لكنها مستوحاة من معاناة حقيقية، وتتناول العنف والفقد. اللعبة تحترم الضحايا ولا تعرض مشاهد دموية.</p><button class="btn pri" onclick="start()">ابدأ الرحلة</button><button class="btn" onclick="ld()">📂 تابع من آخر حفظ</button><button class="btn" onclick="lng()">🌐 English / AR</button>`}
+function start(){s={h:100,f:70,m:0,p:60,e:90,c:60,dy:[],jc:{}};go("d0")}
+let xt="";
+const LP={};
+function LOOP(id,nx,d,tx,L,pr){LP[id]={d,n:nx};const E=[{f:14,h:-6,e:2},{h:10,f:-7,e:12},{p:6,f:-8,h:-3,e:3},{p:10,f:-9,e:2}];S[id]=["",tx,L.map((l,i)=>[l,"@"+id,E[i],null,i==0?pr:null])]}
+LOOP("jd","d3b",3,"تمشي وحدك بين الأودية. الشمس فوقك والليل يلسع. كل يوم قرار جديد في الصحراء.",["تتبّع طيورًا تحلّق في اتجاه واحد بحثًا عن ماء","تحتمِ بظل صخرة وتنم ساعات","تسير ليلًا وتحفظ النجوم","تقتسم تمراتك مع طفل ضائع"]);
+LOOP("js","s2",4,"أسابيع الرصيف: صوت الباعة، برد الفجر، والجوع الذي صار صاحبًا قديمًا.",["اعمل يومك كله لتكسب قوتك","ارتح تحت جسر الشارع وأصلح ثيابك","اذهب إلى المسجد للصلاة والدرس","ساعد سلمان وأطفال الرصيف"]);
+LOOP("je","h1",5,"في المدرسة المهجورة تمرّ الأيام ثقيلة: انقطاع الماء، دوي بعيد، وأمهات يحاولن إسكات الصغار.",["اذهب إلى البئر رغم القنّاصة","نم في الغرفة الداخلية وقلّل الحركة","احكِ حكايات للأطفال ليناموا","اقتسم مياهك مع الجيران"],.7);
+LOOP("jp","p3",5,"الأيام في الزنزانة لا تختلف: ضوء ضعيف من كوّة، صوت مفاتيح، ورائحة الرطوبة.",["اطلب حصتك من الماء بصبر وتحمّل الإهانة","قلّل حركتك لتدّخر قوتك","احفظ أسماء رفاقك وكرّرها","اقتسم رغيفك مع أضعف سجين"]);
+LOOP("jb","fin",4,"نحو الحدود: طريق ترابي، عربات، وعبوات ماء تتناقص. الليل بارد والنهار قاسٍ.",["ابحث عن بئر أو عابر يبيع الماء","احتمِ في ظل شاحنة واسترح","امشِ مع القافلة ولا تتأخر","ساعد عائلة تعطلت عربتها"]);
+LOOP("jf","fs2",4,"في الفاشر المحاصرة: الأسواق خالية، المدافع في الأفق، والناس يعدّون الأيام بالوجبات.",["ابحث عن بقايا طعام في بيوت مهجورة","اختبئ في قبو لتتجنب القصف","اكتب أسماء الجيران على الحائط","احمل الماء لكبار السن"],.75);
+LOOP("jk","k2",4,"في ود مدني: صباحات هادئة، صفوف طويلة أمام المخابز، وأخبار الجزيرة تتناقل همسًا.",["قف في صف الخبز منذ الفجر","ساعد في تنظيم المأوى","اجلس في حلقة قصص مع النازحين","اشترِ دواءً لجارتك"]);
+LOOP("jw","w2",4,"الخرطوم في الأسبوع الأول: القذائف ليلًا، وصفوف الماء نهارًا، والهواتف صامتة.",["اذهب لشراء ماء وخبز من حيّ آخر","اختبئ في الغرفة الداخلية مع أسرتك","اجمع الجيران على السطح وتبادلوا الأخبار","قاسم مخزونك أسرة بلا طعام"],.8);
+const RS=["e2","k1","z1","o2","bd","fs1","jd","js","je","jp","jb","jf","jk","jw"],RV=[["مرّت بك قافلة نازحين، فأعطتك امرأة كسرة خبز دون أن تسأل.",{f:12,p:5}],["هبّت عاصفة غبار أخفت الطريق وأتعبتك.",{h:-8,f:-5}],["التقط راديو قديم عند بائع خبر هدنة قصيرة، فابتسم الناس لأول مرة منذ أيام.",{p:10}],["سمعتَ رصاصًا بعيدًا فاختبأتَ ساعة في خراب مظلم.",{p:-6,e:-8}],["دلّك فتى على بئر قريبة لم يكن يعرفها أحد.",{f:8,h:5}],["وجدتَ على جانب الطريق حذاءً صغيرًا وحيدًا. وقفتَ عنده لحظة ثم أكملت.",{p:-8}]];
+function RE(n){if(LP[n])xt+="\n\n🗓️ اليوم "+(((s.jc||{})[n]||0)+1)+" من "+LP[n].d;if(!RS.includes(n)||Math.random()<.35)return;const r=RV[Math.random()*RV.length|0];xt+="\n\n✦ "+r[0];for(const k in r[1])s[k]=cl(s[k]+r[1][k])}
+function go(n){
+ xt="";s.vs=s.vs||{};s.vs[n]=1;if(AH[n])ach(AH[n]);if(DY[n]&&!s.dy.includes(DY[n]))s.dy.push(DY[n]);
+ if(n==="w2"&&s.st){s.f=cl(s.f+15);xt="\n\nلحسن الحظ كنتَ قد خزّنتَ الماء والطعام، فصمدتم أيامًا أطول من جيرانكم."}
+ if(n==="k2"&&s.hl){s.p=cl(s.p+5);xt="\n\nالأستاذة هالة تحمل كراريس الأطفال تحت إبطها وتصرخ بهم أن يمسكوا أيدي بعضهم."}
+ if(n==="u2"&&s.zn){s.p=cl(s.p+10);xt="\n\nجاءتك ستّ الشاي زينب بكوب شاي بالنعناع وقالت: «يا ولدي، المدينة تأكل من لا صاحب له. اجعل لك أصحابًا قبل أن تجعل لك مالًا». حفظتَ كلماتها في صدرك."}
+ if(n==="s2"&&s.os){s.m+=40;xt="\n\nعثمان، رفيقك القديم من الصندوق، يعمل معك في السوق ويقتسم عنك العبء."}
+ if(n==="w1"&&s.os){s.f=cl(s.f+10);xt="\n\nجاءك عثمان وقال: «أعرف المسالك نحو الحدود، خذ هذا الخبز»."}
+ if(n==="bd"&&s.os){s.h=cl(s.h+10);s.f=cl(s.f+10);xt="\n\nوقف عثمان إلى جانبك: «أعرف مسالك الطريق وآباره»."}
+ if(n==="w3"&&s.m>0){s.m=0;xt+="\n\nصادروا ما تبقّى معك من مال."}
+ if(n==="w2"&&s.joy){xt+="\n\nما زلتَ تسمع ضحكة مريم على ضفة النيل، وهي تقول: «هذا بيتنا الجديد»."}
+ if(n==="w2"&&s.told){s.p=cl(s.p+10);xt+="\n\nتذكّرتَ كلمات آمنة: «أنت لست وحدك». أخذت يد ابنتك وتمسّكتَ بها."}
+ if(n==="z1"&&s.sl){s.p=cl(s.p+10);xt="\n\nعند ناصية الطريق لوّح لك رجل: كان سلمان، كبر وصار يوزّع المياه مع المتطوعين. عانقتما طويلًا بلا كلام."}
+ if(n==="p4"&&s.sh){s.h=cl(s.h+10);xt="\n\nالجريح الذي اقتسمتَ معه رغيفك همس لك بمكان الشقّ في الجدار وساعدك على الخروج."}
+ if(n==="p4"&&s.ld2){s.h=cl(s.h+10);xt+="\n\nتغيّر وجه القائد حين رأى اسم المارشال في الصفحة الأولى. صمت، ثم قال بصوت خافت: «من أين لك هذا؟». وبعد منتصف الليل فُتح بابك وحدك وهمس لك حارس: «اخرج قبل أن يغيّر رأيه».\nلم يبقَ الدفتر معك."}
+ if(n==="o2"&&s.um){s.p=cl(s.p+10);xt="\n\nفي التكية لمحتَ أم حسن وحفيدها، فصاحت باسمك. لم يبقَ لك أهل... لكن بقي لك جيران."}
+ if(n==="o1"&&s.hero){s.f=cl(s.f+10);xt="\n\nمرّ بك سائق عرفك أيام الاعتصام، وناولك كسرة خبز وقال: «من حمل الجرحى لا يُترك»."}
+ RE(n);id=n;const sc=S[n];
+ if(sc[0]){snap={id:n,s:{...s,dy:[...s.dy],jc:{}}};ban(sc[0])}
+ if(/^[wpo]/.test(n)&&n!=="w1")s.f=cl(s.f-10);
+ if(/^[wpoeqh]/.test(n)&&n!=="w1")s.e=cl(s.e-6);
+ if(/^[mdsr]/.test(n))s.e=cl(s.e+4);
+ if(s.h<=0)return over("أنهكتك الإصابات والتعب ولم يعد جسدك يحتمل.");
+ if(s.f<=0)return over("قتلك الجوع قبل أن تجد لقمة.");
+ render(sc)}
+function render(sc){
+ if(s.e<=0)return over("خارت قواك تمامًا ولم تعد تقوى على الخطوة التالية.");
+ if(s.h<=25||s.f<=20||s.e<=20)toast("⚠️ حالتك حرجة: افتح الحقيبة 🎒");
+ if(mu)mood(K(id));
+ app.innerHTML=`${BTN()}${MAP()}${CP()}${stats()}${sc[0]?`<div class="ch">${sc[0]}</div>`:""}${art(id)}<div class="tx">${sc[1]+xt}</div>${F[id]?`<div class="fact">📜 من الواقع: ${F[id]}</div>`:""}`+sc[2].map((c,i)=>c[3]&&(c[3][0]==="!"?s[c[3].slice(1)]:!s[c[3]])?"":`<button class="btn" onclick="pick(${i})">${c[0]}</button>`).join("")}
+function pick(i){
+ const c=S[id][2][i],e=c[2];s.nc=(s.nc||0)+1;sfx(440);
+ let f2=0;if(c[4]!=null&&Math.random()>c[4]){f2=1;toast("⚠️ ساءت الأمور!");s.h=cl(s.h-20);s.p=cl(s.p-10)}
+ const nx=f2&&c[5]?c[5]:c[1];
+ if(!f2)for(const k in e){if(k==="F")e.F.split(" ").forEach(x=>s[x]=1);else if(k==="C")s.C=e.C;else if(k==="X")s[e.X]=0;else s[k]=k==="m"?s.m+e[k]:cl(s[k]+e[k])}
+ s.e=cl(s.e+((e.f||0)+(e.h||0))/2);s.c=cl(s.c+Math.sign(e.p||0)*8+(/sh|um|ys|sl|os|dr|hero|hl|el|sac|fk/.test(e.F||"")?8:0));
+ if(s.e<=0)return over("خارت قواك تمامًا ولم تعد تقوى على الخطوة التالية.");
+ if(nx[0]==="@"){const k=nx.slice(1);s.jc=s.jc||{};s.jc[k]=(s.jc[k]||0)+1;const L=LP[k];if(s.jc[k]>=L.d){s.jc[k]=0;return L.n==="fin"?fin():go(L.n)}return go(k)}
+ if(nx==="fin")return fin();
+ if(X[nx])return over(X[nx]);
+ go(nx)}
+function over(t){mk("death");
+ app.innerHTML=`${stats()}${art("dark")}<div class="tx end"><b>انتهت الرحلة</b>\n\n${t}</div><button class="btn pri" onclick="retry()">حاول مرة أخرى من بداية الفصل</button>`}
+function retry(){s={...snap.s,dy:[...snap.s.dy],jc:{}};go(snap.id)}
+function lg(){const n=["water","med","tea","docs"].filter(k=>s[k]).length,sm=`\n\nقراراتك: ${s.nc||0} · أدوات متبقية في حقيبتك: ${n} · الضمير: ${s.c}%`;const a=[["fk","من أطعمتَهم في الفاشر"],["os","عثمان"],["ad","الراعي آدم"],["hl","الأستاذة هالة"],["el","العجوز التي حملتها"],["sl","سلمان"],["um","أم حسن"],["dr","الطبيبة نهى"],["ys","ياسر"],["sh","الجريح"],["id","عمّ إدريس"],["gr","جدّتك حواء"]].filter(x=>s[x[0]]).map(x=>x[1]);return sm+(a.length?"\n\nمن حملتَهم في قلبك أو حملوك: "+a.join("، ")+".":"\n\nمشيتَ وحدك في معظم الطريق.")}
+function fin(){
+ if(s.h<=0)return over("أنهكتك الإصابات والتعب ولم يعد جسدك يحتمل.");
+ if(s.f<=0)return over("قتلك الجوع قبل أن تجد لقمة.");
+ const ok=s.p>=55&&s.h>=25&&s.f>=15&&!s.b,ok3=s.b&&s.h>=30&&s.f>=15,ok4=ok&&s.bag&&s.sb,ok5=ok&&s.er,ok6=!ok&&!ok3&&s.c<25,ok7=!!s.sac,ok8=!!s.ldg&&(ok||ok3);
+ const t=ok7?`<b>النهاية: التضحية</b>\n\nفي الفاشر قدّمتَ دمك لمن لا تعرف. لم يكن الطريق إلى الأمان سهلًا، لكن إنسانًا نجا لأنك كنت هناك. بعض الناس لا يعيشون ليروا السلام؛ يعيشون ليصنعوه لغيرهم.`:ok8?`<b>النهاية: الدفتر</b>\n\nنجوتَ ومعك الدفتر الجلدي الذي سحبتَه طفلًا من سيارة المارشال. في غرفة صغيرة بمنظمة توثيق حقوقية فتحوه: أسماء وتواريخ وأرقام وأوامر وعمولات. جلست الباحثة أمامك صامتة، ثم قالت: «أنت لا تعرف ما حملتَ كل هذه السنين». لأول مرة لم تكن حكايتك ذاكرةً وحدها، بل وثيقة.`:ok4?`<b>النهاية: الشاهد</b>\n\nجاء السلام ناقصًا كما يأتي دائمًا. في المخيم جلستَ مع الناجين، وبدأت تدوّن الأسماء: أسماء من رحلوا ومن بقوا. علّقتَ سبحة أبيك على عمود الخيمة، ووضعتَ حقيبة مريم عند رأسك.\n\nوحين سألك طفل: «من أنت؟» قلتَ: «أنا من قرية قرب الفاشر، وهذه حكايتنا». لم تعد تنجو لأجل نفسك فقط، بل لتحفظ الأسماء كما قال أبوك.`:ok5?`<b>النهاية: غرفة الطوارئ</b>\n\nلم تغادر الخرطوم. بقيتَ مع شباب الحي تفتحون المطبخ الجماعي كل صباح وتكتبون أسماء المحتاجين. حين جاء الهدوء الهشّ، كنتَ أول من فتح الباب لمن عاد منهكًا. لم تستعد بيتك، لكنك صرتَ بيتًا لغيرك.`:ok3?`<b>النهاية: ${BT[s.C||"eg"]}</b>\n\n${BE[s.C||"eg"]}`:ok6?`<b>النهاية: رماد القلب</b>\n\nنجوتَ بجسدك، لكن شيئًا فيك احترق. كل ما فعلته للبقاء لم يترك لك أحدًا تعود إليه، وجلستَ وحيدًا في بيت بلا ضحك. القوة وحدها لا تكفي ما لم يصحبها قلب.`:ok?`<b>النهاية: سلام ينقذك</b>\n\nبعد أسابيع جاء الخبر: اتفاق وهدنة. خرج الناس من بيوتهم المهدّمة يبكون ويحتضنون بعضهم. تلقّفتك أيادٍ طيبة من المطبخ الجماعي، وأعطتك ماءً وخبزًا وبطانية.\n\nفقدت كثيرًا، لكنك حيّ. وفي الصباح التالي، وقفت على الرصيف مرة أخرى، وبدأت من جديد، وأنت تعلم أن من نجا يحمل أمانة من لم ينجُ.`:`<b>النهاية: حرب لا تنتهي</b>\n\nلم يأتِ السلام في الوقت المناسب. طال الحصار وانقطع الغذاء، وكان جسدك قد أُنهك. جلست على رصيف مدينتك، تتذكر أبناءك وضحكة بيتك، وأغمضت عينيك آخر مرة.\n\nكم من الناس ما زالوا هناك، ينتظرون سلامًا يصل متأخرًا؟`;
+ mk(ok7?"martyr":ok8?"ledger":ok4?"witness":ok5?"er":ok3?"border":ok6?"heart":ok?"peace":"hunger");app.innerHTML=`${stats()}${art(ok||ok3||ok7||ok8?"peace":"dark")}<div class="tx end">${t+lg()}</div><button class="btn pri" onclick="intro()">العب من جديد</button>`}
+(()=>{const c=document.getElementById("ptc");for(let i=0;i<16;i++){const p=document.createElement("div");p.className="pt";p.style.left=Math.random()*100+"%";p.style.animationDuration=9+Math.random()*12+"s";p.style.animationDelay=Math.random()*8+"s";c.appendChild(p)}})();
+intro();
 </script>
 </body>
 </html>
