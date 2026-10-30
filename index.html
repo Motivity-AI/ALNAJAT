@@ -1,1101 +1,750 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-<meta charset="UTF-8">
+<meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>بورصة أسعار السودان</title>
-<meta name="description" content="منصة سودانية لعرض أسعار المنتجات من التجار مباشرة — بدون وسيط">
-<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🇸🇩</text></svg>">
-<link rel="manifest" href='data:application/manifest+json,{"name":"بورصة السودان","short_name":"بورصة","start_url":"./","display":"standalone","background_color":"%23ffffff","theme_color":"%23158049","lang":"ar","dir":"rtl"}'>
-<script src="https://cdn.tailwindcss.com"></script>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet">
-<script>
-  tailwind.config = {
-    theme: {
-      extend: {
-        colors: {
-          brand: {
-            50:'#eefbf3',100:'#d6f5e0',200:'#b0e9c6',300:'#7ed7a4',
-            400:'#47bd7d',500:'#22a05e',600:'#158049',700:'#11663d',
-            800:'#105133',900:'#0e432c'
-          }
-        },
-        fontFamily: { sans: ['Cairo','system-ui','sans-serif'] }
-      }
-    }
-  }
-</script>
+<title>الرماد الأخير — النسخة الملحمية الشاملة</title>
 <style>
-  html { font-family: 'Cairo', system-ui, sans-serif; }
-  body { -webkit-font-smoothing: antialiased; overflow-x: hidden; }
-  ::-webkit-scrollbar { width: 6px; height: 6px; }
-  ::-webkit-scrollbar-track { background: transparent; }
-  ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 3px; }
-  .line-clamp-2 { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
-  .in { width:100%; padding:0.7rem 0.9rem; border:1px solid #e5e7eb; border-radius:0.75rem; background:#f9fafb; outline:none; transition:all .15s; }
-  .in:focus { border-color:#158049; background:#fff; box-shadow:0 0 0 3px rgba(21,128,73,0.1); }
-  .btn-primary { background:#158049; color:#fff; font-weight:700; padding:0.75rem 1rem; border-radius:0.75rem; transition:background .15s; }
-  .btn-primary:hover { background:#11663d; }
-  .btn-primary:disabled { opacity:.6; cursor:not-allowed; }
-  .toast-anim { animation: slideDown .3s ease; }
-  @keyframes slideDown { from{opacity:0;transform:translateY(-20px)} to{opacity:1;transform:translateY(0)} }
-  .spin { animation: spin 1s linear infinite; }
-  @keyframes spin { to { transform: rotate(360deg); } }
-  .modal-backdrop { position:fixed; inset:0; background:rgba(0,0,0,.5); display:flex; align-items:center; justify-content:center; z-index:100; padding:1rem; }
-  .hidden { display:none !important; }
+:root{
+  --bg:#050403; --panel:#0f0b08; --panel2:#18110c; --line:#281f15;
+  --ink:#f5ebd9; --dim:#9e876a; --amber:#d49742; --red:#a8382e;
+  --sand:#c9a227; --blue:#4a7c8c; --green:#5a8a3a;
+}
+*{box-sizing:border-box}
+html,body{height:100%}
+body{
+  margin:0; background:radial-gradient(circle at 50% -20%,#241609 0%,#050403 60%);
+  color:var(--ink); font-family:"Segoe UI",Tahoma,"Noto Naskh Arabic",system-ui,sans-serif;
+  display:flex; justify-content:center; padding:14px 12px 70px;
+  -webkit-font-smoothing:antialiased;
+}
+#app{width:100%; max-width:820px}
+
+/* Topbar */
+#topbar{
+  display:flex; justify-content:space-between; align-items:center;
+  margin-bottom:12px; gap:8px; flex-wrap:wrap;
+}
+#chapterLabel{
+  font-size:12px; letter-spacing:2px; color:var(--amber);
+  font-weight:700; padding:6px 14px;
+  background:linear-gradient(180deg,#1e1610,#14100c);
+  border:1px solid var(--line); border-radius:20px;
+  box-shadow:0 4px 12px rgba(0,0,0,.4);
+}
+#controls{display:flex; gap:6px; flex-wrap:wrap}
+#controls button{
+  background:linear-gradient(180deg,#1c1610,#14100c);
+  color:var(--ink); border:1px solid var(--line); border-radius:8px;
+  padding:7px 11px; font-size:12px; cursor:pointer; font-family:inherit;
+  transition:all .15s; box-shadow:0 4px 10px rgba(0,0,0,.3);
+}
+#controls button:hover{border-color:var(--amber); background:#241a12}
+#controls button.off{opacity:.45}
+
+/* HUD */
+#hud{display:grid; grid-template-columns:repeat(5,1fr); gap:6px; margin-bottom:12px}
+@media(max-width:560px){ #hud{grid-template-columns:repeat(3,1fr)} }
+.chip{
+  background:linear-gradient(180deg,var(--panel2),var(--panel));
+  border:1px solid var(--line); border-radius:10px;
+  padding:8px 9px; display:flex; flex-direction:column; gap:4px; min-width:0;
+  box-shadow:0 4px 12px rgba(0,0,0,.4);
+}
+.chip .lbl{font-size:10px; color:var(--dim); letter-spacing:.5px}
+.chip .val{font-size:13px; font-weight:700; color:var(--ink); white-space:nowrap; overflow:hidden; text-overflow:ellipsis}
+.bar{height:5px; background:#1f1812; border-radius:99px; overflow:hidden; margin-top:2px}
+.bar i{display:block; height:100%; border-radius:99px; transition:width .6s ease}
+
+/* World Map Bar */
+#worldMap{
+  background:#0b0806; border:1px solid var(--line); border-radius:12px;
+  padding:10px 14px; margin-bottom:12px; display:flex; align-items:center; justify-content:space-between;
+  gap:8px; overflow-x:auto;
+}
+.map-node{font-size:11px; color:var(--dim); display:flex; align-items:center; gap:4px; white-space:nowrap}
+.map-node.active{color:var(--amber); font-weight:700; text-shadow:0 0 6px rgba(212,151,66,.4)}
+.map-node.passed{color:var(--green)}
+.map-line{flex:1; height:1px; background:var(--line); min-width:15px}
+
+/* Scene Card */
+.card{
+  background:var(--panel); border:1px solid var(--line); border-radius:16px;
+  overflow:hidden; margin-bottom:14px; box-shadow:0 20px 60px rgba(0,0,0,.6);
+}
+#sceneImg{
+  width:100%; height:200px; display:block; position:relative;
+  border-bottom:1px solid var(--line); overflow:hidden;
+  transition:background 1s ease;
+}
+#sceneImg::after{
+  content:''; position:absolute; inset:0;
+  background:linear-gradient(180deg,transparent 60%,rgba(0,0,0,.6));
+}
+#sceneImg .mood-icon{
+  position:absolute; top:50%; left:50%; transform:translate(-50%,-50%);
+  font-size:54px; opacity:.4; filter:blur(1px);
+}
+@media(max-width:520px){ #sceneImg{height:150px} .mood-icon{font-size:38px} }
+
+.card-body{padding:22px 20px}
+#scene{line-height:2.2; font-size:15.5px; min-height:100px}
+#scene p{margin:0 0 15px; opacity:0; transform:translateY(8px); transition:all .5s ease}
+#scene p:last-child{margin-bottom:0}
+.speaker{color:var(--amber); font-weight:700; text-shadow:0 0 8px rgba(212,151,66,.2)}
+.hl{color:var(--sand); font-weight:600}
+.warn-txt{color:var(--red); font-weight:600}
+
+/* Choices */
+#choices{display:flex; flex-direction:column; gap:10px}
+.choice{
+  width:100%; text-align:right; cursor:pointer;
+  background:linear-gradient(180deg,#1c1610,#14100c);
+  color:var(--ink); border:1px solid var(--line); border-radius:12px;
+  padding:14px 16px; font-size:15px; font-family:inherit; line-height:1.65;
+  transition:all .2s; display:flex; align-items:center; gap:12px;
+  box-shadow:0 4px 15px rgba(0,0,0,.3);
+}
+.choice:hover{
+  background:linear-gradient(180deg,#281e15,#1b140f);
+  border-color:var(--amber); transform:translateX(-3px);
+  box-shadow:0 6px 20px rgba(212,151,66,.18);
+}
+.choice:active{transform:scale(.99)}
+.choice .bullet{flex:0 0 auto; width:8px; height:8px; border-radius:50%; background:var(--amber); opacity:.8; box-shadow:0 0 6px var(--amber)}
+.choice .preview{font-size:11px; color:var(--dim); margin-right:auto; padding-right:8px; display:none}
+.choice:hover .preview{display:inline}
+
+/* Modals */
+.modal{
+  position:fixed; inset:0; background:rgba(0,0,0,.9); z-index:200;
+  display:none; align-items:center; justify-content:center; padding:20px;
+  animation:fadeIn .3s ease;
+}
+.modal.show{display:flex}
+.modal-content{
+  background:var(--panel); border:1px solid var(--line); border-radius:16px;
+  padding:24px; max-width:600px; width:100%; max-height:80vh; overflow-y:auto;
+  box-shadow:0 25px 60px rgba(0,0,0,.8);
+}
+.modal-content h2{margin:0 0 18px; color:var(--amber); font-size:20px}
+.inv-grid, .market-grid{display:grid; grid-template-columns:repeat(auto-fill, minmax(150px, 1fr)); gap:10px; margin-bottom:16px}
+.inv-item, .market-item{
+  background:#140e0a; border:1px solid var(--line); border-radius:10px;
+  padding:12px; display:flex; flex-direction:column; gap:6px; align-items:center; text-align:center;
+}
+.inv-item .icon, .market-item .icon{font-size:26px}
+.inv-item .name, .market-item .name{font-size:13px; font-weight:700; color:var(--ink)}
+.inv-item .desc, .market-item .desc{font-size:11px; color:var(--dim); line-height:1.4}
+.inv-item button, .market-item button{
+  margin-top:auto; background:var(--amber); color:#000; border:none;
+  padding:5px 12px; border-radius:6px; font-size:11.5px; font-weight:700; cursor:pointer;
+}
+.inv-item button:hover, .market-item button:hover{background:#e0a45c}
+.empty-msg{color:var(--dim); font-size:14px; text-align:center; padding:24px; grid-column:1/-1}
+
+.modal-content button.close-btn{
+  background:#1c1610; color:var(--ink); border:1px solid var(--line);
+  border-radius:10px; padding:10px 20px; cursor:pointer; font-family:inherit;
+  margin-top:14px; width:100%; transition:all .2s;
+}
+.modal-content button.close-btn:hover{border-color:var(--amber); background:#281e15}
+
+/* Companion Box */
+.companion-box{
+  background:#130e0a; border:1px solid var(--amber); border-radius:10px;
+  padding:10px 14px; margin-bottom:12px; display:flex; align-items:center; gap:10px;
+  font-size:13px; color:var(--sand);
+}
+.companion-box span{font-size:20px}
+
+/* Chapter Banner */
+#chapterBanner{
+  position:fixed; inset:0; background:rgba(5,4,3,.94); z-index:100;
+  display:none; align-items:center; justify-content:center; flex-direction:column; gap:14px;
+  animation:fadeIn .4s ease;
+}
+#chapterBanner.show{display:flex}
+#chapterBanner h1{color:var(--amber); font-size:26px; margin:0; text-align:center; padding:0 20px; line-height:1.6}
+#chapterBanner .num{font-size:12px; color:var(--dim); letter-spacing:4px}
+@keyframes fadeIn{from{opacity:0} to{opacity:1}}
+
+/* Endings */
+.ending-h{font-size:24px; font-weight:700; margin:0 0 14px; line-height:1.5}
+.ending-h.peace{color:var(--sand)}
+.ending-h.dark{color:var(--red)}
+.ending-h.broken{color:#8a7a5a}
+.quote{
+  border-right:3px solid var(--amber); padding:12px 16px;
+  color:var(--dim); font-style:italic; margin:18px 0;
+  background:rgba(212,151,66,.04); border-radius:0 8px 8px 0; line-height:1.8;
+}
+.stats-box{
+  background:#0b0806; border:1px solid var(--line); border-radius:12px;
+  padding:16px; margin:16px 0; font-size:13.5px; line-height:2;
+}
+.stats-box .row{display:flex; justify-content:space-between; padding:4px 0; color:var(--dim)}
+.stats-box .row span:last-child{color:var(--ink); font-weight:600}
+
+/* Toast */
+#toast{
+  position:fixed; bottom:24px; left:50%; transform:translateX(-50%) translateY(80px);
+  background:#18110c; border:1px solid var(--amber); color:var(--ink);
+  padding:12px 20px; border-radius:12px; font-size:13.5px; z-index:150;
+  transition:transform .4s ease; pointer-events:none; box-shadow:0 10px 30px rgba(0,0,0,.6);
+}
+#toast.show{transform:translateX(-50%) translateY(0)}
 </style>
 </head>
-<body class="bg-gray-50 text-gray-900 min-h-screen">
-
-<!-- Header -->
-<header class="bg-white border-b sticky top-0 z-40">
-  <div class="max-w-7xl mx-auto px-4 h-16 flex items-center justify-between">
-    <a href="#/" class="flex items-center gap-2 font-bold text-brand-700">
-      <span class="text-2xl">🏪</span>
-      <span class="text-lg">بورصة السودان</span>
-    </a>
-    <nav id="nav" class="flex items-center gap-2 text-sm"></nav>
+<body>
+<div id="app">
+  <div id="topbar">
+    <span id="chapterLabel">الفصل الأول · دارفور</span>
+    <div id="controls">
+      <button id="invBtn">🎒 الحقيبة (<span id="invCount">0</span>)</button>
+      <button id="marketBtn">🛒 السوق</button>
+      <button id="diaryBtn">📔 المذكرات</button>
+      <button id="saveBtn">💾 حفظ</button>
+      <button id="loadBtn">📂 تحميل</button>
+      <button id="soundBtn" onclick="toggleSound()">🔊 الصوت</button>
+    </div>
   </div>
-</header>
 
-<!-- Network banner -->
-<div id="net-banner" class="hidden text-sm px-4 py-2.5 flex items-center justify-between gap-3"></div>
+  <div id="worldMap">
+    <div class="map-node" id="m-darfur">🌄 دارفور</div>
+    <div class="map-line"></div>
+    <div class="map-node" id="m-desert">🏜️ الصحراء</div>
+    <div class="map-line"></div>
+    <div class="map-node" id="m-market">🛒 أم درمان</div>
+    <div class="map-line"></div>
+    <div class="map-node" id="m-khartoum">🏙️ الخرطوم</div>
+    <div class="map-line"></div>
+    <div class="map-node" id="m-borders">🚪 الحدود</div>
+  </div>
 
-<!-- Main content -->
-<main class="max-w-7xl mx-auto px-4 py-6" id="app"></main>
+  <div id="companionDisplay"></div>
 
-<!-- Toast container -->
-<div id="toasts" class="fixed top-4 left-1/2 -translate-x-1/2 z-[200] space-y-2 w-11/12 max-w-sm"></div>
+  <div id="hud"></div>
 
-<!-- Modal container -->
-<div id="modal"></div>
+  <div class="card">
+    <div id="sceneImg"><span class="mood-icon"></span></div>
+    <div class="card-body"><div id="scene"></div></div>
+  </div>
+  <div id="choices"></div>
+</div>
 
-<script type="module">
-// ============================================================================
-//  1) الإعدادات — مفاتيحك مُدخلة مسبقاً
-// ============================================================================
-const SUPABASE_URL = 'https://jeugwareeryetubxwjjx.supabase.co';
-const SUPABASE_ANON_KEY = 'sb_publishable_G5-JB9Xkrvo6mvSPLbbycA_ym43OOJ6';
+<div id="chapterBanner">
+  <span class="num" id="chNum">الفصل</span>
+  <h1 id="chTitle"></h1>
+</div>
 
-// ============================================================================
-//  2) استيراد Supabase
-// ============================================================================
-import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.45.4';
-const sb = createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
-  auth: { persistSession: true, autoRefreshToken: true, detectSessionInUrl: true }
+<!-- Modals -->
+<div id="invModal" class="modal">
+  <div class="modal-content">
+    <h2>🎒 الحقيبة والمخزون</h2>
+    <div id="invList" class="inv-grid"></div>
+    <button class="close-btn" onclick="closeModal('invModal')">إغلاق الحقيبة</button>
+  </div>
+</div>
+
+<div id="marketModal" class="modal">
+  <div class="modal-content">
+    <h2>🛒 سوق أم درمان التجاري</h2>
+    <div id="marketList" class="market-grid"></div>
+    <button class="close-btn" onclick="closeModal('marketModal')">إغلاق السوق</button>
+  </div>
+</div>
+
+<div id="diaryModal" class="modal">
+  <div class="modal-content">
+    <h2>📔 مذكرات رحلة الرماد</h2>
+    <div id="diaryList"></div>
+    <button class="close-btn" onclick="closeModal('diaryModal')">إغلاق المذكرات</button>
+  </div>
+</div>
+
+<div id="toast"></div>
+
+<script>
+/* ============================================================
+   MOODS & CHAPTERS & MAP REGIONS
+   ============================================================ */
+const MOODS = {
+  war:      { sky1:'#3a0d08', sky2:'#0a0403', icon:'🔥' },
+  darfur:   { sky1:'#5c2a10', sky2:'#1a0f08', icon:'🌄' },
+  attack:   { sky1:'#4a1a08', sky2:'#0f0604', icon:'⚠️' },
+  desert:   { sky1:'#c98e3f', sky2:'#5c3a1a', icon:'🏜️' },
+  city:     { sky1:'#1a2233', sky2:'#0a0d15', icon:'🏙️' },
+  market:   { sky1:'#6a3a18', sky2:'#2a1508', icon:'🛒' },
+  work:     { sky1:'#3a2a1a', sky2:'#15100a', icon:'🔧' },
+  home:     { sky1:'#4a3a2a', sky2:'#1a120a', icon:'🏠' },
+  prison:   { sky1:'#1a1a1a', sky2:'#050505', icon:'⛓️' },
+  hope:     { sky1:'#8a6a2a', sky2:'#2a2010', icon:'✨' },
+  peace:    { sky1:'#7a9a5a', sky2:'#2a3a1a', icon:'🕊️' },
+  dark:     { sky1:'#1a1010', sky2:'#050303', icon:'🌑' }
+};
+
+const CHAPTERS = {
+  1: 'دارفور · البدايات (٢٠٠٣)',
+  2: 'طريق الهروب الصحراوي',
+  3: 'سوق أم درمان · الانطلاقة',
+  4: 'الخرطوم · الكفاح والرزق',
+  5: 'الاستقرار والأسرة',
+  6: 'الطوفان · ١٥ أبريل ٢٠٢٣',
+  7: 'الحدود ومسارات النجاة',
+  8: 'الخاتمة والرماد الأخير'
+};
+
+/* ============================================================
+   STATE, INVENTORY & MARKET & COMPANION
+   ============================================================ */
+let S = {};
+const SAVE_KEY = 'rimad_epic_ultimate_v7';
+
+const ITEMS_DB = {
+  water:    { name: 'قربة ماء', icon: '💧', desc: 'تروي الظمأ وتعيد الطاقة.', price: 50, use: s => { s.energy = Math.min(100, s.energy + 30); toast('💧 شربت ماءً عذباً.. انتعش جسدك.'); } },
+  medicine: { name: 'إسعافات أولية', icon: '💊', desc: 'تشفى الجروح وتعيد الصحة.', price: 150, use: s => { s.health = Math.min(100, s.health + 40); toast('💊 استخدمت الأدوية.. زادت صحتك.'); } },
+  tea:      { name: 'عدة شاي وبلح', icon: '🍵', desc: 'ترفع المعنويات والأمل.', price: 80, use: s => { s.hope = Math.min(100, s.hope + 25); toast('🍵 شربت شاي بالهيل.. ارتفع أملك.'); } },
+  docs:     { name: 'وثائق رسمية', icon: '📜', desc: 'مستندات ملكية وحقوق.', price: 300, use: s => { toast('📜 تتأمل وثائقك.. ذكريات الكفاح.'); } }
+};
+
+function newState(){
+  return {
+    money: 180, health: 100, hope: 80, energy: 90, humanity: 60,
+    age: 8, chapter: 1, node: 'intro',
+    inventory: ['water'],
+    companion: null, // { name: 'عثمان', role: 'صديق الطفولة', perk: 'يساعدك في جمع المال' }
+    mapNode: 'm-darfur',
+    flags: {}, diary: [],
+    stats: { choices: 0, kind: 0, cruel: 0 },
+    visited: []
+  };
+}
+
+function addItem(s, id){
+  if(!s.inventory.includes(id)){
+    s.inventory.push(id);
+    toast('🎁 حصلت على أداة جديدة: ' + ITEMS_DB[id].name);
+    updateInvUI();
+  }
+}
+
+function useItem(id){
+  const it = ITEMS_DB[id];
+  if(it && it.use){
+    it.use(S);
+    if(id !== 'docs'){
+      const idx = S.inventory.indexOf(id);
+      if(idx > -1) S.inventory.splice(idx, 1);
+    }
+    updateHUD();
+    updateInvUI();
+  }
+}
+
+function buyItem(id){
+  const it = ITEMS_DB[id];
+  if(S.money >= it.price){
+    S.money -= it.price;
+    addItem(S, id);
+    toast('🛍️ اشتريت ' + it.name + ' بنجاح.');
+    updateHUD();
+    updateMarketUI();
+  } else {
+    toast('❌ لا تملك ما يكفي من المال للشراء.');
+  }
+}
+
+function updateInvUI(){
+  const list = document.getElementById('invList');
+  document.getElementById('invCount').textContent = S.inventory.length;
+  if(S.inventory.length === 0){
+    list.innerHTML = '<div class="empty-msg">الحقيبة فارغة تماماً.</div>';
+    return;
+  }
+  list.innerHTML = S.inventory.map(id => {
+    const it = ITEMS_DB[id];
+    return `
+      <div class="inv-item">
+        <span class="icon">${it.icon}</span>
+        <span class="name">${it.name}</span>
+        <span class="desc">${it.desc}</span>
+        <button onclick="useItem('${id}')">استخدام</button>
+      </div>
+    `;
+  }).join('');
+}
+
+function updateMarketUI(){
+  const list = document.getElementById('marketList');
+  list.innerHTML = Object.keys(ITEMS_DB).map(id => {
+    const it = ITEMS_DB[id];
+    return `
+      <div class="market-item">
+        <span class="icon">${it.icon}</span>
+        <span class="name">${it.name}</span>
+        <span class="desc">${it.desc}</span>
+        <span style="color:var(--amber); font-weight:700; font-size:12px">${it.price} ج.س</span>
+        <button onclick="buyItem('${id}')">شراء</button>
+      </div>
+    `;
+  }).join('');
+}
+
+function updateMap(nodeId){
+  S.mapNode = nodeId;
+  document.querySelectorAll('.map-node').forEach(el => {
+    el.classList.remove('active', 'passed');
+    if(el.id === nodeId) el.classList.add('active');
+  });
+}
+
+function updateCompanionUI(){
+  const box = document.getElementById('companionDisplay');
+  if(S.companion){
+    box.style.display = 'flex';
+    box.innerHTML = `<span>👥</span><div><b>رفيق الرحلة: ${S.companion.name}</b><br><small>${S.companion.perk}</small></div>`;
+  } else {
+    box.style.display = 'none';
+  }
+}
+
+/* ============================================================
+   AUDIO ENGINE & AMBIENT SOUNDS
+   ============================================================ */
+let audioCtx = null;
+let soundOn = true;
+
+function playTone(freq, dur=0.15, type='sine', vol=0.04){
+  if(!soundOn) return;
+  try{
+    if(!audioCtx) audioCtx = new (window.AudioContext||window.webkitAudioContext)();
+    const o = audioCtx.createOscillator();
+    const g = audioCtx.createGain();
+    o.type = type; o.frequency.value = freq;
+    g.gain.setValueAtTime(vol, audioCtx.currentTime);
+    g.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + dur);
+    o.connect(g); g.connect(audioCtx.destination);
+    o.start(); o.stop(audioCtx.currentTime + dur);
+  } catch(e){}
+}
+const sfx = {
+  click: () => playTone(440, 0.08, 'sine', 0.03),
+  good:  () => { playTone(523, 0.12); setTimeout(()=>playTone(659,0.15),80); },
+  chapter: () => { playTone(392,0.15); setTimeout(()=>playTone(523,0.2),130); setTimeout(()=>playTone(659,0.25),280); }
+};
+
+function toggleSound(){
+  soundOn = !soundOn;
+  const btn = document.getElementById('soundBtn');
+  btn.textContent = soundOn ? '🔊 الصوت' : '🔇 مكات';
+  btn.classList.toggle('off', !soundOn);
+  toast(soundOn ? 'تم تفعيل الصوت' : 'تم كتم الصوت');
+}
+
+/* ============================================================
+   DOM & RENDER
+   ============================================================ */
+const sceneEl   = document.getElementById('scene');
+const choicesEl = document.getElementById('choices');
+const hudEl     = document.getElementById('hud');
+const imgEl     = document.getElementById('sceneImg');
+const chLabel   = document.getElementById('chapterLabel');
+
+const scenes = {};
+function def(id, opts){ scenes[id] = opts; }
+
+function clamp(s){
+  s.health   = Math.max(0, Math.min(100, s.health));
+  s.hope     = Math.max(0, Math.min(100, s.hope));
+  s.energy   = Math.max(0, Math.min(100, s.energy));
+  s.money    = Math.max(0, s.money);
+  s.humanity = Math.max(0, Math.min(100, s.humanity));
+}
+
+function addDiary(s, text, when){
+  s.diary.push({ text, when: when || ('العمر: ' + s.age + ' سنة') });
+}
+function addStat(s, type){ s.stats[type] = (s.stats[type]||0) + 1; }
+
+function updateHUD(){
+  const repLabel = S.humanity > 65 ? 'نقي' : S.humanity < 35 ? 'قاسي' : 'متوازن';
+  hudEl.innerHTML = `
+    <div class="chip"><span class="lbl">العمر</span><span class="val">${S.age} سنة</span></div>
+    <div class="chip"><span class="lbl">المال</span><span class="val">${S.money.toLocaleString('en-US')} ج</span></div>
+    <div class="chip"><span class="lbl">الصحة</span><div class="bar"><i style="width:${S.health}%;background:var(--red)"></i></div></div>
+    <div class="chip"><span class="lbl">الأمل</span><div class="bar"><i style="width:${S.hope}%;background:var(--amber)"></i></div></div>
+    <div class="chip"><span class="lbl">الضمير · ${repLabel}</span><div class="bar"><i style="width:${S.humanity}%;background:var(--blue)"></i></div></div>`;
+  updateInvUI();
+  updateCompanionUI();
+}
+
+function showChapterBanner(ch, cb){
+  const b = document.getElementById('chapterBanner');
+  document.getElementById('chNum').textContent = 'الفصل ' + ch;
+  document.getElementById('chTitle').textContent = CHAPTERS[ch] || '';
+  b.classList.add('show');
+  sfx.chapter();
+  setTimeout(() => { b.classList.remove('show'); if(cb) cb(); }, 1800);
+}
+
+function setMood(mood){
+  const m = MOODS[mood] || MOODS.darfur;
+  imgEl.style.background = `linear-gradient(180deg, ${m.sky1} 0%, ${m.sky2} 100%)`;
+  imgEl.querySelector('.mood-icon').textContent = m.icon;
+}
+
+function render(){
+  const sc = scenes[S.node];
+  if(!sc) return;
+
+  if(sc.chapter && sc.chapter !== S.chapter){
+    S.chapter = sc.chapter;
+    chLabel.textContent = 'الفصل ' + S.chapter + ' · ' + (CHAPTERS[S.chapter]||'').split(' · ')[0];
+    showChapterBanner(S.chapter);
+  } else {
+    chLabel.textContent = 'الفصل ' + S.chapter + ' · ' + (CHAPTERS[S.chapter]||'').split(' · ')[0];
+  }
+
+  setMood(sc.mood || 'darfur');
+  if(sc.map) updateMap(sc.map);
+
+  const text = (typeof sc.text === 'function') ? sc.text(S) : sc.text;
+  sceneEl.innerHTML = text.split('\n').filter(l => l.trim()).map(l => '<p>' + l + '</p>').join('');
+
+  sceneEl.querySelectorAll('p').forEach((p, i) => {
+    setTimeout(() => { p.style.opacity = '1'; p.style.transform = 'none'; }, 60 + i * 80);
+  });
+
+  choicesEl.innerHTML = '';
+  sc.choices.forEach(c => {
+    if(c.if && !c.if(S)) return;
+    const b = document.createElement('button');
+    b.className = 'choice';
+    b.innerHTML = '<span class="bullet"></span><span>' + c.t + '</span><span class="preview">' + (c.hint||'') + '</span>';
+    b.onclick = () => handleChoice(c);
+    choicesEl.appendChild(b);
+  });
+
+  updateHUD();
+  if(!S.visited.includes(S.node)) S.visited.push(S.node);
+}
+
+function handleChoice(c){
+  sfx.click();
+  if(c.do) c.do(S);
+  addStat(S, 'choices');
+  clamp(S);
+
+  if(S.health <= 0 && c.to !== 'ending'){
+    S.node = 'death';
+  } else {
+    S.node = c.to;
+  }
+
+  updateHUD();
+  render();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+/* ============================================================
+   SCENE DEFINITIONS — شاملة الخريطة، السوق، الرفقاء، الحدود
+   ============================================================ */
+
+def('intro', {
+  chapter: 1, mood: 'darfur', map: 'm-darfur',
+  text: `في دارفور، حيث تتداخل خيوط التاريخ العريق بالرماد والدم، وُلدت عام ٢٠٠٣.
+هذه النسخة الملحمية تدمج **خريطة الرحلة التفاعلية، نظام اقتصاد السوق، رفقاء الدرب، ومسارات الحدود الاستراتيجية**.
+جهز حقيبتك واستعد لرحلة البقاء الخالدة.`,
+  choices: [
+    { t:'ابدأ ملحمة الرماد الأخير', to:'village' }
+  ]
 });
 
-// ============================================================================
-//  3) الثوابت
-// ============================================================================
-const STATES = ['الخرطوم','الجزيرة','البحر الأحمر','كسلا','القضارف','سنار',
-  'النيل الأزرق','النيل الأبيض','شمال كردفان','جنوب كردفان','غرب كردفان',
-  'شمال دارفور','جنوب دارفور','غرب دارفور','شرق دارفور','وسط دارفور',
-  'نهر النيل','الشمالية'];
-const UNITS = ['قطعة','كيلو','جرام','لتر','جوال','كرتون','طن','متر','علبة'];
-const CATEGORY_COLORS = {
-  food:'from-amber-50 to-amber-100', vegetables:'from-green-50 to-green-100',
-  meat:'from-red-50 to-red-100', medicine:'from-blue-50 to-blue-100',
-  clothing:'from-purple-50 to-purple-100', electronics:'from-cyan-50 to-cyan-100',
-  construction:'from-orange-50 to-orange-100', cars:'from-slate-50 to-slate-100',
-  other:'from-gray-50 to-gray-100'
-};
-const PRODUCT_SUGGESTIONS = [
-  {label:'سكر',emoji:'🍬'},{label:'دقيق',emoji:'🌾'},{label:'زيت',emoji:'🛢️'},
-  {label:'أرز',emoji:'🍚'},{label:'عدس',emoji:'🫘'},{label:'بصل',emoji:'🧅'},
-  {label:'طماطم',emoji:'🍅'},{label:'بطاطس',emoji:'🥔'},{label:'لحم',emoji:'🥩'},
-  {label:'دجاج',emoji:'🍗'},{label:'سمك',emoji:'🐟'},{label:'لبن',emoji:'🥛'},
-  {label:'شاي',emoji:'🍵'},{label:'قهوة',emoji:'☕'},{label:'موز',emoji:'🍌'},
-  {label:'برتقال',emoji:'🍊'},{label:'مانجو',emoji:'🥭'},{label:'بطيخ',emoji:'🍉'},
-  {label:'خبز',emoji:'🍞'},{label:'عسل',emoji:'🍯'},{label:'تمر',emoji:'🌴'},
-  {label:'فول',emoji:'🫘'},{label:'سمسم',emoji:'🌰'},{label:'صابون',emoji:'🧼'},
-  {label:'ملابس',emoji:'👕'},{label:'حذاء',emoji:'👟'},{label:'جوال',emoji:'📱'},
-  {label:'شاحن',emoji:'🔌'},{label:'أسمنت',emoji:'🧱'},{label:'حديد',emoji:'⛓️'},
-  {label:'بنزين',emoji:'⛽'},{label:'غاز',emoji:'🔥'}
-];
+def('village', {
+  chapter: 1, mood: 'darfur', map: 'm-darfur',
+  text: `دارفور، قرية هادئة عند سفح جبل محاط بأشجار الطلح. عمرك ٨ أعوام.
+أمك تقول كل صباح: «لا تنظر إلى السماء يا بني.. انظر إلى الأرض، واجرِ.»
+في ربيع ٢٠٠٣، جاء الطوفان والنيران لتلتهم كل شيء.`,
+  choices: [
+    { t:'مرافقة أمك نحو بئر القرية (تحصل على قربة ماء 💧)', do:s=>{ addItem(s,'water'); s.energy-=10; addStat(s,'kind'); addDiary(s,'عبّأت قربة الماء من البئر قبل الهجوم.','بداية الأزمة'); }, to:'well', hint:'تحصل على ماء' },
+    { t:'البقاء مع الأب في حوش البيت', do:s=>{ s.hope-=2; }, to:'raid', hint:'أمل -' }
+  ]
+});
 
-// ============================================================================
-//  4) الحالة العامة
-// ============================================================================
-const state = {
-  user: null,
-  profile: null,
-  categories: [],
-  products: [],
-  myProducts: [],
-  reports: [],
-  traders: [],
-  adminProducts: [],
-  filters: { q:'', category:'', state:'' },
-  route: '/',
-  rates: loadRates(),
-  offline: false,
-  pending: 0
-};
+def('well', {
+  chapter: 1, mood: 'attack', map: 'm-darfur',
+  text: `البئر كانت بعيدة وأمك معك. قبل أن نعود، تردد في الأفق صوت ركض الخيل والنار.. إنهم قادمون بسرعة مرعبة.`,
+  choices: [
+    { t:'الجري بأقصى طاقة نحو سفح الوادي', do:s=>{ s.energy-=20; s.hope-=5; }, to:'raid', hint:'طاقة -' }
+  ]
+});
 
-// ============================================================================
-//  5) أدوات مساعدة
-// ============================================================================
-const $ = (sel) => document.querySelector(sel);
-const $$ = (sel) => document.querySelectorAll(sel);
+def('raid', {
+  chapter: 1, mood: 'war', map: 'm-darfur',
+  text: `قبل أن ينبلج الفجر، صرخ أبوك صرخة رعبة. دفعك من النافذة الخلفية صارخاً:
+<span class="speaker">«لا تلتفت.. ابحث عن النجاة!»</span>`,
+  choices: [
+    { t:'العدو في قاع الوادي حتى انقطع نفس الصدر', do:s=>{ s.energy-=25; s.health-=8; addDiary(s,'هربت بلا التفات كما أمرني أبي.','ليلة الاحتراق'); }, to:'valley', hint:'طاقة/صحة -' }
+  ]
+});
 
-function esc(s) {
-  return String(s ?? '').replace(/[&<>"']/g, c =>
-    ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-}
+def('valley', {
+  chapter: 2, mood: 'desert', map: 'm-desert',
+  text: `مشيت وحيداً في ليل الصحراء الطويل. إذا عطشت، تذكر زر (الحقيبة) بالأعلى واستخدام قربة الماء 💧.
+مع شروق شحيب، ظهرت شاحنة عسكرية عابرة.`,
+  choices: [
+    { t:'الخروج وتلويح اليدين للشاحنة', do:s=>{ s.hope-=4; }, to:'truck', hint:'أمل -' }
+  ]
+});
 
-function formatPrice(price, currency) {
-  const sym = { SDG:'ج.س', USD:'$', SAR:'ر.س' }[currency] ?? currency;
-  return `${Number(price).toLocaleString('ar-EG')} ${sym}`;
-}
+def('truck', {
+  chapter: 2, mood: 'desert', map: 'm-desert',
+  text: `توقف المركب.. شاحنة يقودها رجال مسلحون. سمحوا لك بالصعود في المؤخرة مع طفل مشرد آخر يُدعى **«عثمان»**.`,
+  choices: [
+    { t:'التعرف على عثمان ومشاركته قطرة ماء (تكسب رفيقاً 👥)', do:s=>{ S.companion = { name: 'عثمان', perk: 'يساعدك في جمع المال بأسواق أم درمان' }; s.hope+=10; addStat(s,'kind'); addItem(s,'tea'); }, to:'khartoum_arrival', hint:'تكتسب رفيقاً 👥' }
+  ]
+});
 
-function timeAgo(date) {
-  const s = (Date.now() - new Date(date).getTime()) / 1000;
-  if (s < 60) return 'الآن';
-  if (s < 3600) return `قبل ${Math.floor(s/60)} دقيقة`;
-  if (s < 86400) return `قبل ${Math.floor(s/3600)} ساعة`;
-  if (s < 2592000) return `قبل ${Math.floor(s/86400)} يوم`;
-  return new Date(date).toLocaleDateString('ar-EG');
-}
+def('khartoum_arrival', {
+  chapter: 3, mood: 'city', map: 'm-market',
+  text: `الخرطوم وأم درمان.. السوق العريق يعج بالحياة والصخب.
+يمكنك الآن الضغط على زر **🛒 السوق** بالأعلى لشراء أو بيع المؤن والأدوية والشاي برأس مالك الحالي!`,
+  choices: [
+    { t:'العمل مع رفيقك عثمان في السوق وجمع رأس المال', do:s=>{ s.money+=600; s.hope+=10; addDiary(s, 'وصلت أم درمان مع عثمان. بدأنا نعمل بجد في السوق.', 'سن الشباب'); }, to:'bus', hint:'مال +' }
+  ]
+});
 
-function isNew(date, hours = 24) {
-  return (Date.now() - new Date(date).getTime()) < hours * 3600 * 1000;
-}
+def('bus', {
+  chapter: 4, mood: 'work', map: 'm-khartoum',
+  text: `سنوات من الكفاح برفقة عثمان حتى امتلكت حافلة نقل عام «كريز» وبيتاً صغيراً وأسرة دافئة.
+حصلت على وثائق ملكية رسمية واحتفظت بها في حقيبتك (<span class="hl">وثائق 📜</span>).`,
+  choices: [
+    { t:'الاستمتاع بالاستقرار والعمل', do:s=>{ addItem(s,'docs'); s.money+=400000; s.hope+=15; s.age=38; }, to:'war', hint:'استقرار' }
+  ]
+});
 
-function waLink(phone, name) {
-  let n = (phone ?? '').replace(/\D/g, '');
-  if (n.startsWith('0')) n = '249' + n.slice(1);
-  else if (!n.startsWith('249')) n = '249' + n;
-  const text = encodeURIComponent(`السلام عليكم، شفت منتج "${name}" في بورصة السودان. هل ما زال متاحاً؟`);
-  return `https://wa.me/${n}?text=${text}`;
-}
+def('war', {
+  chapter: 6, mood: 'war', map: 'm-khartoum',
+  text: `١٥ أبريل ٢٠٢٣.
+صباح مشؤوم أعاد أهوال دارفور. دوي المدفعية يمزق سماء الخرطوم. حافلتك وبيتك تعرضا للنهب.
+رفيقك عثمان يعرض عليك خطة للهروب الجماعي عبر الحدود.`,
+  choices: [
+    { t:'الموافقة على خطة عثمان للهروب عبر الحدود الاستراتيجية 🚪', do:s=>{ s.hope+=15; }, to:'borders', hint:'مسارات الهروب الدولي' },
+    { t:'البقاء ومواجهة الاعتقال الداخلي', do:s=>{ s.health-=20; }, to:'prison', hint:'خطر الاعتقال' }
+  ]
+});
 
-function getEmoji(p) {
-  if (p.emoji) return p.emoji;
-  const map = { food:'🌾',vegetables:'🥬',meat:'🥩',medicine:'💊',
-    clothing:'👕',electronics:'📱',construction:'🧱',cars:'🚗',other:'📦' };
-  return map[p.category_slug] ?? '📦';
-}
+def('borders', {
+  chapter: 7, mood: 'desert', map: 'm-borders',
+  text: `رفيقك عثمان يرافقك وأمامكم 3 خيارات للهروب عبر الحدود نحو بر الأمان. اختر طريقك بحكمة:`,
+  choices: [
+    { t:'🇪🇬 طريق الشمال نحو مصر (عبر وادي حلفا)', do:s=>{ s.money-=200; s.hope+=20; s.flags.border_north=true; addDiary(s, 'عبرت نحو مصر مع عثمان. بداية جديدة.', 'العبور الآمن'); }, to:'ending', hint:'أمان مستقر' },
+    { t:'🇹🇩 طريق الغرب نحو تشاد (عبر دارفور)', do:s=>{ s.energy-=25; s.hope+=15; s.flags.border_west=true; addDiary(s, 'عدت غرباً نحو تشاد ومخيمات اللجوء.', 'طريق الجذور'); }, to:'ending', hint:'عودة للأرض' },
+    { t:'🇸🇸 طريق الجنوب نحو جنوب السودان', do:s=>{ s.health-=20; s.hope+=10; s.flags.border_south=true; addDiary(s, 'نزلت جنوباً عبر النيل نحو حدود جنوب السودان.', 'طريق النيل'); }, to:'ending', hint:'مسار النيل' }
+  ]
+});
 
-function toast(msg, type = 'success') {
-  const colors = {
-    success: 'bg-green-600', error: 'bg-red-600',
-    info: 'bg-blue-600', warn: 'bg-amber-600'
-  };
-  const icons = { success:'✅', error:'⚠️', info:'ℹ️', warn:'⏳' };
-  const el = document.createElement('div');
-  el.className = `${colors[type]} text-white px-4 py-3 rounded-xl shadow-lg toast-anim text-sm flex items-center gap-2`;
-  el.innerHTML = `<span>${icons[type]}</span><span>${esc(msg)}</span>`;
-  $('#toasts').appendChild(el);
-  setTimeout(() => { el.style.opacity = '0'; el.style.transition = 'opacity .3s'; setTimeout(() => el.remove(), 300); }, 3000);
-}
+def('prison', {
+  chapter: 7, mood: 'prison', map: 'm-khartoum',
+  text: `أُلقيت في زنزانة مظلمة تحت ظروف قاسية. تذكر أن تفتح الحقيبة لاستخدام الأدوية 💊 أو الماء 💧 في أي وقت!`,
+  choices: [
+    { t:'مشاركة رغيف الخبز مع سجين آخر', do:s=>{ s.hope+=20; s.humanity+=20; s.health-=10; }, to:'ending', hint:'إنسانية عالية' }
+  ]
+});
 
-// ============================================================================
-//  6) أسعار الصرف
-// ============================================================================
-function loadRates() {
-  try {
-    const raw = localStorage.getItem('sm_rates');
-    return raw ? JSON.parse(raw) : { SDG:1, USD:1/600, SAR:1/160, updatedAt:new Date().toISOString() };
-  } catch { return { SDG:1, USD:1/600, SAR:1/160, updatedAt:new Date().toISOString() }; }
-}
-function saveRates(r) {
-  state.rates = { ...state.rates, ...r, updatedAt:new Date().toISOString() };
-  localStorage.setItem('sm_rates', JSON.stringify(state.rates));
-  window.dispatchEvent(new CustomEvent('rates-updated'));
-}
-function convertPrice(amount, from, to) {
-  if (from === to) return amount;
-  const r = state.rates;
-  return (amount / r[from]) * r[to];
-}
+def('ending', {
+  chapter: 8, mood: 'hope', map: 'm-borders',
+  text: function(s){
+    const score = s.hope + s.humanity + (s.companion?20:0) + (s.flags.border_north||s.flags.border_west?25:0);
+    const sBox = `<div class="stats-box">
+      <div class="row"><span>إجمالي القرارات</span><span>${s.stats.choices}</span></div>
+      <div class="row"><span>الرفيق المرافق</span><span>${s.companion?s.companion.name:'لا أحد'}</span></div>
+      <div class="row"><span>الأدوات بالحقيبة</span><span>${s.inventory.length} عناصر</span></div>
+      <div class="row"><span>رصيد الأمل</span><span>${s.hope}%</span></div>
+      <div class="row"><span>الضمير والإنسانية</span><span>${s.humanity}%</span></div>
+      <div class="row"><span>العمر النهائي</span><span>${s.age} سنة</span></div>
+    </div>`;
 
-// ============================================================================
-//  7) IndexedDB للطابور المحلي
-// ============================================================================
-const DB_NAME = 'sm_offline', DB_VER = 1;
-function openDB() {
-  return new Promise((res, rej) => {
-    const r = indexedDB.open(DB_NAME, DB_VER);
-    r.onupgradeneeded = () => {
-      const db = r.result;
-      if (!db.objectStoreNames.contains('queue')) db.createObjectStore('queue', { keyPath:'localId' });
-      if (!db.objectStoreNames.contains('cache')) db.createObjectStore('cache', { keyPath:'id' });
-    };
-    r.onsuccess = () => res(r.result);
-    r.onerror = () => rej(r.error);
-  });
-}
-async function idbPut(store, val) {
-  const db = await openDB();
-  return new Promise((res, rej) => {
-    const tx = db.transaction(store, 'readwrite');
-    tx.objectStore(store).put(val);
-    tx.oncomplete = () => res(); tx.onerror = () => rej(tx.error);
-  });
-}
-async function idbGetAll(store) {
-  try {
-    const db = await openDB();
-    return new Promise((res, rej) => {
-      const tx = db.transaction(store, 'readonly');
-      const r = tx.objectStore(store).getAll();
-      r.onsuccess = () => res(r.result); r.onerror = () => rej(r.error);
-    });
-  } catch { return []; }
-}
-async function idbDel(store, key) {
-  const db = await openDB();
-  return new Promise((res, rej) => {
-    const tx = db.transaction(store, 'readwrite');
-    tx.objectStore(store).delete(key);
-    tx.oncomplete = () => res(); tx.onerror = () => rej(tx.error);
-  });
-}
-async function enqueue(action) {
-  const item = { ...action, localId: `${Date.now()}-${Math.random().toString(36).slice(2,7)}`, createdAt: new Date().toISOString() };
-  await idbPut('queue', item);
-  await refreshPending();
-  return item.localId;
-}
-async function refreshPending() {
-  state.pending = (await idbGetAll('queue')).length;
-  renderNetBanner();
-}
-async function syncPending() {
-  const items = await idbGetAll('queue');
-  let synced = 0, failed = 0;
-  for (const it of items) {
-    try {
-      if (it.type === 'insert') await sb.from('products').insert(it.payload);
-      else if (it.type === 'update') await sb.from('products').update(it.payload).eq('id', it.id);
-      else if (it.type === 'delete') await sb.from('products').delete().eq('id', it.id);
-      await idbDel('queue', it.localId);
-      synced++;
-    } catch { failed++; }
-  }
-  await refreshPending();
-  return { synced, failed };
-}
+    if(s.flags.border_north){
+      return `<div class="ending-h peace">نهاية العبور الآمن · أفق الشمال</div>
+بمعية رفيقك عثمان، عبرت الحدود الشمالية نحو مصر بسلام. أسستم حياة جديدة وكتبتم فصلاً جديداً من الكفاح.
+${sBox}`;
+    }
+    return `<div class="ending-h peace">النهاية الملحمية الكبرى · شتات الرماد وبذرة الحياة</div>
+تجاوزت المحن والصعاب، وخرجت بروح نقية وحقيبة مليئة بالذكريات والوثائق.
+${sBox}`;
+  },
+  choices: [
+    { t:'إعادة خوض ملحمة الرماد من جديد', do:s=>{ Object.assign(s, newState()); updateInvUI(); updateMarketUI(); }, to:'intro' }
+  ]
+});
 
-// ============================================================================
-//  8) المصادقة
-// ============================================================================
-async function loadSession() {
-  const { data: { session } } = await sb.auth.getSession();
-  state.user = session?.user ?? null;
-  if (state.user) await loadProfile();
-}
-async function loadProfile() {
-  if (!state.user) { state.profile = null; return; }
-  const { data } = await sb.from('profiles').select('*').eq('id', state.user.id).single();
-  state.profile = data;
-}
-async function signUp(form) {
-  const { error } = await sb.auth.signUp({
-    email: form.email, password: form.password,
-    options: { data: { full_name: form.full_name, phone: form.phone, state: form.state, city: form.city } }
-  });
-  if (error) throw error;
-}
-async function signIn(email, password) {
-  const { error } = await sb.auth.signInWithPassword({ email, password });
-  if (error) throw error;
-  await loadSession();
-}
-async function signOut() {
-  await sb.auth.signOut();
-  state.user = null; state.profile = null;
-  location.hash = '#/';
-  render();
-}
+def('death', {
+  chapter: 8, mood: 'dark', map: 'm-desert',
+  text: `انهارت طاقتك الجسدية تماماً ولم تستخدم الإسعافات أو الماء من حقيبتك بالوقت المناسب. سقطت على رمال الطريق.`,
+  choices: [
+    { t:'حاول مرة أخرى', do:s=>{ Object.assign(s, newState()); updateInvUI(); updateMarketUI(); }, to:'intro' }
+  ]
+});
 
-// ============================================================================
-//  9) تحميل البيانات من Supabase
-// ============================================================================
-async function loadCategories() {
-  const { data } = await sb.from('categories').select('*').order('sort_order');
-  state.categories = data ?? [];
-}
-async function loadProducts() {
-  const { data } = await sb.from('product_feed').select('*').order('created_at', { ascending:false }).limit(60);
-  state.products = data ?? [];
-  for (const p of state.products) await idbPut('cache', p).catch(()=>{});
-}
-async function loadMyProducts() {
-  if (!state.user) return;
-  const { data } = await sb.from('product_feed').select('*').eq('trader_id', state.user.id).order('created_at', { ascending:false });
-  state.myProducts = data ?? [];
-}
-async function loadAdminData() {
-  if (state.profile?.role !== 'admin') return;
-  const [reports, traders, products] = await Promise.all([
-    sb.from('reports').select('*, product:products(name), reporter:profiles!reporter_id(full_name)').eq('status','pending').order('created_at',{ascending:false}),
-    sb.from('profiles').select('*').order('created_at',{ascending:false}).limit(100),
-    sb.from('product_feed').select('*').order('created_at',{ascending:false}).limit(100)
-  ]);
-  state.reports = reports.data ?? [];
-  state.traders = traders.data ?? [];
-  state.adminProducts = products.data ?? [];
-}
+/* ============================================================
+   UI & MODAL CONTROLLERS
+   ============================================================ */
+function openModal(id){ document.getElementById(id).classList.add('show'); }
+function closeModal(id){ document.getElementById(id).classList.remove('show'); }
 
-// ============================================================================
-//  10) معالج النقرات على واتساب
-// ============================================================================
-async function trackClick(id) {
-  try { await sb.rpc('increment_whatsapp_clicks', { pid: id }); } catch {}
-}
-async function trackView(id) {
-  try { await sb.rpc('increment_views', { pid: id }); } catch {}
-}
-
-// ============================================================================
-//  11) المكونات المُعاد استخدامها
-// ============================================================================
-function renderNetBanner() {
-  const el = $('#net-banner');
-  if (state.offline && state.pending === 0) {
-    el.className = 'text-sm px-4 py-2.5 flex items-center justify-between gap-3 bg-amber-50 border-b border-amber-200 text-amber-900';
-    el.innerHTML = '<div class="flex items-center gap-2">📴 <span>أنت غير متصل — تُعرض لك آخر نسخة محفوظة</span></div>';
-    el.classList.remove('hidden');
-  } else if (!state.offline && state.pending > 0) {
-    el.className = 'text-sm px-4 py-2.5 flex items-center justify-between gap-3 bg-blue-50 border-b border-blue-200 text-blue-900';
-    el.innerHTML = `<div class="flex items-center gap-2">☁️ <span>${state.pending} منتج بانتظار النشر</span></div>
-      <button onclick="window.__sync()" class="text-xs bg-blue-600 text-white px-3 py-1 rounded-lg">نشر الآن</button>`;
-    el.classList.remove('hidden');
-  } else if (state.offline && state.pending > 0) {
-    el.className = 'text-sm px-4 py-2.5 flex items-center justify-between gap-3 bg-amber-50 border-b border-amber-200 text-amber-900';
-    el.innerHTML = `<div class="flex items-center gap-2">📴 <span>غير متصل — ${state.pending} منتج بانتظار النشر</span></div>`;
-    el.classList.remove('hidden');
+document.getElementById('invBtn').onclick = () => openModal('invModal');
+document.getElementById('marketBtn').onclick = () => { updateMarketUI(); openModal('marketModal'); };
+document.getElementById('diaryBtn').onclick = () => {
+  const list = document.getElementById('diaryList');
+  if(S.diary.length === 0){
+    list.innerHTML = '<div class="empty-msg">لم تُدون أي ذكرى بعد.</div>';
   } else {
-    el.classList.add('hidden');
+    list.innerHTML = S.diary.map(d => `<div class="diary-entry"><div class="when">${d.when}</div>${d.text}</div>`).join('');
   }
-}
-
-function productCard(p) {
-  const emoji = getEmoji(p);
-  const grad = CATEGORY_COLORS[p.category_slug] ?? CATEGORY_COLORS.other;
-  const isNewBadge = isNew(p.created_at)
-    ? `<span class="inline-flex items-center gap-1 text-[10px] bg-amber-100 text-amber-700 px-2 py-0.5 rounded-full mr-1">🔥 جديد</span>` : '';
-  const verified = p.trader_verified ? `<span title="موثّق" class="text-brand-600 text-lg">✓</span>` : '';
-  const rating = p.trader_rating ? `<span class="text-amber-500">★ ${Number(p.trader_rating).toFixed(1)}</span>` : '';
-
-  return `
-    <div class="bg-white rounded-2xl border hover:shadow-lg transition-shadow p-4 flex flex-col">
-      <div class="flex items-start gap-3">
-        <div class="w-14 h-14 rounded-xl bg-gradient-to-br ${grad} flex items-center justify-center text-3xl shrink-0">${emoji}</div>
-        <div class="flex-1 min-w-0">
-          <a href="#/product/${p.id}"><h3 class="font-bold text-gray-900 line-clamp-2 hover:text-brand-700">${esc(p.name)}</h3></a>
-          ${p.category_name ? `<span class="inline-flex items-center gap-1 text-[11px] text-gray-500 mt-1">${p.category_icon ?? '📦'} ${esc(p.category_name)}</span>` : ''}
-          ${isNewBadge}
-        </div>
-        ${verified}
-      </div>
-      <div class="mt-3 flex items-baseline gap-2">
-        <span class="text-2xl font-extrabold text-brand-700">${formatPrice(p.price, p.currency)}</span>
-        <span class="text-xs text-gray-500">/ ${esc(p.unit)}</span>
-      </div>
-      <div class="mt-2 space-y-1 text-xs text-gray-600">
-        <div>📦 متوفر: <b>${esc(p.qty)} ${esc(p.unit)}</b></div>
-        <div>📍 ${esc(p.state)}${p.market ? ' — ' + esc(p.market) : ''}</div>
-        <div>🏪 ${esc(p.trader_name)} ${rating}</div>
-      </div>
-      <div class="mt-3 pt-3 border-t flex items-center justify-between text-xs text-gray-500">
-        <span>⏰ ${timeAgo(p.created_at)}</span>
-        <span>👁 ${p.views_count}</span>
-      </div>
-      <a href="${waLink(p.trader_phone, p.name)}" target="_blank" rel="noopener"
-         onclick="window.__click('${p.id}')"
-         class="mt-3 bg-[#25D366] hover:bg-[#1fb457] text-white text-sm font-semibold text-center py-2.5 rounded-xl">💬 تواصل واتساب</a>
-    </div>`;
-}
-
-function emptyState(title, desc) {
-  return `<div class="bg-white rounded-2xl border p-12 text-center">
-    <div class="text-5xl mb-3">📭</div>
-    <h3 class="font-bold text-gray-800">${esc(title)}</h3>
-    ${desc ? `<p class="text-sm text-gray-500 mt-1">${esc(desc)}</p>` : ''}
-  </div>`;
-}
-
-// ============================================================================
-//  12) الصفحات
-// ============================================================================
-
-function viewHome() {
-  const cats = state.categories;
-  const f = state.filters;
-  const filtered = state.products.filter(p => {
-    const matchQ = !f.q || p.name.includes(f.q) || (p.trader_name ?? '').includes(f.q) || (p.market ?? '').includes(f.q);
-    const matchC = !f.category || p.category_slug === f.category;
-    const matchS = !f.state || p.state === f.state;
-    return matchQ && matchC && matchS;
-  });
-
-  return `
-    <div class="grid lg:grid-cols-[280px_1fr] gap-6">
-      <aside class="space-y-4">
-        <div class="bg-white rounded-2xl border p-4 lg:sticky lg:top-20">
-          <div class="relative mb-3">
-            <input id="f-q" value="${esc(f.q)}" placeholder="ابحث عن منتج، تاجر، أو سوق..."
-              class="w-full pr-10 pl-4 py-3 bg-gray-50 border rounded-xl focus:ring-2 focus:ring-brand-500 outline-none">
-            <span class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400">🔍</span>
-          </div>
-          <div class="grid grid-cols-2 gap-2">
-            <select id="f-cat" class="px-3 py-2.5 bg-gray-50 border rounded-xl text-sm">
-              <option value="">كل التصنيفات</option>
-              ${cats.map(c => `<option value="${c.slug}" ${f.category===c.slug?'selected':''}>${c.icon ?? ''} ${esc(c.name_ar)}</option>`).join('')}
-            </select>
-            <select id="f-state" class="px-3 py-2.5 bg-gray-50 border rounded-xl text-sm">
-              <option value="">كل الولايات</option>
-              ${STATES.map(s => `<option value="${s}" ${f.state===s?'selected':''}>${s}</option>`).join('')}
-            </select>
-          </div>
-          ${(f.q||f.category||f.state) ? `<button onclick="window.__clearFilters()" class="mt-3 text-xs text-brand-700 hover:underline">✕ مسح الفلاتر</button>` : ''}
-        </div>
-
-        <div class="bg-white rounded-2xl border p-4">
-          <h3 class="font-bold text-sm mb-3">💱 أسعار الصرف</h3>
-          <div class="space-y-2 text-sm">
-            <div class="flex items-center gap-2">
-              <span class="w-16">1 دولار</span>
-              <input id="rate-usd" type="number" value="${Math.round(1/state.rates.USD)}" class="flex-1 px-2 py-1.5 border rounded-lg">
-              <span class="text-xs text-gray-500">ج.س</span>
-            </div>
-            <div class="flex items-center gap-2">
-              <span class="w-16">1 ريال</span>
-              <input id="rate-sar" type="number" value="${Math.round(1/state.rates.SAR)}" class="flex-1 px-2 py-1.5 border rounded-lg">
-              <span class="text-xs text-gray-500">ج.س</span>
-            </div>
-          </div>
-          <button onclick="window.__saveRates()" class="mt-3 w-full bg-brand-600 text-white text-sm py-2 rounded-lg">حفظ الأسعار</button>
-        </div>
-      </aside>
-
-      <section>
-        <div class="flex items-center justify-between mb-4">
-          <h1 class="text-2xl font-bold">🏪 الأسعار المتاحة</h1>
-          <span class="text-sm text-gray-500">${filtered.length} منتج</span>
-        </div>
-        ${filtered.length === 0
-          ? emptyState('لا توجد منتجات مطابقة', 'جرّب تغيير الفلاتر أو ابحث بكلمة أخرى')
-          : `<div class="grid sm:grid-cols-2 xl:grid-cols-3 gap-4">${filtered.map(productCard).join('')}</div>`}
-      </section>
-    </div>`;
-}
-
-function viewProduct(id) {
-  const p = state.products.find(x => x.id === id) || state.myProducts.find(x => x.id === id);
-  if (!p) return emptyState('المنتج غير موجود', 'ربما حُذف أو الرابط غير صحيح');
-  const emoji = getEmoji(p);
-  const grad = CATEGORY_COLORS[p.category_slug] ?? CATEGORY_COLORS.other;
-  return `
-    <div class="max-w-3xl mx-auto bg-white rounded-2xl border p-6 sm:p-8">
-      <div class="flex flex-col sm:flex-row items-center gap-5 mb-6 pb-6 border-b">
-        <div class="w-32 h-32 rounded-2xl bg-gradient-to-br ${grad} flex items-center justify-center text-7xl shrink-0">${emoji}</div>
-        <div class="flex-1 text-center sm:text-right">
-          <div class="flex items-center gap-2 justify-center sm:justify-start mb-2">
-            <h1 class="text-2xl sm:text-3xl font-bold">${esc(p.name)}</h1>
-            ${p.trader_verified ? '<span class="text-brand-600 text-2xl">✓</span>' : ''}
-          </div>
-          ${p.category_name ? `<span class="inline-block text-xs bg-brand-50 text-brand-700 px-2.5 py-1 rounded-full mb-2">${p.category_icon ?? ''} ${esc(p.category_name)}</span>` : ''}
-          <div class="flex items-baseline gap-2 justify-center sm:justify-start">
-            <span class="text-3xl font-extrabold text-brand-700">${formatPrice(p.price, p.currency)}</span>
-            <span class="text-gray-500">/ ${esc(p.unit)}</span>
-          </div>
-        </div>
-      </div>
-
-      <div class="grid sm:grid-cols-2 gap-3 mb-6 text-sm">
-        <div>📦 الكمية: <b>${esc(p.qty)} ${esc(p.unit)}</b></div>
-        <div>📍 ${esc(p.state)}${p.market ? ' — ' + esc(p.market) : ''}</div>
-        <div>🏪 <b>${esc(p.trader_name)}</b>${p.trader_rating ? ` <span class="text-amber-500">★ ${Number(p.trader_rating).toFixed(1)}</span>` : ''}</div>
-        <div>👁 ${p.views_count}</div>
-      </div>
-
-      ${p.description ? `<div class="bg-gray-50 rounded-xl p-4 mb-6"><p class="text-sm whitespace-pre-wrap">${esc(p.description)}</p></div>` : ''}
-      <div class="text-xs text-gray-400 mb-4">⏰ ${timeAgo(p.created_at)}</div>
-
-      <a href="${waLink(p.trader_phone, p.name)}" target="_blank" rel="noopener"
-         onclick="window.__click('${p.id}')"
-         class="block w-full bg-[#25D366] hover:bg-[#1fb457] text-white text-center font-bold py-3.5 rounded-xl">💬 تواصل عبر واتساب</a>
-    </div>`;
-}
-
-function viewLogin() {
-  return `
-    <div class="max-w-md mx-auto bg-white rounded-2xl border p-6 sm:p-8 mt-8">
-      <h1 class="text-xl font-bold mb-6 text-brand-700">🔑 تسجيل الدخول</h1>
-      <form id="login-form" class="space-y-4">
-        <input name="email" type="email" required placeholder="البريد الإلكتروني" class="in">
-        <input name="password" type="password" required placeholder="كلمة المرور" class="in">
-        <button type="submit" class="btn-primary w-full">دخول</button>
-      </form>
-      <p class="text-center text-sm text-gray-600 mt-5">
-        ما عندك حساب؟ <a href="#/register" class="text-brand-700 font-semibold">سجّل كتاجر</a>
-      </p>
-    </div>`;
-}
-
-function viewRegister() {
-  return `
-    <div class="max-w-lg mx-auto bg-white rounded-2xl border p-6 sm:p-8">
-      <h1 class="text-xl font-bold mb-6 text-brand-700">🏪 حساب تاجر جديد</h1>
-      <form id="register-form" class="space-y-4">
-        <div><label class="block text-sm mb-1.5">الاسم الكامل *</label>
-          <input name="full_name" required class="in" placeholder="محمد أحمد"></div>
-        <div><label class="block text-sm mb-1.5">رقم الهاتف / واتساب *</label>
-          <input name="phone" required pattern="[0-9+\\s-]{9,15}" class="in" placeholder="0912345678"></div>
-        <div class="grid grid-cols-2 gap-3">
-          <div><label class="block text-sm mb-1.5">الولاية</label>
-            <select name="state" class="in">${STATES.map(s => `<option>${s}</option>`).join('')}</select></div>
-          <div><label class="block text-sm mb-1.5">المدينة</label>
-            <input name="city" class="in" placeholder="أم درمان"></div>
-        </div>
-        <div><label class="block text-sm mb-1.5">البريد الإلكتروني *</label>
-          <input name="email" type="email" required class="in"></div>
-        <div><label class="block text-sm mb-1.5">كلمة المرور * (8 أحرف على الأقل)</label>
-          <input name="password" type="password" required minlength="8" class="in"></div>
-        <button type="submit" class="btn-primary w-full">إنشاء الحساب</button>
-      </form>
-      <p class="text-center text-sm text-gray-600 mt-5">
-        عندك حساب؟ <a href="#/login" class="text-brand-700 font-semibold">دخول</a>
-      </p>
-    </div>`;
-}
-
-function viewDashboard() {
-  if (!state.user) { location.hash = '#/login'; return ''; }
-  const list = state.myProducts;
-  const totalViews = list.reduce((s, p) => s + (p.views_count ?? 0), 0);
-  const totalClicks = list.reduce((s, p) => s + (p.whatsapp_clicks ?? 0), 0);
-  return `
-    <div>
-      <div class="flex items-center justify-between mb-6">
-        <h1 class="text-2xl font-bold">لوحة التاجر</h1>
-        <a href="#/new" class="bg-brand-600 hover:bg-brand-700 text-white px-4 py-2.5 rounded-xl text-sm font-semibold">➕ منتج جديد</a>
-      </div>
-      <div class="grid sm:grid-cols-3 gap-4 mb-8">
-        <div class="bg-white rounded-2xl border p-4 flex items-center gap-3">
-          <div class="w-11 h-11 rounded-xl bg-brand-50 text-brand-700 flex items-center justify-center text-xl">📦</div>
-          <div><div class="text-2xl font-extrabold">${list.length}</div><div class="text-xs text-gray-500">المنتجات</div></div>
-        </div>
-        <div class="bg-white rounded-2xl border p-4 flex items-center gap-3">
-          <div class="w-11 h-11 rounded-xl bg-brand-50 text-brand-700 flex items-center justify-center text-xl">👁</div>
-          <div><div class="text-2xl font-extrabold">${totalViews}</div><div class="text-xs text-gray-500">المشاهدات</div></div>
-        </div>
-        <div class="bg-white rounded-2xl border p-4 flex items-center gap-3">
-          <div class="w-11 h-11 rounded-xl bg-brand-50 text-brand-700 flex items-center justify-center text-xl">💬</div>
-          <div><div class="text-2xl font-extrabold">${totalClicks}</div><div class="text-xs text-gray-500">تواصل واتساب</div></div>
-        </div>
-      </div>
-      ${list.length === 0 ? emptyState('لم تُضف أي منتج بعد', 'ابدأ بنشر أول منتج لك الآن')
-        : `<div class="grid sm:grid-cols-2 xl:grid-cols-3 gap-4">
-            ${list.map(p => `<div class="relative">
-              ${productCard(p)}
-              <div class="absolute top-2 left-2 flex gap-1">
-                <a href="#/edit/${p.id}" class="bg-white/90 backdrop-blur text-xs px-2.5 py-1 rounded-lg border">تعديل</a>
-              </div>
-            </div>`).join('')}
-          </div>`}
-    </div>`;
-}
-
-function viewProductForm(initial = null) {
-  if (!state.user) { location.hash = '#/login'; return ''; }
-  const f = initial || {
-    name:'', description:'', category_id: state.categories[0]?.id ?? null,
-    emoji:'📦', qty:'', unit:'قطعة', price:'', currency:'SDG', state:'الخرطوم',
-    city:'', market:'', min_order: 1
-  };
-  const emojis = PRODUCT_SUGGESTIONS.map(s =>
-    `<button type="button" data-emoji="${s.emoji}" title="${s.label}" class="emoji-btn w-9 h-9 rounded-lg text-xl flex items-center justify-center transition ${f.emoji===s.emoji?'bg-brand-600 ring-2 ring-brand-300':'bg-gray-100 hover:bg-brand-50'}">${s.emoji}</button>`
-  ).join('');
-
-  return `
-    <div class="max-w-3xl mx-auto">
-      <h1 class="text-2xl font-bold mb-6">${initial ? 'تعديل المنتج' : 'إضافة منتج جديد'}</h1>
-      <form id="product-form" class="bg-white rounded-2xl border p-6 space-y-4">
-        <input type="hidden" name="id" value="${initial?.id ?? ''}">
-        <div class="grid sm:grid-cols-2 gap-4">
-          <div><label class="block text-sm mb-1.5">اسم المنتج *</label>
-            <input name="name" required value="${esc(f.name)}" class="in" placeholder="سكر كنانة"></div>
-          <div><label class="block text-sm mb-1.5">التصنيف</label>
-            <select name="category_id" class="in">
-              ${state.categories.map(c => `<option value="${c.id}" ${f.category_id===c.id?'selected':''}>${c.icon ?? ''} ${esc(c.name_ar)}</option>`).join('')}
-            </select></div>
-        </div>
-
-        <div>
-          <label class="block text-sm mb-1.5">رمز المنتج</label>
-          <div class="flex items-center gap-3 mb-2">
-            <div id="emoji-preview" class="w-14 h-14 rounded-xl bg-brand-50 flex items-center justify-center text-3xl border-2 border-brand-200">${f.emoji || '📦'}</div>
-            <input name="emoji" id="emoji-input" value="${esc(f.emoji || '')}" maxlength="8" class="in flex-1 text-center text-2xl" placeholder="الصق إيموجي أو اختر">
-          </div>
-          <div class="flex flex-wrap gap-1.5 max-h-24 overflow-y-auto">${emojis}</div>
-        </div>
-
-        <div class="grid sm:grid-cols-2 gap-4">
-          <div><label class="block text-sm mb-1.5">الكمية *</label>
-            <input name="qty" type="number" step="any" min="0" required value="${esc(f.qty)}" class="in"></div>
-          <div><label class="block text-sm mb-1.5">الوحدة</label>
-            <select name="unit" class="in">${UNITS.map(u => `<option ${f.unit===u?'selected':''}>${u}</option>`).join('')}</select></div>
-          <div><label class="block text-sm mb-1.5">السعر *</label>
-            <input name="price" type="number" step="any" min="0" required value="${esc(f.price)}" class="in"></div>
-          <div><label class="block text-sm mb-1.5">العملة</label>
-            <select name="currency" class="in">
-              <option value="SDG" ${f.currency==='SDG'?'selected':''}>جنيه سوداني</option>
-              <option value="USD" ${f.currency==='USD'?'selected':''}>دولار أمريكي</option>
-              <option value="SAR" ${f.currency==='SAR'?'selected':''}>ريال سعودي</option>
-            </select></div>
-          <div><label class="block text-sm mb-1.5">الولاية *</label>
-            <select name="state" class="in">${STATES.map(s => `<option ${f.state===s?'selected':''}>${s}</option>`).join('')}</select></div>
-          <div><label class="block text-sm mb-1.5">المدينة</label>
-            <input name="city" value="${esc(f.city)}" class="in"></div>
-          <div><label class="block text-sm mb-1.5">السوق / المنطقة</label>
-            <input name="market" value="${esc(f.market)}" class="in" placeholder="سوق أم درمان الكبير"></div>
-          <div><label class="block text-sm mb-1.5">أقل كمية للطلب</label>
-            <input name="min_order" type="number" step="any" min="1" value="${esc(f.min_order)}" class="in"></div>
-        </div>
-
-        <div><label class="block text-sm mb-1.5">الوصف / ملاحظات</label>
-          <textarea name="description" rows="3" class="in" placeholder="تفاصيل إضافية...">${esc(f.description)}</textarea></div>
-
-        <button type="submit" id="pf-submit" class="btn-primary w-full">${initial ? 'حفظ التعديلات' : 'نشر المنتج'}</button>
-      </form>
-    </div>`;
-}
-
-function viewAdmin() {
-  if (state.profile?.role !== 'admin') { location.hash = '#/'; return ''; }
-  const tabs = `
-    <div class="flex gap-2 mb-6 border-b overflow-x-auto">
-      <button data-tab="reports" class="admin-tab active px-4 py-2.5 text-sm font-semibold border-b-2 border-brand-600 text-brand-700 whitespace-nowrap">🚨 البلاغات (${state.reports.length})</button>
-      <button data-tab="traders" class="admin-tab px-4 py-2.5 text-sm font-semibold border-b-2 border-transparent text-gray-500 hover:text-gray-700 whitespace-nowrap">👥 التجار (${state.traders.length})</button>
-      <button data-tab="products" class="admin-tab px-4 py-2.5 text-sm font-semibold border-b-2 border-transparent text-gray-500 hover:text-gray-700 whitespace-nowrap">📦 المنتجات (${state.adminProducts.length})</button>
-    </div>`;
-
-  const reportsTab = state.reports.length === 0
-    ? emptyState('لا توجد بلاغات معلقة')
-    : state.reports.map(r => `
-      <div class="bg-white rounded-xl border p-4 mb-3">
-        <div class="flex items-start justify-between mb-2">
-          <div>
-            <div class="font-bold text-sm">${esc(r.product?.name ?? 'منتج محذوف')}</div>
-            <div class="text-xs text-gray-500">بلاغ من: ${esc(r.reporter?.full_name ?? 'مجهول')} • ${timeAgo(r.created_at)}</div>
-          </div>
-        </div>
-        <p class="text-sm bg-gray-50 rounded-lg p-2 mb-3">${esc(r.reason)}</p>
-        <div class="flex gap-2">
-          <button onclick="window.__resolveReport('${r.id}','resolved')" class="flex-1 bg-green-600 text-white text-xs py-2 rounded-lg">✓ حل</button>
-          <button onclick="window.__resolveReport('${r.id}','dismissed')" class="flex-1 bg-gray-200 text-gray-700 text-xs py-2 rounded-lg">✕ تجاهل</button>
-        </div>
-      </div>`).join('');
-
-  const tradersTab = state.traders.map(t => `
-    <div class="bg-white rounded-xl border p-4 flex items-center gap-3 mb-3">
-      <div class="w-10 h-10 rounded-full bg-brand-50 flex items-center justify-center text-lg">${esc(t.full_name?.charAt(0) ?? '؟')}</div>
-      <div class="flex-1">
-        <div class="font-bold text-sm flex items-center gap-1">
-          ${esc(t.full_name)}
-          ${t.is_verified ? '<span class="text-brand-600">✓</span>' : ''}
-          ${t.is_banned ? '<span class="text-xs bg-red-100 text-red-700 px-1.5 rounded">محظور</span>' : ''}
-        </div>
-        <div class="text-xs text-gray-500">${esc(t.phone)} • ${esc(t.state)} • ★ ${Number(t.rating_avg).toFixed(1)}</div>
-      </div>
-      <div class="flex gap-1">
-        <button onclick="window.__verifyTrader('${t.id}',${!t.is_verified})" class="p-2 rounded-lg ${t.is_verified?'bg-brand-100 text-brand-700':'bg-gray-100 text-gray-500'}" title="توثيق">✓</button>
-        <button onclick="window.__banTrader('${t.id}',${!t.is_banned})" class="p-2 rounded-lg ${t.is_banned?'bg-red-100 text-red-700':'bg-gray-100 text-gray-500'}" title="حظر">🚫</button>
-      </div>
-    </div>`).join('');
-
-  const productsTab = state.adminProducts.map(p => `
-    <div class="bg-white rounded-xl border p-4 flex items-center gap-3 mb-3">
-      <div class="w-10 h-10 rounded-lg bg-gray-50 flex items-center justify-center text-xl">${p.emoji ?? '📦'}</div>
-      <div class="flex-1 min-w-0">
-        <div class="font-bold text-sm truncate">${esc(p.name)}</div>
-        <div class="text-xs text-gray-500">${esc(p.trader_name)} • ${p.price} ${p.currency} • ${timeAgo(p.created_at)}</div>
-      </div>
-      <button onclick="window.__banProduct('${p.id}')" class="p-2 rounded-lg bg-red-50 text-red-600" title="حظر">🚫</button>
-    </div>`).join('');
-
-  return `
-    <div>
-      <div class="flex items-center gap-3 mb-6">
-        <div class="w-12 h-12 rounded-2xl bg-purple-100 text-purple-700 flex items-center justify-center text-xl">👑</div>
-        <div><h1 class="text-2xl font-bold">لوحة الإدارة</h1></div>
-      </div>
-      ${tabs}
-      <div id="admin-content">
-        <div data-panel="reports">${reportsTab}</div>
-        <div data-panel="traders" class="hidden">${tradersTab}</div>
-        <div data-panel="products" class="hidden">${productsTab}</div>
-      </div>
-    </div>`;
-}
-
-// ============================================================================
-//  13) الراوتر
-// ============================================================================
-function parseHash() {
-  const h = location.hash.replace(/^#/, '') || '/';
-  const parts = h.split('/').filter(Boolean);
-  return { path: h, parts };
-}
-
-async function render() {
-  const { path, parts } = parseHash();
-  const app = $('#app');
-  state.route = path;
-
-  if (parts.length === 0) {
-    if (state.products.length === 0) await loadProducts();
-    app.innerHTML = viewHome();
-    bindHomeEvents();
-  }
-  else if (parts[0] === 'product' && parts[1]) {
-    if (state.products.length === 0) await loadProducts();
-    app.innerHTML = viewProduct(parts[1]);
-    trackView(parts[1]);
-  }
-  else if (parts[0] === 'login') {
-    app.innerHTML = viewLogin();
-    bindLogin();
-  }
-  else if (parts[0] === 'register') {
-    app.innerHTML = viewRegister();
-    bindRegister();
-  }
-  else if (parts[0] === 'dashboard') {
-    if (!state.user) { location.hash = '#/login'; return; }
-    await loadMyProducts();
-    app.innerHTML = viewDashboard();
-  }
-  else if (parts[0] === 'new') {
-    app.innerHTML = viewProductForm();
-    bindProductForm(null);
-  }
-  else if (parts[0] === 'edit' && parts[1]) {
-    if (!state.user) { location.hash = '#/login'; return; }
-    if (state.myProducts.length === 0) await loadMyProducts();
-    const p = state.myProducts.find(x => x.id === parts[1]);
-    if (!p) { toast('المنتج غير موجود', 'error'); location.hash = '#/dashboard'; return; }
-    app.innerHTML = viewProductForm(p);
-    bindProductForm(p);
-  }
-  else if (parts[0] === 'admin') {
-    if (!state.user) { location.hash = '#/login'; return; }
-    if (state.profile?.role !== 'admin') { toast('غير مصرح', 'error'); location.hash = '#/'; return; }
-    await loadAdminData();
-    app.innerHTML = viewAdmin();
-    bindAdmin();
-  }
-  else {
-    app.innerHTML = emptyState('الصفحة غير موجودة', 'تحقق من الرابط');
-  }
-
-  renderNav();
-  renderNetBanner();
-}
-
-// ============================================================================
-//  14) الـ Navbar
-// ============================================================================
-function renderNav() {
-  const nav = $('#nav');
-  if (!state.user) {
-    nav.innerHTML = `
-      <a href="#/login" class="px-3 py-2 rounded-lg hover:bg-gray-100">دخول</a>
-      <a href="#/register" class="bg-brand-600 hover:bg-brand-700 text-white px-4 py-2 rounded-lg">👤 حساب تاجر</a>`;
-  } else {
-    const isAdmin = state.profile?.role === 'admin';
-    nav.innerHTML = `
-      <a href="#/new" class="hidden sm:inline-block bg-brand-600 hover:bg-brand-700 text-white px-3 py-2 rounded-lg">➕ منتج جديد</a>
-      ${isAdmin ? `<a href="#/admin" class="hidden sm:inline-block text-purple-700 hover:bg-purple-50 px-3 py-2 rounded-lg">👑 الإدارة</a>` : ''}
-      <a href="#/dashboard" class="px-3 py-2 rounded-lg hover:bg-gray-100">📊 لوحتي</a>
-      <button onclick="window.__logout()" class="text-red-600 hover:bg-red-50 px-3 py-2 rounded-lg">خروج</button>`;
-  }
-}
-
-// ============================================================================
-//  15) ربط الأحداث
-// ============================================================================
-function bindHomeEvents() {
-  const f = state.filters;
-  const q = $('#f-q');
-  if (q) {
-    let t;
-    q.addEventListener('input', e => {
-      clearTimeout(t);
-      t = setTimeout(() => { state.filters.q = e.target.value; render(); }, 250);
-    });
-  }
-  const cat = $('#f-cat');
-  if (cat) cat.addEventListener('change', e => { state.filters.category = e.target.value; render(); });
-  const st = $('#f-state');
-  if (st) st.addEventListener('change', e => { state.filters.state = e.target.value; render(); });
-}
-
-function bindLogin() {
-  $('#login-form')?.addEventListener('submit', async e => {
-    e.preventDefault();
-    const fd = new FormData(e.target);
-    const btn = e.target.querySelector('button');
-    btn.disabled = true; btn.textContent = '...';
-    try {
-      await signIn(fd.get('email'), fd.get('password'));
-      toast('مرحباً بك');
-      location.hash = '#/dashboard';
-    } catch (err) {
-      toast(err.message || 'فشل الدخول', 'error');
-      btn.disabled = false; btn.textContent = 'دخول';
-    }
-  });
-}
-
-function bindRegister() {
-  $('#register-form')?.addEventListener('submit', async e => {
-    e.preventDefault();
-    const fd = new FormData(e.target);
-    const btn = e.target.querySelector('button');
-    btn.disabled = true; btn.textContent = '...';
-    try {
-      await signUp(Object.fromEntries(fd));
-      toast('تم التسجيل! تحقق من بريدك الإلكتروني');
-      setTimeout(() => location.hash = '#/login', 1500);
-    } catch (err) {
-      toast(err.message || 'فشل التسجيل', 'error');
-      btn.disabled = false; btn.textContent = 'إنشاء الحساب';
-    }
-  });
-}
-
-function bindProductForm(initial) {
-  const form = $('#product-form');
-  if (!form) return;
-
-  $$('.emoji-btn').forEach(btn => {
-    btn.addEventListener('click', () => {
-      const emoji = btn.dataset.emoji;
-      $('#emoji-input').value = emoji;
-      $('#emoji-preview').textContent = emoji;
-      $$('.emoji-btn').forEach(b => {
-        b.classList.toggle('bg-brand-600', b.dataset.emoji === emoji);
-        b.classList.toggle('ring-2', b.dataset.emoji === emoji);
-        b.classList.toggle('ring-brand-300', b.dataset.emoji === emoji);
-      });
-    });
-  });
-
-  $('#emoji-input')?.addEventListener('input', e => {
-    $('#emoji-preview').textContent = e.target.value || '📦';
-  });
-
-  form.addEventListener('submit', async e => {
-    e.preventDefault();
-    const fd = new FormData(form);
-    const btn = $('#pf-submit');
-    btn.disabled = true; btn.textContent = '...';
-
-    const payload = {
-      name: fd.get('name').trim(),
-      description: fd.get('description').trim() || null,
-      category_id: Number(fd.get('category_id')) || null,
-      emoji: fd.get('emoji').trim() || '📦',
-      qty: Number(fd.get('qty')),
-      unit: fd.get('unit'),
-      price: Number(fd.get('price')),
-      currency: fd.get('currency'),
-      state: fd.get('state'),
-      city: fd.get('city').trim() || null,
-      market: fd.get('market').trim() || null,
-      min_order: Number(fd.get('min_order')) || 1,
-      trader_id: state.user.id
-    };
-
-    try {
-      if (!navigator.onLine) {
-        const id = initial?.id;
-        await enqueue(id
-          ? { type:'update', id, payload }
-          : { type:'insert', payload });
-        toast('📥 تم الحفظ محلياً — سيُنشر عند عودة الإنترنت', 'info');
-        location.hash = '#/dashboard';
-        return;
-      }
-
-      const id = initial?.id;
-      const { error } = id
-        ? await sb.from('products').update(payload).eq('id', id)
-        : await sb.from('products').insert(payload);
-      if (error) throw error;
-      toast(id ? 'تم التحديث' : 'تم نشر المنتج');
-      location.hash = '#/dashboard';
-    } catch (err) {
-      toast(err.message || 'فشل الحفظ', 'error');
-      btn.disabled = false;
-      btn.textContent = initial ? 'حفظ التعديلات' : 'نشر المنتج';
-    }
-  });
-}
-
-function bindAdmin() {
-  $$('.admin-tab').forEach(tab => {
-    tab.addEventListener('click', () => {
-      $$('.admin-tab').forEach(t => {
-        t.classList.remove('border-brand-600','text-brand-700');
-        t.classList.add('border-transparent','text-gray-500');
-      });
-      tab.classList.remove('border-transparent','text-gray-500');
-      tab.classList.add('border-brand-600','text-brand-700');
-
-      const target = tab.dataset.tab;
-      $$('[data-panel]').forEach(p => {
-        p.classList.toggle('hidden', p.dataset.panel !== target);
-      });
-    });
-  });
-}
-
-// ============================================================================
-//  16) Realtime
-// ============================================================================
-function setupRealtime() {
-  sb.channel('products-live')
-    .on('postgres_changes', { event:'INSERT', schema:'public', table:'products' }, async (payload) => {
-      const { data } = await sb.from('product_feed').select('*').eq('id', payload.new.id).single();
-      if (data) {
-        state.products = [data, ...state.products.filter(x => x.id !== data.id)];
-        if (state.route === '/' ) render();
-        toast(`🆕 منتج جديد: ${data.name}`, 'info');
-      }
-    })
-    .on('postgres_changes', { event:'UPDATE', schema:'public', table:'products' }, (payload) => {
-      state.products = state.products.map(p => p.id === payload.new.id ? { ...p, ...payload.new } : p);
-      state.myProducts = state.myProducts.map(p => p.id === payload.new.id ? { ...p, ...payload.new } : p);
-      if (['/','/dashboard'].includes(state.route)) render();
-    })
-    .subscribe();
-}
-
-// ============================================================================
-//  17) كشف حالة الشبكة
-// ============================================================================
-function setupNetwork() {
-  const update = () => {
-    state.offline = !navigator.onLine;
-    renderNetBanner();
-    if (!state.offline && state.pending > 0) {
-      setTimeout(async () => {
-        const { synced, failed } = await syncPending();
-        if (synced > 0) toast(`✅ تم نشر ${synced} منتج`, 'success');
-        if (failed > 0) toast(`⚠️ فشل نشر ${failed}`, 'error');
-        render();
-      }, 1000);
-    }
-  };
-  window.addEventListener('online', update);
-  window.addEventListener('offline', update);
-  state.offline = !navigator.onLine;
-}
-
-// ============================================================================
-//  18) Service Worker (inline)
-// ============================================================================
-if ('serviceWorker' in navigator) {
-  const swCode = `
-    self.addEventListener('install', e => self.skipWaiting());
-    self.addEventListener('activate', e => e.waitUntil(self.clients.claim()));
-    self.addEventListener('fetch', e => {
-      const url = new URL(e.request.url);
-      if (url.hostname.includes('supabase') || e.request.method !== 'GET') return;
-      e.respondWith(
-        caches.open('sm-v1').then(c =>
-          c.match(e.request).then(r => r || fetch(e.request).then(res => {
-            if (res.status === 200 && res.type !== 'opaque') c.put(e.request, res.clone());
-            return res;
-          }).catch(() => r))
-        )
-      );
-    });
-  `;
-  const blob = new Blob([swCode], { type: 'application/javascript' });
-  navigator.serviceWorker.register(URL.createObjectURL(blob)).catch(() => {});
-}
-
-// ============================================================================
-//  19) الدوال المعرّضة للنطاق العام
-// ============================================================================
-window.__logout = signOut;
-window.__sync = async () => {
-  const { synced, failed } = await syncPending();
-  if (synced > 0) toast(`✅ تم نشر ${synced} منتج`);
-  if (failed > 0) toast(`⚠️ فشل ${failed}`, 'error');
-  render();
-};
-window.__click = trackClick;
-window.__clearFilters = () => {
-  state.filters = { q:'', category:'', state:'' };
-  render();
-};
-window.__saveRates = () => {
-  const usd = Number($('#rate-usd').value);
-  const sar = Number($('#rate-sar').value);
-  if (!usd || !sar || usd <= 0 || sar <= 0) return toast('أسعار غير صحيحة', 'error');
-  saveRates({ USD: 1/usd, SAR: 1/sar });
-  toast('✅ تم حفظ أسعار الصرف');
-};
-window.__resolveReport = async (id, action) => {
-  await sb.from('reports').update({ status: action, reviewed_at: new Date().toISOString() }).eq('id', id);
-  state.reports = state.reports.filter(r => r.id !== id);
-  toast(action === 'resolved' ? 'تم الحل' : 'تم التجاهل');
-  render();
-};
-window.__banTrader = async (id, banned) => {
-  await sb.from('profiles').update({ is_banned: banned }).eq('id', id);
-  state.traders = state.traders.map(t => t.id === id ? { ...t, is_banned: banned } : t);
-  toast(banned ? 'تم الحظر' : 'تم رفع الحظر');
-  render();
-};
-window.__verifyTrader = async (id, verified) => {
-  await sb.from('profiles').update({ is_verified: verified }).eq('id', id);
-  state.traders = state.traders.map(t => t.id === id ? { ...t, is_verified: verified } : t);
-  toast(verified ? '✅ تم التوثيق' : 'تم إلغاء التوثيق');
-  render();
-};
-window.__banProduct = async (id) => {
-  await sb.from('products').update({ status: 'banned' }).eq('id', id);
-  state.adminProducts = state.adminProducts.filter(p => p.id !== id);
-  toast('تم حظر المنتج');
-  render();
+  openModal('diaryModal');
 };
 
-// ============================================================================
-//  20) نقطة البداية
-// ============================================================================
-async function init() {
-  try {
-    await loadCategories();
-    await loadSession();
-    await refreshPending();
-    setupRealtime();
-    setupNetwork();
-    await render();
-  } catch (err) {
-    console.error(err);
-    $('#app').innerHTML = `<div class="bg-red-50 border border-red-200 rounded-2xl p-6 text-center">
-      <div class="text-4xl mb-3">⚠️</div>
-      <h2 class="font-bold mb-2">حدث خطأ في التحميل</h2>
-      <p class="text-sm text-red-700 mb-4">${esc(err.message)}</p>
-      <p class="text-xs text-gray-500">تأكد من تشغيل schema.sql في Supabase SQL Editor</p>
-    </div>`;
-  }
+function toast(msg){
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  clearTimeout(t._tid);
+  t._tid = setTimeout(() => t.classList.remove('show'), 2000);
 }
 
-window.addEventListener('hashchange', render);
-init();
+function saveGame(){
+  try{
+    localStorage.setItem(SAVE_KEY, JSON.stringify(S));
+    toast('✅ تم حفظ تقدم اللعبة بالكامل بنجاح');
+    sfx.good();
+  } catch(e){ toast('❌ تعذر الحفظ'); }
+}
+
+function loadGame(){
+  try{
+    const data = localStorage.getItem(SAVE_KEY);
+    if(!data){ toast('⚠️ لا توجد بيانات محفوظة سابقة'); return; }
+    S = JSON.parse(data);
+    clamp(S);
+    render();
+    updateInvUI();
+    updateMarketUI();
+    updateCompanionUI();
+    toast('📂 تم استعادة تقدم اللعبة بنجاح');
+    sfx.good();
+  } catch(e){ toast('❌ فشل التحميل'); }
+}
+
+document.getElementById('saveBtn').onclick  = saveGame;
+document.getElementById('loadBtn').onclick  = loadGame;
+
+S = newState();
+render();
+updateInvUI();
+updateMarketUI();
+updateCompanionUI();
 </script>
 </body>
 </html>
