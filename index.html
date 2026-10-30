@@ -2,211 +2,156 @@
 <html lang="ar" dir="rtl">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>الرماد الأخير — النسخة الملحمية الشاملة</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>الرماد الأخير — ملحمة النجاة</title>
 <style>
 :root{
-  --bg:#050403; --panel:#0f0b08; --panel2:#18110c; --line:#281f15;
-  --ink:#f5ebd9; --dim:#9e876a; --amber:#d49742; --red:#a8382e;
-  --sand:#c9a227; --blue:#4a7c8c; --green:#5a8a3a;
+  --bg:#050403;--panel:#0f0b08;--panel2:#18110c;--line:#281f15;
+  --ink:#f5ebd9;--dim:#9e876a;--amber:#d49742;--red:#a8382e;
+  --sand:#c9a227;--blue:#4a7c8c;--green:#5a8a3a;--violet:#7a5c8a;
 }
 *{box-sizing:border-box}
 html,body{height:100%}
 body{
-  margin:0; background:radial-gradient(circle at 50% -20%,#241609 0%,#050403 60%);
-  color:var(--ink); font-family:"Segoe UI",Tahoma,"Noto Naskh Arabic",system-ui,sans-serif;
-  display:flex; justify-content:center; padding:14px 12px 70px;
-  -webkit-font-smoothing:antialiased;
+  margin:0;background:radial-gradient(circle at 50% -20%,#241609 0%,#050403 60%);
+  color:var(--ink);font-family:"Segoe UI",Tahoma,"Noto Naskh Arabic",system-ui,sans-serif;
+  display:flex;justify-content:center;padding:14px 12px 70px;
+  -webkit-font-smoothing:antialiased;overflow-x:hidden;
 }
-#app{width:100%; max-width:820px}
+#particles{position:fixed;inset:0;pointer-events:none;z-index:1;overflow:hidden}
+.particle{position:absolute;width:2px;height:2px;background:var(--amber);border-radius:50%;opacity:0;animation:fall linear infinite;box-shadow:0 0 3px var(--amber)}
+@keyframes fall{0%{transform:translateY(-20px);opacity:0}10%{opacity:.4}90%{opacity:.2}100%{transform:translateY(100vh) translateX(30px);opacity:0}}
+#app{width:100%;max-width:820px;position:relative;z-index:2}
 
-/* Topbar */
-#topbar{
-  display:flex; justify-content:space-between; align-items:center;
-  margin-bottom:12px; gap:8px; flex-wrap:wrap;
-}
-#chapterLabel{
-  font-size:12px; letter-spacing:2px; color:var(--amber);
-  font-weight:700; padding:6px 14px;
-  background:linear-gradient(180deg,#1e1610,#14100c);
-  border:1px solid var(--line); border-radius:20px;
-  box-shadow:0 4px 12px rgba(0,0,0,.4);
-}
-#controls{display:flex; gap:6px; flex-wrap:wrap}
-#controls button{
-  background:linear-gradient(180deg,#1c1610,#14100c);
-  color:var(--ink); border:1px solid var(--line); border-radius:8px;
-  padding:7px 11px; font-size:12px; cursor:pointer; font-family:inherit;
-  transition:all .15s; box-shadow:0 4px 10px rgba(0,0,0,.3);
-}
-#controls button:hover{border-color:var(--amber); background:#241a12}
+#topbar{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;gap:6px;flex-wrap:wrap}
+#chapterLabel{font-size:11px;letter-spacing:2px;color:var(--amber);font-weight:700;padding:6px 12px;background:linear-gradient(180deg,#1e1610,#14100c);border:1px solid var(--line);border-radius:20px;white-space:nowrap}
+#controls{display:flex;gap:5px;flex-wrap:wrap}
+#controls button{background:linear-gradient(180deg,#1c1610,#14100c);color:var(--ink);border:1px solid var(--line);border-radius:8px;padding:6px 9px;font-size:11px;cursor:pointer;font-family:inherit;transition:all .15s}
+#controls button:hover{border-color:var(--amber);background:#241a12}
 #controls button.off{opacity:.45}
 
-/* HUD */
-#hud{display:grid; grid-template-columns:repeat(5,1fr); gap:6px; margin-bottom:12px}
-@media(max-width:560px){ #hud{grid-template-columns:repeat(3,1fr)} }
-.chip{
-  background:linear-gradient(180deg,var(--panel2),var(--panel));
-  border:1px solid var(--line); border-radius:10px;
-  padding:8px 9px; display:flex; flex-direction:column; gap:4px; min-width:0;
-  box-shadow:0 4px 12px rgba(0,0,0,.4);
-}
-.chip .lbl{font-size:10px; color:var(--dim); letter-spacing:.5px}
-.chip .val{font-size:13px; font-weight:700; color:var(--ink); white-space:nowrap; overflow:hidden; text-overflow:ellipsis}
-.bar{height:5px; background:#1f1812; border-radius:99px; overflow:hidden; margin-top:2px}
-.bar i{display:block; height:100%; border-radius:99px; transition:width .6s ease}
+#hud{display:grid;grid-template-columns:repeat(5,1fr);gap:5px;margin-bottom:10px}
+@media(max-width:560px){#hud{grid-template-columns:repeat(3,1fr)}}
+.chip{background:linear-gradient(180deg,var(--panel2),var(--panel));border:1px solid var(--line);border-radius:9px;padding:6px 7px;display:flex;flex-direction:column;gap:3px;min-width:0;transition:all .3s}
+.chip.crit{border-color:var(--red);animation:pulse 1.3s infinite}
+@keyframes pulse{0%,100%{box-shadow:0 0 0 0 rgba(168,56,46,.4)}50%{box-shadow:0 0 0 6px rgba(168,56,46,0)}}
+.chip .lbl{font-size:9px;color:var(--dim);letter-spacing:.3px}
+.chip .val{font-size:12px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.bar{height:4px;background:#1f1812;border-radius:99px;overflow:hidden;margin-top:2px}
+.bar i{display:block;height:100%;border-radius:99px;transition:width .55s ease}
 
-/* World Map Bar */
-#worldMap{
-  background:#0b0806; border:1px solid var(--line); border-radius:12px;
-  padding:10px 14px; margin-bottom:12px; display:flex; align-items:center; justify-content:space-between;
-  gap:8px; overflow-x:auto;
-}
-.map-node{font-size:11px; color:var(--dim); display:flex; align-items:center; gap:4px; white-space:nowrap}
-.map-node.active{color:var(--amber); font-weight:700; text-shadow:0 0 6px rgba(212,151,66,.4)}
-.map-node.passed{color:var(--green)}
-.map-line{flex:1; height:1px; background:var(--line); min-width:15px}
+#worldMap{background:#0b0806;border:1px solid var(--line);border-radius:10px;padding:8px 10px;margin-bottom:10px;display:flex;align-items:center;justify-content:space-between;gap:4px;overflow-x:auto}
+.map-node{font-size:10px;color:var(--dim);display:flex;align-items:center;gap:3px;white-space:nowrap}
+.map-node.active{color:var(--amber);font-weight:700;text-shadow:0 0 6px rgba(212,151,66,.4)}
+.map-line{flex:1;height:1px;background:var(--line);min-width:8px}
 
-/* Scene Card */
-.card{
-  background:var(--panel); border:1px solid var(--line); border-radius:16px;
-  overflow:hidden; margin-bottom:14px; box-shadow:0 20px 60px rgba(0,0,0,.6);
-}
-#sceneImg{
-  width:100%; height:200px; display:block; position:relative;
-  border-bottom:1px solid var(--line); overflow:hidden;
-  transition:background 1s ease;
-}
-#sceneImg::after{
-  content:''; position:absolute; inset:0;
-  background:linear-gradient(180deg,transparent 60%,rgba(0,0,0,.6));
-}
-#sceneImg .mood-icon{
-  position:absolute; top:50%; left:50%; transform:translate(-50%,-50%);
-  font-size:54px; opacity:.4; filter:blur(1px);
-}
-@media(max-width:520px){ #sceneImg{height:150px} .mood-icon{font-size:38px} }
-
+.card{background:var(--panel);border:1px solid var(--line);border-radius:14px;overflow:hidden;margin-bottom:12px;box-shadow:0 18px 55px rgba(0,0,0,.6)}
+#sceneImg{width:100%;height:200px;position:relative;border-bottom:1px solid var(--line);overflow:hidden;transition:background 1.1s ease}
+#sceneImg::after{content:'';position:absolute;inset:0;background:linear-gradient(180deg,transparent 55%,rgba(0,0,0,.65))}
+#sceneImg .mood-icon{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-size:54px;opacity:.42;filter:blur(1px);animation:float 4s ease-in-out infinite}
+@keyframes float{0%,100%{transform:translate(-50%,-50%)}50%{transform:translate(-50%,-56%)}}
+@media(max-width:520px){#sceneImg{height:150px}.mood-icon{font-size:38px}}
+.avatar{position:absolute;bottom:10px;right:12px;width:46px;height:46px;background:linear-gradient(135deg,#2a1a10,#1a1008);border:2px solid var(--amber);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:22px;z-index:2}
 .card-body{padding:22px 20px}
-#scene{line-height:2.2; font-size:15.5px; min-height:100px}
-#scene p{margin:0 0 15px; opacity:0; transform:translateY(8px); transition:all .5s ease}
+#scene{line-height:2.15;font-size:15.5px;min-height:90px}
+#scene p{margin:0 0 15px;opacity:0;transform:translateY(6px);transition:all .5s ease}
 #scene p:last-child{margin-bottom:0}
-.speaker{color:var(--amber); font-weight:700; text-shadow:0 0 8px rgba(212,151,66,.2)}
-.hl{color:var(--sand); font-weight:600}
-.warn-txt{color:var(--red); font-weight:600}
+.speaker{color:var(--amber);font-weight:700}
+.hl{color:var(--sand);font-weight:600}
+.warn-txt{color:var(--red);font-weight:600}
+.thought{display:block;background:rgba(122,92,138,.08);border-right:2px solid var(--violet);padding:8px 12px;border-radius:0 6px 6px 0;font-style:italic;color:#b8a8c8;font-size:13.5px;margin:8px 0}
+.fact{background:rgba(74,124,140,.06);border-right:2px solid var(--blue);padding:8px 12px;border-radius:0 6px 6px 0;font-size:12.5px;color:#9ab8c8;margin:10px 0;line-height:1.8}
 
-/* Choices */
-#choices{display:flex; flex-direction:column; gap:10px}
-.choice{
-  width:100%; text-align:right; cursor:pointer;
-  background:linear-gradient(180deg,#1c1610,#14100c);
-  color:var(--ink); border:1px solid var(--line); border-radius:12px;
-  padding:14px 16px; font-size:15px; font-family:inherit; line-height:1.65;
-  transition:all .2s; display:flex; align-items:center; gap:12px;
-  box-shadow:0 4px 15px rgba(0,0,0,.3);
-}
-.choice:hover{
-  background:linear-gradient(180deg,#281e15,#1b140f);
-  border-color:var(--amber); transform:translateX(-3px);
-  box-shadow:0 6px 20px rgba(212,151,66,.18);
-}
-.choice:active{transform:scale(.99)}
-.choice .bullet{flex:0 0 auto; width:8px; height:8px; border-radius:50%; background:var(--amber); opacity:.8; box-shadow:0 0 6px var(--amber)}
-.choice .preview{font-size:11px; color:var(--dim); margin-right:auto; padding-right:8px; display:none}
+#choices{display:flex;flex-direction:column;gap:8px}
+.choice{width:100%;text-align:right;cursor:pointer;background:linear-gradient(180deg,#1c1610,#14100c);color:var(--ink);border:1px solid var(--line);border-radius:11px;padding:13px 15px;font-size:14.5px;font-family:inherit;line-height:1.6;transition:all .2s;display:flex;align-items:center;gap:10px}
+.choice:hover{background:linear-gradient(180deg,#281e15,#1b140f);border-color:var(--amber);transform:translateX(-3px)}
+.choice .bullet{flex:0 0 auto;width:7px;height:7px;border-radius:50%;background:var(--amber);opacity:.8}
+.choice .preview{font-size:10.5px;color:var(--dim);margin-right:auto;padding-right:6px;display:none}
 .choice:hover .preview{display:inline}
+.choice.req{opacity:.5;cursor:not-allowed}
+.choice.req:hover{transform:none;border-color:var(--line);background:linear-gradient(180deg,#1c1610,#14100c)}
 
-/* Modals */
-.modal{
-  position:fixed; inset:0; background:rgba(0,0,0,.9); z-index:200;
-  display:none; align-items:center; justify-content:center; padding:20px;
-  animation:fadeIn .3s ease;
-}
-.modal.show{display:flex}
-.modal-content{
-  background:var(--panel); border:1px solid var(--line); border-radius:16px;
-  padding:24px; max-width:600px; width:100%; max-height:80vh; overflow-y:auto;
-  box-shadow:0 25px 60px rgba(0,0,0,.8);
-}
-.modal-content h2{margin:0 0 18px; color:var(--amber); font-size:20px}
-.inv-grid, .market-grid{display:grid; grid-template-columns:repeat(auto-fill, minmax(150px, 1fr)); gap:10px; margin-bottom:16px}
-.inv-item, .market-item{
-  background:#140e0a; border:1px solid var(--line); border-radius:10px;
-  padding:12px; display:flex; flex-direction:column; gap:6px; align-items:center; text-align:center;
-}
-.inv-item .icon, .market-item .icon{font-size:26px}
-.inv-item .name, .market-item .name{font-size:13px; font-weight:700; color:var(--ink)}
-.inv-item .desc, .market-item .desc{font-size:11px; color:var(--dim); line-height:1.4}
-.inv-item button, .market-item button{
-  margin-top:auto; background:var(--amber); color:#000; border:none;
-  padding:5px 12px; border-radius:6px; font-size:11.5px; font-weight:700; cursor:pointer;
-}
-.inv-item button:hover, .market-item button:hover{background:#e0a45c}
-.empty-msg{color:var(--dim); font-size:14px; text-align:center; padding:24px; grid-column:1/-1}
+#companionDisplay{margin-bottom:10px;display:none}
+.companion-box{background:#130e0a;border:1px solid var(--amber);border-radius:9px;padding:10px 12px;display:flex;align-items:center;gap:10px;font-size:12.5px;color:var(--sand)}
+.companion-box.wounded{border-color:var(--red);color:#e0a8a8}
+.companion-box span{font-size:18px}
+.companion-box .status{font-size:10.5px;color:var(--dim);margin-top:2px}
 
-.modal-content button.close-btn{
-  background:#1c1610; color:var(--ink); border:1px solid var(--line);
-  border-radius:10px; padding:10px 20px; cursor:pointer; font-family:inherit;
-  margin-top:14px; width:100%; transition:all .2s;
-}
-.modal-content button.close-btn:hover{border-color:var(--amber); background:#281e15}
-
-/* Companion Box */
-.companion-box{
-  background:#130e0a; border:1px solid var(--amber); border-radius:10px;
-  padding:10px 14px; margin-bottom:12px; display:flex; align-items:center; gap:10px;
-  font-size:13px; color:var(--sand);
-}
-.companion-box span{font-size:20px}
-
-/* Chapter Banner */
-#chapterBanner{
-  position:fixed; inset:0; background:rgba(5,4,3,.94); z-index:100;
-  display:none; align-items:center; justify-content:center; flex-direction:column; gap:14px;
-  animation:fadeIn .4s ease;
-}
+#chapterBanner{position:fixed;inset:0;background:rgba(5,4,3,.95);z-index:100;display:none;align-items:center;justify-content:center;flex-direction:column;gap:12px;animation:fadeIn .4s ease}
 #chapterBanner.show{display:flex}
-#chapterBanner h1{color:var(--amber); font-size:26px; margin:0; text-align:center; padding:0 20px; line-height:1.6}
-#chapterBanner .num{font-size:12px; color:var(--dim); letter-spacing:4px}
-@keyframes fadeIn{from{opacity:0} to{opacity:1}}
+#chapterBanner h1{color:var(--amber);font-size:24px;margin:0;text-align:center;padding:0 18px;line-height:1.6}
+#chapterBanner .num{font-size:11px;color:var(--dim);letter-spacing:3px}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
 
-/* Endings */
-.ending-h{font-size:24px; font-weight:700; margin:0 0 14px; line-height:1.5}
+.modal{position:fixed;inset:0;background:rgba(0,0,0,.92);z-index:200;display:none;align-items:center;justify-content:center;padding:16px;animation:fadeIn .3s ease}
+.modal.show{display:flex}
+.modal-content{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:20px;max-width:600px;width:100%;max-height:82vh;overflow-y:auto}
+.modal-content h2{margin:0 0 14px;color:var(--amber);font-size:18px}
+.inv-grid,.market-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:8px;margin-bottom:12px}
+.inv-item,.market-item{background:#140e0a;border:1px solid var(--line);border-radius:9px;padding:10px;display:flex;flex-direction:column;gap:4px;align-items:center;text-align:center}
+.inv-item .icon,.market-item .icon{font-size:22px}
+.inv-item .name,.market-item .name{font-size:12px;font-weight:700}
+.inv-item .desc,.market-item .desc{font-size:10.5px;color:var(--dim);line-height:1.35}
+.inv-item button,.market-item button{margin-top:auto;background:var(--amber);color:#000;border:none;padding:4px 10px;border-radius:5px;font-size:11px;font-weight:700;cursor:pointer}
+.inv-item button:disabled{background:#3a2a1a;color:var(--dim);cursor:not-allowed}
+.empty-msg{color:var(--dim);font-size:13px;text-align:center;padding:20px;grid-column:1/-1}
+.modal-content button.close-btn{background:#1c1610;color:var(--ink);border:1px solid var(--line);border-radius:9px;padding:9px 18px;cursor:pointer;font-family:inherit;margin-top:10px;width:100%}
+.modal-content button.close-btn:hover{border-color:var(--amber)}
+.diary-entry{border-right:2px solid var(--amber);padding:8px 12px;margin-bottom:8px;font-size:13px;line-height:1.85;color:var(--dim);background:rgba(212,151,66,.02);border-radius:0 7px 7px 0}
+.diary-entry .when{color:var(--amber);font-size:11px;margin-bottom:3px;font-weight:700}
+
+.ach-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:8px;margin-bottom:12px}
+.ach-item{background:#140e0a;border:1px solid var(--line);border-radius:9px;padding:10px 6px;text-align:center}
+.ach-item.unlocked{border-color:var(--amber);background:rgba(212,151,66,.06)}
+.ach-item.locked{opacity:.4}
+.ach-item .ic{font-size:22px;margin-bottom:3px}
+.ach-item .tt{font-size:11px;font-weight:700}
+.ach-item .ds{font-size:9.5px;color:var(--dim);margin-top:2px}
+
+.eg-grid{display:grid;gap:8px}
+.eg-item{background:#140e0a;border:1px solid var(--line);border-radius:9px;padding:12px;display:flex;gap:10px;align-items:center}
+.eg-item.found{border-color:var(--amber)}
+.eg-item.locked{opacity:.4}
+.eg-item .ic{font-size:26px}
+.eg-item .tt{font-weight:700;font-size:13px;margin-bottom:2px}
+.eg-item .ds{font-size:11px;color:var(--dim)}
+
+.ending-h{font-size:22px;font-weight:700;margin:0 0 12px;line-height:1.5}
 .ending-h.peace{color:var(--sand)}
 .ending-h.dark{color:var(--red)}
 .ending-h.broken{color:#8a7a5a}
-.quote{
-  border-right:3px solid var(--amber); padding:12px 16px;
-  color:var(--dim); font-style:italic; margin:18px 0;
-  background:rgba(212,151,66,.04); border-radius:0 8px 8px 0; line-height:1.8;
-}
-.stats-box{
-  background:#0b0806; border:1px solid var(--line); border-radius:12px;
-  padding:16px; margin:16px 0; font-size:13.5px; line-height:2;
-}
-.stats-box .row{display:flex; justify-content:space-between; padding:4px 0; color:var(--dim)}
-.stats-box .row span:last-child{color:var(--ink); font-weight:600}
+.ending-h.martyr{color:var(--green)}
+.quote{border-right:3px solid var(--amber);padding:10px 14px;color:var(--dim);font-style:italic;margin:14px 0;background:rgba(212,151,66,.04);border-radius:0 8px 8px 0;line-height:1.75}
+.stats-box{background:#0b0806;border:1px solid var(--line);border-radius:10px;padding:14px;margin:14px 0;font-size:12.5px;line-height:1.9}
+.stats-box .row{display:flex;justify-content:space-between;padding:3px 0;color:var(--dim)}
+.stats-box .row span:last-child{color:var(--ink);font-weight:600}
+.analysis{background:rgba(122,92,138,.06);border:1px solid rgba(122,92,138,.3);border-radius:9px;padding:12px;margin:12px 0;font-size:13px;line-height:1.85;color:#c8b8d8}
+.analysis h4{margin:0 0 6px;color:var(--violet);font-size:14px}
 
-/* Toast */
-#toast{
-  position:fixed; bottom:24px; left:50%; transform:translateX(-50%) translateY(80px);
-  background:#18110c; border:1px solid var(--amber); color:var(--ink);
-  padding:12px 20px; border-radius:12px; font-size:13.5px; z-index:150;
-  transition:transform .4s ease; pointer-events:none; box-shadow:0 10px 30px rgba(0,0,0,.6);
-}
+#toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%) translateY(80px);background:#18110c;border:1px solid var(--amber);color:var(--ink);padding:10px 18px;border-radius:11px;font-size:12.5px;z-index:150;transition:transform .4s ease;pointer-events:none;max-width:90%;text-align:center}
 #toast.show{transform:translateX(-50%) translateY(0)}
+
+#achPop{position:fixed;top:14px;left:50%;transform:translateX(-50%) translateY(-120px);background:linear-gradient(135deg,#2a1a10,#1a1008);border:2px solid var(--amber);padding:12px 20px;border-radius:12px;z-index:180;display:flex;align-items:center;gap:10px;box-shadow:0 15px 40px rgba(0,0,0,.7);transition:transform .5s cubic-bezier(.4,0,.2,1);pointer-events:none}
+#achPop.show{transform:translateX(-50%) translateY(0)}
+#achPop .ic{font-size:28px}
+#achPop .tx{font-size:12px}
+#achPop .tx strong{display:block;color:var(--amber);font-size:13px}
 </style>
 </head>
 <body>
+<div id="particles"></div>
 <div id="app">
   <div id="topbar">
     <span id="chapterLabel">الفصل الأول · دارفور</span>
     <div id="controls">
-      <button id="invBtn">🎒 الحقيبة (<span id="invCount">0</span>)</button>
-      <button id="marketBtn">🛒 السوق</button>
-      <button id="diaryBtn">📔 المذكرات</button>
-      <button id="saveBtn">💾 حفظ</button>
-      <button id="loadBtn">📂 تحميل</button>
-      <button id="soundBtn" onclick="toggleSound()">🔊 الصوت</button>
+      <button id="invBtn">🎒 (<span id="invCount">0</span>)</button>
+      <button id="marketBtn">🛒</button>
+      <button id="diaryBtn">📔</button>
+      <button id="achBtn">🏆</button>
+      <button id="egBtn">🎭</button>
+      <button id="saveBtn">💾</button>
+      <button id="loadBtn">📂</button>
+      <button id="soundBtn">🔊</button>
     </div>
   </div>
 
@@ -219,532 +164,1100 @@ body{
     <div class="map-line"></div>
     <div class="map-node" id="m-khartoum">🏙️ الخرطوم</div>
     <div class="map-line"></div>
+    <div class="map-node" id="m-fasher">🔥 الفاشر</div>
+    <div class="map-line"></div>
     <div class="map-node" id="m-borders">🚪 الحدود</div>
   </div>
 
   <div id="companionDisplay"></div>
-
   <div id="hud"></div>
 
   <div class="card">
-    <div id="sceneImg"><span class="mood-icon"></span></div>
+    <div id="sceneImg"><span class="mood-icon"></span><div class="avatar" id="avatarIcon">👦</div></div>
     <div class="card-body"><div id="scene"></div></div>
   </div>
   <div id="choices"></div>
 </div>
 
-<div id="chapterBanner">
-  <span class="num" id="chNum">الفصل</span>
-  <h1 id="chTitle"></h1>
-</div>
+<div id="chapterBanner"><span class="num" id="chNum"></span><h1 id="chTitle"></h1></div>
 
-<!-- Modals -->
-<div id="invModal" class="modal">
-  <div class="modal-content">
-    <h2>🎒 الحقيبة والمخزون</h2>
-    <div id="invList" class="inv-grid"></div>
-    <button class="close-btn" onclick="closeModal('invModal')">إغلاق الحقيبة</button>
-  </div>
-</div>
+<div id="invModal" class="modal"><div class="modal-content">
+  <h2>🎒 الحقيبة</h2>
+  <div id="invList" class="inv-grid"></div>
+  <button class="close-btn" onclick="closeModal('invModal')">إغلاق</button>
+</div></div>
 
-<div id="marketModal" class="modal">
-  <div class="modal-content">
-    <h2>🛒 سوق أم درمان التجاري</h2>
-    <div id="marketList" class="market-grid"></div>
-    <button class="close-btn" onclick="closeModal('marketModal')">إغلاق السوق</button>
-  </div>
-</div>
+<div id="marketModal" class="modal"><div class="modal-content">
+  <h2>🛒 السوق</h2>
+  <div id="marketList" class="market-grid"></div>
+  <button class="close-btn" onclick="closeModal('marketModal')">إغلاق</button>
+</div></div>
 
-<div id="diaryModal" class="modal">
-  <div class="modal-content">
-    <h2>📔 مذكرات رحلة الرماد</h2>
-    <div id="diaryList"></div>
-    <button class="close-btn" onclick="closeModal('diaryModal')">إغلاق المذكرات</button>
-  </div>
-</div>
+<div id="diaryModal" class="modal"><div class="modal-content">
+  <h2>📔 مذكرات الرحلة</h2>
+  <div id="diaryList"></div>
+  <button class="close-btn" onclick="closeModal('diaryModal')">إغلاق</button>
+</div></div>
 
+<div id="achModal" class="modal"><div class="modal-content">
+  <h2>🏆 الإنجازات</h2>
+  <div id="achGrid" class="ach-grid"></div>
+  <button class="close-btn" onclick="closeModal('achModal')">إغلاق</button>
+</div></div>
+
+<div id="egModal" class="modal"><div class="modal-content">
+  <h2>🎭 معرض النهايات</h2>
+  <div id="egGrid" class="eg-grid"></div>
+  <button class="close-btn" onclick="closeModal('egModal')">إغلاق</button>
+</div></div>
+
+<div id="achPop"><span class="ic">🏆</span><div class="tx"><strong>إنجاز!</strong><span id="achPopTxt"></span></div></div>
 <div id="toast"></div>
 
 <script>
-/* ============================================================
-   MOODS & CHAPTERS & MAP REGIONS
-   ============================================================ */
-const MOODS = {
-  war:      { sky1:'#3a0d08', sky2:'#0a0403', icon:'🔥' },
-  darfur:   { sky1:'#5c2a10', sky2:'#1a0f08', icon:'🌄' },
-  attack:   { sky1:'#4a1a08', sky2:'#0f0604', icon:'⚠️' },
-  desert:   { sky1:'#c98e3f', sky2:'#5c3a1a', icon:'🏜️' },
-  city:     { sky1:'#1a2233', sky2:'#0a0d15', icon:'🏙️' },
-  market:   { sky1:'#6a3a18', sky2:'#2a1508', icon:'🛒' },
-  work:     { sky1:'#3a2a1a', sky2:'#15100a', icon:'🔧' },
-  home:     { sky1:'#4a3a2a', sky2:'#1a120a', icon:'🏠' },
-  prison:   { sky1:'#1a1a1a', sky2:'#050505', icon:'⛓️' },
-  hope:     { sky1:'#8a6a2a', sky2:'#2a2010', icon:'✨' },
-  peace:    { sky1:'#7a9a5a', sky2:'#2a3a1a', icon:'🕊️' },
-  dark:     { sky1:'#1a1010', sky2:'#050303', icon:'🌑' }
+/* ================= MOODS ================= */
+const MOODS={
+  war:{sky1:'#3a0d08',sky2:'#0a0403',icon:'🔥'},
+  darfur:{sky1:'#5c2a10',sky2:'#1a0f08',icon:'🌄'},
+  attack:{sky1:'#4a1a08',sky2:'#0f0604',icon:'⚠️'},
+  desert:{sky1:'#c98e3f',sky2:'#5c3a1a',icon:'🏜️'},
+  city:{sky1:'#1a2233',sky2:'#0a0d15',icon:'🏙️'},
+  market:{sky1:'#6a3a18',sky2:'#2a1508',icon:'🛒'},
+  work:{sky1:'#3a2a1a',sky2:'#15100a',icon:'🔧'},
+  home:{sky1:'#4a3a2a',sky2:'#1a120a',icon:'🏠'},
+  prison:{sky1:'#1a1a1a',sky2:'#050505',icon:'⛓️'},
+  hope:{sky1:'#8a6a2a',sky2:'#2a2010',icon:'✨'},
+  peace:{sky1:'#7a9a5a',sky2:'#2a3a1a',icon:'🕊️'},
+  dark:{sky1:'#1a1010',sky2:'#050303',icon:'🌑'},
+  famine:{sky1:'#5a3a10',sky2:'#1a0f05',icon:'🍂'},
+  border:{sky1:'#8a7040',sky2:'#2a2010',icon:'🚪'}
 };
 
-const CHAPTERS = {
-  1: 'دارفور · البدايات (٢٠٠٣)',
-  2: 'طريق الهروب الصحراوي',
-  3: 'سوق أم درمان · الانطلاقة',
-  4: 'الخرطوم · الكفاح والرزق',
-  5: 'الاستقرار والأسرة',
-  6: 'الطوفان · ١٥ أبريل ٢٠٢٣',
-  7: 'الحدود ومسارات النجاة',
-  8: 'الخاتمة والرماد الأخير'
+const CHAPTERS={
+  1:'دارفور · ٢٠٠٣',
+  2:'الطريق إلى الخرطوم',
+  3:'أم درمان · الرصيف',
+  4:'الخرطوم · الصعود',
+  5:'البيت والأسرة',
+  6:'١٥ أبريل ٢٠٢٣',
+  7:'الفاشر · الحصار',
+  8:'غرف الطوارئ',
+  9:'الحدود',
+  10:'الخاتمة'
 };
 
-/* ============================================================
-   STATE, INVENTORY & MARKET & COMPANION
-   ============================================================ */
-let S = {};
-const SAVE_KEY = 'rimad_epic_ultimate_v7';
+const AVATARS={child:'👦',teen:'🧑',adult:'👨',elder:'👴',prisoner:'🧔'};
 
-const ITEMS_DB = {
-  water:    { name: 'قربة ماء', icon: '💧', desc: 'تروي الظمأ وتعيد الطاقة.', price: 50, use: s => { s.energy = Math.min(100, s.energy + 30); toast('💧 شربت ماءً عذباً.. انتعش جسدك.'); } },
-  medicine: { name: 'إسعافات أولية', icon: '💊', desc: 'تشفى الجروح وتعيد الصحة.', price: 150, use: s => { s.health = Math.min(100, s.health + 40); toast('💊 استخدمت الأدوية.. زادت صحتك.'); } },
-  tea:      { name: 'عدة شاي وبلح', icon: '🍵', desc: 'ترفع المعنويات والأمل.', price: 80, use: s => { s.hope = Math.min(100, s.hope + 25); toast('🍵 شربت شاي بالهيل.. ارتفع أملك.'); } },
-  docs:     { name: 'وثائق رسمية', icon: '📜', desc: 'مستندات ملكية وحقوق.', price: 300, use: s => { toast('📜 تتأمل وثائقك.. ذكريات الكفاح.'); } }
+/* ================= ITEMS ================= */
+const ITEMS={
+  water:{name:'قربة ماء',icon:'💧',desc:'+٣٠ ماء. ضرورية للبقاء.',price:40,use:s=>{s.water=Math.min(100,s.water+30);toast('💧 شربت ماءً.. ارتوى جسدك.')}},
+  food:{name:'كسرة وملاح',icon:'🍲',desc:'+٣٥ شبع. تسد الجوع.',price:80,use:s=>{s.food=Math.min(100,s.food+35);toast('🍲 أكلت.. سكن جوعك.')}},
+  medicine:{name:'دواء',icon:'💊',desc:'+٤٠ صحة. تعالج الجروح.',price:150,use:s=>{s.health=Math.min(100,s.health+40);toast('💊 تعافيت.')}},
+  tea:{name:'شاي وبلح',icon:'🍵',desc:'+٢٠ أمل. ترفع المعنويات.',price:60,use:s=>{s.hope=Math.min(100,s.hope+20);toast('🍵 شاي بالهيل.. ارتفع أملك.')}},
+  blanket:{name:'بطانية',icon:'🛏️',desc:'+٢٥ طاقة. دفء الليل.',price:120,use:s=>{s.energy=Math.min(100,s.energy+25);toast('🛏️ دفء.. استعدت طاقتك.')}}
 };
+
+/* ================= ACHIEVEMENTS ================= */
+const ACHS={
+  survive_darfur:{icon:'🌅',title:'نجاة دارفور',desc:'خرجت من قريتك'},
+  reach_khartoum:{icon:'🏙️',title:'الوصول',desc:'بلغت الخرطوم'},
+  find_uthman:{icon:'👦',title:'الرفيق',desc:'أنقذت عثمان'},
+  uthman_alive:{icon:'🤝',title:'رفيق الدرب',desc:'عثمان نجا معك'},
+  uthman_lost:{icon:'💔',title:'الفقد',desc:'فقدت عثمان'},
+  build_empire:{icon:'🚌',title:'الكريز',desc:'امتلكت حافلتك'},
+  family:{icon:'💍',title:'الأسرة',desc:'تزوجت وأنجبت'},
+  lost_all:{icon:'🔥',title:'الخسارة',desc:'فقدت كل شيء'},
+  fasher:{icon:'🔥',title:'الفاشر',desc:'شهدت الحصار'},
+  err_join:{icon:'🤲',title:'غرفة الطوارئ',desc:'انضممت للمتطوعين'},
+  save_someone:{icon:'💚',title:'التضحية',desc:'أنقذت حياة'},
+  end_witness:{icon:'📖',title:'الشاهد',desc:'نهاية الشاهد'},
+  end_crossing:{icon:'🚪',title:'العبور',desc:'نهاية العبور'},
+  end_renewed:{icon:'🌱',title:'من جديد',desc:'نهاية البداية'},
+  end_broken:{icon:'💔',title:'المنكسر',desc:'نهاية الضياع'},
+  end_martyr:{icon:'🌹',title:'التضحية',desc:'نهاية الشهادة'},
+  end_ash:{icon:'🥀',title:'الرماد',desc:'نهاية الفناء'}
+};
+
+/* ================= ENDINGS GALLERY ================= */
+const ENDINGS=[
+  {id:'witness',icon:'📖',title:'الشاهد',desc:'حفظت الأسماء'},
+  {id:'crossing',icon:'🚪',title:'العبور',desc:'عبرت الحدود'},
+  {id:'renewed',icon:'🌱',title:'من جديد',desc:'نجوت وحدك'},
+  {id:'broken',icon:'💔',title:'المنكسر',desc:'نجا جسدك لا روحك'},
+  {id:'martyr',icon:'🌹',title:'التضحية',desc:'أنقذت غيرك'},
+  {id:'ash',icon:'🥀',title:'الرماد',desc:'لم تنجُ'}
+];
+
+/* ================= STATE ================= */
+let S={};
+const SAVE_KEY='rimad_v11_save';
+const ACH_KEY='rimad_v11_ach';
+const EG_KEY='rimad_v11_eg';
 
 function newState(){
-  return {
-    money: 180, health: 100, hope: 80, energy: 90, humanity: 60,
-    age: 8, chapter: 1, node: 'intro',
-    inventory: ['water'],
-    companion: null, // { name: 'عثمان', role: 'صديق الطفولة', perk: 'يساعدك في جمع المال' }
-    mapNode: 'm-darfur',
-    flags: {}, diary: [],
-    stats: { choices: 0, kind: 0, cruel: 0 },
-    visited: []
+  return{
+    water:70,food:70,health:100,hope:75,energy:80,humanity:60,
+    money:180,age:8,chapter:1,node:'intro',
+    inventory:['water','food'],
+    uthman:null, // {name:'عثمان',bond:100,wounded:false,alive:true}
+    flags:{},diary:[],stats:{choices:0,kind:0,cruel:0},mapNode:'m-darfur'
   };
 }
 
-function addItem(s, id){
-  if(!s.inventory.includes(id)){
-    s.inventory.push(id);
-    toast('🎁 حصلت على أداة جديدة: ' + ITEMS_DB[id].name);
-    updateInvUI();
-  }
+function getAch(){try{return JSON.parse(localStorage.getItem(ACH_KEY)||'[]')}catch(e){return[]}}
+function unlockAch(k){
+  const a=getAch();
+  if(a.includes(k))return;
+  a.push(k);localStorage.setItem(ACH_KEY,JSON.stringify(a));
+  showAchPop(ACHS[k]);
+}
+function showAchPop(a){
+  if(!a)return;
+  const p=document.getElementById('achPop');
+  document.getElementById('achPopTxt').textContent=a.title+' — '+a.desc;
+  p.querySelector('.ic').textContent=a.icon;
+  p.classList.add('show');tone(659,.12);setTimeout(()=>tone(880,.15),120);
+  setTimeout(()=>p.classList.remove('show'),2600);
+}
+function getEg(){try{return JSON.parse(localStorage.getItem(EG_KEY)||'[]')}catch(e){return[]}}
+function markEnding(id){
+  const f=getEg();
+  if(!f.includes(id)){f.push(id);localStorage.setItem(EG_KEY,JSON.stringify(f))}
 }
 
-function useItem(id){
-  const it = ITEMS_DB[id];
-  if(it && it.use){
-    it.use(S);
-    if(id !== 'docs'){
-      const idx = S.inventory.indexOf(id);
-      if(idx > -1) S.inventory.splice(idx, 1);
-    }
-    updateHUD();
-    updateInvUI();
-  }
-}
-
-function buyItem(id){
-  const it = ITEMS_DB[id];
-  if(S.money >= it.price){
-    S.money -= it.price;
-    addItem(S, id);
-    toast('🛍️ اشتريت ' + it.name + ' بنجاح.');
-    updateHUD();
-    updateMarketUI();
-  } else {
-    toast('❌ لا تملك ما يكفي من المال للشراء.');
-  }
-}
-
-function updateInvUI(){
-  const list = document.getElementById('invList');
-  document.getElementById('invCount').textContent = S.inventory.length;
-  if(S.inventory.length === 0){
-    list.innerHTML = '<div class="empty-msg">الحقيبة فارغة تماماً.</div>';
-    return;
-  }
-  list.innerHTML = S.inventory.map(id => {
-    const it = ITEMS_DB[id];
-    return `
-      <div class="inv-item">
-        <span class="icon">${it.icon}</span>
-        <span class="name">${it.name}</span>
-        <span class="desc">${it.desc}</span>
-        <button onclick="useItem('${id}')">استخدام</button>
-      </div>
-    `;
-  }).join('');
-}
-
-function updateMarketUI(){
-  const list = document.getElementById('marketList');
-  list.innerHTML = Object.keys(ITEMS_DB).map(id => {
-    const it = ITEMS_DB[id];
-    return `
-      <div class="market-item">
-        <span class="icon">${it.icon}</span>
-        <span class="name">${it.name}</span>
-        <span class="desc">${it.desc}</span>
-        <span style="color:var(--amber); font-weight:700; font-size:12px">${it.price} ج.س</span>
-        <button onclick="buyItem('${id}')">شراء</button>
-      </div>
-    `;
-  }).join('');
-}
-
-function updateMap(nodeId){
-  S.mapNode = nodeId;
-  document.querySelectorAll('.map-node').forEach(el => {
-    el.classList.remove('active', 'passed');
-    if(el.id === nodeId) el.classList.add('active');
-  });
-}
-
-function updateCompanionUI(){
-  const box = document.getElementById('companionDisplay');
-  if(S.companion){
-    box.style.display = 'flex';
-    box.innerHTML = `<span>👥</span><div><b>رفيق الرحلة: ${S.companion.name}</b><br><small>${S.companion.perk}</small></div>`;
-  } else {
-    box.style.display = 'none';
-  }
-}
-
-/* ============================================================
-   AUDIO ENGINE & AMBIENT SOUNDS
-   ============================================================ */
-let audioCtx = null;
-let soundOn = true;
-
-function playTone(freq, dur=0.15, type='sine', vol=0.04){
-  if(!soundOn) return;
+/* ================= AUDIO ================= */
+let audioCtx=null,soundOn=true,amb=[];
+function tone(f,d=0.15,t='sine',v=0.035){
+  if(!soundOn)return;
   try{
-    if(!audioCtx) audioCtx = new (window.AudioContext||window.webkitAudioContext)();
-    const o = audioCtx.createOscillator();
-    const g = audioCtx.createGain();
-    o.type = type; o.frequency.value = freq;
-    g.gain.setValueAtTime(vol, audioCtx.currentTime);
-    g.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + dur);
-    o.connect(g); g.connect(audioCtx.destination);
-    o.start(); o.stop(audioCtx.currentTime + dur);
-  } catch(e){}
+    if(!audioCtx)audioCtx=new(window.AudioContext||window.webkitAudioContext)();
+    const o=audioCtx.createOscillator(),g=audioCtx.createGain();
+    o.type=t;o.frequency.value=f;
+    g.gain.setValueAtTime(v,audioCtx.currentTime);
+    g.gain.exponentialRampToValueAtTime(.001,audioCtx.currentTime+d);
+    o.connect(g);g.connect(audioCtx.destination);
+    o.start();o.stop(audioCtx.currentTime+d);
+  }catch(e){}
 }
-const sfx = {
-  click: () => playTone(440, 0.08, 'sine', 0.03),
-  good:  () => { playTone(523, 0.12); setTimeout(()=>playTone(659,0.15),80); },
-  chapter: () => { playTone(392,0.15); setTimeout(()=>playTone(523,0.2),130); setTimeout(()=>playTone(659,0.25),280); }
+function stopAmb(){amb.forEach(n=>{try{n.o.stop();n.l.stop()}catch(e){}});amb=[]}
+function startAmb(m){
+  if(!soundOn)return;
+  try{
+    if(!audioCtx)audioCtx=new(window.AudioContext||window.webkitAudioContext)();
+    stopAmb();
+    const map={war:[110,165],darfur:[146,220],desert:[164,246],city:[196,294],market:[174,261],work:[130,195],home:[220,330],prison:[98,147],hope:[261,392],peace:[329,440],dark:[110,165],famine:[87,130],border:[164,220]};
+    const f=map[m]||map.darfur;
+    f.forEach((fr,i)=>{
+      const o=audioCtx.createOscillator(),g=audioCtx.createGain(),l=audioCtx.createOscillator(),lg=audioCtx.createGain();
+      o.type='sine';o.frequency.value=fr;
+      g.gain.setValueAtTime(.006,audioCtx.currentTime);
+      l.frequency.value=.1+i*.05;lg.gain.value=1.3;
+      l.connect(lg);lg.connect(o.frequency);l.start();
+      o.connect(g);g.connect(audioCtx.destination);o.start();
+      amb.push({o,g,l});
+    });
+  }catch(e){}
+}
+
+/* ================= HELPERS ================= */
+const $=id=>document.getElementById(id);
+function clamp(s){
+  s.water=Math.max(0,Math.min(100,s.water));
+  s.food=Math.max(0,Math.min(100,s.food));
+  s.health=Math.max(0,Math.min(100,s.health));
+  s.hope=Math.max(0,Math.min(100,s.hope));
+  s.energy=Math.max(0,Math.min(100,s.energy));
+  s.humanity=Math.max(0,Math.min(100,s.humanity));
+  s.money=Math.max(0,s.money);
+}
+function toast(m){const t=$('toast');t.textContent=m;t.classList.add('show');clearTimeout(t._t);t._t=setTimeout(()=>t.classList.remove('show'),2200)}
+function addDiary(s,t,w){s.diary.push({text:t,when:w||('عمر '+s.age)})}
+function addItem(s,id){if(!s.inventory.includes(id)){s.inventory.push(id);toast('🎁 '+ITEMS[id].name);updateInvUI()}}
+
+/* ================= HUD ================= */
+function updateHUD(){
+  const rep=S.humanity>65?'نقي':S.humanity<35?'قاسي':'متوازن';
+  const cw=S.water<25?' crit':'',cf=S.food<25?' crit':'',ch=S.health<25?' crit':'';
+  $('hud').innerHTML=`
+    <div class="chip"><span class="lbl">العمر</span><span class="val">${S.age}</span></div>
+    <div class="chip${cw}"><span class="lbl">💧 ماء</span><div class="bar"><i style="width:${S.water}%;background:var(--blue)"></i></div></div>
+    <div class="chip${cf}"><span class="lbl">🍲 شبع</span><div class="bar"><i style="width:${S.food}%;background:var(--sand)"></i></div></div>
+    <div class="chip${ch}"><span class="lbl">❤️ صحة</span><div class="bar"><i style="width:${S.health}%;background:var(--red)"></i></div></div>
+    <div class="chip"><span class="lbl">✨ أمل</span><div class="bar"><i style="width:${S.hope}%;background:var(--amber)"></i></div></div>
+  `;
+  updateInvUI();updateCompUI();
+}
+
+function updateCompUI(){
+  const box=$('companionDisplay');
+  if(!S.uthman||!S.uthman.alive){box.style.display='none';return}
+  box.style.display='block';
+  const u=S.uthman;
+  const bondLabel=u.bond>70?'أخ':u.bond>40?'صديق':'رفيق مضطر';
+  box.innerHTML=`<div class="companion-box ${u.wounded?'wounded':''}">
+    <span>${u.wounded?'🤕':'👥'}</span>
+    <div>
+      <b>عثمان</b> · ${bondLabel} ${u.wounded?'<span style="color:var(--red)">· مصاب</span>':''}
+      <div class="status">الرابطة: ${u.bond}% · ${u.wounded?'يحتاج دواءً':'بصحة جيدة'}</div>
+    </div>
+  </div>`;
+}
+
+/* ================= INVENTORY & MARKET ================= */
+function updateInvUI(){
+  const list=$('invList');if(!list)return;
+  $('invCount').textContent=S.inventory.length;
+  if(S.inventory.length===0){list.innerHTML='<div class="empty-msg">الحقيبة فارغة.</div>';return}
+  list.innerHTML=S.inventory.map(id=>{
+    const it=ITEMS[id];
+    return `<div class="inv-item"><span class="icon">${it.icon}</span><span class="name">${it.name}</span><span class="desc">${it.desc}</span><button onclick="useItem('${id}')">استخدام</button></div>`;
+  }).join('');
+}
+function useItem(id){
+  const it=ITEMS[id];if(!it)return;
+  it.use(S);
+  const i=S.inventory.indexOf(id);
+  if(i>-1)S.inventory.splice(i,1);
+  updateHUD();updateInvUI();
+}
+function buyItem(id){
+  const it=ITEMS[id];
+  if(S.money<it.price){toast('❌ لا يكفيك المال');return}
+  S.money-=it.price;addItem(S,id);toast('🛍️ '+it.name);updateHUD();updateMarketUI();
+}
+function updateMarketUI(){
+  const list=$('marketList');if(!list)return;
+  list.innerHTML=Object.keys(ITEMS).map(id=>{
+    const it=ITEMS[id];
+    return `<div class="market-item"><span class="icon">${it.icon}</span><span class="name">${it.name}</span><span class="desc">${it.desc}</span><span style="color:var(--amber);font-weight:700;font-size:11px">${it.price} ج</span><button onclick="buyItem('${id}')">شراء</button></div>`;
+  }).join('');
+}
+
+/* ================= MAP ================= */
+function setMap(id){S.mapNode=id;document.querySelectorAll('.map-node').forEach(e=>e.classList.remove('active'));const el=$(id);if(el)el.classList.add('active')}
+
+/* ================= MODALS ================= */
+function openModal(id){$(id).classList.add('show')}
+function closeModal(id){$(id).classList.remove('show')}
+$('invBtn').onclick=()=>openModal('invModal');
+$('marketBtn').onclick=()=>{updateMarketUI();openModal('marketModal')};
+$('diaryBtn').onclick=()=>{
+  $('diaryList').innerHTML=S.diary.length===0?'<div class="empty-msg">لم تُدون أي ذكرى بعد.</div>':S.diary.map(d=>`<div class="diary-entry"><div class="when">${d.when}</div>${d.text}</div>`).join('');
+  openModal('diaryModal');
+};
+$('achBtn').onclick=()=>{
+  const u=getAch();
+  $('achGrid').innerHTML=Object.entries(ACHS).map(([k,a])=>{
+    const on=u.includes(k);
+    return `<div class="ach-item ${on?'unlocked':'locked'}"><div class="ic">${on?a.icon:'🔒'}</div><div class="tt">${on?a.title:'؟؟؟'}</div><div class="ds">${on?a.desc:'مغلق'}</div></div>`;
+  }).join('');
+  openModal('achModal');
+};
+$('egBtn').onclick=()=>{
+  const f=getEg();
+  $('egGrid').innerHTML=ENDINGS.map(e=>{
+    const on=f.includes(e.id);
+    return `<div class="eg-item ${on?'found':'locked'}"><div class="ic">${on?e.icon:'🔒'}</div><div><div class="tt">${on?e.title:'غير مكتشفة'}</div><div class="ds">${on?e.desc:'أكمل الرحلة'}</div></div></div>`;
+  }).join('');
+  openModal('egModal');
+};
+$('saveBtn').onclick=()=>{try{localStorage.setItem(SAVE_KEY,JSON.stringify(S));toast('✅ تم الحفظ')}catch(e){toast('❌ فشل')}};
+$('loadBtn').onclick=()=>{try{const d=localStorage.getItem(SAVE_KEY);if(!d){toast('⚠️ لا يوجد حفظ');return}S=JSON.parse(d);clamp(S);render();updateHUD();updateCompUI();toast('📂 تم التحميل')}catch(e){toast('❌ فشل')}};
+$('soundBtn').onclick=function(){
+  soundOn=!soundOn;
+  this.textContent=soundOn?'🔊':'🔇';
+  this.classList.toggle('off',!soundOn);
+  if(!soundOn)stopAmb();else startAmb(getMood(S.node));
+  toast(soundOn?'الصوت مفعل':'الصوت مكتوم');
 };
 
-function toggleSound(){
-  soundOn = !soundOn;
-  const btn = document.getElementById('soundBtn');
-  btn.textContent = soundOn ? '🔊 الصوت' : '🔇 مكات';
-  btn.classList.toggle('off', !soundOn);
-  toast(soundOn ? 'تم تفعيل الصوت' : 'تم كتم الصوت');
+/* ================= PARTICLES ================= */
+function initParticles(){
+  const c=$('particles');
+  for(let i=0;i<20;i++){
+    const p=document.createElement('div');p.className='particle';
+    p.style.left=Math.random()*100+'%';
+    p.style.animationDuration=(9+Math.random()*13)+'s';
+    p.style.animationDelay=Math.random()*10+'s';
+    c.appendChild(p);
+  }
 }
 
-/* ============================================================
-   DOM & RENDER
-   ============================================================ */
-const sceneEl   = document.getElementById('scene');
-const choicesEl = document.getElementById('choices');
-const hudEl     = document.getElementById('hud');
-const imgEl     = document.getElementById('sceneImg');
-const chLabel   = document.getElementById('chapterLabel');
+/* ================= SCENES ================= */
+const scenes={};
+function def(id,o){scenes[id]=o}
+const sceneEl=$('scene'),choicesEl=$('choices'),imgEl=$('sceneImg'),chLabel=$('chapterLabel'),avatarEl=$('avatarIcon');
 
-const scenes = {};
-function def(id, opts){ scenes[id] = opts; }
+function getMood(id){return scenes[id]?.mood||'darfur'}
 
-function clamp(s){
-  s.health   = Math.max(0, Math.min(100, s.health));
-  s.hope     = Math.max(0, Math.min(100, s.hope));
-  s.energy   = Math.max(0, Math.min(100, s.energy));
-  s.money    = Math.max(0, s.money);
-  s.humanity = Math.max(0, Math.min(100, s.humanity));
+function setMood(m){
+  const x=MOODS[m]||MOODS.darfur;
+  imgEl.style.background=`linear-gradient(180deg,${x.sky1} 0%,${x.sky2} 100%)`;
+  imgEl.querySelector('.mood-icon').textContent=x.icon;
+  startAmb(m);
+  if(S.age<12)avatarEl.textContent=AVATARS.child;
+  else if(S.age<18)avatarEl.textContent=AVATARS.teen;
+  else if(S.age<55)avatarEl.textContent=AVATARS.adult;
+  else avatarEl.textContent=AVATARS.elder;
 }
 
-function addDiary(s, text, when){
-  s.diary.push({ text, when: when || ('العمر: ' + s.age + ' سنة') });
-}
-function addStat(s, type){ s.stats[type] = (s.stats[type]||0) + 1; }
-
-function updateHUD(){
-  const repLabel = S.humanity > 65 ? 'نقي' : S.humanity < 35 ? 'قاسي' : 'متوازن';
-  hudEl.innerHTML = `
-    <div class="chip"><span class="lbl">العمر</span><span class="val">${S.age} سنة</span></div>
-    <div class="chip"><span class="lbl">المال</span><span class="val">${S.money.toLocaleString('en-US')} ج</span></div>
-    <div class="chip"><span class="lbl">الصحة</span><div class="bar"><i style="width:${S.health}%;background:var(--red)"></i></div></div>
-    <div class="chip"><span class="lbl">الأمل</span><div class="bar"><i style="width:${S.hope}%;background:var(--amber)"></i></div></div>
-    <div class="chip"><span class="lbl">الضمير · ${repLabel}</span><div class="bar"><i style="width:${S.humanity}%;background:var(--blue)"></i></div></div>`;
-  updateInvUI();
-  updateCompanionUI();
+function showBanner(ch){
+  $('chNum').textContent='الفصل '+ch;
+  $('chTitle').textContent=CHAPTERS[ch]||'';
+  $('chapterBanner').classList.add('show');
+  tone(392,.15);setTimeout(()=>tone(523,.18),130);setTimeout(()=>tone(659,.22),280);
+  setTimeout(()=>$('chapterBanner').classList.remove('show'),1700);
 }
 
-function showChapterBanner(ch, cb){
-  const b = document.getElementById('chapterBanner');
-  document.getElementById('chNum').textContent = 'الفصل ' + ch;
-  document.getElementById('chTitle').textContent = CHAPTERS[ch] || '';
-  b.classList.add('show');
-  sfx.chapter();
-  setTimeout(() => { b.classList.remove('show'); if(cb) cb(); }, 1800);
-}
-
-function setMood(mood){
-  const m = MOODS[mood] || MOODS.darfur;
-  imgEl.style.background = `linear-gradient(180deg, ${m.sky1} 0%, ${m.sky2} 100%)`;
-  imgEl.querySelector('.mood-icon').textContent = m.icon;
+/* Resource drain per scene */
+function drain(){
+  S.water=Math.max(0,S.water-5);
+  S.food=Math.max(0,S.food-4);
+  if(S.uthman&&S.uthman.alive){
+    S.water=Math.max(0,S.water-3);
+    S.food=Math.max(0,S.food-2);
+  }
+  if(S.water===0){S.health=Math.max(0,S.health-8);toast('⚠️ عطش شديد! صحتك تنهار.')}
+  if(S.food===0){S.health=Math.max(0,S.health-6);toast('⚠️ جوع قاتل! صحتك تنهار.')}
+  // Uthman's wounds worsen if not treated
+  if(S.uthman&&S.uthman.alive&&S.uthman.wounded){
+    S.uthman.bond=Math.max(0,S.uthman.bond-3);
+    if(S.uthman.bond<=0){S.uthman.alive=false;toast('💔 عثمان مات متأثراً بجراحه.');unlockAch('uthman_lost')}
+  }
 }
 
 function render(){
-  const sc = scenes[S.node];
-  if(!sc) return;
+  const sc=scenes[S.node];if(!sc)return;
+  if(sc.chapter&&sc.chapter!==S.chapter){S.chapter=sc.chapter;showBanner(S.chapter)}
+  chLabel.textContent='الفصل '+S.chapter+' · '+(CHAPTERS[S.chapter]||'').split(' · ')[0];
+  setMood(sc.mood||'darfur');
+  if(sc.map)setMap(sc.map);
 
-  if(sc.chapter && sc.chapter !== S.chapter){
-    S.chapter = sc.chapter;
-    chLabel.textContent = 'الفصل ' + S.chapter + ' · ' + (CHAPTERS[S.chapter]||'').split(' · ')[0];
-    showChapterBanner(S.chapter);
-  } else {
-    chLabel.textContent = 'الفصل ' + S.chapter + ' · ' + (CHAPTERS[S.chapter]||'').split(' · ')[0];
-  }
+  const txt=typeof sc.text==='function'?sc.text(S):sc.text;
+  sceneEl.innerHTML=txt.split('\n').filter(l=>l.trim()).map(l=>`<p>${l}</p>`).join('');
+  sceneEl.querySelectorAll('p').forEach((p,i)=>setTimeout(()=>{p.style.opacity='1';p.style.transform='none'},50+i*80));
 
-  setMood(sc.mood || 'darfur');
-  if(sc.map) updateMap(sc.map);
-
-  const text = (typeof sc.text === 'function') ? sc.text(S) : sc.text;
-  sceneEl.innerHTML = text.split('\n').filter(l => l.trim()).map(l => '<p>' + l + '</p>').join('');
-
-  sceneEl.querySelectorAll('p').forEach((p, i) => {
-    setTimeout(() => { p.style.opacity = '1'; p.style.transform = 'none'; }, 60 + i * 80);
-  });
-
-  choicesEl.innerHTML = '';
-  sc.choices.forEach(c => {
-    if(c.if && !c.if(S)) return;
-    const b = document.createElement('button');
-    b.className = 'choice';
-    b.innerHTML = '<span class="bullet"></span><span>' + c.t + '</span><span class="preview">' + (c.hint||'') + '</span>';
-    b.onclick = () => handleChoice(c);
+  choicesEl.innerHTML='';
+  sc.choices.forEach(c=>{
+    if(c.if&&!c.if(S))return;
+    const b=document.createElement('button');
+    b.className='choice';
+    const dis=c.lock&&c.lock(S);
+    if(dis)b.classList.add('req');
+    b.innerHTML=`<span class="bullet"></span><span>${c.t}</span><span class="preview">${c.hint||''}</span>`;
+    if(!dis)b.onclick=()=>handleChoice(c);
     choicesEl.appendChild(b);
   });
 
   updateHUD();
-  if(!S.visited.includes(S.node)) S.visited.push(S.node);
 }
 
 function handleChoice(c){
-  sfx.click();
-  if(c.do) c.do(S);
-  addStat(S, 'choices');
-  clamp(S);
+  tone(440,.08);
+  if(c.do)c.do(S);
+  S.stats.choices++;clamp(S);
 
-  if(S.health <= 0 && c.to !== 'ending'){
-    S.node = 'death';
-  } else {
-    S.node = c.to;
-  }
+  // Check death
+  if(S.health<=0&&c.to!=='ending'){S.node='death';updateHUD();render();return}
 
-  updateHUD();
-  render();
-  window.scrollTo({ top: 0, behavior: 'smooth' });
+  // Drain resources
+  drain();
+  if(S.health<=0){S.node='death';updateHUD();render();return}
+
+  S.node=c.to;
+  updateHUD();render();window.scrollTo({top:0,behavior:'smooth'});
 }
 
 /* ============================================================
-   SCENE DEFINITIONS — شاملة الخريطة، السوق، الرفقاء، الحدود
+   SCENE DEFINITIONS
    ============================================================ */
 
-def('intro', {
-  chapter: 1, mood: 'darfur', map: 'm-darfur',
-  text: `في دارفور، حيث تتداخل خيوط التاريخ العريق بالرماد والدم، وُلدت عام ٢٠٠٣.
-هذه النسخة الملحمية تدمج **خريطة الرحلة التفاعلية، نظام اقتصاد السوق، رفقاء الدرب، ومسارات الحدود الاستراتيجية**.
-جهز حقيبتك واستعد لرحلة البقاء الخالدة.`,
-  choices: [
-    { t:'ابدأ ملحمة الرماد الأخير', to:'village' }
-  ]
-});
+def('intro',{chapter:1,mood:'darfur',map:'m-darfur',
+text:`في دارفور، عام ٢٠٠٣، وُلد طفل في قرية صغيرة قرب الفاشر.
+هذه ليست قصته وحده — هذه قصة مئات الآلاف الذين شُرّدوا، وقُتلوا، وبَقُوا.
 
-def('village', {
-  chapter: 1, mood: 'darfur', map: 'm-darfur',
-  text: `دارفور، قرية هادئة عند سفح جبل محاط بأشجار الطلح. عمرك ٨ أعوام.
-أمك تقول كل صباح: «لا تنظر إلى السماء يا بني.. انظر إلى الأرض، واجرِ.»
-في ربيع ٢٠٠٣، جاء الطوفان والنيران لتلتهم كل شيء.`,
-  choices: [
-    { t:'مرافقة أمك نحو بئر القرية (تحصل على قربة ماء 💧)', do:s=>{ addItem(s,'water'); s.energy-=10; addStat(s,'kind'); addDiary(s,'عبّأت قربة الماء من البئر قبل الهجوم.','بداية الأزمة'); }, to:'well', hint:'تحصل على ماء' },
-    { t:'البقاء مع الأب في حوش البيت', do:s=>{ s.hope-=2; }, to:'raid', hint:'أمل -' }
-  ]
-});
+ستعيش هنا قرارات صعبة. ستشعر بالجوع والعطش والخوف.
+ستفقد أناساً، وستجد آخرين. وقد تنجو، أو لا تنجو.
 
-def('well', {
-  chapter: 1, mood: 'attack', map: 'm-darfur',
-  text: `البئر كانت بعيدة وأمك معك. قبل أن نعود، تردد في الأفق صوت ركض الخيل والنار.. إنهم قادمون بسرعة مرعبة.`,
-  choices: [
-    { t:'الجري بأقصى طاقة نحو سفح الوادي', do:s=>{ s.energy-=20; s.hope-=5; }, to:'raid', hint:'طاقة -' }
-  ]
-});
+<span class="warn-txt">تنبيه:</span> اللعبة تتناول الحرب والمجاعة والفقد بصدق. لا تصف العنف صراحة، لكنها لا تتجنبه.`,
+choices:[{t:'ابدأ الرحلة',to:'village'}]});
 
-def('raid', {
-  chapter: 1, mood: 'war', map: 'm-darfur',
-  text: `قبل أن ينبلج الفجر، صرخ أبوك صرخة رعبة. دفعك من النافذة الخلفية صارخاً:
-<span class="speaker">«لا تلتفت.. ابحث عن النجاة!»</span>`,
-  choices: [
-    { t:'العدو في قاع الوادي حتى انقطع نفس الصدر', do:s=>{ s.energy-=25; s.health-=8; addDiary(s,'هربت بلا التفات كما أمرني أبي.','ليلة الاحتراق'); }, to:'valley', hint:'طاقة/صحة -' }
-  ]
-});
+def('village',{chapter:1,mood:'darfur',map:'m-darfur',
+text:`قريتنا تقع بين أشجار الهجليج وحقول الدخن. عمرك ثمانية أعوام.
+أمك تغني في الفناء عند الفجر. أبوك يمسح عرق جبينه بثوبه الأبيض.
 
-def('valley', {
-  chapter: 2, mood: 'desert', map: 'm-desert',
-  text: `مشيت وحيداً في ليل الصحراء الطويل. إذا عطشت، تذكر زر (الحقيبة) بالأعلى واستخدام قربة الماء 💧.
-مع شروق شحيب، ظهرت شاحنة عسكرية عابرة.`,
-  choices: [
-    { t:'الخروج وتلويح اليدين للشاحنة', do:s=>{ s.hope-=4; }, to:'truck', hint:'أمل -' }
-  ]
-});
+ثم جاء فبراير.
+في فبراير ٢٠٠٣ بدأ التمرد. وفي مارس وأبريل، جاء الرد: طائرات تحلق منخفضة، ثم رجال على خيول وجمال.
 
-def('truck', {
-  chapter: 2, mood: 'desert', map: 'm-desert',
-  text: `توقف المركب.. شاحنة يقودها رجال مسلحون. سمحوا لك بالصعود في المؤخرة مع طفل مشرد آخر يُدعى **«عثمان»**.`,
-  choices: [
-    { t:'التعرف على عثمان ومشاركته قطرة ماء (تكسب رفيقاً 👥)', do:s=>{ S.companion = { name: 'عثمان', perk: 'يساعدك في جمع المال بأسواق أم درمان' }; s.hope+=10; addStat(s,'kind'); addItem(s,'tea'); }, to:'khartoum_arrival', hint:'تكتسب رفيقاً 👥' }
-  ]
-});
+أمك تقول لك كل صباح: <span class="speaker">«لا تنظر إلى السماء. انظر إلى الأرض، واجرِ.»</span>
 
-def('khartoum_arrival', {
-  chapter: 3, mood: 'city', map: 'm-market',
-  text: `الخرطوم وأم درمان.. السوق العريق يعج بالحياة والصخب.
-يمكنك الآن الضغط على زر **🛒 السوق** بالأعلى لشراء أو بيع المؤن والأدوية والشاي برأس مالك الحالي!`,
-  choices: [
-    { t:'العمل مع رفيقك عثمان في السوق وجمع رأس المال', do:s=>{ s.money+=600; s.hope+=10; addDiary(s, 'وصلت أم درمان مع عثمان. بدأنا نعمل بجد في السوق.', 'سن الشباب'); }, to:'bus', hint:'مال +' }
-  ]
-});
+هذا الصباح، الطائرات لم تأتِ بعد. لكنك تسمع صوتاً بعيداً.
 
-def('bus', {
-  chapter: 4, mood: 'work', map: 'm-khartoum',
-  text: `سنوات من الكفاح برفقة عثمان حتى امتلكت حافلة نقل عام «كريز» وبيتاً صغيراً وأسرة دافئة.
-حصلت على وثائق ملكية رسمية واحتفظت بها في حقيبتك (<span class="hl">وثائق 📜</span>).`,
-  choices: [
-    { t:'الاستمتاع بالاستقرار والعمل', do:s=>{ addItem(s,'docs'); s.money+=400000; s.hope+=15; s.age=38; }, to:'war', hint:'استقرار' }
-  ]
-});
+<div class="fact">📜 في عامي ٢٠٠٣-٢٠٠٤، هُجّر نحو ٢ مليون شخص من دارفور. هوجم ٩٧٪ من قرى الفور في بعض المناطق.</div>`,
+choices:[
+{t:'تذهب مع أمك لجلب الماء من البئر',do:s=>{s.energy-=8;s.hope-=3;addItem(s,'water');addDiary(s,'ذهبت مع أمي إلى البئر. آخر مرة سليمة.','بداية الأزمة')},to:'well',hint:'ماء +'},
+{t:'تبقى مع أبيك في الحوش',do:s=>{s.hope-=2},to:'raid',hint:'أمل -'}]});
 
-def('war', {
-  chapter: 6, mood: 'war', map: 'm-khartoum',
-  text: `١٥ أبريل ٢٠٢٣.
-صباح مشؤوم أعاد أهوال دارفور. دوي المدفعية يمزق سماء الخرطوم. حافلتك وبيتك تعرضا للنهب.
-رفيقك عثمان يعرض عليك خطة للهروب الجماعي عبر الحدود.`,
-  choices: [
-    { t:'الموافقة على خطة عثمان للهروب عبر الحدود الاستراتيجية 🚪', do:s=>{ s.hope+=15; }, to:'borders', hint:'مسارات الهروب الدولي' },
-    { t:'البقاء ومواجهة الاعتقال الداخلي', do:s=>{ s.health-=20; }, to:'prison', hint:'خطر الاعتقال' }
-  ]
-});
+def('well',{chapter:1,mood:'attack',map:'m-darfur',
+text:`البئر على بعد ربع ساعة. في الطريق رأيت جسد رجل ملقى، وحذاؤه ما زال عليه.
+أمك سحبتك من يدك وغطّت عينيك بكفها الخشنة الدافئة.
 
-def('borders', {
-  chapter: 7, mood: 'desert', map: 'm-borders',
-  text: `رفيقك عثمان يرافقك وأمامكم 3 خيارات للهروب عبر الحدود نحو بر الأمان. اختر طريقك بحكمة:`,
-  choices: [
-    { t:'🇪🇬 طريق الشمال نحو مصر (عبر وادي حلفا)', do:s=>{ s.money-=200; s.hope+=20; s.flags.border_north=true; addDiary(s, 'عبرت نحو مصر مع عثمان. بداية جديدة.', 'العبور الآمن'); }, to:'ending', hint:'أمان مستقر' },
-    { t:'🇹🇩 طريق الغرب نحو تشاد (عبر دارفور)', do:s=>{ s.energy-=25; s.hope+=15; s.flags.border_west=true; addDiary(s, 'عدت غرباً نحو تشاد ومخيمات اللجوء.', 'طريق الجذور'); }, to:'ending', hint:'عودة للأرض' },
-    { t:'🇸🇸 طريق الجنوب نحو جنوب السودان', do:s=>{ s.health-=20; s.hope+=10; s.flags.border_south=true; addDiary(s, 'نزلت جنوباً عبر النيل نحو حدود جنوب السودان.', 'طريق النيل'); }, to:'ending', hint:'مسار النيل' }
-  ]
-});
+الجركل لم يمتلئ حتى نصفه حين سمعت الصوت.
+ليس صوت طائرة. صوت حوافر. وصيحات. صوت يشبه الريح لكنه ليس ريحاً.
 
-def('prison', {
-  chapter: 7, mood: 'prison', map: 'm-khartoum',
-  text: `أُلقيت في زنزانة مظلمة تحت ظروف قاسية. تذكر أن تفتح الحقيبة لاستخدام الأدوية 💊 أو الماء 💧 في أي وقت!`,
-  choices: [
-    { t:'مشاركة رغيف الخبز مع سجين آخر', do:s=>{ s.hope+=20; s.humanity+=20; s.health-=10; }, to:'ending', hint:'إنسانية عالية' }
-  ]
-});
+أمك نظرت إليك نظرة لم ترها قبل. <span class="speaker">«اجرِ. لا تلتفت. اجرِ.»</span>`,
+choices:[
+{t:'تجري بأقصى ما تستطيع',do:s=>{s.energy-=20;s.water-=10;s.hope-=5},to:'raid',hint:'طاقة -، ماء -'},
+{t:'تتجمّد في مكانك من الخوف',do:s=>{s.hope-=10;s.health-=5},to:'raid',hint:'أمل --'}]});
 
-def('ending', {
-  chapter: 8, mood: 'hope', map: 'm-borders',
-  text: function(s){
-    const score = s.hope + s.humanity + (s.companion?20:0) + (s.flags.border_north||s.flags.border_west?25:0);
-    const sBox = `<div class="stats-box">
-      <div class="row"><span>إجمالي القرارات</span><span>${s.stats.choices}</span></div>
-      <div class="row"><span>الرفيق المرافق</span><span>${s.companion?s.companion.name:'لا أحد'}</span></div>
-      <div class="row"><span>الأدوات بالحقيبة</span><span>${s.inventory.length} عناصر</span></div>
-      <div class="row"><span>رصيد الأمل</span><span>${s.hope}%</span></div>
-      <div class="row"><span>الضمير والإنسانية</span><span>${s.humanity}%</span></div>
-      <div class="row"><span>العمر النهائي</span><span>${s.age} سنة</span></div>
-    </div>`;
+def('raid',{chapter:1,mood:'war',map:'m-darfur',
+text:`كانوا في نهاية الشارع.
 
-    if(s.flags.border_north){
-      return `<div class="ending-h peace">نهاية العبور الآمن · أفق الشمال</div>
-بمعية رفيقك عثمان، عبرت الحدود الشمالية نحو مصر بسلام. أسستم حياة جديدة وكتبتم فصلاً جديداً من الكفاح.
-${sBox}`;
-    }
-    return `<div class="ending-h peace">النهاية الملحمية الكبرى · شتات الرماد وبذرة الحياة</div>
-تجاوزت المحن والصعاب، وخرجت بروح نقية وحقيبة مليئة بالذكريات والوثائق.
-${sBox}`;
-  },
-  choices: [
-    { t:'إعادة خوض ملحمة الرماد من جديد', do:s=>{ Object.assign(s, newState()); updateInvUI(); updateMarketUI(); }, to:'intro' }
-  ]
-});
+دفعك أبوك من النافذة الخلفية صارخاً: <span class="speaker">«لا تلتفت! ابحث عن النجاة!»</span>
+وسمعت خلفك ما لا يوصف.
 
-def('death', {
-  chapter: 8, mood: 'dark', map: 'm-desert',
-  text: `انهارت طاقتك الجسدية تماماً ولم تستخدم الإسعافات أو الماء من حقيبتك بالوقت المناسب. سقطت على رمال الطريق.`,
-  choices: [
-    { t:'حاول مرة أخرى', do:s=>{ Object.assign(s, newState()); updateInvUI(); updateMarketUI(); }, to:'intro' }
-  ]
-});
+لم تلتفت. ركضت في الحقل حتى انقطع نفسك. حين توقفت، كنت وحدك.
+
+<span class="thought">💭 لا أعرف إن كانا حيين. لا أعرف إن كانا ميتين. لن أعرف أبداً.</span>
+
+<span class="thought">💭 كلمة أبيك الأخيرة في أذنك: لا تلتفت.</span>`,
+choices:[
+{t:'تجري في الوادي حتى ينقطع نفسك',do:s=>{s.energy-=25;s.health-=5;s.water-=12;s.hope-=10;addDiary(s,'تركت قريتي خلفي. لم ألتفت.','ليلة الاحتراق');unlockAch('survive_darfur')},to:'valley',hint:'طاقة --، صحة -'},
+{t:'تختبئ في حفرة تحت شجرة',do:s=>{s.health-=8;s.hope-=6;addDiary(s,'اختبأت ساعات. سمعت كل شيء.','ليلة الاحتراق');unlockAch('survive_darfur')},to:'valley',hint:'صحة -'}]});
+
+def('valley',{chapter:2,mood:'desert',map:'m-desert',
+text:`مشيت. الليل غطّى الوادي، والصمت كان أسوأ من الصوت.
+
+عمرك ٨ سنوات. ليس معك سوى قميص نوم، وقربة ماء نصف ممتلئة، وعزم لا تعرف من أين جاء.
+
+في الصباح، سمعت محركاً. ليس طائرة. سيارة.
+توقفت على بعد أمتار.
+
+كانت شاحنة عسكرية قديمة. عليها رجال بثياب مدنية وأسلحة.
+رجل ضخم نظر إليك من النافذة.
+
+<span class="speaker">«هذا؟ هذا صغير جداً.»</span>
+ضحك. لم يفهموا أنك سمعت كل كلمة.
+
+<span class="thought">💭 أنت تعرف كيف تصمت. الصمت أول شيء تعلمته في دارفور.</span>`,
+choices:[
+{t:'تصعد بصمت وتجلس في المؤخرة',do:s=>{s.energy-=10;s.hope-=3},to:'marshall',hint:'طاقة -'},
+{t:'تقول إنك تعرف الطرق وتنفعهم',do:s=>{s.flags.useful=true;s.hope+=3},to:'marshall',hint:'أمل +'}]});
+
+def('marshall',{chapter:2,mood:'desert',map:'m-desert',
+text:`في الشاحنة تعلّمت أن الرجل الضخم يُنادى «المارشال».
+
+سمعته يتحدث في الهاتف مراراً. كان يتحدث عن «تقارير»، وعن «عمولات»، وعن «شحنة ستصل الخرطوم».
+كان يتحدث مع الجيش، لا مع الجنجريد.
+
+<span class="thought">💭 هذا الرجل يمشي في طريقين. والذين يمشون في طريقين يعرفون أشياء كثيرة.</span>
+
+ثلاثة أيام في الصندوق الخلفي. ماء قليل، وشمس لا ترحم.
+عند كل نقطة تفتيش يمدّ المارشال يده بظرف، ويضحك، ويمرّ.
+
+في النقطة الأخيرة، سأله الحارس: <span class="speaker">«والطفل؟»</span>
+قال: <span class="speaker">«هذا؟ غنيمتي.»</span>`,
+choices:[
+{t:'تصمت وتستجمع قوتك',do:s=>{s.energy+=15;s.health+=3},to:'arrival',hint:'طاقة +'},
+{t:'تراقب وتتعلم أسماء كل من يمر',do:s=>{s.flags.observer=true;s.hope+=3},to:'arrival',hint:'أمل +'}]});
+
+def('arrival',{chapter:3,mood:'city',map:'m-market',
+text:`الخرطوم.
+
+أول ما أدهشك: لا دخان. لا طائرات. لا صراخ.
+
+نساء يضحكن في السوق. أطفال يجرون خلف كرة. رجل يبيع الشاي على الرصيف ويضحك.
+
+الحرب هنا ليست هنا. الخرطوم مدينة أخرى، عالم آخر.
+
+توقفت الشاحنة عند سوق أم درمان، الذي يعود تاريخه إلى ١٩١٧. نزل المارشال، وغاب بين الناس.
+
+<span class="thought">💭 لم يرَك أحد. كنت صغيراً بما يكفي لتكون غير موجود.</span>`,
+choices:[
+{t:'تقفز من الشاحنة فوراً',do:s=>{s.health-=3;unlockAch('reach_khartoum')},to:'market',hint:'صحة -'},
+{t:'تنتظر حتى يغيب تماماً ثم تقفز',do:s=>{s.hope+=2;unlockAch('reach_khartoum')},to:'market',hint:'أمل +'}]});
+
+def('market',{chapter:3,mood:'market',map:'m-market',
+text:`الشارع طويل، والوجوه كثيرة، ولا أحد ينظر إلى طفل صغير نائم على الرصيف.
+
+الجوع يمزق أمعاءك. لم تأكل منذ يومين.
+
+لأول مرة في حياتك، مددت يدك. ليس لأنك تريد. لأنك لم تجد خياراً.
+
+مرّ العشرات. بعضهم نظر إلى الجهة الأخرى. بعضهم أسرع في الخطو.
+واحد فقط توقف، نظر إليك، ثم مشى.
+
+<span class="thought">💭 لم تكرههم. أنت أيضاً لو كنت مكانهم لكنت خفت. الخوف يجعل الناس يمشون أسرع. لكن الجوع لا يفهم.</span>
+
+في السودان، «التسالي» هي الفول السوداني المحمّص، يُباع في أكياس صغيرة على الأرصفة.`,
+choices:[
+{t:'تمدّ يدك للمارّة',do:s=>{s.hope-=10;s.humanity-=3;s.food-=5;addDiary(s,'مددت يدي. لم ينظر إليّ أحد.','أول يوم في الخرطوم')},to:'beg',hint:'أمل -'},
+{t:'تبحث عن عمل في مطعم',to:'dishes',hint:'كرامة'}]});
+
+def('beg',{chapter:3,mood:'market',map:'m-market',
+text:`في اليوم الثاني، توقف رجل عجوز. أعطاك نصف رغيف. لم يقل شيئاً. مشى.
+
+في اليوم الثالث، صبي في سنك بصندوق أحذية خشبي. نظر إليك وقال: <span class="speaker">«تعال. أنا أعلّمك.»</span>
+
+هذا الصبي، لن تعرف اسمه أبداً، لكنه أنقذ حياتك.
+
+في الشهر الأول صرت تعرف وجوه السوق كلها. تعرف من يدفع، ومن يماطل، ومن يعطف.
+في الشهر الثاني، أكلت كل يوم.
+
+في الشهر السادس، صار عندك 300 جنيه. لم يكن مبلغاً، لكنه كان بداية.
+
+<span class="thought">💭 من مدّ يده لي حين كنت لا أستحق. لن أنساه.</span>`,
+choices:[
+{t:'تذهب إلى المطعم وتطلب أي عمل',do:s=>{s.hope-=3;s.energy-=10;s.money+=300},to:'dishes',hint:'طاقة -'}]});
+
+def('dishes',{chapter:3,mood:'work',map:'m-market',
+text:`في مطعم صغير عند السوق، وقفت أمام الرجل وقلت:
+<span class="speaker">«أنا أغسل الصحون. أي شيء. أنام في المخزن.»</span>
+
+نظر إليك طويلاً. كان اسمه الحاج محمود. عجوز بلا أسنان تقريباً، يجلس دائماً على كرسي خشبي عند الباب.
+
+قال: <span class="speaker">«تبدأ اليوم.»</span>
+
+لم تنم في سرير. لكنك نمت.
+
+الصحون، والموية، والليل. ستة أشهر.
+تعلّمت أسماء الزبائن. تعلّمت كيف يعدّ الرجل نقوده.
+
+في الليلة الأخيرة، ناولك صحناً من العدس وقال:
+<span class="speaker">«تغسل كأنك تهرب من شيء. الرزق صبر يا ولد. من أين أنت؟»</span>
+
+<span class="thought">💭 لم تعرف هل تقول الحقيقة.</span>`,
+choices:[
+{t:'احكِ له كل شيء عن دارفور',do:s=>{s.money+=500;s.hope+=8;s.humanity+=5;s.flags.told_story=true;addDiary(s,'حكيت للحاج محمود كل شيء.','سنة 9')},to:'fired',hint:'أمل +'},
+{t:'قل إنك يتيم من الأطراف وكفى',do:s=>{s.money+=350;s.hope-=3},to:'fired',hint:'مال'}]});
+
+def('fired',{chapter:3,mood:'market',map:'m-market',
+text:`في اليوم التالي، جاء قريب للحاج محمود يبحث عن عمل.
+الحاج محمود لم ينظر إليك حين قال: <span class="speaker">«ما بقى لي شغل ليك.»</span>
+
+خرجت إلى الشارع وبيدك أجرك: 600 جنيه.
+
+اشتريت بها صابوناً وخرقة ودلواً صغيراً. وجدت ركناً في السوق، وجلست.
+
+«أغسل لك حذاءك؟ أنظّف لك عربتك؟»
+
+في أول يوم رفضك ثلاثون شخصاً ووافق اثنان.
+في الشهر الأول صرت تعرف وجوه السوق كلها.
+
+في الشهر السادس، صار عندك 6000 جنيه.`,
+choices:[
+{t:'تواصل العمل عامين كاملين',do:s=>{s.money+=6000;s.energy-=15;s.age=10;addDiary(s,'سنتان على الرصيف. الصبر أول رأس مال.','سنة 10')},to:'uthman_meet',hint:'مال ++'}]});
+
+def('uthman_meet',{chapter:3,mood:'market',map:'m-market',
+text:`في ليلة باردة من ليالي الشتاء، بينما تجمع أدواتك لتغادر، سمعت بكاءً خافتاً.
+
+خلف صندوق خشبي، كان هناك طفل أصغر منك — خمس سنوات ربما — يرتجف في ثياب ممزقة. عيناه واسعتان. لم يتكلم. فقط نظر إليك.
+
+<span class="thought">💭 هو أنا. هو أنا قبل سنتين.</span>
+
+بجانبه كيس بلاستيكي فيه قليل من الفول السوداني. كان يبيعه. لم يبع شيئاً اليوم.
+
+قال بصوت مرتجف: <span class="speaker">«اسمي عثمان.»</span>
+
+<span class="thought">💭 عثمان. سأعرف هذا الاسم لبقية حياتي.</span>`,
+choices:[
+{t:'تأخذه معك. تطعمه من طعامك. تعلّمه ما تعلمت.',do:s=>{
+  s.uthman={name:'عثمان',bond:80,wounded:false,alive:true};
+  s.hope+=15;s.humanity+=10;s.food-=15;s.water-=10;s.money-=100;
+  addDiary(s,'وجدت طفلاً في السوق. اسمه عثمان. أخذته معي.','سنة 10');
+  unlockAch('find_uthman');
+},to:'network',hint:'رفيق 👥'},
+{t:'تعطيه نصف رغيفك وتتركه',do:s=>{
+  s.food-=5;s.humanity-=5;s.hope-=5;
+  addDiary(s,'تركتُ عثمان في السوق. لم أنسَ وجهه.','سنة 10');
+},to:'network',hint:'بلا رفيق'}]});
+
+def('network',{chapter:4,mood:'work',map:'m-market',
+text:function(s){
+const c=s.uthman&&s.uthman.alive?'\n\nعثمان بجانبك كل يوم. يغسل الأحذية في ركن، وأنت في ركن آخر. في المساء تعدّان معاً ما كسبتما. أصبح أخاك الصغير.':'';
+return `بعد سنتين، صار في جيبك 12000 جنيه. مبلغ لم يكن في خيالك.
+
+بدلاً من أن تحتفظ به، اشتريت أدوات إضافية ووزعتها على خمسة أطفال تعرفهم في الطرقات.
+قلت لهم: <span class="speaker">«كل واحد يشتغل في ركنه، ويعطيني جزءاً في آخر اليوم. والباقي لكم.»</span>
+
+لم تكن تعرف كلمة «مشروع». كنت تعرف الجوع فقط.
+
+<span class="thought">💭 أطفال السوق صاروا إخوتك.</span>${c}`;
+},
+choices:[
+{t:'تكون عادلاً معهم وتترك لهم ما يكفيهم',do:s=>{s.flags.fair=true;s.hope+=15;s.humanity+=12;s.money+=14000;addDiary(s,'أعطيت الأطفال نصف ما كسبته.','سنة 11')},to:'bike',hint:'ضمير ++'},
+{t:'تأخذ أكثر مما ينبغي',do:s=>{s.flags.harsh=true;s.hope-=12;s.humanity-=15;s.money+=25000;addDiary(s,'أخذت أكثر مما ينبغي من الأطفال.','سنة 11')},to:'bike',hint:'مال ++'}]});
+
+def('bike',{chapter:4,mood:'work',map:'m-market',
+text:`سنة أخرى. اشتريت دراجة.
+
+دراجة! أنت، طفل دارفور الحافي.
+
+صرت تجوب الأزقة تبيع: تسالي، فول، دوم، قنقليز.
+تعرف أوقات الذروة. تعرف من يشتري بالدين ومن يدفع فوراً.
+
+كنت تنام على الرصيف. لكن الرصيف صار لك.
+
+<span class="thought">💭 بعد سنتين: ركشة. بعد خمس: كريز. هذه هي الخطة.</span>`,
+choices:[
+{t:'تواصل الادخار بصبر',do:s=>{s.money+=45000;s.energy-=15;s.age=14},to:'rickshaw',hint:'مال ++'},
+{t:'توسّع في البضاعة بجرأة',do:s=>{s.money+=75000;s.energy-=25;s.hope+=4;s.age=14},to:'rickshaw',hint:'مال +++'}]});
+
+def('rickshaw',{chapter:4,mood:'city',map:'m-khartoum',
+text:`سنوات.
+
+ثم اشتريت ركشة. صرت تنقل الناس.
+تسمع حكاياتهم. توصل النساء إلى المستشفى في الليل. تعيد الأطفال من المدارس.
+
+كنت تعرف الخرطوم بقدميك.
+
+في الركشة، تعلّمت شيئاً جديداً: أن المدينة كلها تعرفك. أن السائق الذي ينقل الناس بأمانة يصبح جزءاً من نسيجها.
+
+<span class="thought">💭 أنا، طفل دارفور، أصبحت جزءاً من الخرطوم.</span>`,
+choices:[
+{t:'تواصل العمل سنوات',do:s=>{s.money+=150000;s.hope+=8;s.age=22;addDiary(s,'اشتريت ركشة. أنا، طفل دارفور.','سنة 22')},to:'bus',hint:'مال ++'}]});
+
+def('bus',{chapter:4,mood:'work',map:'m-khartoum',
+text:`في سن الـ٢٨، وقفت أمام حافلة صغيرة «كريز» مستعملة.
+
+في الخرطوم، «الكريز» حافلة صغيرة تنقل الناس بين الأحياء. تعرفة الرحلة تُحدَّد أحياناً بمزاج السائق، لكن السائقين الشرفاء يعرفون قيمتهم.
+
+دفعت ثمنها كاملاً نقداً.
+
+أول مرة في حياتك، كان لك شيء لا يمكن لأحد أن يأخذه بسهولة.
+
+أسميتها «فجر الأمل».
+
+<span class="thought">💭 ثلاثون سنة. من صندوق شاحنة إلى مقعد سائق. هذا ما فعله الصبر.</span>`,
+choices:[
+{t:'تكمل — اشتريت الحافلة',do:s=>{s.money+=900000;s.hope+=12;s.humanity+=3;s.age=28;addItem(s,'medicine');addItem(s,'water');unlockAch('build_empire');addDiary(s,'كريز. حافلتي. اسميتها «فجر الأمل».','سنة 28')},to:'house',hint:'مال +++'}]});
+
+def('house',{chapter:5,mood:'home',map:'m-khartoum',
+text:`بنيت بيتاً في أطراف العاصمة.
+غرفتان، وحوش صغير، وباب حديدي يمكن أن تغلقه وأنت مطمئن.
+
+أول ليلة نمت فيها، بكيت ولم تعرف لماذا.
+
+ربما لأنك لأول مرة، لم تكن خائفاً من الصباح.
+
+<span class="thought">💭 في بعض الأحيان، أتذكر أمي وأبي. ماذا كانا سيقولان لو رأيا هذا؟</span>`,
+choices:[
+{t:'تحتفل مع الجيران',do:s=>{s.money+=400000;s.hope+=5;s.humanity+=5},to:'marriage',hint:'استقرار'}]});
+
+def('marriage',{chapter:5,mood:'home',map:'m-khartoum',
+text:`تزوجت.
+
+اسمها آمنة. كانت تعمل خياطة في سوق أم درمان. تعرف معنى أن تبدأ من الصفر.
+
+أنجبتما طفلين: محمد ومريم.
+كانا يضحكان دائماً. كانت مريم تشبه أمك في الضحك.
+
+كنت تقول لهما كل مساء:
+<span class="speaker">«أبوكم جاء من دارفور في صندوق شاحنة. ولم يعد خائفاً.»</span>
+
+وكانا يضحكان. لم يفهما. لكنهما ضحكا.
+
+<span class="thought">💭 في بعض الليالي، كنت أستيقظ على كابوس. أشوف النار. أشوف أمي. ثم أرى آمنة بجانبي. وأرتاح.</span>`,
+choices:[
+{t:'عش السنوات بهدوء وامتنان',do:s=>{s.hope+=15;s.health+=10;s.humanity+=5;s.age=40;addItem(s,'tea');unlockAch('family');addDiary(s,'آمنة ومحمد ومريم. عائلتي.','سنة 40')},to:'dream',hint:'سلام'}]});
+
+def('dream',{chapter:5,mood:'home',map:'m-khartoum',
+text:`مرت السنوات في أمان.
+
+كنت تخطط لشراء حافلة ثانية. حسبت، وأعدت الحساب.
+ذهبت في صباح ١٥ أبريل ٢٠٢٣ لتوقيع الأوراق.
+
+وفي تلك اللحظة بالذات...`,
+choices:[{t:'...',to:'war'}]});
+
+def('war',{chapter:6,mood:'war',map:'m-khartoum',
+text:`١٥ أبريل ٢٠٢٣.
+
+كنت في الشارع حين سمعت أول صوت.
+
+صوت تعرفه. صوت لم تسمعه منذ ثلاثين سنة، لكن جسمك لم ينسه.
+
+الطائرات. والمدفعية. والدخان نفسه الذي خرج من قريتك.
+
+في ذلك الصباح اندلع القتال بين الجيش السوداني وقوات الدعم السريع في الخرطوم.
+خلال أيام، سيطرت قوات الدعم السريع على القصر الجمهوري ومطار الخرطوم.
+
+<span class="thought">💭 ثلاثون سنة. وعدت الحرب لتأخذ كل شيء من جديد.</span>`,
+choices:[
+{t:'تجري إلى البيت',do:s=>{s.health-=10;s.energy-=20;s.water-=10},to:'loot',hint:'صحة -'},
+{t:'تتصل بآمنة أولاً',do:s=>{s.hope-=8;s.energy-=15},to:'loot',hint:'أمل -'}]});
+
+def('loot',{chapter:6,mood:'attack',map:'m-khartoum',
+text:`وصلت والحي كله دخان.
+
+الباب مفتوح.
+لم يبقَ شيء.
+
+الحافلة. والبيت. وكل جنيه جمعته في ثلاثين سنة.
+
+في الأيام الأولى للحرب نُهبت أسواق الخرطوم وأم درمان. التجار فقدوا كل مدخراتهم.
+
+<span class="thought">💭 ثلاثون سنة. راحت في ثلاثين دقيقة.</span>
+
+<span class="thought">💭 أين آمنة؟ أين محمد ومريم؟</span>`,
+choices:[
+{t:'تدخل الغرفة',do:s=>{s.money=0;s.hope-=15;unlockAch('lost_all')},to:'loss',hint:'مال ---'}]});
+
+def('loss',{chapter:6,mood:'dark',map:'m-khartoum',
+text:`ودخلت.
+
+لا أستطيع أن أصف لك ما حدث في تلك الغرفة.
+يكفي أن تعرف أنك خرجت منها وحدك.
+
+وأنك صرخت حتى انقطع صوتك، ولم يسمعك أحد.
+
+في دارفور، عادت التقارير عن عنف واسع النطاق وتدمير قرى كاملة.
+وقالت الأمم المتحدة إن الحرب قد ترقى إلى جريمة إبادة.
+
+<span class="thought">💭 ثلاثون سنة. من صندوق شاحنة إلى بيت. إلى صندوق آخر. إلى رماد.</span>`,
+choices:[
+{t:'...',do:s=>{s.health-=20;s.hope-=20;s.humanity-=3},to:'uthman_saves'}]});
+
+def('uthman_saves',{chapter:6,mood:'dark',map:'m-khartoum',
+text:function(s){
+if(s.uthman&&s.uthman.alive){
+  return `وبينما كنت تزحف وحدك بين الأنقاض، سمعت خطوات.
+
+كان عثمان. صار شاباً في الثالثة والعشرين. جاء يبحث عنك في الدخان.
+
+<span class="speaker">«قمت معي من الشارع. لن أتركك في النار.»</span>
+
+سحبك من بين الأنقاض. أنت من علّمه الصبر. وهو من أنقذ حياتك اليوم.
+
+<span class="thought">💭 بعض الناس يُرسلهم الله حين لا يبقى أحد.</span>`;
+}
+return `وبينما كنت تزحف وحدك بين الأنقاض، لم يأتِ أحد.
+
+لا رفيق، لا صديق.
+
+الحرب تأخذ منك حتى الذكريات.`;
+},
+choices:[
+{t:'...',do:s=>{if(s.uthman&&s.uthman.alive){s.hope+=10;s.humanity+=5;s.uthman.bond+=10}s.health-=5},to:'fasher_road'}]});
+
+def('fasher_road',{chapter:7,mood:'famine',map:'m-fasher',
+text:`لم يكن أمامك سوى الفاشر.
+
+سمعت أن بها معبراً نحو الشمال. مشيت أياماً.
+في الطريق رأيت عائلات تفر من المدينة عكس اتجاهك.
+
+قالت امرأة عجوز: <span class="speaker">«لا تذهب. الفاشر جحيم.»</span>
+
+لكن الجوع لا يسمع النصيحة.
+
+<div class="fact">📜 الفاشر، عاصمة شمال دارفور، تعرضت لحصار مطبق منذ منتصف ٢٠٢٤. أعلنت الأمم المتحدة حالة المجاعة في المنطقة في أغسطس ٢٠٢٤.</div>`,
+choices:[
+{t:'تدخل الفاشر بحثاً عن طعام',do:s=>{s.food-=15;s.hope-=5},to:'fasher_siege',hint:'جوع -'},
+{t:'تستمع للنصيحة وتتجه غرباً نحو تشاد',do:s=>{s.energy-=20;s.hope+=5;s.flags.skip_fasher=true},to:'border_direct',hint:'طريق تشاد'}]});
+
+def('fasher_siege',{chapter:7,mood:'war',map:'m-fasher',
+text:`الفاشر.
+
+المدينة محاصرة منذ شهور. الحصار يعني شيئاً واحداً: لا طعام يدخل، ولا دواء، ولا أحد يخرج.
+
+رأيت أطفالاً يأكلون أوراق الأشجار.
+رأيت رجلاً يبيع حذاءه مقابل رغيف.
+رأيت امرأة تدفن طفلها بيدين عاريتين لأن لا أحد يملك قوة لحفر قبر.
+
+<div class="fact">📜 في تقرير IPC نوفمبر ٢٠٢٥، أُكدت ظروف المجاعة في الفاشر وكادوقلي. سوء التغذية الحاد وصل إلى ٣٨٪ بين الأطفال.</div>
+
+<span class="thought">💭 أنا جئت من دارفور. رأيت الفقر. لكنني لم أرَ هذا.</span>`,
+choices:[
+{t:'تبحث عن غرفة طوارئ أو مطبخ جماعي',do:s=>{s.hunger-=10;s.hope+=5},to:'err_room',hint:'أمل +'},
+{t:'تحاول الفرار من المدينة عبر نقطة تفتيش',do:s=>{s.money-=200;s.health-=10;s.water-=15},to:'checkpoint_bribe',hint:'مال -، صحة -'}]});
+
+def('err_room',{chapter:8,mood:'hope',map:'m-fasher',
+text:`في زقاق ضيق، وجدت باباً عليه لافتة مرسومة باليد: «غرفة طوارئ».
+
+في الداخل، شبان ونساء يعدّون أكياس طحين ويوزعون ماء.
+فتاة بحقيبة ظهر — طبيبة شابة — قالت لك:
+<span class="speaker">«ما معنا مال. معنا بعضنا. تعال.»</span>
+
+هذه غرف الطوارئ التي وُلدت من لجان المقاومة.
+منذ أبريل ٢٠٢٣، أنقذت آلاف الأرواح.
+لكن ٤٣ متطوعاً على الأقل قُتلوا في الخرطوم وحدها.
+
+<span class="thought">💭 بعضهم قُتل لأنهم ساعدوا الناس. بعضهم قُتل لأنهم وُجدوا.</span>
+
+<span class="thought">💭 أنا جئت من دارفور. أعرف الفقر. لكنني لا أعرف ما هذا.</span>`,
+choices:[
+{t:'تنضم إليهم وتوزّع الطعام على البيوت الجريحة',do:s=>{
+  s.humanity+=15;s.hope+=15;s.food-=10;s.health-=5;s.flags.joined_err=true;
+  addDiary(s,'انضممت إلى غرفة طوارئ الفاشر.','الحصار');
+  unlockAch('err_join');
+},to:'err_work',hint:'إنسانية ++'},
+{t:'تأخذ كيس طحين وترحل',do:s=>{
+  s.food+=25;s.humanity-=10;s.hope-=5;
+},to:'escape_fasher',hint:'جوع +، ضمير -'}]});
+
+def('err_work',{chapter:8,mood:'hope',map:'m-fasher',
+text:`أيام في غرفة الطوارئ.
+
+تحمل الماء. تدفن من مات. تمسح جبين طفل محموم.
+
+في الليل، يجلس المتطوعون ويتحدثون عن الشهداء.
+قال أحدهم: <span class="speaker">«خالد الزبير. تذكرونه؟ اعتُقل داخل معتقلات استخبارات الجيش. لم يعد.»</span>
+
+صمت طويل.
+ثم قال آخر: <span class="speaker">«نحن نكتب أسماءنا كل يوم. لأننا لا نعرف إن كنا سنراها غداً.»</span>
+
+<span class="thought">💭 أنا أيضاً أصبحت أكتب اسمي كل صباح.</span>
+
+<span class="thought">💭 عثمان بجانبي. لا يتكلم. فقط يحمل الماء.</span>
+
+في أحد الأيام، جاء جريح على محفة. كان شاباً في العشرين. أصابته شظية في بطنه.
+الطبيبة الشابة نظرت إليك. <span class="speaker">«تحتاج دماً. أنت O سالب؟»</span>
+لم تعرف. لكنك مددت ذراعك.`,
+choices:[
+{t:'تتبرع بالدم للجريح',do:s=>{
+  s.health-=15;s.humanity+=15;s.hope+=10;
+  addDiary(s,'تبرعت بالدم في غرفة الطوارئ.','الفاشر');
+  unlockAch('save_someone');
+},to:'fasher_fall',hint:'تضحية'},
+{t:'تعتذر وتستمر في عملك',do:s=>{s.hope-=3},to:'fasher_fall',hint:'محايد'}]});
+
+def('fasher_fall',{chapter:8,mood:'dark',map:'m-fasher',
+text:`في أواخر أكتوبر ٢٠٢٥، سقطت الفاشر.
+
+قوات الدعم السريع اجتاحت المدينة.
+بعثة الأمم المتحدة لتقصي الحقائق وجدت <span class="warn-txt">«مؤشرات إبادة جماعية»</span>.
+تحدثت التقارير عن عمليات قتل جماعي، واغتصاب ممنهج، وإعدام ٣١٩ شخصاً على الأقل في المخيم أو أثناء محاولتهم الفرار.
+
+كنت هناك.
+رأيت ما رأيت.
+ولم تستطع أن تفعل شيئاً.
+
+<span class="thought">💭 خرجت من دارفور طفلاً. وأعود إليها في الخمسين. والجحيم نفسه.</span>`,
+choices:[
+{t:'تحاول الفرار في الفوضى',do:s=>{s.health-=25;s.hope-=20;s.water-=15},to:'escape_fasher',hint:'صحة --'},
+{t:'تختبئ مع عثمان وتنتظر',do:s=>{
+  s.health-=15;s.hope-=15;s.humanity-=5;
+  if(s.uthman&&s.uthman.alive){s.uthman.wounded=true;s.uthman.bond-=10}
+},to:'escape_fasher',hint:'أمل --، عثمان مصاب'}]});
+
+def('escape_fasher',{chapter:8,mood:'desert',map:'m-fasher',
+text:`خرجت من الفاشر. أو ما تبقّى منها.
+
+في الطريق إلى طويلة، رأيت عائلات تدفن أطفالها على جانب الطريق.
+عند كل نقطة تفتيش، يطلب المسلحون مالاً. قال أحدهم: <span class="speaker">«خمسمائة ألف. أو ارجع.»</span>
+
+لم يكن معك ما يكفي. لكنك عبرت. لا تعرف كيف.
+
+<span class="thought">💭 في كل نقطة تفتيش، كانت يدك ترتجف. لكنك عبرت.</span>`,
+choices:[
+{t:'تواصل السير نحو الحدود',do:s=>{s.health-=10;s.energy-=20;s.hope-=5},to:'borders',hint:'طاقة --'}]});
+
+def('checkpoint_bribe',{chapter:7,mood:'attack',map:'m-fasher',
+text:`عند نقطة التفتيش، أوقفك شاب مسلح. لم يكن أكبر من ابنك.
+
+نظر إلى وجهك، ثم إلى حقيبتك.
+<span class="speaker">«تدفع. أو ترجع.»</span>
+
+كانت هذه هي اللحظة التي تختبر فيها كل شيء تعلمته في ثلاثين سنة.`,
+choices:[
+{t:'تدفع ما تبقّى',do:s=>{s.money=Math.max(0,s.money-500);s.health-=5},to:'escape_fasher',hint:'مال -'},
+{t:'تحاول المرور بلا دفع',do:s=>{s.health-=20;s.hope-=10},to:'escape_fasher',hint:'صحة --'}]});
+
+def('border_direct',{chapter:9,mood:'border',map:'m-borders',
+text:`اتجهت غرباً نحو تشاد قبل أن تدخل الفاشر.
+
+الطريق عبر دارفور يعرفك. أنت من هنا.
+لكن الأرض التي عرفتها طفلاً لم تعد هي.
+القرى التي مررت بها طفلاً صارت رماداً.
+
+<span class="thought">💭 أرى في كل قرية محروقة، قريتي. أرى في كل طفل هارب، نفسي.</span>`,
+choices:[
+{t:'تواصل نحو الحدود',do:s=>{
+  s.flags.border='west';s.hope+=15;s.health-=15;
+  addDiary(s,'عدت غرباً نحو تشاد.','الحدود');
+},to:'borders'}]});
+
+def('borders',{chapter:9,mood:'border',map:'m-borders',
+text:function(s){
+const os=s.uthman&&s.uthman.alive?'\n\nعثمان بجانبك. لم يتكلم منذ أيام. أنت تعرف أنه يفكر في نفس الشيء الذي تفكر فيه: أين نذهب؟':'';
+return `وقفت أمام مفترق الطرق الأخير.
+
+🇪🇬 <b>مصر</b> — عبرت نحو ١.٥ مليون سوداني إلى مصر. الطريق طويل، والمعبر مزدحم.
+🇹🇩 <b>تشاد</b> — ٨٦٣ ألفاً إلى تشاد. قريبة من دارفور. لكن المخيمات مكتظة.
+🇸🇸 <b>جنوب السودان</b> — ٣٧١ ألفاً. النيل الأبيض طريق طويل ومستنقعات.
+
+أكثر من ٤ ملايين سوداني لجأوا إلى الدول المجاورة منذ أبريل ٢٠٢٣.
+
+<span class="thought">💭 أي طريق تختار؟ وأي ثمن تدفع؟</span>${os}`;
+},
+choices:[
+{t:'🇪🇬 شمالاً نحو مصر — مع وثائقك',if:s=>s.inventory.includes('docs')||s.flags.has_docs,do:s=>{s.flags.border='north';s.hope+=20;s.health-=15;s.water-=10;addDiary(s,'عبرت نحو مصر بوثائقي.','الحدود')},to:'ending',hint:'أمان مستقر'},
+{t:'🇪🇬 شمالاً نحو مصر — بلا وثائق، مع مهرّب',if:s=>!(s.inventory.includes('docs')||s.flags.has_docs),do:s=>{s.flags.border='north';s.hope+=10;s.health-=25;s.money=Math.max(0,s.money-300);addDiary(s,'عبرت نحو مصر بلا وثائق.','الحدود')},to:'ending',hint:'خطر'},
+{t:'🇹🇩 غرباً نحو تشاد — عبر أرض دارفور',do:s=>{s.flags.border='west';s.hope+=15;s.health-=20;s.water-=15;addDiary(s,'عدت غرباً نحو تشاد.','الحدود')},to:'ending',hint:'عودة للجذور'},
+{t:'🇸🇸 جنوباً نحو جنوب السودان — مع النيل',do:s=>{s.flags.border='south';s.hope+=10;s.health-=20;s.energy-=20;s.water-=15;addDiary(s,'نزلت جنوباً عبر النيل.','الحدود')},to:'ending',hint:'طريق النيل'}]});
 
 /* ============================================================
-   UI & MODAL CONTROLLERS
+   ENDINGS
    ============================================================ */
-function openModal(id){ document.getElementById(id).classList.add('show'); }
-function closeModal(id){ document.getElementById(id).classList.remove('show'); }
+def('ending',{chapter:10,mood:'hope',map:'m-borders',
+text:function(s){
+  const uthAlive=s.uthman&&s.uthman.alive;
+  const score=s.hope+s.humanity+(uthAlive?20:0)+(s.flags.joined_err?15:0)+(s.flags.fair?8:0);
 
-document.getElementById('invBtn').onclick = () => openModal('invModal');
-document.getElementById('marketBtn').onclick = () => { updateMarketUI(); openModal('marketModal'); };
-document.getElementById('diaryBtn').onclick = () => {
-  const list = document.getElementById('diaryList');
-  if(S.diary.length === 0){
-    list.innerHTML = '<div class="empty-msg">لم تُدون أي ذكرى بعد.</div>';
-  } else {
-    list.innerHTML = S.diary.map(d => `<div class="diary-entry"><div class="when">${d.when}</div>${d.text}</div>`).join('');
+  const sBox=`<div class="stats-box">
+    <div class="row"><span>القرارات</span><span>${s.stats.choices}</span></div>
+    <div class="row"><span>عثمان</span><span>${uthAlive?(s.uthman.wounded?'حي مصاب':'حي'):'مفقود'}</span></div>
+    <div class="row"><span>غرفة الطوارئ</span><span>${s.flags.joined_err?'نعم':'لا'}</span></div>
+    <div class="row"><span>الأمل</span><span>${s.hope}%</span></div>
+    <div class="row"><span>الإنسانية</span><span>${s.humanity}%</span></div>
+    <div class="row"><span>العمر</span><span>${s.age}</span></div>
+  </div>`;
+
+  const analysis=`<div class="analysis"><h4>🔍 من أنت بعد كل هذا؟</h4>
+${s.humanity>=70?'حافظت على إنسانيتك رغم كل شيء. في مكان لا يرحم، اخترت أن تبقى إنساناً. هذا نادر. هذا بطولي.':
+s.humanity>=45?'وازنت بين النجاة والضمير. لم تكن ملاكاً، ولم تكن وحشاً. كنت إنساناً في حرب.':
+'النجاة أخذت منك الكثير. لكنك نجوت. أحياناً هذا كل ما يمكن فعله.'}
+</div>`;
+
+  // MARTYR — you died but saved someone
+  if(s.flags.sacrifice){
+    markEnding('martyr');unlockAch('end_martyr');
+    return `<div class="ending-h martyr">🌹 التضحية</div>
+        لم تصل إلى الحدود.
+
+        في غرفة الطوارئ، حين نظرت الطبيبة إليك وسألت عن الدم، لم تتردد. وحين سألوك أن تحمل جريحاً نحو السيارة، حملته.
+
+        ثم سقطت.
+
+        عثمان بجانبك. كان يبكي. لم تتكلم. فقط نظرت إليه وابتسمت.
+
+        <span class="thought">💭 أنت تعرف أنك أنقذت أحداً. هذا يكفي.</span>
+
+        <span class="quote">«بعض الناس لا يعيشون ليروا السلام. يعيشون ليصنعوه لغيرهم.»</span>
+        ${sBox}${analysis}`;
   }
-  openModal('diaryModal');
-};
 
-function toast(msg){
-  const t = document.getElementById('toast');
-  t.textContent = msg;
-  t.classList.add('show');
-  clearTimeout(t._tid);
-  t._tid = setTimeout(() => t.classList.remove('show'), 2000);
-}
+  // WITNESS — high humanity, ERR, uthman alive
+  if(score>=115&&uthAlive&&s.flags.joined_err){
+    markEnding('witness');unlockAch('end_witness');unlockAch('uthman_alive');
+    return `<div class="ending-h peace">📖 الشاهد</div>
+        عبرت الحدود. عثمان بجانبك.
 
-function saveGame(){
-  try{
-    localStorage.setItem(SAVE_KEY, JSON.stringify(S));
-    toast('✅ تم حفظ تقدم اللعبة بالكامل بنجاح');
-    sfx.good();
-  } catch(e){ toast('❌ تعذر الحفظ'); }
-}
+        لكنك لم تتوقف. بدأت تكتب.
 
-function loadGame(){
-  try{
-    const data = localStorage.getItem(SAVE_KEY);
-    if(!data){ toast('⚠️ لا توجد بيانات محفوظة سابقة'); return; }
-    S = JSON.parse(data);
-    clamp(S);
-    render();
-    updateInvUI();
-    updateMarketUI();
-    updateCompanionUI();
-    toast('📂 تم استعادة تقدم اللعبة بنجاح');
-    sfx.good();
-  } catch(e){ toast('❌ فشل التحميل'); }
-}
+        أسماء من رأيت. أسماء من فقدت. أسماء من ساعدوك.
+        اسم خالد الزبير. اسم الحاج محمود. اسم الفتاة التي كانت في غرفة الطوارئ.
 
-document.getElementById('saveBtn').onclick  = saveGame;
-document.getElementById('loadBtn').onclick  = loadGame;
+        في المخيم، جلست كل صباح ومساء، وبدأت تحكي.
 
-S = newState();
+        حين سألك طفل: <span class="speaker">«من أنت؟»</span>
+        قلت: <span class="speaker">«أنا من قرية قرب الفاشر. وهذه حكايتنا.»</span>
+
+        لم تعد تنجو لنفسك فقط. صرت تحفظ الأسماء كما قال أبوك قبل ثلاثين سنة:
+        <span class="speaker">«ما دمتَ تحفظ اسمك واسم قريتك، فلن تضيع.»</span>
+
+        <span class="quote">«النجاة ليست أن تبقى حياً فقط. النجاة أن تحفظ الأسماء.»</span>
+        ${sBox}${analysis}`;
+  }
+
+  // RENEWED — survived with Uthman but didn't join ERR
+  if(uthAlive&&score>=70){
+    markEnding('renewed');unlockAch('end_renewed');unlockAch('uthman_alive');
+    return `<div class="ending-h peace">🌱 من جديد</div>
+        عبرت الحدود. عثمان بجانبك.
+
+        في المخيم، بدأت من جديد. أنت تعرف كيف تبدأ من جديد — فعلتها قبل ثلاثين سنة.
+
+        عثمان بجانبك. ما زال شاباً. لكنه تعب. أنت أيضاً.
+
+        في ليلة من الليالي، قال: <span class="speaker">«خمس عشرة سنة معك. أنت أخي.»</span>
+        ثم صمت.
+
+        بدأتما تفكران في المستقبل. في العودة. في البناء من جديد.
+        لأنك تعرف: من نجا يحمل أمانة من لم ينجُ.
+
+        <span class="quote">«بعض البشر يولدون مرتين: مرة من أمهاتهم، ومرة من رحم الحروب.»</span>
+        ${sBox}${analysis}`;
+  }
+
+  // CROSSING — survived, uthman lost
+  if(score>=55&&!uthAlive){
+    markEnding('crossing');unlockAch('end_crossing');unlockAch('uthman_lost');
+    return `<div class="ending-h peace">🚪 العبور</div>
+        عبرت الحدود. وحدك.
+
+        عثمان ليس بجانبك. أين هو؟ لا تعرف.
+        ربما في الفاشر. ربما في مقبرة جماعية. ربما على طريق طويل.
+
+        في المخيم، أعطاك المتطوعون ماءً وخبزاً وبطانية.
+        جلست وحدك ليلة كاملة.
+
+        ثم في الصباح التالي، بدأت تزرع.
+
+        لأن عثمان كان سيقول لك: <span class="speaker">«قمت معي من الشارع. لن أتركك في النار.»</span>
+        وهو لم يتركك. لكنك تركته. أو هكذا تشعر.
+
+        <span class="quote">«من نجوا يحملون أمانة من لم ينجوا. هذا ما يعنيه أن تعيش.»</span>
+        ${sBox}${analysis}`;
+  }
+
+  // BROKEN — survived with low humanity
+  if(score<55){
+    markEnding('broken');unlockAch('end_broken');
+    return `<div class="ending-h broken">💔 المنكسر</div>
+        عبرت الحدود. لكنك لم تعد أنت.
+
+        الحرب أخذت آمنة. أخذت محمد ومريم. أخذت الحافلة والبيت.
+        ثم أخذت شيئاً آخر: إنسانيتك.
+
+        في المخيم، صرت تجلس وحدك. لا تتكلم. لا تبكي.
+        تشاهد الآخرين يبنون ولا تبني.
+
+        صرت تمشي في طرقات المدينة، تنظر إلى الأطفال، وترى فيهم وجوهاً لن تعود.
+
+        <span class="quote">«بعض النجاة أقسى من الموت. بعض الناجين لا ينجون فعلاً.»</span>
+        ${sBox}${analysis}`;
+  }
+
+  // Default to witness-lite
+  markEnding('renewed');unlockAch('end_renewed');
+  return `<div class="ending-h peace">🌱 من جديد</div>
+      عبرت الحدود. جسدك هناك. روحك لا تزال تحاول.
+
+      <span class="quote">«في السودان، هناك من يعيش هذا كل يوم. تذكرهم. ولا تدع الرماد ينسيك وجوههم.»</span>
+      ${sBox}${analysis}`;
+},
+choices:[{t:'ابدأ من جديد',do:s=>{Object.assign(s,newState());updateHUD();updateCompUI();},to:'intro'}]});
+
+def('death',{chapter:10,mood:'dark',map:'m-borders',
+text:function(s){
+  if(s.uthman&&s.uthman.alive){
+    return `<div class="ending-h dark">🥀 الرماد الأخير</div>
+        انهار جسدك.
+
+        عثمان كان بجانبك. حاول. صرخ. حمل جسدك. لكنك كنت قد رحلت.
+
+        <span class="thought">💭 لم تقل له وداعاً. لم تستطع.</span>
+
+        <span class="quote">«بعض الناس لا يعيشون ليروا السلام. لكنهم يعيشون ليصنعوا من سيصنعه.»</span>`;
+  }
+  return `<div class="ending-h dark">🥀 الرماد الأخير</div>
+      انهار جسدك.
+
+      سقطت على رمال الطريق، أو في زاوية زنزانة، أو بين أنقاض بيتك.
+
+      لا أحد كان بجانبك. لا أحد سيعرف أنك كنت هنا.
+
+      <span class="quote">«في السودان، هناك من يموت كل يوم بلا اسم. تذكرهم. تذكر أنهم كانوا هنا.»</span>`;
+},
+choices:[{t:'حاول مرة أخرى',do:s=>{Object.assign(s,newState());updateHUD();updateCompUI();},to:'intro'}]});
+
+/* ================= INIT ================= */
+initParticles();
+S=newState();
 render();
-updateInvUI();
-updateMarketUI();
-updateCompanionUI();
+updateHUD();
+updateCompUI();
 </script>
 </body>
 </html>
