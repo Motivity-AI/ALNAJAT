@@ -1000,5 +1000,350 @@ document.addEventListener("click",()=>{unlockAudio()},{once:true});
 })();
 </script>
 <!-- ========== end of How to Play add-on ========== -->
+<!-- ═══════════════════════════════════════════════════════════════════════
+     إضافات شاملة: فصل الثورة + 2013–2026 + نهايات الشهادة + إصلاح الإنجازات
+     ألصقها مرة واحدة قبل </body>
+     ═══════════════════════════════════════════════════════════════════════ -->
+<script>
+(function(){
+"use strict";
+
+/* ═══════════════════════════════════════════════════════════════
+   1) فصل الثورة — rev1 → rev6
+   ═══════════════════════════════════════════════════════════════ */
+S.rev1 = ["", "في يناير 2019، التقيتَ في الميدان بشباب لم تلتقِ بمثلهم. فتاة اسمها سلمى تكتب الشعر على الجدران، وشاب اسمه الطيب فقد أخاه في احتجاج، وآخر اسمه هيثم يرسم بالطلاء صورًا للحرية.\n\nقالت سلمى:\n— «نحن أبناء ديسمبر. من دمنا وُلد هذا الحلم. تعال، العالم يحتاج ليدين إضافيتين».", [
+  ["انضم إليهم وارسم معهم على الجدران", "rev2", {p:10, F:"dec"}],
+  ["اعرض نقلهم بحافلتك من مكان إلى آخر", "rev2", {p:8, m:-20, F:"dec"}],
+  ["راقب من بعيد", "rev2", {p:-5}]
+]];
+S.rev2 = ["", "في ٦ أبريل 2019، وقف ملايين الشباب أمام القيادة العامة للجيش. سلمى تُلقي قصيدة، والطيب يُنظّم صفوف الماء، وهيثم يرسم على الجدار أسماء الشهداء.\n\nغنّى الشباب: «تسقط بس». وفي الليل، بدأ الرصاص.", [
+  ["اهتف معهم", "rev3", {p:15, h:-5}],
+  ["ساعد في تنظيم الإسعافات الأولية", "rev3", {p:10, h:-10, F:"medic"}],
+  ["حمِ سلمى والطيب من الانفجارات", "rev3", {p:12, h:-8}]
+]];
+S.rev3 = ["", "في ٣ يونيو 2019، فُضّ الاعتصام بالرصاص. سقط الطيب بجانبك. رصاصة أخرى أصابت كتف هيثم. سلمى كانت تصرخ باسم أخيها.\n\nالرصاص يمطر، والنار تشتعل، والدخان يغطي السماء.", [
+  ["احمل الطيب الجريح واهرب به", "rev4", {h:-15, p:10, F:"martyrs"}],
+  ["اهرب مع سلمى", "rev4", {p:5, h:-10}],
+  ["ابقَ لتنقذ من تستطيع", "rev4", {h:-20, p:15, F:"martyrs"}]
+]];
+S.rev4 = ["", "في الصباح، كانت المدينة صامتة. لم يبقَ من الاعتصام إلا الدخان والدم والصور الممزقة. دفنتَ من دفنت، واحتفظت بذكرى من احتفظت.\n\nبقيت سلمى تكتب أسماء الشهداء على الجدران. قالت لك:\n— «لن ننسى. النسيان هو الموت الثاني».", [
+  ["اكتب معها أسماء الشهداء", "rev5", {p:15, F:"memory"}],
+  ["خُذ صورة للجدار واحفظها", "rev5", {p:8}],
+  ["اتركها وامضِ", "rev5", {p:-5}]
+]];
+S.rev5 = ["", "زرتَ أم الطيب في بيتها المتواضع بعد أسبوعين من الثالث من يونيو. كانت تجلس على سجادة قديمة، وبجانبها صورة ابنها معلقة على الحائط. لم تبكِ حين رأتك.\n\nناولتك فنجان قهوة وقالت:\n— «ابني مات ليحيا هذا البلد. لا تحزن عليه، بل احمل عنه».", [
+  ["اسألها عن الطيب طفلًا", "rev6", {p:10, F:"umt"}],
+  ["اعرض عليها المساعدة", "rev6", {p:8, m:-20, F:"umt"}],
+  ["اصمت واشرب القهوة", "rev6", {p:5, F:"umt"}]
+]];
+S.rev6 = ["", "بعد شهور، تحوّل شباب الميدان إلى «لجان مقاومة» في الأحياء: يوثّقون الانتهاكات، ويرسمون الجرافيتي، ويوزّعون الخبز على الأسر المحتاجة. جاءك هيثم بيده المضمدة:\n— «الثورة لا تنتهي بتنحي رئيس. الثورة تبدأ حين تنتهي. تعال».", [
+  ["انضم إلى لجنة مقاومة الحي", "sd2013", {p:12, h:-3, F:"resistance"}],
+  ["ادعمهم بالمال", "sd2013", {m:-30, p:8, F:"resistance"}],
+  ["اكتفِ بالمشاهدة", "sd2013", {p:-3}]
+]];
+
+/* ═══════════════════════════════════════════════════════════════
+   2) فصل السودان 2013–2026 — sd2013 → sd2026
+   ═══════════════════════════════════════════════════════════════ */
+S.sd2013 = ["", "سبتمبر 2013. رفعت الحكومة الدعم عن الوقود، فارتفعت الأسعار أكثر من ٦٠٪ في يوم واحد. خرجت مدن السودان كلها: ود مدني، الخرطوم، أم درمان، بورتسودان، الأبيّض. سقط عشرات القتلى في الشوارع، واعتقلت الشرطة المئات.\n\nكنتَ شابًا يافعًا، ترى بلدك يغلي للمرة الأولى منذ ١٩٨٩.", [
+  ["انزل إلى الشارع مع المحتجين", "sd2013b", {p:15, h:-10, F:"c2013"}],
+  ["ابقَ في البيت واحمِ أسرتك", "sd2013b", {p:-5}],
+  ["ساعد المصابين في المساجد", "sd2013b", {p:10, h:-5}]
+]];
+S.sd2013b = ["", "في المساء، جلس الشيخ إبراهيم في المسجد وقال:\n— «يا أولادي، ١٩٨٩ جاء البشير، و٢٠١٣ جاء الجوع. لكن الشيء الذي لم يتغيّر هو أن الشباب هم من يدفع الثمن أولًا».\n\nنظرتَ إلى يديك. لم تكونا تحملان شيئًا بعد.", [
+  ["اسأله: وماذا نفعل؟", "sd2014", {p:10}],
+  ["اصمت واحفظ الكلمات", "sd2014", {p:5}]
+]];
+S.sd2014 = ["", "في يناير 2014، أعلن البشير «حوارًا وطنيًا» مع المعارضة والحركات المسلحة. اجتمع الناس في الخرطوم سنوات، وتحدثوا عن دستور جديد وسلام. لكن الحركات المسلحة الكبرى قاطعت، والحرب في دارفور والنيل الأزرق وجنوب كردفان لم تتوقف.\n\nفي ٢٠١٦ أُجيزت «الوثيقة الوطنية» في احتفال كبير. لكن الشارع لم يصدّق.", [
+  ["احضر جلسات الحوار كمراقب", "sd2018", {p:5, F:"dialogue"}],
+  ["قل إن الحوار بلا معنى ما دامت الحرب مستمرة", "sd2018", {p:10}],
+  ["اكتفِ بالمشاهدة من بعيد", "sd2018", {p:-3}]
+]];
+S.sd2018 = ["", "١٩ ديسمبر ٢٠١٨. في عطبرة، خرج الناس يطالبون بالخبز والوقود. في أيام، امتدت الاحتجاجات إلى كل السودان. الشعار الذي بدأ صغيرًا صار عظيمًا: «حرية، سلام، وعدالة».\n\nكنتَ ترى وجوهًا لم ترها من قبل: طلاب، أطباء، مهندسون، ستات شاي، عمال. الكل في الشارع.", [
+  ["انضم إلى الاحتجاجات", "sd2019", {p:20, h:-5, F:"dec2018"}],
+  ["ساعد في نقل الجرحى", "sd2019", {p:15, h:-8}],
+  ["راقب من النافذة", "sd2019", {p:-5}]
+]];
+S.sd2019 = ["", "يناير ٢٠١٩. دخلت الاحتجاجات أسبوعها الثاني. سقط ١٩ قتيلًا على الأقل (وقدّرت العفو الدولية ٣٧). في ٩ يناير اقتحمت قوات الأمن مستشفى في أم درمان وطلقت الرصاص بحثًا عن مصابين. في فبراير، أعلن البشير حالة الطوارئ وحلّ الحكومة.\n\nثم في ٦ أبريل، خرج ملايين إلى القيادة العامة. وفي ١١ أبريل، سقط البشير واعتقل.", [
+  ["اهتف مع الملايين أمام القيادة العامة", "sd2019b", {p:20, F:"april2019"}],
+  ["ساعد في تنظيم الاعتصام", "sd2019b", {p:15, h:-5}],
+  ["احمل المصابين إلى المستشفيات", "sd2019b", {p:12, h:-10}]
+]];
+S.sd2019b = ["", "بعد سقوط البشير، شُكّل «المجلس العسكري الانتقالي» برئاسة البرهان، ووعد بتسليم السلطة للمدنيين. لكن المفاوضات تعثّرت. في ٣ يونيو ٢٠١٩، فُضّ اعتصام القيادة العامة بالرصاص. سقط أكثر من ٣٠ شهيدًا في يوم واحد، ومئات الجرحى.\n\nكان ذلك اليوم هو الجرح الذي لن يندمل.", [
+  ["احمل الجرحى واهرب بهم", "sd2020", {p:15, h:-15, F:"june3"}],
+  ["ابقَ في الميدان حتى النهاية", "sd2020", {p:10, h:-20, F:"june3"}],
+  ["اترك الميدان واذهب إلى المستشفى", "sd2020", {p:-5, h:-5}]
+]];
+S.sd2020 = ["", "في ٣ أكتوبر ٢٠٢٠، وُقّع «اتفاق جوبا للسلام» بين الحكومة الانتقالية والجبهة الثورية، لإنهاء عقود من الحرب في دارفور وجنوب كردفان والنيل الأزرق. احتفل الناس في الخرطوم وجوبا. لكن كثيرين قالوا: «السلام على الورق لا يطعم أحدًا».\n\nفي تلك السنة أيضًا، بدأت جائحة كورونا تضرب البلاد، وانهار الاقتصاد أكثر.", [
+  ["احتفل بالسلام وتمنَّ أن يدوم", "sd2021", {p:10, F:"juba"}],
+  ["ساعد في توزيع المساعدات على النازحين", "sd2021", {p:8, F:"juba"}],
+  ["قل إن السلام الحقيقي لم يبدأ بعد", "sd2021", {p:5}]
+]];
+S.sd2021 = ["", "٢٥ أكتوبر ٢٠٢١. أعلن البرهان حالة الطوارئ، وحلّ الحكومة الانتقالية، واعتقل رئيس الوزراء عبد الله حمدوك وعددًا من الوزراء. خرج الملايين في الشوارع ضد «الانقلاب». منذ ذلك اليوم، قُتل العشرات من المحتجين برصاص قوات الأمن.\n\nكنتَ ترى الثورة تُسرق من جديد.", [
+  ["انضم إلى احتجاجات «لا للانقلاب»", "sd2022", {p:15, h:-8, F:"oct2021"}],
+  ["ساعد في توثيق الانتهاكات", "sd2022", {p:10}],
+  ["ابقَ بعيدًا واحمِ أسرتك", "sd2022", {p:-8}]
+]];
+S.sd2022 = ["", "٢٠٢٢. اشتدّ الصراع بين البرهان (الجيش) وحميدتي (قوات الدعم السريع). الاتفاق الإطاري الذي اقترحته القوى المدنية في ديسمبر ٢٠٢٢ كان يحاول إعادة الانتقال المدني، لكن الخلاف حول «توحيد المؤسسة العسكرية» — أي دمج الدعم السريع في الجيش — فجّر كل شيء.\n\nفي ١٥ أبريل ٢٠٢٣، بدأت الحرب في الخرطوم.", [
+  ["استعدّ لما هو قادم", "sd2023", {p:5, F:"prewar2023"}],
+  ["قل إن الحرب قادمة لا محالة", "sd2023", {p:3}],
+  ["تمنَّ أن يكون الاتفاق الإطاري بداية جديدة", "sd2023", {p:8}]
+]];
+S.sd2023 = ["", "١٥ أبريل ٢٠٢٣. الساعة الثامنة صباحًا. دوت الانفجارات في الخرطوم. قوات الدعم السريع سيطرت على القصر الجمهوري ومطار الخرطوم وأجزاء واسعة من القيادة العامة. الجيش ردّ بالطيران. في أيام، امتد القتال إلى كل الولايات.\n\nملايين الناس نزحوا. الخرطوم صارت مدينة أشباح.", [
+  ["اهرب بأسرتك من الخرطوم", "sd2023b", {h:-10, f:-10, p:-5}],
+  ["ابقَ وساعد الجيران", "sd2023b", {h:-15, p:12}],
+  ["انضم إلى غرفة طوارئ الحي", "sd2023b", {h:-8, p:15, F:"err2023"}]
+]];
+S.sd2023b = ["", "في غرب دارفور، كانت الجنينة تُحرق. بين ١٣ و٢١ يونيو ٢٠٢٣، قُتل ما لا يقل عن ٨٧ شخصًا — معظمهم من قبيلة المساليت — ودُفنوا في مقبرة جماعية. هيومن رايتس ووتش وصفت ما حدث بأنه «تطهير عرقي». أكثر من ١٥ ألف قُتلوا في الجنينة وحدها.\n\nثم جاءت ود مدني.", [
+  ["ساعد في دفن الضحايا", "sd2023c", {p:10, h:-10, F:"geneina"}],
+  ["ساعد الناجين في الهروب", "sd2023c", {p:15, h:-12}],
+  ["اصمت واحفظ الأسماء", "sd2023c", {p:8, F:"geneina"}]
+]];
+S.sd2023c = ["", "١٨ ديسمبر ٢٠٢٣. سقطت ود مدني — عاصمة الجزيرة، التي كانت تُعتبر «آمنة» — في يد الدعم السريع. نزح مئات الآلاف مرة ثانية. المدينة التي استقبلت نازحي الخرطوم صارت هي نفسها مسرح حرب.\n\nقال لك رجل عجوز في الطريق:\n— «كل مرة نقول هذه آخر مرة. وكل مرة نبدأ من الصفر».", [
+  ["اهرب مع النازحين نحو القضارف", "sd2024", {h:-10, f:-10}],
+  ["ساعد العجوز حتى يلحق بالقافلة", "sd2024", {h:-15, p:12}],
+  ["ابقَ في المدينة وساعد من بقي", "sd2024", {p:10, h:-8}]
+]];
+S.sd2024 = ["", "٢٠٢٤. حاصرت قوات الدعم السريع الفاشر منذ مايو. في يوليو، أُعلنت المجاعة رسميًا في مخيم زمزم — أول تأكيد لمجاعة في السودان منذ سنوات. الأمم المتحدة قالت إن أكثر من ٣٠ مليون سوداني يحتاجون مساعدة إنسانية.\n\nفي الخرطوم، تفشّت الكوليرا. الاتصالات انقطعت. العالم كان صامتًا.", [
+  ["ساعد في مطابخ زمزم", "sd2024b", {p:15, h:-15, F:"zamzam"}],
+  ["وزّع الماء على النازحين", "sd2024b", {p:12, h:-10}],
+  ["احفظ أسماء من ماتوا", "sd2024b", {p:8, F:"zamzam"}]
+]];
+S.sd2024b = ["", "في ٢٠٢٤ أيضًا، أعلنت «غرف الطوارئ» — التي وُلدت من لجان المقاومة — أنها تدير أكثر من ١٦٢ مركزًا في ١٨ ولاية، بعشرة آلاف متطوع، منهم ١٤٠٠ طبيب. في سبتمبر ٢٠٢٥، فازت غرف الطوارئ بجائزة حقوقية في النرويج، ورُشّحت لجائزة نوبل للسلام.\n\nقالت لك متطوعة:\n— «ما معنا مال، معنا بعضنا».", [
+  ["انضم إلى غرف الطوارئ", "sd2025", {p:20, F:"err2025"}],
+  ["ادعمهم بالمال", "sd2025", {m:-50, p:12, F:"err2025"}],
+  ["اكتفِ بالمشاهدة", "sd2025", {p:-5}]
+]];
+S.sd2025 = ["", "٢٠٢٥. في يناير، استعاد الجيش ود مدني. في مارس، استعاد الخرطوم بالكامل. عادت الحكومة إلى العاصمة. لكن في أكتوبر ٢٠٢٥، سقطت الفاشر في يد الدعم السريع بعد حصار طويل، وتحدثت الأمم المتحدة عن «مجازر» و«فظائع» تحمل «سمات الإبادة الجماعية». أكثر من ٦٠٠٠ قُتلوا في أيام.\n\nالحرب لم تنتهِ. لقد تغيّر شكلها فقط.", [
+  ["اذهب إلى الفاشر وساعد الناجين", "sd2026", {h:-15, p:15, F:"fashir2025"}],
+  ["ابقَ في الخرطوم وساعد العائدين", "sd2026", {p:10}],
+  ["احفظ أسماء ضحايا الفاشر", "sd2026", {p:12, F:"fashir2025"}]
+]];
+S.sd2026 = ["", "٢٠٢٦. دخلت الحرب عامها الرابع. تحوّلت من قتال شوارع إلى «حرب مسيّرات». في ٢٦ أكتوبر ٢٠٢٦، ضربت مسيّرات الدعم السريع خمس محطات كهرباء في وسط وشرق السودان، فانقطع التيار عن أربع ولايات. السودان يتهم إثيوبيا بتوفير منصات إطلاق. الجامعة العربية تدعو لإنهاء الحرب.\n\n٣٣.٧ مليون سوداني يحتاجون مساعدة. ١٩.٥ مليون يعانون جوعًا حادًا. ٨.٦ مليون نازح داخليًا. أكثر من ٥ ملايين عادوا إلى منازل مدمّرة. المجاعة ما زالت في الفاشر وكادقلي.\n\nقال لك طفل في المأوى:\n— «هل انتهت الحرب؟»\n\nلم تعرف ماذا تقول.", [
+  ["قل له: «ليس بعد، لكننا سنبقى»", "r2", {p:15, F:"2026"}],
+  ["اصمت واحتضنه", "r2", {p:10, F:"2026"}],
+  ["قل له الحقيقة: «لا أعرف»", "r2", {p:5, F:"2026"}]
+]];
+
+/* ═══════════════════════════════════════════════════════════════
+   3) الترجمات الإنجليزية
+   ═══════════════════════════════════════════════════════════════ */
+EN.rev1 = ["In January 2019, in the square, you met youth the like of whom you had never met. A girl named Salma writing poetry on the walls, a young man named Al-Tayeb who lost his brother in a protest, and another named Haitham painting images of freedom.\n\nSalma said:\n— 'We are the children of December. From our blood this dream was born. Come, the world needs extra hands.'", [
+  "Join them and paint the walls", "Offer to transport them in your bus", "Watch from a distance"]];
+EN.rev2 = ["On April 6, 2019, millions of youth stood before the military headquarters. Salma reciting a poem, Al-Tayeb organizing water lines, Haitham painting the martyrs' names on the wall.\n\nThey chanted: 'Just fall.' At night, the bullets began.", [
+  "Chant with them", "Help organize first aid", "Shield Salma and Al-Tayeb from the explosions"]];
+EN.rev3 = ["On June 3, 2019, the sit-in was dispersed with bullets. Al-Tayeb fell beside you. Another bullet hit Haitham's shoulder. Salma was screaming her brother's name.\n\nThe bullets rained, fire flared, smoke covered the sky.", [
+  "Carry the wounded Al-Tayeb and flee", "Flee with Salma", "Stay to save whoever you can"]];
+EN.rev4 = ["In the morning, the city was silent. Nothing remained of the sit-in but smoke, blood, and torn pictures.\n\nSalma stayed writing the martyrs' names on the walls. She told you:\n— 'We will not forget. Forgetting is the second death.'", [
+  "Write the martyrs' names with her", "Take a photo of the wall and keep it", "Leave her and walk away"]];
+EN.rev5 = ["Two weeks after June 3rd, you visited Umm Al-Tayeb. She sat on an old rug, her son's picture hanging on the wall. She did not weep when she saw you.\n\nShe handed you coffee and said:\n— 'My son died so this country could live. Do not grieve for him — carry him.'", [
+  "Ask her about Al-Tayeb as a child", "Offer to help her", "Stay silent and drink the coffee"]];
+EN.rev6 = ["Months later, the youth of the square transformed into 'Resistance Committees': documenting violations, painting graffiti, distributing bread to families in need. Haitham came to you, his hand bandaged:\n— 'The revolution doesn't end with a president stepping down. The revolution begins when it ends. Come.'", [
+  "Join your neighborhood's resistance committee", "Support them with money", "Just watch"]];
+
+EN.sd2013 = ["September 2013. The government lifted fuel subsidies, and prices rose over 60% in a single day. Cities across Sudan rose up. Dozens were killed, hundreds arrested.\n\nYou were young, watching your country boil for the first time since 1989.", [
+  "Join the protesters", "Stay home and protect your family", "Help the wounded in the mosques"]];
+EN.sd2013b = ["That evening, Sheikh Ibrahim sat in the mosque and said:\n— 'My sons, 1989 brought al-Bashir, and 2013 brought hunger. But one thing has not changed: the youth are always the first to pay the price.'\n\nYou looked at your hands. Still empty.", [
+  "Ask him: so what do we do?", "Stay silent and keep the words"]];
+EN.sd2014 = ["In January 2014, al-Bashir announced a 'national dialogue' with the opposition and armed movements. People met in Khartoum for years, talking of a new constitution and peace. But the major armed movements boycotted, and war in Darfur, Blue Nile and South Kordofan never stopped.\n\nIn 2016, the 'National Document' was approved in a grand ceremony. But the street did not believe it.", [
+  "Attend the dialogue sessions as an observer", "Say the dialogue is meaningless while war continues", "Watch from afar"]];
+EN.sd2018 = ["19 December 2018. In Atbara, people came out demanding bread and fuel. Within days, protests spread across Sudan. The chant: 'Freedom, peace, and justice.'\n\nYou saw faces you had never seen before: students, doctors, engineers, tea ladies, workers.", [
+  "Join the protests", "Help transport the wounded", "Watch from the window"]];
+EN.sd2019 = ["January 2019. At least 19 were killed (Amnesty estimated 37). On 9 January, security forces stormed a hospital in Omdurman, firing live bullets in search of the wounded. In February, al-Bashir declared a state of emergency.\n\nThen on 6 April, millions poured into the General Command square. On 11 April, al-Bashir fell and was arrested.", [
+  "Chant with the millions", "Help organize the sit-in", "Carry the wounded to hospitals"]];
+EN.sd2019b = ["After al-Bashir fell, a 'Transitional Military Council' led by al-Burhan promised to hand power to civilians. But negotiations stalled. On 3 June 2019, the General Command sit-in was dispersed with bullets. More than 30 martyrs fell in a single day.\n\nThat day was a wound that would never heal.", [
+  "Carry the wounded and flee", "Stay in the square to the end", "Leave the square and go to the hospital"]];
+EN.sd2020 = ["On 3 October 2020, the 'Juba Peace Agreement' was signed between the transitional government and the Revolutionary Front. People celebrated. But many said: 'Peace on paper feeds no one.'\n\nThat year, COVID-19 hit, and the economy collapsed further.", [
+  "Celebrate and hope it lasts", "Help distribute aid to the displaced", "Say the real peace has not begun yet"]];
+EN.sd2021 = ["25 October 2021. Al-Burhan declared a state of emergency, dissolved the transitional government, and arrested Prime Minister Hamdok and ministers. Millions took to the streets against the 'coup'. Dozens of protesters were killed.\n\nYou watched the revolution being stolen again.", [
+  "Join the 'No to the coup' protests", "Help document the violations", "Stay away and protect your family"]];
+EN.sd2022 = ["2022. The conflict between al-Burhan (army) and Hemedti (RSF) intensified. The framework agreement proposed by civilian forces in December 2022 tried to restore the civilian transition, but the dispute over 'unifying the military institution' — merging the RSF into the army — blew everything up.\n\nOn 15 April 2023, war began in Khartoum.", [
+  "Prepare for what is coming", "Say war is inevitable", "Hope the framework agreement is a new beginning"]];
+EN.sd2023 = ["15 April 2023. Eight in the morning. Explosions echoed across Khartoum. The RSF seized the Republican Palace, the airport, and large parts of the General Command. The army responded with airstrikes. Within days, fighting spread to every state.\n\nMillions were displaced. Khartoum became a ghost city.", [
+  "Flee Khartoum with your family", "Stay and help the neighbors", "Join your neighborhood's emergency room"]];
+EN.sd2023b = ["In West Darfur, El Geneina was burning. Between 13 and 21 June 2023, at least 87 people — mostly Masalit — were killed and buried in a mass grave. Human Rights Watch called it 'ethnic cleansing'. Over 15,000 were killed in El Geneina alone.\n\nThen came Wad Madani.", [
+  "Help bury the victims", "Help the survivors escape", "Stay silent and remember the names"]];
+EN.sd2023c = ["18 December 2023. Wad Madani — capital of Al-Jazira, once considered 'safe' — fell to the RSF. Hundreds of thousands were displaced again. The city that had received Khartoum's displaced became itself a war zone.\n\nAn old man told you:\n— 'Every time we say this is the last time. And every time we start from zero.'", [
+  "Flee with the displaced toward Gedaref", "Help the old man catch the convoy", "Stay in the city and help those left"]];
+EN.sd2024 = ["2024. The RSF besieged Al-Fashir from May. In July, famine was officially confirmed in Zamzam camp — the first such confirmation in Sudan in years. The UN said over 30 million Sudanese need humanitarian aid.\n\nIn Khartoum, cholera spread. Communications were cut. The world was silent.", [
+  "Help in the Zamzam kitchens", "Distribute water to the displaced", "Remember the names of those who died"]];
+EN.sd2024b = ["Also in 2024, the 'Emergency Response Rooms' — born from the Resistance Committees — announced they were running more than 162 centers across 18 states, with 10,000 volunteers including 1,400 doctors. In September 2025, the ERRs won a human rights award in Norway and were nominated for the Nobel Peace Prize.\n\nA volunteer told you:\n— 'We have no money, we have each other.'", [
+  "Join the Emergency Response Rooms", "Support them with money", "Just watch"]];
+EN.sd2025 = ["2025. In January, the army retook Wad Madani. In March, it retook all of Khartoum. The government returned to the capital. But in October 2025, Al-Fashir fell to the RSF after a long siege, and the UN spoke of 'massacres' and 'atrocities' bearing 'hallmarks of genocide'. Over 6,000 were killed in days.\n\nThe war did not end. It only changed shape.", [
+  "Go to Al-Fashir and help the survivors", "Stay in Khartoum and help the returning", "Remember the names of Al-Fashir's victims"]];
+EN.sd2026 = ["2026. The war entered its fourth year. It shifted to 'drone war'. On 26 October 2026, RSF drones struck five power stations in central and eastern Sudan, cutting electricity to four states. Sudan accused Ethiopia of providing launch platforms.\n\n33.7 million Sudanese need aid. 19.5 million face acute hunger. 8.6 million are internally displaced.\n\nA child in the shelter asked you:\n— 'Is the war over?'\n\nYou did not know what to say.", [
+  "Tell him: 'Not yet, but we will stay'", "Stay silent and hold him", "Tell him the truth: 'I don't know'"]];
+
+/* ═══════════════════════════════════════════════════════════════
+   4) الحقائق التاريخية
+   ═══════════════════════════════════════════════════════════════ */
+F.rev1 = "بدأت الثورة السودانية في ديسمبر 2018 احتجاجًا على ارتفاع الأسعار ونقص الخبز والوقود. قادها شباب من أطياف مختلفة، وكان للنساء حضور بارز.";
+F.rev3 = "في 3 يونيو 2019، فُضّ اعتصام القيادة العامة بالقوة، وسقط عشرات القتلى ومئات الجرحى. أصبح هذا اليوم يومًا للحداد والتذكر في السودان.";
+F.rev5 = "تحدّثت تقارير حقوقية عن دور أمهات الشهداء في تخليد ذكرى أبنائهن، وأصبح بعضهن رمزًا للصمود المدني.";
+F.rev6 = "بعد الثورة، تحوّلت لجان المقاومة الشبابية إلى شبكات مدنية في الأحياء، لعبت دورًا محوريًا في غرف الطوارئ إبان حرب 2023.";
+F.sd2013 = "في سبتمبر 2013، رفعت الحكومة الدعم عن الوقود، فارتفعت الأسعار أكثر من ٦٠٪. خرجت احتجاجات واسعة. قدّرت منظمات حقوقية سقوط أكثر من ١٨٠ قتيلًا.";
+F.sd2014 = "أطلق البشير «الحوار الوطني» في يناير 2014، واختُتم في 2016 بـ«الوثيقة الوطنية». قاطعته أبرز الحركات المسلحة والأحزاب المعارضة.";
+F.sd2018 = "بدأت احتجاجات ١٩ ديسمبر ٢٠١٨ في عطبرة بسبب نقص الخبز والوقود، وامتدت إلى كل السودان.";
+F.sd2019 = "في ٩ يناير ٢٠١٩ اقتحمت قوات الأمن مستشفى في أم درمان. في ١١ أبريل ٢٠١٩ سقط البشير بعد ٣٠ عامًا في الحكم.";
+F.sd2019b = "في ٣ يونيو ٢٠١٩، فُضّ اعتصام القيادة العامة. أعلنت لجنة أطباء السودان سقوط أكثر من ٣٠ شهيدًا في اليوم نفسه.";
+F.sd2020 = "في ٣ أكتوبر ٢٠٢٠، وُقّع اتفاق جوبا للسلام بين الحكومة الانتقالية والجبهة الثورية.";
+F.sd2021 = "في ٢٥ أكتوبر ٢٠٢١، أعلن البرهان حالة الطوارئ وحلّ الحكومة. قُتل ٤٢ محتجًا على الأقل حتى نوفمبر ٢٠٢١.";
+F.sd2022 = "في ديسمبر ٢٠٢٢ وُقّع «الاتفاق الإطاري». لكن الخلاف حول دمج الدعم السريع فجّر الوضع، وانطلقت الحرب في ١٥ أبريل ٢٠٢٣.";
+F.sd2023 = "في ١٥ أبريل ٢٠٢٣ اندلع القتال. سيطرت الدعم السريع على القصر الجمهوري والمطار وأجزاء من القيادة العامة.";
+F.sd2023b = "في يونيو ٢٠٢٣ دُفن ٨٧ شخصًا على الأقل — معظمهم من المساليت — في مقبرة جماعية بالجنينة. وصفتها هيومن رايتس ووتش بأنها «تطهير عرقي».";
+F.sd2023c = "في ١٨ ديسمبر ٢٠٢٣ سقطت ود مدني في يد الدعم السريع، فنزح مئات الآلاف مرة ثانية.";
+F.sd2024 = "في يوليو ٢٠٢٤ أُعلنت المجاعة رسميًا في مخيم زمزم بشمال دارفور. الأمم المتحدة: أكثر من ٣٠ مليون سوداني يحتاجون مساعدة.";
+F.sd2024b = "غرف الطوارئ تدير أكثر من ١٦٢ مركزًا في ١٨ ولاية، بعشرة آلاف متطوع منهم ١٤٠٠ طبيب. فازت بجائزة حقوقية في النرويج (٢٠٢٥).";
+F.sd2025 = "في أكتوبر ٢٠٢٥ سقطت الفاشر في يد الدعم السريع. الأمم المتحدة وثّقت «مجازر» تحمل «سمات الإبادة الجماعية».";
+F.sd2026 = "في ٢٦ أكتوبر ٢٠٢٦ ضربت مسيّرات الدعم السريع خمس محطات كهرباء. ٣٣.٧ مليون سوداني يحتاجون مساعدة، ١٩.٥ مليون يعانون جوعًا حادًا.";
+
+FE.rev1 = "The Sudanese revolution began in December 2018 over price rises and shortages of bread and fuel. It was led by youth from diverse backgrounds, with women prominent.";
+FE.rev3 = "On June 3, 2019, the General Command sit-in was forcibly dispersed, with dozens killed and hundreds wounded. The day became one of mourning in Sudan.";
+FE.rev5 = "Rights reports documented the role of mothers of martyrs in preserving their sons' memory.";
+FE.rev6 = "After the revolution, youth resistance committees became civilian neighborhood networks, playing a central role in emergency rooms during the 2023 war.";
+FE.sd2013 = "In September 2013, the government lifted fuel subsidies, prices rose over 60%, and wide protests erupted. Rights groups estimated over 180 killed.";
+FE.sd2014 = "Al-Bashir launched the 'National Dialogue' in January 2014, concluding in 2016. Major armed movements and opposition parties boycotted it.";
+FE.sd2018 = "The December 19, 2018 protests began in Atbara over bread and fuel shortages, spreading across Sudan.";
+FE.sd2019 = "On January 9, 2019, security forces stormed a hospital in Omdurman. On April 11, 2019, al-Bashir fell after 30 years.";
+FE.sd2019b = "On June 3, 2019, the General Command sit-in was dispersed with bullets. Sudan's Doctors Committee reported over 30 martyrs.";
+FE.sd2020 = "On October 3, 2020, the Juba Peace Agreement was signed.";
+FE.sd2021 = "On October 25, 2021, al-Burhan declared a state of emergency. At least 42 protesters were killed by November 2021.";
+FE.sd2022 = "In December 2022, the Framework Agreement was signed. The dispute over merging the RSF blew up the situation; war erupted April 15, 2023.";
+FE.sd2023 = "On April 15, 2023, fighting broke out. The RSF seized the Republican Palace, airport, and parts of the General Command.";
+FE.sd2023b = "In June 2023, at least 87 — mostly Masalit — were buried in a mass grave in El Geneina. HRW called it 'ethnic cleansing'.";
+FE.sd2023c = "On December 18, 2023, Wad Madani fell to the RSF, displacing hundreds of thousands again.";
+FE.sd2024 = "In July 2024, famine was officially confirmed in Zamzam camp. The UN: over 30 million Sudanese need aid.";
+FE.sd2024b = "The Emergency Response Rooms run over 162 centers, with 10,000 volunteers including 1,400 doctors. They won a rights award in Norway (2025).";
+FE.sd2025 = "In October 2025, Al-Fashir fell to the RSF. The UN documented 'massacres' bearing 'hallmarks of genocide'.";
+FE.sd2026 = "On October 26, 2026, RSF drones struck five power stations. 33.7 million Sudanese need aid; 19.5 million face acute hunger.";
+
+/* ═══════════════════════════════════════════════════════════════
+   5) الإنجازات الجديدة
+   ═══════════════════════════════════════════════════════════════ */
+AH.rev1 = ["dec","🎗️","أبناء ديسمبر","التقيتَ بشباب الثورة"];
+AH.rev3 = ["martyrs","🌹","شهيد الثورة","نجوتَ من الثالث من يونيو"];
+AH.rev4 = ["memory","📿","الذاكرة","احتفظتَ بذكرى الشهداء"];
+AH.rev5 = ["umt","🤍","أم الشهيد","زرتَ أم الطيب"];
+AH.rev6 = ["resistance","✊","لجان المقاومة","انضممتَ إلى لجان المقاومة"];
+AH.sd2013 = ["c2013","📢","صوت ٢٠١٣","نزلتَ إلى شوارع سبتمبر"];
+AH.sd2019 = ["april2019","✊","أبريل ٢٠١٩","شهدتَ سقوط البشير"];
+AH.sd2019b = ["june3","🕯️","الثالث من يونيو","نجوتَ من فضّ الاعتصام"];
+AH.sd2020 = ["juba","🕊️","جوبا","شهدتَ اتفاق السلام"];
+AH.sd2021 = ["oct2021","🚫","لا للانقلاب","واجهتَ انقلاب أكتوبر"];
+AH.sd2023 = ["err2023","🤲","غرفة الطوارئ ٢٠٢٣","انضممتَ إلى المتطوعين"];
+AH.sd2023b = ["geneina","🕯️","الجنينة","حفظتَ ذكرى ضحايا الجنينة"];
+AH.sd2024 = ["zamzam","🍞","زمزم","ساعدتَ في مواجهة المجاعة"];
+AH.sd2025 = ["fashir2025","🕯️","الفاشر ٢٠٢٥","حفظتَ ذكرى ضحايا الفاشر"];
+AH.sd2026 = ["2026","📡","حرب المسيّرات","بلغتَ عام ٢٠٢٦"];
+
+/* ═══════════════════════════════════════════════════════════════
+   6) إصلاح عرض الإنجازات في المذكرات
+   (الإنجازات المسجلة في najat_ach لم تكن تظهر في EG)
+   ═══════════════════════════════════════════════════════════════ */
+[
+  ["reach","🏙️","الوصول"],
+  ["os","👥","الرفيق"],
+  ["bus","🚌","الكريز"],
+  ["fam","💍","الأسرة"],
+  ["lost","🔥","الخسارة"],
+  ["esc","⛓️","الهروب"],
+  ["err","🤲","غرفة الطوارئ"],
+  ["wm","🏙️","ود مدني"],
+  ["bag","🎒","حقيبة مريم"],
+  ["fsh","🔥","الفاشر"],
+  ["cross","🚪","العبور"],
+  ["dec","🎗️","أبناء ديسمبر"],
+  ["martyrs","🌹","شهيد الثورة"],
+  ["memory","📿","الذاكرة"],
+  ["umt","🤍","أم الشهيد"],
+  ["resistance","✊","لجان المقاومة"],
+  ["c2013","📢","صوت ٢٠١٣"],
+  ["april2019","✊","أبريل ٢٠١٩"],
+  ["june3","🕯️","الثالث من يونيو"],
+  ["juba","🕊️","جوبا"],
+  ["oct2021","🚫","لا للانقلاب"],
+  ["err2023","🤲","غرفة الطوارئ ٢٠٢٣"],
+  ["geneina","🕯️","الجنينة"],
+  ["zamzam","🍞","زمزم"],
+  ["fashir2025","🕯️","الفاشر ٢٠٢٥"],
+  ["2026","📡","حرب المسيّرات"]
+].forEach(function(a){ if(!EG.find(function(x){return x[0]===a[0]})) EG.push(a); });
+
+/* ═══════════════════════════════════════════════════════════════
+   7) إعادة التوجيه: r1b → rev1، rev6 → sd2013، sd2026 → r2
+   ═══════════════════════════════════════════════════════════════ */
+try{
+  const r1b = S["r1b"];
+  if(r1b && r1b[2]) r1b[2].forEach(function(c){ if(c[1]==="r2") c[1]="rev1"; });
+}catch(e){}
+
+/* ═══════════════════════════════════════════════════════════════
+   8) تتبّع مسار الفاشر (لنهاية «شهيد الفاشر»)
+   ═══════════════════════════════════════════════════════════════ */
+const _origRenderNode = window.renderNode;
+window.renderNode = function(nid){
+  try{
+    if(s && (nid==="fs1"||nid==="fs2"||nid==="fs2b"||nid==="fs3"||nid==="jf")){
+      s.fsh_siege = true;
+    }
+  }catch(e){}
+  if(typeof _origRenderNode === "function") return _origRenderNode.apply(this, arguments);
+};
+
+/* ═══════════════════════════════════════════════════════════════
+   9) النهايات الجديدة
+   ═══════════════════════════════════════════════════════════════ */
+END_META.martyr_rev = {icon:"🎗️", ar:"شهيد الثورة", en:"Martyr of the Revolution"};
+END_META.martyr_fsh = {icon:"🕯️", ar:"شهيد الفاشر", en:"Martyr of Al-Fashir"};
+END_META.witness_age = {icon:"📜", ar:"الشاهد على العصر", en:"Witness to the Age"};
+
+ENDINGS.martyr_rev = function(){
+  return "<b>النهاية: شهيد الثورة</b>\n\nلم تنجُ حتى النهاية، لكن اسمك بقي على الجدار الذي رسمتما عليه في يناير. سلمى كتبته بخط عريض، وأضافت تحته: «كان هنا».\n\nالثورة لا تنسى من حملها.";
+};
+ENDINGS.martyr_fsh = function(){
+  return "<b>النهاية: شهيد الفاشر</b>\n\nفي زقاق ضيق بالفاشر، سقطتَ كما سقط كثيرون قبلك. لم يعرف أحد اسمك، لكنك كنت من حمل الماء لكبار السن، واقتسم خبزه مع طفل. اسمك محفوظ عند من رأوك.\n\nبعض الشهداء لا يُعرفون إلا عند الله.";
+};
+ENDINGS.witness_age = function(){
+  return "<b>النهاية: الشاهد على العصر</b>\n\nمن ٢٠١٣ إلى ٢٠٢٦، رأيتَ كل شيء: الجوع، الثورة، الرصاص، المجاعة، الحرب، والصمت. لم تنجُ دائمًا، لكنك بقيتَ تحمل الأسماء.\n\nفي مخيم بعيد، فتحتَ دفترك وبدأتَ تكتب:\n\n«في سبتمبر ٢٠١٣، كنا شبابًا. في ديسمبر ٢٠١٨، كنا ثورة. في أبريل ٢٠٢٣، صرنا حربًا. لكننا ما زلنا هنا. وهذا وحده انتصار».";
+};
+
+ENDINGS_EN.martyr_rev = function(){
+  return "<b>Ending: Martyr of the Revolution</b>\n\nYou did not survive to the end, but your name remained on the wall you painted together in January. Salma wrote it in bold, and beneath it: 'He was here.'\n\nThe revolution does not forget those who carried it.";
+};
+ENDINGS_EN.martyr_fsh = function(){
+  return "<b>Ending: Martyr of Al-Fashir</b>\n\nIn a narrow alley in Al-Fashir, you fell as many had fallen before you. No one knew your name, but you were among those who carried water to the elderly and shared bread with a child.\n\nSome martyrs are known only to God.";
+};
+ENDINGS_EN.witness_age = function(){
+  return "<b>Ending: Witness to the Age</b>\n\nFrom 2013 to 2026, you saw everything: hunger, revolution, bullets, famine, war, and silence. You did not always survive, but you kept the names.\n\nIn a distant camp, you opened your notebook and wrote:\n\n'In September 2013, we were young. In December 2018, we were a revolution. In April 2023, we became a war. But we are still here. And that alone is a victory.'";
+};
+
+/* ═══════════════════════════════════════════════════════════════
+   10) اعتراض finish() — نهايات الشهادة والشاهد على العصر
+   ═══════════════════════════════════════════════════════════════ */
+const _origFinish = window.finish;
+window.finish = function(){
+  try{
+    if(s){
+      /* أولوية ١: شهيد الفاشر (مرّ بالفاشر ومات ولم يتبرع بالدم) */
+      if(s.fsh_siege && (s.h<=0 || s.f<=0) && !s.sac){
+        renderEnding("martyr_fsh"); return;
+      }
+      /* أولوية ٢: شهيد الثورة (نجا من ٣ يونيو ثم مات) */
+      if(s.martyrs && (s.h<=0 || s.f<=0 || s.p<=20) && !s.sac && !s.ldg && !s.er && !s.C){
+        renderEnding("martyr_rev"); return;
+      }
+      /* أولوية ٣: الشاهد على العصر (بلغ 2026 وكان سيحصل على «الشاهد» الافتراضي) */
+      if(s["2026"] && !s.sac && !s.ldg && !s.er && !s.C && !(s.p>=70) && !(s.p<=20) && !(s.f<=0||s.h<=0) && !(s.p<=35)){
+        renderEnding("witness_age"); return;
+      }
+    }
+  }catch(e){}
+  if(typeof _origFinish === "function") return _origFinish.apply(this, arguments);
+};
+
+console.log("✅ نُصّبت الإضافات: 6 مشاهد ثورة + 20 مشهدًا 2013–2026 + 3 نهايات + إصلاح الإنجازات");
+})();
+</script>
+<!-- ═══════════════════════════════════════════════════════════════════════ -->
 </body>
 </html>
