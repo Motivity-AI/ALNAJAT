@@ -850,5 +850,155 @@ window.addEventListener("load",()=>{
 });
 document.addEventListener("click",()=>{unlockAudio()},{once:true});
 </script>
+  <!-- ========== How to Play — self-contained add-on ========== -->
+<script>
+(function(){
+  "use strict";
+
+  /* ---------- 1) محتوى الشرح ---------- */
+  function AR(){
+    return `<h3>❓ كيف تلعب</h3>
+      <div class="mut" style="line-height:1.9">
+        <b>🎮 الأساسيات</b><br>
+        تلعب دور طفل سوداني يهرب من دارفور، يبني حياة في الخرطوم، ثم يواجه الحرب مرة أخرى. كل قرار يؤثّر.
+        <br><br>
+        <b>📊 مؤشراتك الخمسة</b><br>
+        ❤ <b>الصحة</b> · 🍞 <b>الشبع</b> · 🌱 <b>الأمل</b> · ⚡ <b>الطاقة</b> · ⚖ <b>الضمير</b><br>
+        إذا وصلت الصحة أو الشبع إلى الصفر قد تنتهي رحلتك. الأمل يحدّد أي نهاية تصل إليها. الضمير يعكس نوع الإنسان الذي تصير إليه.
+        <br><br>
+        <b>💰 المال</b><br>
+        تكسبه من العمل والتجارة، وتستخدمه في السوق لشراء الماء والإسعاف والشاي والوثائق.
+        <br><br>
+        <b>🎯 اتخاذ القرارات</b><br>
+        المس أي زر في أسفل كل مشهد. علامة <span class="risk">⚠️</span> تعني أن الخيار مخاطرة — قد تموت. يُحفظ تقدّمك تلقائيًا في كل خطوة.
+        <br><br>
+        <b>↩️ التراجع</b><br>
+        زر ↩️ في الشريط العلوي يتراجع عن قرارك الأخير — حتى بعد الموت. استخدمه بحرية للاستكشاف.
+        <br><br>
+        <b>🤝 الرفاق</b><br>
+        شخصيات تقابلها قد تنضم إليك. تظهر تحت مؤشراتك وتعطيك تعزيزات في مشاهد محددة.
+        <br><br>
+        <b>📔 المذكرات</b><br>
+        تسجّل رفاقك ويومياتك وأوسمتك.
+        <br><br>
+        <b>🛒 السوق</b><br>
+        اشترِ بالمال: 💧 قربة ماء تروي العطش، 💊 حقيبة إسعاف تداوي الجراح، 🍵 شاي يرفع الأمل، 📜 وثائق تثبت من أنت عند المعابر.
+        <br><br>
+        <b>💾 الحفظ والتحميل</b><br>
+        الحفظ التلقائي يعمل دائمًا. ولديك ٣ خانات حفظ يدوية.
+        <br><br>
+        <b>🌐 اللغة</b><br>
+        بدّل بين العربية والإنجليزية من القائمة في أي وقت — يبقى تقدّمك كما هو.
+        <br><br>
+        <b>🎵 الموسيقى</b><br>
+        زر 🔇 يشغّل ويوقف الموسيقى. الصوت يتغيّر حسب مزاج المشهد.
+        <br><br>
+        <b>🏁 النهايات</b><br>
+        ٩ نهايات مختلفة في انتظارك. مؤشراتك ورفاقك وقراراتك الماضية تحدّد أيّها تصل إليه.
+        <br><br>
+        <span style="color:var(--ac)">⚠ ملاحظة محتوى:</span> تتناول اللعبة الحرب والنزوح والجوع والموت. مستوحاة من أحداث حقيقية لكن كل الشخصيات خيالية.
+      </div>
+      <button class="btn pri" onclick="document.getElementById('pn').classList.remove('on')">إغلاق</button>`;
+  }
+
+  function EN(){
+    return `<h3>❓ How to Play</h3>
+      <div class="mut" style="line-height:1.9">
+        <b>🎮 The basics</b><br>
+        You play a Sudanese child who flees Darfur, builds a life in Khartoum, and faces war again. Every choice matters.
+        <br><br>
+        <b>📊 Your five stats</b><br>
+        ❤ <b>Health</b> · 🍞 <b>Food</b> · 🌱 <b>Hope</b> · ⚡ <b>Energy</b> · ⚖ <b>Conscience</b><br>
+        When Health or Food reach zero, your journey may end. Hope shapes which ending you reach. Conscience reflects the kind of person you are becoming.
+        <br><br>
+        <b>💰 Money</b><br>
+        Earned through work and trade. Used in the shop to buy water, first-aid kits, tea, and documents.
+        <br><br>
+        <b>🎯 Making choices</b><br>
+        Tap any button at the bottom of each scene. A <span class="risk">⚠️</span> marker means the choice carries risk — you may die. Progress is auto-saved at every step.
+        <br><br>
+        <b>↩️ Undo</b><br>
+        The ↩️ button in the top bar reverses your last choice — even after death. Use it freely to explore.
+        <br><br>
+        <b>🤝 Companions</b><br>
+        Characters you meet may join you. They appear under your stats and give bonus stats in specific scenes.
+        <br><br>
+        <b>📔 Journal</b><br>
+        Records your companions, your diary entries, and your achievements.
+        <br><br>
+        <b>🛒 Shop</b><br>
+        Buy items with money. 💧 Water restores thirst, 💊 First-aid heals wounds, 🍵 Tea restores hope, 📜 Documents prove your identity at crossings.
+        <br><br>
+        <b>💾 Save & Load</b><br>
+        Auto-save is always active. You also have 3 manual save slots.
+        <br><br>
+        <b>🌐 Language</b><br>
+        Switch between Arabic and English anytime from the menu — your progress is kept.
+        <br><br>
+        <b>🎵 Music</b><br>
+        The 🔇 button toggles music. Sound responds to scene mood.
+        <br><br>
+        <b>🏁 Endings</b><br>
+        9 endings await. Your stats, companions, and past choices determine which one you reach.
+        <br><br>
+        <span style="color:var(--ac)">⚠ Content note:</span> This game deals with war, displacement, hunger, and death. It is inspired by real events but all characters are fictional.
+      </div>
+      <button class="btn pri" onclick="document.getElementById('pn').classList.remove('on')">Close</button>`;
+  }
+
+  /* ---------- 2) دالة الفتح ---------- */
+  window.openHowToPlay = function(){
+    const pn = document.getElementById("pn");
+    if(!pn) return;
+    const isEn = (typeof LG !== "undefined" && LG === "en");
+    pn.innerHTML = `<div>${isEn ? EN() : AR()}</div>`;
+    pn.classList.add("on");
+  };
+
+  /* ---------- 3) زر في القائمة الرئيسية ---------- */
+  const _origShowMenu = window.showMenu;
+  window.showMenu = function(){
+    if(typeof _origShowMenu === "function") _origShowMenu.apply(this, arguments);
+    const app = document.getElementById("app");
+    if(!app) return;
+    if(app.querySelector("[data-howto]")) return;
+    const firstPri = app.querySelector("button.pri");
+    if(!firstPri) return;
+    const isEn = (typeof LG !== "undefined" && LG === "en");
+    const btn = document.createElement("button");
+    btn.className = "btn";
+    btn.setAttribute("data-howto","1");
+    btn.textContent = isEn ? "❓ How to Play" : "❓ كيف تلعب";
+    btn.addEventListener("click", window.openHowToPlay);
+    firstPri.insertAdjacentElement("afterend", btn);
+  };
+
+  /* ---------- 4) زر ❓ في الشريط العلوي ---------- */
+  const _origTopBar = window.topBar;
+  window.topBar = function(){
+    let html = "";
+    if(typeof _origTopBar === "function") html = _origTopBar.apply(this, arguments) || "";
+    if(html.indexOf("openHowToPlay()") !== -1) return html;
+    const target = '<button onclick="showMenu()">☰</button>';
+    if(html.indexOf(target) !== -1){
+      html = html.replace(target, '<button onclick="openHowToPlay()" aria-label="Help">❓</button>' + target);
+    }
+    return html;
+  };
+
+  /* ---------- 5) شرح تلقائي في أول لعبة فقط ---------- */
+  const _origStartGame = window.startGame;
+  window.startGame = function(){
+    if(typeof _origStartGame === "function") _origStartGame.apply(this, arguments);
+    try{
+      if(!localStorage.getItem("najat_seen_tutorial")){
+        localStorage.setItem("najat_seen_tutorial","1");
+        setTimeout(function(){ window.openHowToPlay(); }, 600);
+      }
+    }catch(e){}
+  };
+})();
+</script>
+<!-- ========== end of How to Play add-on ========== -->
 </body>
 </html>
