@@ -1344,6 +1344,2354 @@ window.finish = function(){
 console.log("✅ نُصّبت الإضافات: 6 مشاهد ثورة + 20 مشهدًا 2013–2026 + 3 نهايات + إصلاح الإنجازات");
 })();
 </script>
-<!-- ═══════════════════════════════════════════════════════════════════════ -->
+<!-- ═══════════════════════════════════════════════════════════════════
+     STORY WEAVER v2 — 250+ مقطعًا سرديًا لكل قرار
+     استبدل به السكربت السابق بالكامل
+     ═══════════════════════════════════════════════════════════════════ -->
+<script>
+(function(){
+"use strict";
+
+/* ─────────────── الأنماط ─────────────── */
+const st = document.createElement("style");
+st.textContent = `
+.recap{padding:6px 2px 20px;animation:f .4s}
+.recap-seal{width:54px;height:54px;margin:6px auto 12px;border-radius:50%;background:var(--ac);color:#fff;font-weight:900;font-size:1.5rem;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 14px rgba(181,84,28,.3);font-family:serif}
+.recap-head{text-align:center;color:var(--ac);font-size:var(--fs-small);font-weight:800;letter-spacing:1.5px;margin-bottom:4px}
+.recap h1{text-align:center;font-size:clamp(1.4rem,5.5vw,1.9rem);margin:0 0 8px;line-height:1.3}
+.recap-intro{text-align:center;color:var(--mut);font-style:italic;font-size:var(--fs-small);margin-bottom:22px;line-height:1.7}
+.recap-body p{margin:0 0 16px;line-height:1.95;font-size:var(--fs-body);animation:f .5s both}
+.recap-body p::first-letter{font-size:2em;color:var(--ac);font-weight:900;float:inline-start;line-height:1;margin:4px 0 0 6px;margin-inline-end:8px}
+.recap-reflection{background:var(--card);border:1px solid var(--bd);border-radius:var(--r);padding:14px 16px;margin:20px 0;font-size:var(--fs-small);line-height:1.9;color:var(--mut);font-style:italic}
+.recap-reflection::before{content:"❦";display:block;text-align:center;color:var(--ac);font-size:1.2rem;margin-bottom:6px}
+.recap-closing{border-inline-start:4px solid var(--ac);padding:12px 16px;background:var(--card);border-radius:8px;margin:20px 0 24px;line-height:1.9;font-size:var(--fs-body);font-weight:600}
+.recap-stats{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin:14px 0;font-size:var(--fs-small)}
+.recap-stats span{background:var(--card);border:1px solid var(--bd);padding:4px 10px;border-radius:20px}
+.ch-map{display:flex;justify-content:center;gap:6px;margin:8px 0 16px;flex-wrap:wrap;font-size:.7rem}
+.ch-map span{width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;border:1px solid var(--bd);color:var(--mut)}
+.ch-map span.on{background:var(--ac);color:#fff;border-color:var(--ac);font-weight:800}
+.ch-map span.done{background:rgba(181,84,28,.15);color:var(--ac);border-color:var(--ac)}
+`;
+document.head.appendChild(st);
+
+/* ─────────────── فهرس الفصول ─────────────── */
+const CH_START = { d0:1, m0:2, r1:3, s6:4, w1:5, o1:6 };
+const CH_TITLES = {
+  1:{ar:"الفصل الأول: دارفور",          en:"Chapter 1: Darfur"},
+  2:{ar:"الفصل الثاني: الخرطوم",         en:"Chapter 2: Khartoum"},
+  3:{ar:"الفصل الثالث: ديسمبر وما بعده", en:"Chapter 3: December & After"},
+  4:{ar:"الفصل الرابع: قبل الحرب",       en:"Chapter 4: Before the War"},
+  5:{ar:"الفصل الخامس: الحرب",           en:"Chapter 5: War"},
+  6:{ar:"الفصل السادس: الخرطوم الجريحة", en:"Chapter 6: Wounded Khartoum"}
+};
+const CH_ACH = {1:["ch1","🎗️","دارفور"],2:["ch2","🏙️","الخرطوم"],3:["ch3","✊","ديسمبر"],4:["ch4","💍","قبل الحرب"],5:["ch5","🔥","الحرب"]};
+try{Object.keys(CH_ACH).forEach(k=>{const a=CH_ACH[k];if(typeof EG!=="undefined"&&!EG.find(x=>x[0]===a[0]))EG.push(a);});}catch(e){}
+
+/* ═══════════════════════════════════════════════════════════════════
+   CHOICE BEATS — 250+ مقطعًا سرديًا
+   التنسيق: CB[معرف_العقدة] = [ [عربي، إنجليزي], [عربي، إنجليزي], ... ]
+   الفهرس يطابق الخيارات الأصلية (قبل التصفية)
+   ═══════════════════════════════════════════════════════════════════ */
+const CB = {
+
+/* ────── الفصل الأول: دارفور ────── */
+d0:[
+["في ليلة الحصاد، علّقتَ سبحة أبيك الخشبية حول عنقك. تلك السبحة الصغيرة لم تفارقك بعد ذلك، كأنها وعد بأن لا تضيع.","On harvest night, you hung your father's wooden prayer beads around your neck. That small string never left you after that, as though a promise not to be lost."],
+["وضعتَ السبحة في جيبك وركضت لتلعب. لم تكن تعرف أنها ستكون آخر ما يبقى لك من أبيك، وأن يدك ستعود إليها حين لا يبقى شيء آخر.","You pocketed the beads and ran to play. You didn't know they would be the last thing remaining of your father, and that your hand would return to them when nothing else remained."]
+],
+d0b:[
+["سألتَ جدتك: «وماذا لو لم تبقَ لي جذور؟» فأجابت بهدوء: «ستصير أنت الجذر يا ولدي». حملت الكلمة معك كأنها تعويذة.","You asked your grandmother: 'And what if I have no roots left?' She answered calmly: 'Then you will become the root, my son.' You carried those words like a charm."],
+["وضعتَ رأسك على كتفها ولم تقل شيئًا. بعض الحب لا يحتاج كلامًا، وبعض اللحظات تُحفظ أكثر مما تُروى.","You rested your head on her shoulder without speaking. Some love needs no words, and some moments are remembered better than told."]
+],
+d0c:[
+["تعلّمتَ الحروف بجدّ، وكتبتَ اسمك مئة مرة على لوح الفحم. صار الاسم بيتًا حين ضاع البيت، ووطنًا حين ضاع الوطن.","You learned the letters diligently, writing your name a hundred times on the charcoal board. The name became a home when the home was lost, and a homeland when the homeland was lost."],
+["تشاجرتَ مع طارق على اللوح، وبكيتَ حين انتصر. تلك كانت أول مرة تذوق فيها طعم الخسارة الصغيرة، قبل أن تأتي الخسارات الكبيرة.","You fought with Tariq over the board and wept when he won. That was the first time you tasted small defeat, before the great defeats arrived."]
+],
+d0d:[
+["وعدتَ طارق أن تلقاه يومًا. كان وعدًا طفوليًا صغيرًا، لكنه كبر معك وصار من أثقل ما حملت.","You promised Tariq you would meet him one day. It was a small childish promise, but it grew with you and became one of the heaviest things you carried."],
+["ابتسمتَ ولم تقل شيئًا. لم تكن تعرف أنها آخر مرة ترى فيها طارق، وأن ابتسامتك ستكون كل ما يبقى في ذاكرتك عنه.","You smiled and said nothing. You didn't know it was the last time you would see Tariq, and that your smile would be all that remained of him in your memory."]
+],
+d1:[
+["ساعدتَ أمك في حمل الخبز والماء قبل الفجر. كان ذلك آخر عمل تقوم به معها، وآخر مرة تلمس فيها يداها الخشنتان يديك.","You helped your mother carry bread and water before dawn. That was the last task you did with her, and the last time her rough hands touched yours."],
+["ودّعتَ كلبك الصغير الذي كان يلاحقك كظلّك. لسنوات بعدها، كل كلب تراه في الطريق كان يشبهه، وكان يوقظ فيك شيئًا لا يهدأ.","You said goodbye to your puppy who followed you like a shadow. For years after, every dog you saw on the road resembled him, waking something in you that would not settle."]
+],
+d2:[
+["اختبأتَ خلف الصخرة. بقيتَ هناك ساعة كاملة سمعتَ فيها كل شيء: الصرخات، الطلقات، ثم الصمت الذي جاء بعدها وكان أثقل من كل شيء.","You hid behind the rock. You stayed there a full hour hearing everything: the screams, the shots, then the silence that came after, heavier than everything."],
+["تمسّكتَ بيد أمك بقوة، لكن اليد كانت تفلت منك ببطء. لم تكن تعرف أنك تحمل يدها للمرة الأخيرة، وأنك ستقضي عمرك تبحث عن يد تشبهها.","You held your mother's hand tightly, but the hand was slowly slipping from you. You didn't know you were holding her hand for the last time, and that you would spend your life looking for a hand like hers."]
+],
+d2b:[
+["احفظتَ اسم خالك موسى في قلبك كأنه تعويذة. صار الاسم بابًا في جدار لا باب له، وخيطًا في متاهة لا مخرج منها.","You memorized your uncle Musa's name in your heart like a charm. It became a door in a wall without doors, a thread in a maze without exit."],
+["قلت لأمك: «لن نضيع». لم تكن تعرف كم ستكون هذه الكلمة ثقيلة، وأنك ستقضي سنوات تحاول أن تُبقيها صحيحة.","You told your mother: 'We won't be lost.' You didn't know how heavy those words would become, and that you would spend years trying to keep them true."]
+],
+d3:[
+["بقيتَ مختبئًا حتى غادر الجميع. حين خرجت، لم يكن هناك شيء يشبه البيت، ولا شيء يشبه تلك الحياة التي عشتها قبل يومين.","You stayed hidden until everyone left. When you came out, nothing resembled home, and nothing resembled the life you had lived two days earlier."],
+["ركضتَ نحو الأشجار. لم تنظر خلفك، لكنك سمعتَ كل شيء. صار الركض هو أول قرار كبير في حياتك، وأول هروب من نوع جديد.","You ran toward the trees. You didn't look back, but you heard everything. Running became the first big decision of your life, and the first escape of a new kind."]
+],
+d3b:[
+["استمعتَ لنصيحة آدم وبقيتَ معه ليلة. كان شيخًا هزيلًا يسوق عنزات هزيلة، لكنه كان يعرف الطريق — وكان يعرف كيف يحمي ولدًا لا يعرفه.","You listened to Adam's advice and stayed with him a night. He was a frail old man herding frail goats, but he knew the way — and he knew how to protect a boy he didn't know."],
+["شكرتَه وواصلت وحدك. لم تكن تعرف أنك ستحتاج نصيحته قريبًا، وأن الصحراء تعطي دروسها مرة واحدة فقط.","You thanked him and continued alone. You didn't know you would need his advice soon, and that the desert teaches its lessons only once."]
+],
+d5:[
+["شربتَ من قارورة مهملة وأخذت حقيبة إسعاف. صار الماء في جسدك حياة، وصارت الحقيبة في يدك أملًا.","You drank from a discarded bottle and took a first-aid kit. The water in your body became life, and the kit in your hand became hope."],
+["صبرت على العطش. في الصندوق المظلم، صار العطش صديقًا يعلّمك الصبر، وأخًا يعلّمك أن الجسد يمكن أن يتجاوز ما تظن.","You endured the thirst. In the dark trunk, thirst became a friend teaching you patience, a brother teaching you that the body can exceed what you think."],
+["سحبتَ الدفتر الجلدي من بين الأكياس وأخفيته في ثيابك. لم تكن تعرف أنه سيصير أثمن من المال والذهب، وأنه سيحفظ ما لا تحفظه الذاكرة.","You pulled the leather notebook from between the bags and hid it in your clothes. You didn't know it would become more precious than money and gold, and that it would preserve what memory cannot."]
+],
+d5b:[
+["اقتسمت مع عثمان قربة الماء. صار الماء دمًا بينكما، وصار عثمان أخًا لم تلده أمك.","You shared the water flask with Uthman. The water became blood between you, and Uthman became a brother your mother did not bear."],
+["طلبت منه أن يبقى معك رغم أن الماء لم يكن يكفي. كانت الرفقة أولوية أكبر من البقاء، وأنت لم تكن تعرف بعد أن هذا سيكون قانون حياتك.","You asked him to stay with you even though the water was not enough. Companionship was a bigger priority than survival, and you didn't yet know this would become the law of your life."],
+["ابتعدت وراقبته بحذر. لم تكن قاسيًا، كنت فقط خائفًا. لكنك تعرف اليوم أن بعض الخوف يترك أثرًا أكبر من بعض الجراح.","You moved away and watched him carefully. You weren't cruel, only afraid. But you know today that some fear leaves a deeper mark than some wounds."]
+],
+d5c:[
+["كتمتَ أنفاسك حتى كاد صدرك ينفجر. سمعت كل شيء: النقود، الضحك، عدّ الخطوات، ووقع الأحذية على الحصى.","You held your breath until your chest nearly burst. You heard everything: the money, the laughter, the counting of steps, and the sound of boots on gravel."],
+["اختلستَ النظر من شقّ الصندوق. حفظت الوجوه وحفظت الأصوات. كنتَ تحفظ دليلًا دون أن تعرف أن هذا سيصير واجبك يومًا.","You stole a glance through the crack in the trunk. You memorized the faces and voices. You were preserving evidence without knowing this would one day become your duty."]
+],
+d5d:[
+["بكيتَ بصمت حتى نام عثمان. لم تكن تعرف أن الدموع تستنزف أكثر من العطش، وأن الحزن الجاف أحيانًا يكون أرحم من البكاء.","You wept silently until Uthman slept. You didn't know that tears drain more than thirst, and that dry grief is sometimes kinder than weeping."],
+["حفظتَ كل انعطاف، كل توقف، كل صوت. كنتَ ترسم خريطة في رأسك بلا قلم، وكنتَ تحفظ الطريق كما يحفظ الحكماء آياتهم.","You memorized every bend, every stop, every sound. You drew a map in your head without a pen, memorizing the road as the wise memorize their verses."]
+],
+
+/* ────── الفصل الثاني: الخرطوم ────── */
+m0:[
+["تحدّقتَ مذهولًا في إشارة المرور الحمراء. في القرية لم تكن هناك إشارات، ولا هذا الصمت الجماعي، ولا هذا النظام الذي يبدو كأنه يخفي شيئًا.","You stared in astonishment at the red traffic light. In the village there were no signals, no such collective silence, no such order that seemed to hide something."],
+["مسحتَ وجهك وبدأت تمشي. المدينة كانت أكبر من أن تحتويك، لكنك كنت أصغر من أن تخاف — أو هكذا ظننت.","You wiped your face and began to walk. The city was too big to contain you, but you were too small to fear — or so you thought."]
+],
+m1:[
+["بدأت تسأل المارة. أعطاك بعضهم، ومعظمهم لم يعطِ. لكنك تعلّمت في ذلك اليوم أن السؤال لا يُذل، وأن الجوع هو الذي يُذل.","You began asking passersby. Some gave, most didn't. But you learned that day that asking does not humiliate, and that hunger is what humiliates."],
+["بحثتَ عن عمل. لم يكن في جيبك مال، لكن كان في يديك قوة، وفي قلبك صبر، وفي عينيك حياة لم تُطفأ بعد.","You looked for work. You had no money in your pocket, but you had strength in your hands, patience in your heart, and a life in your eyes not yet extinguished."]
+],
+m2b:[
+["صمتت وتركت الصبي يسرق. لم تكن شريكًا، لكنك كنت شاهدًا. تعلّمت أن الصمت أحيانًا خيار، وأن الشهادة أحيانًا ثمنها ثقيل.","You stayed silent and let the boy steal. You weren't an accomplice, but you were a witness. You learned that silence is sometimes a choice, and that bearing witness sometimes costs much."],
+["حذّرت الرجل. نظر إليك الصبي بغضب، لكن الرجل أعطاك جنيهًا وقال: «أنت رجل». لم تفهم في ذلك اليوم كيف يجتمع الغضب والامتنان في قلب واحد.","You warned the man. The boy looked at you angrily, but the man gave you a pound and said: 'You're a man.' That day you didn't understand how anger and gratitude could coexist in one heart."]
+],
+m3:[
+["غسلت الصحون بإخلاص. في نهاية اليوم، أعطاك صاحب المطعم وجبة وجنيهات وقال: «غدًا تأتي». صار الغد وعدًا، وصار الوعد أملًا.","You washed dishes honestly. At day's end, the owner gave you a meal and some pounds and said: 'Come tomorrow.' Tomorrow became a promise, and the promise became hope."],
+["غسلت الصحون وخطفت وجبة إضافية. شعرت بذنب صغير، لكن بطنك صمتت أخيرًا. تعلّمت أن بعض الذنوب أخف من الجوع.","You washed dishes and sneaked an extra meal. You felt a small guilt, but your stomach finally quieted. You learned that some sins are lighter than hunger."]
+],
+m3b:[
+["حكيتَ لعمّ إدريس كل شيء — عن دارفور، عن أسرتك، عن الصندوق، عن عثمان. سمعك دون أن يقاطعك، ثم قال: «أنت ابني من اليوم».","You told Uncle Idris everything — about Darfur, your family, the trunk, Uthman. He listened without interrupting, then said: 'You are my son from today.'"],
+["قلت إنك يتيم من الأطراف وكفى. لم يكذبك، لكنه عرف أن هناك أكثر لم تقله، وأن بعض الصمت أصدق من كل الكلام.","You said you were just an orphan from the outskirts. He didn't call you a liar, but he knew there was more you weren't saying, and that some silence is truer than all speech."]
+],
+m3c:[
+["شكرت عمّ إدريس. في المساء جاءك بصحن عدس وقال: «غدًا تبدأ معي من الفجر». صار العدس عشاءً، وصار الوعد عائلة.","You thanked Uncle Idris. In the evening he came with a plate of lentils and said: 'Tomorrow you start with me at dawn.' Lentils became dinner, and the promise became family."],
+["سألته عن أهله، فحكى عن ابن في الخرطوم لا يراه منذ سنوات. صرتَ تعرف أن كل رجل هنا يحمل حكايته، وأن الخرطوم مدينة من الحكايات المكسورة.","You asked about his family, and he spoke of a son in Khartoum he hadn't seen in years. You came to understand that every man here carries his story, and that Khartoum is a city of broken stories."]
+],
+m4:[
+["غادرت المطعم بصمت. لم تكن تعرف ماذا تفعل، لكنك كنت تعرف أن البكاء في العلن لا يفيد، وأن الرجال الحقيقيين يبتلعون دموعهم مع الخبز.","You left the restaurant in silence. You didn't know what to do, but you knew that weeping in public doesn't help, and that real men swallow their tears with their bread."],
+["احتججت، لكنك عرفت أن احتجاجك لن يغيّر شيئًا. طردك صاحب المطعم، وضربك أحد العمال. صار الجرح الأول في الخرطوم جرحًا صغيرًا، لكنه فتح طريقًا لجراح أكبر.","You protested, but you knew your protest would change nothing. The owner expelled you, a worker beat you. The first wound in Khartoum was small, but it opened the way to greater wounds."]
+],
+m4b:[
+["شكرت الرجل وجلست بجانبه تحت الجسر. تعلّمت في تلك الليلة أن الكرامة أحيانًا تكون قطعة بلاستيك تتقي بها المطر، وأن النبل لا يُشترى بالمال.","You thanked the man and sat beside him under the bridge. That night you learned that dignity is sometimes a piece of plastic shielding you from the rain, and that nobility cannot be bought with money."],
+["ابتعدت وبحثت عن زاوية خاصة بك. لم تكن تعرف أن الزاوية ستؤلمك أكثر من العراء، وأن الوحدة أحيانًا أشقى من الشارع.","You moved away and found a corner of your own. You didn't know the corner would hurt more than the open, and that loneliness is sometimes harder than the street."]
+],
+s1:[
+["جلستَ قرب المسجد. كان الناس يمرّون، وبعضهم يشتري منك، وكثير منهم يتجاهلك. صار المسجد جارك، وصار الأذان ساعة عملك.","You sat near the mosque. People passed, some buying from you, many ignoring you. The mosque became your neighbor, and the call to prayer your work clock."],
+["جُبت الأحياء ببضاعتك. تعبت، لكنك عرفت أن الطريق هو الذي يأتي بالرزق، وأن الأرجل التي تعبت اليوم تستريح غدًا.","You walked the neighborhoods with your goods. You tired, but you learned that the road brings livelihood, and that feet that tire today rest tomorrow."]
+],
+s1b:[
+["اقتسمت مع سلمان كل ما تربحه. صار المال قليلًا، لكن صار لك أخ. تعلّمت أن الفقر مع الرفقة أخف من الغنى في الوحدة.","You shared with Salman whatever you earned. The money grew small, but you gained a brother. You learned that poverty with companionship is lighter than wealth in solitude."],
+["احتفظت بمالك. لم تكن تعرف أنك ستحتاجه، لكن الحاجة في الشارع تأتي بلا موعد، وأن الجيب الفارغ أقسى من القلب الفارغ.","You kept your money. You didn't know you would need it, but need on the street comes without appointment, and an empty pocket is harsher than an empty heart."]
+],
+s1c:[
+["قبلت العمل في الورشة. صار لك جدول، وصار لك وجبة يومية، وصار لك شيء يشبه الحياة الطبيعية — رغم أنه لم يكن طبيعيًا.","You accepted work in the workshop. You gained a schedule, a daily meal, and something resembling a normal life — though it was not normal."],
+["رفضت العمل المقيّد. بقيتَ حرًا، لكن الحرية في الخرطوم لها ثمن، والثمن كان جوعًا وأنت تعرف أنك ستدفعه.","You refused the restrictive work. You stayed free, but freedom in Khartoum has a price, and the price was hunger — and you knew you would pay it."]
+],
+s2:[
+["ادّخرت المبلغ. كل يوم تضع جنيهًا في جيبك، كل جنيه كان حياة صغيرة، وكل قرش كان وعدًا بأن الغد أفضل.","You saved the money. Every day you put a pound in your pocket; every pound was a small life, every penny a promise that tomorrow would be better."],
+["اشتريت بضاعة ووزّعتها على من عرفت. صار لك اسم في الحي، وصار الناس يعرفونك ببائع الفول السوداني — وهذا الاسم صار أغلى من المال.","You bought goods and distributed them to those you knew. You gained a name in the neighborhood, and people knew you as the peanut seller — and that name became more precious than money."]
+],
+s2b:[
+["رفضت القرض بفائدة. لم تكن تعرف أنك بذلك حفظت سنتك القادمة، وأن الديون في الحرب ثقيلة كالحديد.","You refused the interest loan. You didn't know that by doing so you protected your coming year, and that debts in war are heavy as iron."],
+["قبلت القرض. توسّعت تجارتك، لكنك كنت تعرف أنك لستَ وحدك في الأرباح. صار للدائن يد في ربحك، ويد في قلبك.","You accepted the loan. Your trade expanded, but you knew you were not alone in the profits. The lender had a hand in your earnings, and a hand in your heart."]
+],
+u1:[
+["حملت بضائع التجار. تعبت، لكنك ربحت. صار التعب صديقًا، وأجرته ثمن الماء، وصار الجسد وسيلةً لا غاية.","You carried the merchants' goods. You tired, but you earned. Fatigue became a friend, its wage the price of water, and the body a means not an end."],
+["ساعدت البائعة العجوز، فأعطتك وجبة وكلمة طيبة. تلك الوجبة كانت أحلى ما ذقت في الخرطوم، لأنها جاءت من عطاء لا من أجر.","You helped the old vendor, and she gave you a meal and a kind word. That meal was the sweetest you tasted in Khartoum, because it came from giving not wages."],
+["بعتَ المناديل والبخور. صار الزحام سوقك، والعابرون زبائنك، وصار الصوت العالي أداتك الوحيدة للبقاء.","You sold tissues and incense. The crowd became your market, passersby your customers, and the loud voice your only tool for survival."]
+],
+u2:[
+["ادّخرت لشراء دراجة. صار كل قرش خطوة، وصار الانتظار استثمارًا، وصار الصبر طريقًا لا خيارًا.","You saved for a bicycle. Every penny became a step, waiting became investment, and patience became a path, not a choice."],
+["أعطيتَ جزءًا من مالك لمن هو أحوج. لم تكن تعرف أن هذا سيصير خبزًا يومًا في بيتك، وأن العطاء يعود بأشكال لا تتوقعها.","You gave part of your money to someone needier. You didn't know it would become bread in your house one day, and that giving returns in forms you don't expect."]
+],
+u3:[
+["اقتسمت الحلوى مع سلمان. ضحك كطفل، وأنت ضحكت كأنك لم تضحك من قبل. صار العيد عيدًا، وصار الشارع بيتًا.","You shared the candy with Salman. He laughed like a child, and you laughed as you hadn't laughed before. Eid became Eid, and the street became home."],
+["احتفظت بالحلوى. أكلتها وحدك، لكن طعمها كان أقل حلاوة مما ظننت. تعلّمت أن بعض الأشياء لا تكتمل إلا إذا اقتُسمت.","You kept the candy. You ate it alone, but its taste was less sweet than you expected. You learned that some things are only complete when shared."]
+],
+u4:[
+["تركت بضاعتك وجريت. لم تكن تعرف أن هذا سيصير تدريبًا على أشياء أكبر، وأن الجري في الشارع يعلّمك الجري من الحياة نفسها.","You left your goods and ran. You didn't know this would become training for greater things, and that running in the street teaches you to run from life itself."],
+["حملت أكبر ما تستطيع وجريت. تعبت، لكنك لم ترجع فارغ اليدين. صار التعب ثمنًا، وصار الحمل إصرارًا.","You carried as much as you could and ran. You tired, but you didn't return empty-handed. Fatigue became a price, and the load became determination."]
+],
+s3:[
+["عملت ليلًا ونهارًا. تعبت، لكن المال كان يتزايد، والحلم كان يقترب. صار الجسد آلة، وصار الوقت خصمًا لا صديقًا.","You worked night and day. You tired, but money was growing and the dream was approaching. The body became a machine, and time an opponent not a friend."],
+["عملت وأخذت قسطًا من الراحة. صحتك تحسنت، والمحفظة كذلك. تعلّمت أن البقاء ماراثون لا سباق سرعة.","You worked and rested. Your health improved, and so did your purse. You learned that survival is a marathon not a sprint."]
+],
+s3b:[
+["اعتنيتَ بالجرح وتوقفت يومين. تعلمت أن الجسد ليس آلة، وأن الأعطال الصغيرة تسبق الانهيارات الكبيرة.","You tended your wound and stopped two days. You learned that the body is not a machine, and that small breakdowns precede great collapses."],
+["واصلت العمل رغم الألم. ربحت أكثر، لكن الجرح صار أعمق. صار الألم خبزك، وصار الصبر تجارة.","You kept working despite the pain. You earned more, but the wound grew deeper. Pain became your bread, and patience your trade."]
+],
+s4:[
+["نقلت الناس بإنصاف. سمعت شكرًا كثيرًا، واحتفظت بسمعتك. صار اسمك أغلى من الحافلة، وصار الإنصاف رأس مالك الحقيقي.","You carried people fairly. You heard much thanks and kept your reputation. Your name became more valuable than the bus, and fairness became your real capital."],
+["رفعت الأجرة على المضطرين. ربحت أكثر، لكن الناس بدأوا ينظرون إليك بشكل مختلف. صار المال أكثر، وصار القلب أقل.","You raised the fare on the desperate. You earned more, but people began to look at you differently. Money grew, and the heart shrank."]
+],
+s4b:[
+["قطعتَ الزحام بحذر. وصلت المرأة إلى المستشفى، وحين سألت عنك كنت قد ذهبت. لم تكن تعرف أن يدًا ستفتح لك بابًا بعد سنوات بفضل هذا اليوم.","You cut through traffic carefully. You got the woman to the hospital, and when she asked about you, you were gone. You didn't know a hand would open a door for you years later because of this day."],
+["سلكت الطريق الخلفي الوعر. وصلت متأخرًا، لكنك وصلت. صار التأخير درسًا، وصار الوصول انتصارًا صغيرًا.","You took the rough back road. You arrived late, but you arrived. Delay became a lesson, and arrival became a small victory."]
+],
+s4c:[
+["رفضت الفاكهة. قالت المرأة: «أنت رجل نادر». لم تفهم لماذا قالت هذا، لكنك احتفظت بالكلمة كأنها شهادة.","You refused the fruit. The woman said: 'You are a rare man.' You didn't understand why she said this, but you kept the words like a certificate."],
+["قبلت الفاكهة وابتسمت. بكيتَ في السيارة دون أن تعرف لماذا. بعض الدموع لا تحتاج سببًا، تحتاج فقط نافذة تفتح.","You accepted the fruit and smiled. You wept in the car without knowing why. Some tears need no reason, only a window to open."]
+],
+s5b:[
+["حاورتهم بهدوء: «أنا من دارفور وأعرف الجوع، فخذوا ما شئتم من جيبي واتركوا الحافلة». صار الكلام درعًا، وصار الصدق سلاحًا.","You spoke calmly: 'I am from Darfur and I know hunger. Take what you want from my pocket and leave the bus.' Words became a shield, and honesty a weapon."],
+["ضغطت على الوقود. في المرآة رأيتهم يهربون. شعرت بالإثارة والخوف في وقت واحد، وصرت تعرف أن الشجاعة أحيانًا قرار لحظي.","You pressed the accelerator. In the mirror you saw them fleeing. You felt thrill and fear at once, and came to know that courage is sometimes a momentary decision."],
+["سلّمت المفاتيح. دخلوا ثم خرجوا، والمرأة الحامل والطفلان لم يُمسّوا بأذى. ربحت أقل، لكنك ربحت نفسك.","You handed over the keys. They entered and left, and the pregnant woman and two children were untouched. You earned less, but you earned yourself."]
+],
+
+/* ────── الفصل الثالث: ديسمبر والثورة ────── */
+r1:[
+["نقلت الجرحى مجانًا. الحافلة صارت مستشفى متحركًا، وشعرت أنك تفعل شيئًا أكبر من العمل — أكبر من الحياة نفسها.","You carried the wounded for free. The bus became a moving hospital, and you felt you were doing something greater than work — greater than life itself."],
+["واصلت عملك. الربح كان أهم من السياسة، لكن قلبك كان ينظر إلى الميدان، ويداك كانتا على المقود.","You continued your work. Profit was more important than politics, but your heart was looking at the square, while your hands were on the wheel."]
+],
+r1b:[
+["رسمت شجرة على الجدار. الكل توقف لينظر. كأن الشجرة وعدًا بأن الحياة ستعود، وأن الجذور لا تموت.","You painted a tree on the wall. Everyone stopped to look. As if the tree was a promise that life would return, and that roots do not die."],
+["كتبت اسم أبيك بخط عريض. المارة قرأوه بصوت عالٍ، كأنهم يعيدونه للحياة، كأن الأسماء قادرة على البعث.","You wrote your father's name in bold letters. Passersby read it aloud, as if returning him to life, as if names were capable of resurrection."]
+],
+r2:[
+["احتفظت بالأمل. صار الأمل أثقل من الحجر، لكنه كان يحمل سلامًا صغيرًا في داخلك، وصار الأمل مقاومة.","You kept hope. Hope became heavier than stone, but it carried a small peace within you, and hope became resistance."],
+["أغلقت قلبك: السياسة لا تطعم أحدًا. صار القلب مغارة، وصار الصمت ملاذًا، وصار الألم عادة تُدفن كل صباح.","You closed your heart: politics feeds no one. The heart became a cave, silence a refuge, and pain a habit buried each morning."]
+],
+r2b:[
+["ابتسمت واعتذرت. رأت فيك أمانة، وتذكرت اسمك حين احتاجت سائقًا. صار الاعتذار بابًا، وصار الباب طريقًا.","You smiled and apologized. She saw honesty in you, and remembered your name when she needed a driver. An apology became a door, and the door became a road."],
+["ساعدتها في حمل الأكياس. لم تكن تعرف أنها ستصير أم أولادك، وأن تلك الأكياس كانت بداية أثقل حكاية في حياتك.","You helped her carry the bags. You didn't know she would become the mother of your children, and that those bags were the beginning of the heaviest story of your life."]
+],
+rev1:[
+["انضممت إليهم ورسمت. الطلاء على يديك، والحلم على الجدران. شعرت أنك طفل من جديد، وأن الخوف ليس قدرًا.","You joined them and painted. Paint on your hands, dream on the walls. You felt a child again, and that fear was not destiny."],
+["عرضت نقلهم بحافلتك. صارت الحافلة صالة ثورة، وصار كل رحلة قصيدة، وكل مقعد منبرًا.","You offered to transport them in your bus. The bus became a revolutionary hall, every trip a poem, every seat a pulpit."],
+["راقبت من بعيد. لم تكن مستعدًا بعد، لكنك كنت تحفظ الوجوه، وكنتَ تعرف أن هذا اليوم سيأتي دورك فيه.","You watched from afar. You weren't ready yet, but you memorized the faces, knowing this day would come to your turn."]
+],
+rev2:[
+["هتفت معهم. صوتك اختلط بآلاف الأصوات، وكأنه صوت واحد. صار الفرد جماعة، وصارت الجماعة إنسانًا واحدًا.","You chanted with them. Your voice mixed with thousands, as if one voice. The individual became a crowd, the crowd a single human."],
+["نظّمت الإسعافات. وضعت الماء والضمادات ومساعدة الجرحى. صار الميدان بيتًا، وصار الماء صلاة.","You organized first aid. You placed water, bandages, and aid to the wounded. The square became a home, and water became prayer."],
+["حميت سلمى والطيب. أخذتك الانفجارات مرتين، لكنك لم تتركهما. صار الحب قرارًا، والقرار شجاعة، والشجاعة جسدًا.","You shielded Salma and Al-Tayeb. Explosions hit you twice, but you didn't leave them. Love became a decision, the decision courage, and courage a body."]
+],
+rev3:[
+["حملت الطيب الجريح وهربت. لكن الطيب مات بين يديك، وأنت تعرف أنك فعلت ما تستطيع. صار العجز جرحًا، والجرح ذكرى.","You carried the wounded Al-Tayeb and fled. But Al-Tayeb died in your hands, and you know you did what you could. Helplessness became a wound, and the wound a memory."],
+["هربت مع سلمى. تركتَ الميدان، لكنك لم تترك قلبك. صار الهروب نجاة، والنجاة عارًا صغيرًا، والعار ذكرى.","You fled with Salma. You left the square, but not your heart. Escape became survival, survival a small shame, and shame a memory."],
+["بقيت لتنقذ من تستطيع. رأيت ما لا يُنسى، وأيقنت أن بعض الشجاعة خيار لا شرف، وأن البقاء أحيانًا أشجع من الفرار.","You stayed to save whoever you could. You saw what cannot be forgotten, and became certain that some courage is a choice not an honor, and that staying is sometimes braver than fleeing."]
+],
+rev4:[
+["كتبت أسماء الشهداء. صار الجدار مصحفًا، وصار اسمك شاهدًا على الجدار، وصارت يدك قلمًا لذاكرة الأمة.","You wrote the martyrs' names. The wall became a scripture, your name a witness on the wall, and your hand a pen for the nation's memory."],
+["أخذت صورة للجدار وحفظتها. لم تكن تعرف أنها ستصير دليلًا يومًا، وأن صورة صغيرة قد تحفظ حقيقة كبيرة.","You took a photo of the wall and kept it. You didn't know it would become evidence one day, and that a small photo could preserve a great truth."],
+["تركت سلمى ومضيت. لم تكن قاسيًا، كنت فقط متعبًا. صار التعب عذرًا، والعذر ثقلًا، والثقل سنواتًا.","You left Salma and walked away. You weren't cruel, only tired. Fatigue became an excuse, the excuse a weight, and the weight years."]
+],
+rev5:[
+["سألتها عن الطيب طفلًا. حكت، وضحكت، وبكت. صرتَ تعرف أن الشهداء كانوا أطفالًا قبل كل شيء، وأن الذاكرة وطن.","You asked her about Al-Tayeb as a child. She spoke, laughed, and wept. You came to know that martyrs were children before anything else, and that memory is a homeland."],
+["عرضت المساعدة. رفضت أولًا، ثم قبلت. صار بيتها بيتك، وصارت أم الطيب أمك الثانية.","You offered help. She refused at first, then accepted. Her house became yours, and Umm Al-Tayeb your second mother."],
+["صمتّ وشربت القهوة. بعض اللحظات أفضل ما فيها الصمت، وبعض الحزن أشرف من الكلام.","You stayed silent and drank the coffee. Some moments are best served by silence, and some grief is nobler than speech."]
+],
+rev6:[
+["انضممت إلى لجنة مقاومة الحي. توثيق، وتوزيع، ومساعدة. صارت الثورة عملك اليومي، وصار الحي عائلتك الجديدة.","You joined your neighborhood's resistance committee. Documentation, distribution, aid. The revolution became your daily work, and the neighborhood your new family."],
+["دعمتهم بالمال. لم تكن في الصفوف الأمامية، لكنك كنت في القلب. صار المال وقودًا، والوقود وعدًا، والوعد حياة.","You supported them with money. You weren't in the front ranks, but you were in the heart. Money became fuel, fuel a promise, and the promise life."],
+["اكتفيت بالمشاهدة. لم تكن مستعدًا، لكنك كنت تتعلم. صار الانتظار درسًا، والدرس سنوات، والسنوات جسرًا.","You were content to watch. You weren't ready, but you were learning. Waiting became a lesson, the lesson years, and the years a bridge."]
+],
+sd2013:[
+["نزلت إلى الشارع مع المحتجين. رأيت الشرطة، ورأيت الدم، ورأيت بلدك يغلي. صار الغضب معرفة، والمعرفة جرحًا.","You went down to the street with the protesters. You saw the police, the blood, your country boiling. Anger became knowledge, and knowledge a wound."],
+["بقيت في البيت. حميت أسرتك، لكن قلبك كان في الشارع. صار البيت ملجأ، والملجأ قيدًا، والقيد شعورًا دائمًا.","You stayed home. You protected your family, but your heart was in the street. Home became a shelter, the shelter a restraint, and the restraint a constant feeling."],
+["ساعدت المصابين في المساجد. كان ذلك أول يوم تتعلم فيه الإسعافات الأولية. صار المسجد مستشفى، والدم درسًا.","You helped the wounded in the mosques. It was the first day you learned first aid. The mosque became a hospital, and blood a lesson."]
+],
+sd2013b:[
+["سألت الشيخ إبراهيم: «وماذا نفعل؟» فأجاب: «اصبر، وتعلم، وانتظر فرصتك». صارت الكلمة خريطة، والخريطة سنوات.","You asked Sheikh Ibrahim: 'So what do we do?' He answered: 'Be patient, learn, wait for your chance.' The words became a map, and the map years."],
+["صمتّ وحفظت كلماته. في السنوات التالية، رجعت إليها كثيرًا. صار الصمت خزانة، والخزانة ذاكرة.","You stayed silent and memorized his words. In the following years you returned to them often. Silence became a store, and the store memory."]
+],
+sd2014:[
+["حضرت جلسات الحوار. رأيت كيف تُدار السياسة، وكيف تُكتب الكلمات التي لا تُنفذ. صار الحوار مسرحًا، والمسرح خدعة.","You attended the dialogue sessions. You saw how politics is managed, how words that are not executed are written. Dialogue became theater, and theater a trick."],
+["قلت إن الحوار بلا معنى. صار صوتك صوت كثيرين، وكأنهم جميعًا يتحدثون بك. صار الرفض موقفًا، والموقف هوية.","You said the dialogue was meaningless. Your voice became the voice of many, as if they all spoke through you. Refusal became a stance, and the stance an identity."],
+["اكتفيت بالمشاهدة. الحوار كان بعيدًا عن الشارع، والشارع كان بعيدًا عن الحوار. صار البعد خريطة، والخريطة بلدًا.","You were content to watch. The dialogue was far from the street, the street far from the dialogue. Distance became a map, and the map a country."]
+],
+sd2018:[
+["انضممت إلى الاحتجاجات. كان ديسمبر باردًا، لكن الشارع كان دافئًا بآلاف الأجساد. صار البرد صلاة، والدفء ثورة.","You joined the protests. December was cold, but the street was warm with thousands of bodies. Cold became prayer, and warmth revolution."],
+["ساعدت في نقل الجرحى. صارت سيارتك إسعافًا، وصار دمك ماءً في العروق، وصار الوقت عدوًا تُهزمه بالسرعة.","You helped transport the wounded. Your car became an ambulance, your blood water in the veins, and time an enemy defeated by speed."],
+["راقبت من النافذة. لم تكن مستعدًا بعد. صار الانتظار درسًا، والدرس صبرًا، والصبر سنوات.","You watched from the window. You weren't ready yet. Waiting became a lesson, the lesson patience, and patience years."]
+],
+sd2019:[
+["هتفت مع الملايين أمام القيادة العامة. صوتك اختلط بآلاف، وكل صوت كان ثورة صغيرة. صار الفرد جيشًا، والجيش إنسانًا واحدًا.","You chanted with the millions before the General Command. Your voice mixed with thousands, and every voice was a small revolution. The individual became an army, and the army a single human."],
+["نظّمت الاعتصام. الماء والخبز والنظافة. صار الميدان بيتًا، وصار البقاء فيه عملًا، وصار الصمود هوية.","You organized the sit-in. Water, bread, cleanliness. The square became a home, staying in it became work, and steadfastness became identity."],
+["حملت المصابين إلى المستشفيات. رأيت وجوهًا لا تنسى، وأيادي تمسك بيدك ثم تفلت. صار الجرح ذاكرة، والذاكرة بلدًا.","You carried the wounded to hospitals. You saw faces not to be forgotten, and hands that held yours then slipped away. The wound became memory, and memory a country."]
+],
+sd2019b:[
+["حملت الجرحى وهربت. لم تكن تعرف أن هذا اليوم سيبقى فيك للأبد. صار اليوم جرحًا، والجرح معلمًا.","You carried the wounded and fled. You didn't know this day would remain in you forever. The day became a wound, and the wound a teacher."],
+["بقيت في الميدان حتى النهاية. رأيت ما رأيت. لم تخرج كما دخلت. صار الميدان قبرًا، والقبر وطنًا.","You stayed in the square to the end. You saw what you saw. You didn't leave as you entered. The square became a grave, and the grave a homeland."],
+["تركت الميدان وذهبت إلى المستشفى. ساعدت من قدرت، لكن قلبك بقي في الميدان. صار القلب أسيرًا، والأسير حيًّا.","You left the square and went to the hospital. You helped who you could, but your heart stayed in the square. The heart became captive, and the captive alive."]
+],
+sd2020:[
+["احتفلت بالسلام. أملت أن يدوم، وعرفتَ أن الأمل وحده لا يكفي. صار الاحتفال درسًا، والدرس حكمة.","You celebrated the peace. You hoped it would last, and you knew hope alone was not enough. Celebration became a lesson, and the lesson wisdom."],
+["وزعت المساعدات على النازحين. لم تكن سياسيًا، كنت إنسانًا. صار العطاء هويتك، والهوية وطنًا.","You distributed aid to the displaced. You weren't a politician, you were a human. Giving became your identity, and identity a homeland."],
+["قلت إن السلام الحقيقي لم يبدأ. كان صوتك صوت من رأى كثيرًا. صار الصوت حكمة، والحكمة ألمًا.","You said the real peace had not begun. Your voice was the voice of one who had seen much. The voice became wisdom, and wisdom pain."]
+],
+sd2021:[
+["انضممت إلى احتجاجات «لا للانقلاب». كان أكتوبر صعبًا، لكن الشارع كان مصممًا. صار الشارع وطنًا، والوطن مقاومة.","You joined the 'No to the coup' protests. October was hard, but the street was determined. The street became a homeland, and the homeland resistance."],
+["ساعدت في توثيق الانتهاكات. صار هاتفك دفترك، وصار الشارع مكتبك، وصار القلم سلاحك.","You helped document the violations. Your phone became your notebook, the street your office, and the pen your weapon."],
+["بقيت بعيدًا واحمِ أسرتك. حميت أسرتك، لكن قلبك كان في الشارع. صار القلب أسيرًا، والأسير شاهدًا.","You stayed away and protected your family. You protected your family, but your heart was in the street. The heart became captive, and the captive a witness."]
+],
+sd2022:[
+["استعددت لما هو قادم. خزنت، وحسبت، وانتظرت. صار الاستعداد حكمة، والحكمة نجاة.","You prepared for what was coming. You stored, you calculated, you waited. Preparation became wisdom, and wisdom survival."],
+["قلت إن الحرب قادمة. لم يصدقك كثيرون، لكنك كنت تعرف ما يعرفه من رأى الحرب. صار الصوت صادقًا، والصدق مؤلمًا.","You said war was coming. Many didn't believe you, but you knew what those who had seen war know. The voice became truthful, and truthfulness painful."],
+["تمنيت أن يكون الاتفاق الإطاري بداية. كان الأمل أجمل من الحقيقة. صار الأمل خبزًا، والخبز وهمًا.","You hoped the Framework Agreement would be a beginning. Hope was more beautiful than the truth. Hope became bread, and bread an illusion."]
+],
+sd2023:[
+["هربت بأسرتك من الخرطوم. تركت البيت، والحافلة، والوثائق. حملت ما تستطيع من قلبك، ونسيت أن القلب أثقل ما يُحمل.","You fled Khartoum with your family. You left the house, the bus, the documents. You carried what you could of your heart, and forgot that the heart is the heaviest burden."],
+["بقيت وساعدت الجيران. صارت الحرب جارك، وصار الحي أسرتك، وصار البقاء مقاومة.","You stayed and helped the neighbors. War became your neighbor, the neighborhood your family, and staying resistance."],
+["انضممت إلى غرفة طوارئ الحي. صار الماء والخبز عملك، وصار الموت عادة تتعايش معها. صار العطاء وطنًا.","You joined your neighborhood's emergency room. Water and bread became your work, and death a habit you coexist with. Giving became a homeland."]
+],
+sd2023b:[
+["ساعدت في دفن الضحايا. لم تكن تعرف أسماء كل من دُفن، لكنك كنت تعرف أنهم ليسوا أرقامًا. صار التراب شهادة، والشهادة صلاة.","You helped bury the victims. You didn't know all their names, but you knew they were not numbers. Earth became testimony, and testimony prayer."],
+["ساعدت الناجين على الهروب. رأيت في عيونهم ما لا يُنسى. صار الخوف معرفة، والمعرفة عبئًا.","You helped survivors escape. You saw in their eyes what cannot be forgotten. Fear became knowledge, and knowledge a burden."],
+["صمتّ وحفظت الأسماء. صار لسانك مقبرة، وصار قلبك متحفًا. صار الحفظ عملك، والعمل وطنًا.","You stayed silent and memorized the names. Your tongue became a cemetery, your heart a museum. Preservation became your work, and work a homeland."]
+],
+sd2023c:[
+["هربت مع النازحين نحو القضارف. كان الطريق طويلًا والليل باردًا. صار الطريق وطنًا، والبرد رفيقًا.","You fled with the displaced toward Gedaref. The road was long and the night cold. The road became a homeland, and cold a companion."],
+["ساعدت العجوز حتى يلحق بالقافلة. صار تعبك ثمنًا لكرامة رجل لا تعرفه، وصار التعب شرفًا.","You helped the old man until he caught the convoy. Your exhaustion became the price of a stranger's dignity, and exhaustion became honor."],
+["بقيت في المدينة وساعدت من بقي. لم تكن تعرف كم سيبقى، لكنك كنت هناك. صار البقاء وعدًا، والوعد حياة.","You stayed in the city and helped those who remained. You didn't know how long it would be, but you were there. Staying became a promise, and the promise life."]
+],
+sd2024:[
+["ساعدت في مطابخ زمزم. صار القدر الكبير صديقك، وصار الخبز عطاءً لا سلعة. صار الجوع عدوًا تُقاومه بالحب.","You helped in the Zamzam kitchens. The big pot became your friend, and bread a gift not a commodity. Hunger became an enemy resisted by love."],
+["وزعت الماء على النازحين. صار كل كوب شهادة، وكل جرعة وعدًا. صار الماء أثمن من الذهب.","You distributed water to the displaced. Every cup became testimony, every sip a promise. Water became more precious than gold."],
+["حفظت الأسماء. لم تكن تعرف أن هذا سيصير واجبك. صار الاسم هوية، والهوية وطنًا.","You memorized the names. You didn't know this would become your duty. A name became identity, and identity a homeland."]
+],
+sd2024b:[
+["انضممت إلى غرف الطوارئ. صار لك أخوة وأخوات، وصار لك عمل أكبر من نفسك. صار العطاء عائلة، والعائلة وطنًا.","You joined the emergency rooms. You gained brothers and sisters, and work greater than yourself. Giving became family, and family a homeland."],
+["دعمتهم بالمال. لم تكن في الصفوف، لكنك كنت في القلب. صار المال وقودًا، والوقود حياة.","You supported them with money. You weren't in the ranks, but you were in the heart. Money became fuel, and fuel life."],
+["اكتفيت بالمشاهدة. ثم ندمت. صار الندم معلمًا، والمعلم ثقلًا.","You were content to watch. Then you regretted. Regret became a teacher, and the teacher a weight."]
+],
+sd2025:[
+["ذهبت إلى الفاشر. كان الجرح في عمق الأرض، وأنت كنت تعرف أنك تنتمي إليه. صار الرجوع جذرًا، والجذر دمًا.","You went to Al-Fashir. The wound was in the depth of the earth, and you knew you belonged to it. Returning became a root, and the root blood."],
+["بقيت في الخرطوم وساعدت العائدين. صارت العاصمة تكتب من جديد، وأنت كنت قلمًا. صار البقاء إعادة كتابة.","You stayed in Khartoum and helped the returning. The capital began to write anew, and you were a pen. Staying became rewriting."],
+["حفظت أسماء ضحايا الفاشر. لم تكن تعرف كم من الأسماء سيأتي. صار الحفظ صلاة، والصلاة وطنًا.","You memorized the names of Al-Fashir's victims. You didn't know how many names would come. Memorizing became prayer, and prayer a homeland."]
+],
+sd2026:[
+["قلت للطفل: «ليس بعد، لكننا سنبقى». كانت الكلمة أكبر من الأمل، أصغر من الوعد. صار البقاء عقيدة.","You told the child: 'Not yet, but we will stay.' The words were bigger than hope, smaller than a promise. Staying became a creed."],
+["صمتّ واحتضنته. لم تكن تحتاج كلمة، كنت تحتاج يدًا. صار الصمت حوارًا، والحوار حبًا.","You stayed silent and held him. You didn't need a word, you needed a hand. Silence became dialogue, and dialogue love."],
+["قلت الحقيقة: «لا أعرف». صار الصدق معجزة في زمن الحرب. صار الجهل شرفًا، والشرف وطنًا.","You told the truth: 'I don't know.' Honesty became a miracle in wartime. Not knowing became honor, and honor a homeland."]
+],
+
+/* ────── الفصل الرابع: قبل الحرب ────── */
+s6b:[
+["حكيت لها عن دارفور وعن أهلك. بكت معك، ومسحت دمعة لم تكن تعرفها. صار الحكي راحة، والراحة بيتًا.","You told her about Darfur and your family. She wept with you and wiped a tear you didn't know existed. Speaking became rest, and rest a home."],
+["غيّرت الحديث: «الماضي ماضٍ». قالت: «حسنًا»، ولم تسأل بعدها. صار الصمت جدارًا، والجدار وطنًا صغيرًا.","You changed the subject: 'The past is past.' She said: 'Alright,' and didn't ask again. Silence became a wall, and the wall a small homeland."]
+],
+s6c:[
+["اشتريت لهم الآيس كريم وعلّمتهم السباحة. صارت ضحكاتهم أثمن من كل شيء، وصار اليوم وطنًا.","You bought them ice cream and taught them to swim. Their laughter became more precious than everything, and the day a homeland."],
+["بقيت على العتبة تحسب الديون. لم تكن تعرف أن هذه كانت أجمل أيام عمرك، وأنك تفرّط فيها وأنت تحسب.","You stayed at the threshold counting debts. You didn't know these were the most beautiful days of your life, and that you were squandering them while counting."]
+],
+s6d:[
+["كتبت اسميهما على الجدار. صار الجدار وعدًا بأن ذاكرتهما ستبقى، وأن الأسماء لا تموت.","You wrote their names on the wall. The wall became a promise that their memory would remain, and that names do not die."],
+["علّقت سبحة أبيك فوق سريرهما. صار الأب والأب، جنبًا إلى جنب. صار الجد حاضرًا في الجيل الجديد.","You hung your father's prayer beads above their bed. Father and father, side by side. The grandfather became present in the new generation."]
+],
+q1:[
+["خزّنت الماء والطعام والوقود. ضحك الجيران، لكنك كنت تعرف. صار الاستعداد حكمة، والحكمة نجاة.","You stocked water, food, and fuel. The neighbors laughed, but you knew. Preparation became wisdom, and wisdom survival."],
+["أعددت عيدًا جميلًا. كانت ضحكة مريم أثمن من كل التخزين في العالم. صار العيد خبزًا، والخبز حبًا.","You prepared a beautiful Eid. Maryam's laughter was more precious than all the stocking in the world. Eid became bread, and bread love."]
+],
+q1b:[
+["تمنيت أن يطول هذا اليوم. لم يطل، لكنه بقي فيك للأبد. صار اليوم ذكرى، والذكرى وطنًا.","You wished the day would last. It didn't, but it remained in you forever. The day became a memory, and memory a homeland."],
+["التقطت في ذاكرتك كل الوجوه. بعد أسابيع كنت تحفظها أكثر من اسمك. صار الحفظ وعدًا، والوعد صلاة.","You captured every face in your memory. Weeks later you knew them better than your own name. Memorizing became a promise, and the promise prayer."]
+],
+
+/* ────── الفصل الخامس: الحرب ────── */
+w1:[
+["بقيت مع أسرتك في البيت. كانت الجدران تحمي، أو هكذا بدا. صار البيت وهمًا، والوهم وطنًا مؤقتًا.","You stayed with your family at home. The walls protected, or so it seemed. Home became an illusion, and the illusion a temporary homeland."],
+["هربت بهم من الحي. صارت السيارة بيتًا مؤقتًا، وصار الطريق وطنًا. صار الهروب قرارًا، والقرار مصيرًا.","You fled the neighborhood with them. The car became a temporary home, the road a homeland. Escape became a decision, and the decision destiny."]
+],
+v1:[
+["أمسكت بيد آمنة. كانت يدها ترتجف، فمسكتها أكثر. صارت اليد وعدًا، والوعد نجاة.","You held Amina's hand. Her hand trembled, so you held it tighter. The hand became a promise, and the promise survival."],
+["تحققت من الأبواب وجمعت الوثائق. لم تكن تعرف أن الوثائق ستكون آخر ما يحمي هويتك. صار الورق درعًا، والدرع وطنًا.","You checked the doors and gathered the documents. You didn't know the documents would be the last thing protecting your identity. Paper became a shield, and the shield a homeland."]
+],
+v2:[
+["فتحت الباب لتحمي الأسرة. كنت تعرف أن يدك لن توقف رصاصة، لكنك كنت تعرف أيضًا أن الصمت لن يحمي. صار الفتح شجاعة، والشجاعة ثمنًا.","You opened the door to protect the family. You knew your hand wouldn't stop a bullet, but you also knew silence wouldn't protect. Opening became courage, and courage a price."],
+["اختبأت مع أسرتك في الغرفة الخلفية. سمعت كل شيء. لم يكن هناك شيء آخر تفعله. صار الاختباء انتظارًا، والانتظار سنوات.","You hid with your family in the back room. You heard everything. There was nothing else to do. Hiding became waiting, and waiting years."]
+],
+w2:[
+["قاومت بيدين خاليتين. كانت شجاعتك أكبر من قدرتك. صار الجسد جدارًا، والجدار ركامًا.","You resisted with bare hands. Your courage was greater than your strength. The body became a wall, and the wall rubble."],
+["لم تقاوم لتبقى حيًا. فقدت كل شيء، لكنك عشت. صار البقاء عارًا، والعار سنوات.","You didn't resist, to stay alive. You lost everything, but you lived. Survival became shame, and shame years."]
+],
+v3:[
+["قدّمت نفسك. صار لك رفاق، وصار للزنزانة أسماء. صار الاسم وجودًا، والوجود مقاومة.","You introduced yourself. You gained companions, and the cell gained names. A name became existence, and existence resistance."],
+["صمت وأبقت عينيك مفتوحتين. حفظت الوجوه وحفظت الأصوات. صار الصمت ذاكرة، والذاكرة سلاحًا.","You stayed silent and kept your eyes open. You memorized faces and voices. Silence became memory, and memory a weapon."]
+],
+u1:[
+["حملت بضائع التجار. تعبت، لكن الجيب امتلأ، والكرامة عادت. صار التعب عملة، والعملة نجاة.","You carried the merchants' goods. You tired, but your pocket filled, and dignity returned. Fatigue became currency, and currency survival."],
+["ساعدت البائعة العجوز. أعطتك وجبة وكلمة طيبة. صارت الوجبة أثمن من كل المال، لأنها كانت حبًا.","You helped the old vendor. She gave you a meal and a kind word. The meal became more precious than all money, because it was love."],
+["بعت المناديل والبخور. صار الزحام سوقك، والعابرون زبائنك. صار الصوت العالي سلاحك، والصبر تجارتك.","You sold tissues and incense. The crowd became your market, passersby your customers. The loud voice became your weapon, and patience your trade."]
+],
+u2:[
+["ادّخرت. صار القرش خطوة، وصار الانتظار استثمارًا. صار الصبر طريقًا لا خيارًا.","You saved. A penny became a step, waiting became investment. Patience became a path not a choice."],
+["أعطيت لمن هو أحوج. لم تكن تعرف أن هذا العطاء سيعود إليك في وقت لا تتوقعه. صار العطاء دائرة، والدائرة قدرًا.","You gave to someone needier. You didn't know this giving would return in an unexpected time. Giving became a circle, and the circle destiny."]
+],
+g1:[
+["وزعت الطعام والماء على البيوت الجريحة. صار الحي عائلتك، وصار الجرح وطنك. صار العطاء هويتك.","You distributed food and water to wounded homes. The neighborhood became your family, the wound your homeland. Giving became your identity."],
+["سجّلت الأسماء والأدوية. صار هاتفك مكتبًا، وصار الحبر شهادة. صار التدوين صلاة.","You recorded names and medicines. Your phone became an office, and ink testimony. Recording became prayer."]
+],
+h1:[
+["ساعدت الأطباء. رأيت ما رأيت، ولم تعد كما كنت. صار الجرح معرفة، والمعرفة عبئًا.","You helped the doctors. You saw what you saw, and you did not return as you were. The wound became knowledge, and knowledge a burden."],
+["ابتعدت. لم تكن مستعدًا، لكنك عرفت أن فيك شيئًا لم يُكسر بعد. صار الابتعاد إنقاذًا، والإنقاذ ثمنًا.","You stepped away. You weren't ready, but you knew something in you was not yet broken. Stepping away became saving, and saving a price."]
+],
+h2:[
+["أعطيت دواءك للطفل. حرارته انخفضت، وأمه قبلت يديك. صار الدواء حبًا، والحب معجزة.","You gave your medicine to the child. His fever went down, and his mother kissed your hands. Medicine became love, and love a miracle."],
+["ساعدت الأم بكمادات. لم يكن هناك دواء، لكن كان هناك يد. صار الكماد صلاة، والصلاة وطنًا.","You helped the mother with compresses. There was no medicine, but there was a hand. The compress became prayer, and prayer a homeland."],
+["احتفظت بالدواء. صار في جيبك، وصار في قلبك ثقل. صار الثقل سنواتًا.","You kept the medicine. It stayed in your pocket, and in your heart grew a weight. The weight became years."]
+],
+e1:[
+["شاركتها الماء. صارت أم حسن أختك، وصار البئر دربك. صار الماء قرابة، والقرابة وطنًا.","You shared your water with her. Umm Hasan became your sister, and the well your path. Water became kinship, and kinship a homeland."],
+["اعتذرت. لم تكن قاسيًا، كنت جائعًا. لكنك تعرف أن العطش الذي رأيته في عينيها سيرافقك سنوات.","You apologized. You weren't cruel, only hungry. But you know the thirst you saw in her eyes would accompany you for years."],
+["انضممت إلى غرفة الطوارئ. صار الماء والخبز عملك، وصار الموت عادة تتعايش معها. صار العطاء وطنًا.","You joined the emergency room. Water and bread became your work, and death a habit you coexist with. Giving became a homeland."]
+],
+e2:[
+["أجبت بهدوء. لم تكن خائفًا، كنت متعبًا. صار الهدوء درعًا، والدرع شجاعة.","You answered calmly. You weren't afraid, only tired. Calm became a shield, and the shield courage."],
+["أظهرت وثائقك. صار الورق هويتك، وصار اسمك تذكرة عبور. صار الورق وطنًا.","You showed your documents. Paper became your identity, and your name a passage ticket. Paper became a homeland."],
+["رفعت صوتك. لم يحتمل الحاجز احتجاجك. صار الصوت شهيدًا، والشهيد ذكرى.","You raised your voice. The checkpoint could not bear your protest. The voice became a martyr, and the martyr a memory."],
+["وقفت بين أم حسن وبينه. لم تكن تعرف أنه سيحترمك، لكنه فعل. صار الوقوف وطنًا.","You stood between Umm Hasan and him. You didn't know he would respect you, but he did. Standing became a homeland."]
+],
+q2:[
+["قلت اسمك واسم قريتك. صار لك اسم، وصار للقرى أسماء. صار الاسم وجودًا، والوجود مقاومة.","You said your name and your village. You had a name, and villages had names. A name became existence, and existence resistance."],
+["صمت. صار الصمت أحيانًا هو الحكمة الوحيدة. صار الصمت درعًا، والدرع سنوات.","You stayed silent. Silence is sometimes the only wisdom. Silence became a shield, and the shield years."]
+],
+q3:[
+["ضممته إليك. تحملت الضرب عنه، وتعلمت أن الأبوة ليست دمًا. صار الفتى ابنك، والابن وطنًا.","You took him in. You bore the beating for him, and learned that fatherhood is not blood. The boy became your son, and the son a homeland."],
+["ابتعدت. لم تكن قاسيًا، كنت حيًا. لكنك لم تنم تلك الليلة. صار السهاد معلمًا، والمعلم ثقلًا.","You moved away. You weren't cruel, only alive. But you didn't sleep that night. Insomnia became a teacher, and the teacher a weight."]
+],
+q4:[
+["أخرجت الدفتر ووضعته على المكتب. لم تتكلم، والدفتر تكلم. صار الدفتر شاهدًا، والشاهد وطنًا.","You took out the notebook and put it on the desk. You didn't speak; the notebook spoke. The notebook became a witness, and the witness a homeland."],
+["أخرجت السبحة وقلت اسم أبيك. رأيت في عينيه شيئًا يشبه الاحترام. صار الاسم درعًا، والدرع كرامة.","You took out the prayer beads and said your father's name. You saw something like respect in his eyes. The name became a shield, and the shield dignity."],
+["قلت إنك سائق. صار الكذب درعًا، لكنه كان درعًا ضروريًا. صار الدرع سنوات.","You said you were a driver. The lie became a shield, but a necessary shield. The shield became years."],
+["حكيت له عن أبنائك. رأيت في وجهه ما لا يُتوقع: دمعة. صار الجرح جسرًا، والجسر نجاة.","You told him about your children. You saw in his face something unexpected: a tear. The wound became a bridge, and the bridge survival."]
+],
+q5:[
+["طلبت النشرة الكاملة. سمعت أخبارًا هزّت الزنزانة. صار الأمل يدخل في الهواء. صار الهواء وطنًا.","You asked for the full bulletin. You heard news that shook the cell. Hope began to enter the air. Air became a homeland."],
+["قلت: «يكفي أملًا مزيّفًا». لم تكن متشائمًا، كنت متعبًا. صار اليأس راحة، والراحة وهمًا.","You said: 'Enough false hope.' You weren't pessimistic, only tired. Despair became rest, and rest an illusion."]
+],
+q6:[
+["ساعدت الطبيب. صار الدم والقمامة أخلاقًا، وصار الجرح صلاة. صار الجسد معبدًا.","You helped the doctor. Blood and scraps became ethics, and the wound prayer. The body became a temple."],
+["بقيت بعيدًا. صرت أكثر تعبًا، وأقل رحمة. صار البعد خيارًا، والخيار ثقلًا.","You stayed away. You became more tired and less merciful. Distance became a choice, and the choice a weight."]
+],
+p1:[
+["اقتسمت رغيفك. صار الجريح أخاك، وصار الرغيف رغيفين. صار الجوع قرابة.","You shared your loaf. The wounded man became your brother, and one loaf became two. Hunger became kinship."],
+["أكلت رغيفك. لم تكن قاسيًا، كنت جائعًا. لكنك لم تشبع. صار الجوع عادة، والعادة سنوات.","You ate your loaf. You weren't cruel, only hungry. But you didn't feel full. Hunger became a habit, and the habit years."]
+],
+p2:[
+["تطوعت للعمل. صار الخندق صلاتك، وصار التعب رفيقك. صار العمل نجاة.","You volunteered. The trench became your prayer, and fatigue your companion. Work became survival."]
+,
+["اختبأت. لم تُضرب بشدة، لكن قلبك ضُرب. صار القلب جريحًا، والجريح شاهدًا.","You hid. You weren't beaten badly, but your heart was beaten. The heart became wounded, and the wounded a witness."]
+],
+p3:[
+["حدثته بهدوء. صار الشاب يبكي، وصار الحارس أخًا لجزء منك. صار الكلام يدًا.","You spoke to him calmly. The young man began to weep, and the guard became a brother to part of you. Words became a hand."],
+["حاولت سرقة المفتاح. أمسكوا بك. صار الطمع خطأً، والخطأ ثمنًا.","You tried to steal the key. They caught you. Greed became a mistake, and the mistake a price."],
+["تظاهرت بالمرض. لم يصدقوك تمامًا، لكنهم تركونك. صار المرض حيلة، والحيلة نجاة صغيرة.","You pretended to be sick. They didn't fully believe you, but they left you. Sickness became a trick, and the trick a small survival."],
+["أخرجت السبحة وحكيت عن أبيك. صار الحارس يستمع كطفل. صار الأب حاضرًا، والحضور وطنًا.","You took out the prayer beads and told him about your father. The guard listened like a child. The father became present, and presence a homeland."]
+],
+p4:[
+["هربت. لم تنظر خلفك. صارت الجدران تشبه الأعداء. صار الهروب قرارًا، والقرار مصيرًا.","You escaped. You didn't look back. The walls became like enemies. Escape became a decision, and the decision destiny."],
+["انتظرت. خططت مع رفيقين. خرجتم معًا، وصار الهروب أعظم من الحرية. صار التخطيط صلاة.","You waited. You planned with two companions. You left together, and escape became greater than freedom. Planning became prayer."]
+],
+z0:[
+["نمت قليلًا. لم يكن هناك وقت، لكن الجسد كان يحتاج ذلك. صار النوم صلاة صغيرة.","You slept a little. There was no time, but the body needed it. Sleep became a small prayer."],
+["واصلت. صار الليل صديقًا، وصار الأفق وعدًا. صار المشي صلاة.","You continued. Night became a friend, and the horizon a promise. Walking became prayer."]
+],
+o1:[
+["ذهبت إلى التكية. أعطوك طعامًا وكلمة. صار الناس عائلتك، وصار الفقر وطنًا. صار العطاء مقاومة.","You went to the communal kitchen. They gave you food and a word. People became your family, and poverty a homeland. Giving became resistance."],
+["بحثت في الأنقاض. وجدت شيئًا صغيرًا. لم يكن طعامًا، لكنه كان ذكرى. صار الأنقاض مكتبة، والذكرى طعامًا.","You searched the ruins. You found something small. It wasn't food, but it was a memory. Ruins became a library, and memory food."]
+],
+o1c:[
+["عاهدت نفسك ألا تنسى. صار الحفظ عملًا، وصار النسيان خيانة. صار الحفظ صلاة.","You vowed not to forget. Preservation became work, and forgetting betrayal. Preservation became prayer."],
+["قررت أن تطوي الصفحة. كانت الصفحة ثقيلة، لكنك أغلقتها. صار الطي راحة، والراحة نجاة.","You decided to turn the page. The page was heavy, but you closed it. Turning became rest, and rest survival."]
+],
+o2:[
+["ساعدت في التوزيع. صار الماء والخبز صلاتك، وصار الحي أسرتك. صار العطاء وطنًا.","You helped in the distribution. Water and bread became your prayer, and the neighborhood your family. Giving became a homeland."],
+["اخترت الحدود. صارت الرحلة طريقًا جديدًا، وصار الهروب بداية. صار العبور قدرًا.","You chose the border. The journey became a new road, and escape a beginning. Crossing became destiny."],
+["جلست وانتظرت. لم يكن هناك وقت، لكنك انتظرت. صار الانتظار إيمانًا صغيرًا.","You sat and waited. There was no time, but you waited. Waiting became a small faith."],
+["عدت نحو الفاشر. صار القلب يجرّك، والعقل يعترض. صار الرجوع جذرًا، والجذر دمًا.","You returned toward Al-Fashir. The heart dragged you, the mind objected. Returning became a root, and the root blood."]
+],
+
+/* ────── الفصل السادس: الخرطوم الجريحة ────── */
+k1:[
+["فتحت كشك شاي. صار الكشك مكتبك، وصار الشاي تعزية. صار العطاء مقاومة.","You opened a tea stall. The stall became your office, and tea consolation. Giving became resistance."],
+["ساعدت الأستاذة هالة. صار الحرف وعدًا، وصار التعليم مقاومة. صار الحرف سلاحًا.","You helped Ustadha Hala. Letters became a promise, and teaching resistance. Letters became a weapon."],
+["انتظرت. لم يكن هناك ما تنتظره، لكنك انتظرت. صار الانتظار إيمانًا صغيرًا.","You waited. There was nothing to wait for, but you waited. Waiting became a small faith."]
+],
+k1b:[
+["وزعت الخبز بعدل. صار الخبز عطاءً، وصار العدل أملًا. صار العطاء وطنًا.","You distributed bread fairly. Bread became giving, and fairness hope. Giving became a homeland."],
+["احتفظت لأسرة المأوى. صار القليل كثيرًا. صار الاقتصاد حبًا.","You kept some for the shelter family. A little became much. Economy became love."]
+],
+k2:[
+["هربت مع آخر الحافلات. صار الطريق وطنًا، وصار الجسر حدًا. صار الهروب قرارًا.","You fled with the last buses. The road became a homeland, and the bridge a boundary. Escape became a decision."],
+["ساعدت العجوز. صار التعب ثمنًا لكرامة رجل لا تعرفه. صار التعب شرفًا.","You helped the old woman. Exhaustion became the price of a stranger's dignity. Exhaustion became honor."],
+["اختبأت في المدرسة. انتظرت أن يمر الوقت. لم يمر. صار الوقت عدوًا، والعدو سنوات.","You hid in the school. You waited for time to pass. It didn't pass. Time became an enemy, and the enemy years."]
+],
+gd:[
+["بقيت في المأوى وساعدت المتطوعين. صار المأوى بيتًا، وصار العطاء روتينًا. صار الروتين صلاة.","You stayed in the shelter and helped volunteers. The shelter became a home, and giving routine. Routine became prayer."],
+["واصلت نحو الحدود. صار الطريق قدَرًا، وصار الأفق وعدًا. صار الحد قدرًا.","You continued toward the border. The road became destiny, and the horizon a promise. The border became destiny."]
+],
+bd:[
+["اخترت مصر مع وثائقك. صارت الوثائق درعًا، وصار الاسم تذكرة. صار الورق وطنًا.","You chose Egypt with your documents. Documents became a shield, and the name a ticket. Paper became a homeland."],
+["اخترت مصر بلا وثائق عبر مهرّب. صار المجهول مصيرًا، والخطر رفيقًا، والأمل خبزًا.","You chose Egypt without documents via a smuggler. The unknown became destiny, danger a companion, and hope bread."],
+["اخترت تشاد عبر دارفور. صار الجذر أغلى من الأمان. صار الرجوع جذرًا.","You chose Chad via Darfur. The root became more precious than safety. Returning became the root."],
+["اخترت النيل الأبيض. صار النهر طريقًا، وصار المجهول وعدًا. صار الماء وطنًا.","You chose the White Nile. The river became a road, and the unknown a promise. Water became a homeland."]
+],
+bd2:[
+["قدّمت أوراقك بهدوء. صار الورق صوتًا. صار الصمت احتجاجًا.","You presented your papers calmly. Paper became voice. Silence became protest."],
+["تكلمت بصدق. رأى في عينيك شيئًا يشبه الحقيقة. صار الصدق تذكرة.","You spoke honestly. He saw in your eyes something like truth. Honesty became a ticket."]
+],
+t1:[
+["حدّثته عن بيتك. استمع، ثم أشار للحافلة أن تمر. صار الكلام عبورًا، والعبور حياة.","You told him about your home. He listened, then signaled the bus to pass. Words became crossing, and crossing life."],
+["اكتفيت بالاستماع. صار الصمت لغة، وصار الرحيل قدرًا. صار الاستماع حكمة.","You were content to listen. Silence became a language, and departure destiny. Listening became wisdom."]
+],
+jf:[
+["اقتسمت ما معك. صار طفل الفاشر صديقك، وصار الخبز رحمة. صار العطاء وطنًا.","You shared what you had. The child of Al-Fashir became your friend, and bread mercy. Giving became a homeland."],
+["ذهبت إلى غرفة الطوارئ. صار الحي واجبك، وصار الجرح عملًا. صار الواجب وطنًا.","You went to the emergency room. The neighborhood became your duty, and the wound work. Duty became a homeland."]
+],
+fs1:[
+["اقتسمت ما معك مع الطفل وأمه. لم يكن عندك كثير، لكن كان هناك ما يكفي لأن تحب. صار القليل كثيرًا.","You shared what you had with the child and his mother. You didn't have much, but you had enough to love. A little became much."],
+["ذهبت إلى غرفة الطوارئ. صار الجرح عنوانك. صار العنوان وطنًا.","You went to the emergency room. The wound became your address. The address became a homeland."]
+],
+fs2:[
+["تبرعت بدمك. أُنقذ الرجل، لكن جسدك لم يكن كما كان. صار الدم عطاءً، والعطاء شهادة.","You donated your blood. The man was saved, but your body was not as it was. Blood became giving, and giving testimony."],
+["وزعت الطعام. صار الجرح واجبك، وصار الصبر صلاة. صار العطاء وطنًا.","You distributed food. The wound became your duty, and patience prayer. Giving became a homeland."],
+["أخذت ما تحتاج ورحلت. لم تكن قاسيًا، كنت خائفًا. صار الخوف ثقلًا، والثقل سنوات.","You took what you needed and left. You weren't cruel, only afraid. Fear became a weight, and the weight years."]
+],
+fs2b:[
+["حملت الجرحى. صار التعب شهادة، وصار الجسد وسيلة. صار الحمل صلاة.","You carried the wounded. Fatigue became testimony, and the body a means. Carrying became prayer."],
+["نجوت بنفسك. لم تكن قاسيًا، كنت حيًا. لكن قلبك تعب. صار القلب جريحًا، والجريح شاهدًا.","You saved yourself. You weren't cruel, only alive. But your heart tired. The heart became wounded, and the wounded a witness."]
+],
+fs3:[
+["ضمّدت الجراح. صار الدم صلاة، وصار الجرح وطنك. صار التضميد عهدًا.","You bandaged wounds. Blood became prayer, and the wound your homeland. Bandaging became a covenant."],
+["مضيت مع الجموع. صار الجمع وطنًا، وصار الفرار حكمة. صار الخروج صلاة.","You went with the crowds. The crowd became a homeland, and fleeing wisdom. Leaving became prayer."]
+],
+je2:[
+["حكيت لها عن النيل. صار النيل أملًا، وصار الحكي مقاومة. صار الحكي وطنًا.","You told her about the Nile. The Nile became hope, and telling resistance. Telling became a homeland."],
+["تركتها مع صمتها. لم تكن قاسيًا، كنت متعبًا. صار الصمت ثقلًا، والثقل سنوات.","You left her with her silence. You weren't cruel, only tired. Silence became a weight, and the weight years."]
+]
+};
+
+/* ─────────────── أدوات ─────────────── */
+function _L(){ return (typeof LG!=="undefined" && LG==="en") ? "en" : "ar"; }
+function _T(pair){ return (pair[_L()]==="ar" ? pair[0] : pair[1]) || pair[0] || ""; }
+
+/* بناء القصة من سجل الاختيارات */
+function buildStory(ch){
+  const out=[], seen={};
+  (s && Array.isArray(s.log) ? s.log : []).forEach(function(l){
+    if(l.ch !== ch) return;
+    const key = l.n + ":" + l.i;
+    if(seen[key]) return;
+    seen[key] = 1;
+    const beats = CB[l.n];
+    if(beats && beats[l.i] !== undefined && beats[l.i]){
+      const t = (l.en && _L()==="en" ? beats[l.i][1] : beats[l.i][0]) || "";
+      if(t) out.push(t);
+    }
+  });
+  return out;
+}
+
+/* ─────────────── انعكاسات + أشياء + رفاق ─────────────── */
+function reflectionLine(){
+  if(!s) return "";
+  const l=_L(), p=[];
+  if(s.h<=20) p.push(l==="en"?"Your body was broken, but something inside kept you standing.":"كان جسدك منهكًا، لكن شيئًا في الداخل أبقاك واقفًا.");
+  else if(s.h>=70) p.push(l==="en"?"Your body held, though the road was long.":"صمد جسدك، رغم طول الطريق.");
+  if(s.f<=15) p.push(l==="en"?"Hunger gnawed at you, and every meal felt like a battle.":"أنهكك الجوع، وكانت كل وجبة معركة.");
+  if(s.p>=70) p.push(l==="en"?"And yet, hope burned quietly in you.":"ومع ذلك، كان الأمل يشتعل فيك بهدوء.");
+  else if(s.p<=25) p.push(l==="en"?"Hope grew thin, like a thread about to break.":"رقّ الأمل، كخيط على وشك أن ينقطع.");
+  if((s.m||0)>=200) p.push(l==="en"?"Money you saved was a promise of another day.":"كان المال الذي ادّخرته وعدًا بيوم آخر.");
+  return p.join(" ");
+}
+function itemsLine(){
+  if(!s) return "";
+  const l=_L(), it=[];
+  if(s.water) it.push(l==="en"?"a water flask":"قربة ماء");
+  if(s.med) it.push(l==="en"?"a first-aid kit":"حقيبة إسعاف");
+  if(s.ldg) it.push(l==="en"?"a leather notebook":"دفتر جلدي");
+  if(s.docs) it.push(l==="en"?"your ownership documents":"وثائق ملكيتك");
+  if(s.bag) it.push(l==="en"?"Maryam's schoolbag":"حقيبة مريم");
+  if(s.sb) it.push(l==="en"?"your father's prayer beads":"سبحة أبيك");
+  if(!it.length) return "";
+  return l==="en" ? "You carried: "+it.join(", ")+"." : "كنتَ تحمل معك: "+it.join("، ")+".";
+}
+function companionsLine(){
+  if(!s) return "";
+  const l=_L(), arr=(typeof companionsOf==="function")?companionsOf():[];
+  if(!arr.length) return "";
+  const n=arr.map(function(k){const c=COMP[k];return l==="en"?c.en:c.ar;});
+  return l==="en" ? "Walking with you: "+n.join(", ")+"." : "كان يسير معك: "+n.join("، ")+".";
+}
+
+/* ─────────────── عرض ملخص الفصل ─────────────── */
+function renderRecap(ch, target, callback){
+  const l=_L();
+  const title = CH_TITLES[ch] ? CH_TITLES[ch][l] : "";
+  const story = buildStory(ch);
+  const refl = [reflectionLine(), itemsLine(), companionsLine()].filter(function(x){return x}).join(" ");
+  const LBL={
+    ar:{head:"خلاصة الفصل", intro:"قبل أن تكمل، تتوقف لحظة وتتذكر...", cont:"أكمل الرحلة", empty:"هذا الفصل لم يُكتب فيه بعد."},
+    en:{head:"Chapter Summary", intro:"Before you continue, you pause and remember...", cont:"Continue the journey", empty:"This chapter has no record yet."}
+  }[l];
+  const CLOSINGS={
+    1:{ar:"كانت هذه نهاية طفولتك. بعدها، لم تعد طفلًا.", en:"That was the end of your childhood. After it, you were no longer a child."},
+    2:{ar:"بنيتَ حياة من العدم. ثم جاء ما يهدّدها.", en:"You built a life from nothing. Then came what would threaten it."},
+    3:{ar:"في ديسمبر عرفتَ أن الخوف يمكن أن يُهزم. وفي يونيو عرفتَ أن الثمن باهظ.", en:"In December you learned fear could be defeated. In June you learned the price was steep."},
+    4:{ar:"حياة صغيرة، هشّة، وقريبة من نهايتها.", en:"A small life, fragile, close to its end."},
+    5:{ar:"الحرب لا تختار. لكنك اخترت كيف تواجهها.", en:"War does not choose. But you chose how to face it."},
+    6:{ar:"ما تبقّى ليس نهاية، بل بداية.", en:"What remains is not an end, but a beginning."}
+  };
+  const close = CLOSINGS[ch] ? CLOSINGS[ch][l] : "";
+
+  if(CH_ACH[ch] && typeof ach==="function"){try{ach(CH_ACH[ch]);}catch(e){}}
+
+  const statsHtml = `<div class="recap-stats">
+    <span>${l==="en"?"❤ Health":"❤ الصحة"}: ${s?s.h:0}</span>
+    <span>${l==="en"?"🍞 Food":"🍞 الشبع"}: ${s?s.f:0}</span>
+    <span>${l==="en"?"🌱 Hope":"🌱 الأمل"}: ${s?s.p:0}</span>
+    <span>${l==="en"?"💰 Money":"💰 المال"}: ${s?s.m:0}</span>
+  </div>`;
+
+  const bodyHtml = story.length
+    ? `<div class="recap-body">${story.map(function(p,i){return '<p style="animation-delay:'+(i*80)+'ms">'+p+'</p>'}).join("")}</div>`
+    : `<p class="mut">${LBL.empty}</p>`;
+
+  const curCh = (s && s._ch) || ch;
+  const chMap = `<div class="ch-map">${[1,2,3,4,5,6].map(function(c){
+    const cls = c===curCh ? "on" : (c<curCh ? "done" : "");
+    return `<span class="${cls}">${c}</span>`;
+  }).join("")}</div>`;
+
+  document.getElementById("app").innerHTML = `
+    ${topBar()}
+    <div class="recap">
+      <div class="recap-seal">${ch}</div>
+      <div class="recap-head">${LBL.head}</div>
+      <h1>${title}</h1>
+      ${chMap}
+      <div class="recap-intro">${LBL.intro}</div>
+      ${bodyHtml}
+      ${refl ? '<div class="recap-reflection">'+refl+'</div>' : ""}
+      ${statsHtml}
+      ${close ? '<div class="recap-closing">'+close+'</div>' : ""}
+      <button class="btn pri" onclick="window._continueFromRecap()">${LBL.cont} →</button>
+    </div>
+  `;
+  window.scrollTo({top:0,behavior:"smooth"});
+
+  window._continueFromRecap = function(){
+    window._continueFromRecap = null;
+    try{
+      if(callback) callback();
+      else if(target && window.__origRenderNode) window.__origRenderNode.call(window, target);
+      else if(target) window.renderNode(target);
+    }catch(e){console.error(e);}
+  };
+}
+
+/* ─────────────── اعتراضات ─────────────── */
+window.__origRenderNode = window.renderNode;
+window.renderNode = function(nid){
+  if(s){
+    if(!s._ch) s._ch = 0;
+    const newCh = CH_START[nid];
+    if(newCh && newCh > s._ch && s._ch >= 1 && nid !== "d0"){
+      const oldCh = s._ch;
+      s._ch = newCh;
+      renderRecap(oldCh, nid);
+      return;
+    }
+    if(newCh) s._ch = newCh;
+  }
+  return window.__origRenderNode.apply(this, arguments);
+};
+
+const _origChoose = window.choose;
+window.choose = function(i){
+  try{
+    if(s && curChoices && curChoices[i]){
+      const c = curChoices[i];
+      const node = S[id];
+      const origIdx = (node && node[2]) ? node[2].indexOf(c) : i;
+      const safeIdx = origIdx >= 0 ? origIdx : i;
+      if(!Array.isArray(s.log)) s.log = [];
+      s.log.push({n:id, i:safeIdx, ar:(c&&c[0])||"", ch:s._ch||1});
+    }
+  }catch(e){}
+  return _origChoose.apply(this, arguments);
+};
+
+const _origRE = window.renderEnding;
+window.renderEnding = function(key){
+  if(s && s._ch === 5){
+    s._ch = 6;
+    renderRecap(5, null, function(){ _origRE.call(window, key); });
+    return;
+  }
+  return _origRE.apply(this, arguments);
+};
+
+const _origCL = window.choiceLabel;
+window.choiceLabel = function(n, i){
+  try{
+    if(typeof curChoices !== "undefined" && curChoices && curChoices[i]){
+      const c = curChoices[i];
+      const node = S[n];
+      if(node && node[2]){
+        const origIdx = node[2].indexOf(c);
+        if(origIdx !== -1){
+          if((typeof LG!=="undefined" && LG==="en") && EN[n] && EN[n][1] && EN[n][1][origIdx]) return EN[n][1][origIdx];
+          return c[0] || "";
+        }
+      }
+    }
+  }catch(e){}
+  return _origCL.apply(this, arguments);
+};
+
+/* ─────────────── زر «قصتي» ─────────────── */
+const _origTB = window.topBar;
+window.topBar = function(){
+  let html = "";
+  try{ html = _origTB.apply(this, arguments) || ""; }catch(e){}
+  if(html.indexOf("storySoFar") !== -1) return html;
+  const target = '<button onclick="showMenu()">☰</button>';
+  if(html.indexOf(target) !== -1){
+    const lbl = (typeof LG!=="undefined" && LG==="en") ? "📜 My Story" : "📜 قصتي";
+    html = html.replace(target, '<button onclick="window.storySoFar()">'+lbl+'</button>' + target);
+  }
+  return html;
+};
+
+window.storySoFar = function(){
+  const l = (typeof LG!=="undefined" && LG==="en") ? "en" : "ar";
+  const e = document.getElementById("pn");
+  const chapters = [];
+  for(let c=1;c<=6;c++){
+    const st = buildStory(c);
+    if(!st.length) continue;
+    chapters.push({ch:c, title:CH_TITLES[c][l], story:st});
+  }
+  if(!chapters.length){
+    e.innerHTML = `<div><h3>📜 ${l==="en"?"My Story":"قصتي"}</h3><p class="mut">${l==="en"?"No chapters yet.":"لم تُكتب فصول بعد."}</p><button class="btn pri" onclick="document.getElementById('pn').classList.remove('on')">${l==="en"?"Close":"إغلاق"}</button></div>`;
+    e.classList.add("on"); return;
+  }
+  let html = `<h3>📜 ${l==="en"?"My Story so far":"قصتي حتى الآن"}</h3>`;
+  chapters.forEach(function(c){
+    html += `<div style="margin:16px 0;padding:12px;background:var(--card);border:1px solid var(--bd);border-radius:var(--r)">
+      <div style="color:var(--ac);font-weight:800;font-size:var(--fs-small);letter-spacing:1px;margin-bottom:6px">${c.title}</div>`;
+    c.story.forEach(function(p){
+      html += `<p style="margin:0 0 10px;line-height:1.9;font-size:var(--fs-small)">${p}</p>`;
+    });
+    html += `</div>`;
+  });
+  html += `<button class="btn pri" onclick="document.getElementById('pn').classList.remove('on')">${l==="en"?"Close":"إغلاق"}</button>`;
+  e.innerHTML = `<div>${html}</div>`;
+  e.classList.add("on");
+};
+
+console.log("✅ Story Weaver v2 — 250+ مقطعًا سرديًا لكل قرار");
+})();
+</script>
+<!-- ═══════════════════════════════════════════════════════════════════
+     STORY WEAVER v3 — المقاطع المتبقية + الانتقالات + النهايات الفرعية
+     يُضاف بعد سكربت v2 (لا يحلّ محله)
+     ═══════════════════════════════════════════════════════════════════ -->
+<script>
+(function(){
+"use strict";
+
+/* ─────────── 1) عناوين الفصول (نسخة محلية) ─────────── */
+const CH_TITLES_T = {
+  2:{ar:"الفصل الثاني: الخرطوم",          en:"Chapter 2: Khartoum"},
+  3:{ar:"الفصل الثالث: ديسمبر وما بعده",  en:"Chapter 3: December & After"},
+  4:{ar:"الفصل الرابع: قبل الحرب",         en:"Chapter 4: Before the War"},
+  5:{ar:"الفصل الخامس: الحرب",             en:"Chapter 5: War"},
+  6:{ar:"الفصل السادس: الخرطوم الجريحة",   en:"Chapter 6: Wounded Khartoum"}
+};
+
+/* ─────────── 2) مقاطع الحلقات — 36 مقطعًا ─────────── */
+const LOOP_PASSAGES = {
+  jd: [
+    ["تتبّعتَ طيورًا تحلّق في اتجاه واحد. عبر الأودية والرمال، وجدتَ بئرًا صغيرًا. شربت، وشكرت الله كما علّمك أبوك: «الماء أمانة».","You followed birds flying one direction. Across valleys and sands, you found a small well. You drank, and thanked God as your father taught you: 'Water is a trust.'"],
+    ["احتميتَ بظل صخرة ونمت. في المنام رأيت أمك تغني في الفناء. صحوتَ ودموعك على خديك. صار الحلم بيتًا صغيرًا تعود إليه كل ليلة.","You sheltered in a rock's shadow and slept. In the dream you saw your mother singing in the courtyard. You woke with tears on your cheeks. The dream became a small home you return to every night."],
+    ["سرت ليلًا وحفظت النجوم. صارت السماء خريطة، والنجوم أصدقاء لا يخونون. صرت تعرف الطريق كما تعرف اسمك، وكما يعرف من لا اسم له طريقه الوحيد.","You walked at night and memorized the stars. The sky became a map, the stars friends who don't betray. You came to know the road as you know your name, and as one without a name knows his only road."],
+    ["قابلت طفلًا ضائعًا في العراء. اقتسمت معه تمراتك، وسرت معه حتى وجد أهله. حين بكى شكرًا، بكيت معه. صار الطريق بيتًا، والغريب أخًا.","You met a lost child in the open. You shared your dates and walked with him until he found his family. When he wept in thanks, you wept with him. The road became a home, and the stranger a brother."]
+  ],
+  js: [
+    ["عملت يومك كله تحت الشمس. تعبت، لكنك ربحت ما يكفي لأسبوع. في المساء جلستَ تعدّ النقود، وشعرت أن الغد قد يكون أفضل. صار الجسد عملة، والجوع دافعًا.","You worked all day under the sun. You tired, but earned enough for a week. In the evening you sat counting the money, feeling tomorrow might be better. The body became currency, and hunger a motive."],
+    ["ارتحت تحت الجسر وأصلحت ثيابك بخيط وجدته في القمامة. صار الخيط إبرة، والظل وطنًا، والإصلاح صلاة صغيرة.","You rested under the bridge and mended your clothes with a thread you found in the trash. Thread became a needle, shadow a homeland, and mending a small prayer."],
+    ["ذهبت إلى المسجد. الصلاة تريح القلب، والدرس يشغل العقل. صرت تعرف الإمام باسمه، ويعرفك باسمك. صار المسجد جارًا، والجار أمانًا.","You went to the mosque. Prayer quiets the heart, and study occupies the mind. You came to know the imam by name, and he knew you by yours. The mosque became a neighbor, and the neighbor safety."],
+    ["ساعدت سلمان وأطفال الرصيف. لعبت معهم، وضحكت معهم، وأكلت معهم. صار الرصيف بيتًا، وصار الأطفال إخوتك، وصار ضحكك عائدًا إليك شيئًا فشيئًا.","You helped Salman and the pavement children. You played with them, laughed with them, ate with them. The pavement became a home, the children your siblings, and your laughter returned to you little by little."]
+  ],
+  je: [
+    ["ذهبت إلى البئر رغم القنّاصة. سمعت الرصاصة تلامس الحجر بجانبك، لكنك عدت. عدت بجرح صغير وجالون ماء. صارت المياه صلاة، وصارت العودة معجزة صغيرة.","You went to the well despite the sniper. You heard the bullet touch the stone beside you, but you returned. You returned with a small wound and a jerrycan of water. Water became prayer, and returning a small miracle."],
+    ["نمت في الغرفة الداخلية. الحركة أقل، والخطر أقل. لكن الحياة صامتة، والوقت ثقيل، والسقف يحتفظ بأنفاس عشرين شخصًا.","You slept in the inner room. Less movement, less danger. But life was silent, time heavy, and the ceiling held the breaths of twenty people."],
+    ["حكيت حكايات للأطفال. حكايات جدتك عن الشجرة التي لا تُقطع، وعن النيل الذي يجمع الناس. صار الكلام يدًا تمسك، وضحكة الطفل نافذة على الحياة.","You told stories to the children. Your grandmother's tales of the tree that cannot be cut, of the Nile that gathers people. Words became a hand holding, and a child's laugh a window onto life."],
+    ["اقتسمت مياهك مع الجيران. صار الجالون قرابة، وصارت المياه وطنًا، وصار العطش شيئًا نتقاسمه جميعًا. صار الحي أسرة.","You shared your water with the neighbors. The jerrycan became kinship, water a homeland, and thirst something we all share. The neighborhood became family."]
+  ],
+  jp: [
+    ["طلبت حصتك من الماء بصبر. تحملت الإهانة، ولم ترد. صار الصبر درعًا، والصمت الذي حفظته في صدرك سلاحًا مؤجلًا.","You asked for your water share patiently. You bore the insult, didn't reply. Patience became a shield, and the silence you kept in your chest a deferred weapon."],
+    ["قلّلت حركتك لتدّخر قوتك. صار السكون استراتيجية، والصمت أداة، والنَفَس القصير وسيلة للبقاء.","You moved less to save your strength. Stillness became a strategy, silence a tool, and the short breath a means of survival."],
+    ["حفظت أسماء رفاقك وكررتها كل ليلة قبل النوم. صار الاسم هوية، والهوية مقاومة، والتكرار صلاة تحمي من النسيان.","You memorized your companions' names and repeated them each night before sleep. A name became identity, identity resistance, and repetition a prayer protecting against forgetting."],
+    ["اقتسمت رغيفك مع أضعف سجين. صار الرغيف رغيفين، وصار الجوع قرابة، وصارت الزنزانة بيتًا صغيرًا يعرف فيه كل واحد اسم الآخر.","You shared your loaf with the weakest prisoner. One loaf became two, hunger became kinship, and the cell a small home where each knew the other's name."]
+  ],
+  jb: [
+    ["بحثت عن بئر بين الصخور. وجدت واحدًا تحت صخرة مائلة. شربت جيدًا، وملأت قربتك، ووهبت ما تبقى لعابرٍ لم تجمعك به قرابة إلا العطش.","You searched for a well among the rocks. You found one under a leaning rock. You drank well, filled your flask, and gave what remained to a passerby you shared nothing with but thirst."],
+    ["احتميت في ظل شاحنة واسترحت. صار الظل بيتًا، والشاحنة جارًا، والسائق صديقًا أعطاك كوب شاي لم تشرب مثله من قبل.","You sheltered behind a truck and rested. Shadow became a home, the truck a neighbor, and the driver a friend who gave you a cup of tea the like of which you'd never tasted."],
+    ["مشيت مع القافلة دون أن تتأخر. صار الجماعة وطنًا، والانتظام صلاة، والخطوة المتناغمة مع مئات الأقدام شيئًا أكبر من المشي.","You walked with the convoy without lagging. The group became a homeland, order prayer, and the step tuned to hundreds of feet something greater than walking."],
+    ["ساعدت عائلة تعطلت عربتها. وصلت معهم بعد الغروب، لكنك وصلت. صار التأخير ثمنًا، والثمن شرفًا، والعائلة أختًا لك في الطريق.","You helped a family whose cart broke down. You arrived with them after sunset, but you arrived. Delay became a price, the price honor, and the family a sister on the road."]
+  ],
+  jf: [
+    ["بحثت في بيوت مهجورة. وجدت علبة فول وبعض الأرز وحبة بصل. لم يكن كثيرًا، لكنه كان عشاءً، وكان يكفي ليوم آخر في الفاشر.","You searched abandoned houses. You found a can of beans, some rice, an onion. It wasn't much, but it was dinner, and it was enough for another day in Al-Fashir."],
+    ["اختبأت في قبو من القصف. صارت الظلمة صديقة، والجدران حماية هشة، وكل انفجار بعيد يعني أنك ما زلت حيًّا.","You hid in a cellar from the bombardment. Darkness became a friend, walls fragile protection, and each distant explosion meant you were still alive."],
+    ["كتبت أسماء الجيران على الحائط. صارت الأسماء صلاة، والذاكرة وطنًا، والحائط لوحًا يحفظ من لا تحفظهم الحكومة ولا الأمم المتحدة.","You wrote the neighbors' names on the wall. Names became prayer, memory a homeland, and the wall a board preserving those whom neither government nor UN preserves."],
+    ["حملت الماء لكبار السن. صار التعب قربانًا، والقربان أملًا، وصار جسدك النحيل وسيلةً لنقل الحياة من بئر إلى شفة جافة.","You carried water for the elderly. Fatigue became an offering, the offering hope, and your thin body a means of moving life from a well to a dry lip."]
+  ],
+  jk: [
+    ["وقفت في صف الخبز منذ الفجر. عدت بأربعة أرغفة. لم تكن تكفي أسبوعًا، لكنها كانت تكفي اليوم، وهذا وحده يكفي اليوم.","You stood in the bread queue since dawn. You returned with four loaves. Not enough for a week, but enough for today — and today alone is enough for today."],
+    ["ساعدت في تنظيم المأوى. صارت الأسرّة صفوفًا، والأسماء قائمة، والفوضى نظامًا صغيرًا. صار الترتيب عائلة، والعائلة وطنًا.","You helped organize the shelter. Beds became rows, names a list, chaos a small order. Order became family, and family a homeland."],
+    ["جلست في حلقة قصص. حكيتَ عن دارفور، عن الهجليج، عن جدتك. صار الحكي جسرًا، والجسر وطنًا، وصار الغريب في الحلقة أخًا يسمعك.","You sat in a story circle. You told of Darfur, of heglig trees, of your grandmother. Speaking became a bridge, the bridge a homeland, and the stranger in the circle a brother who hears you."],
+    ["اشتريت دواءً لجارتك. صار المال رحمة، والرحمة وطنًا، وصار القرش الذي جمعته في الرصيف شفاءً لطفل لم تلده.","You bought medicine for your neighbor. Money became mercy, mercy a homeland, and a penny you gathered on the pavement healing for a child you did not bear."]
+  ],
+  jg: [
+    ["وقفت في صف توزيع الغذاء. تعلمت أن الصبر يشبع، وأن الانتظار صلاة، وأن الصف الذي تراه طويلًا هو في الحقيقة سلسلة أيادٍ تمسك بعضها.","You stood in the food distribution queue. You learned that patience satisfies, that waiting is prayer, and that the long line is in fact a chain of hands holding each other."],
+    ["نمت مبكرًا. صار النوم فرارًا صغيرًا، والفرار الصغير نجاة، والحلم الذي جاءك في الليل عن بيت أبيض في قرية قريبة معجزة صغيرة.","You slept early. Sleep became a small escape, the small escape survival, and the dream that came at night of a white house in a nearby village a small miracle."],
+    ["جلست مع الناس وسمعت حكاياتهم. صار الاستماع صلاة، والصلاة وطنًا، والرجل الذي بجانبك صار أخًا لم تلده أمك.","You sat with people and heard their stories. Listening became prayer, prayer a homeland, and the man beside you a brother your mother did not bear."],
+    ["ساعدت المتطوعين في ترتيب الأسرّة. صار الترتيب صلاة، والصلاة وطنًا، والمرتبة التي رتبتها لطفل غريب سريرًا في بيت الله.","You helped volunteers arrange the beds. Arranging became prayer, prayer a homeland, and the bed you made for a stranger's child a bed in God's house."]
+  ],
+  jw: [
+    ["ذهبت لشراء ماء وخبز من حي آخر. كان الطريق خطرًا، لكنك عدت. صار الشارع امتحانًا، والعودة انتصارًا، والخبز الذي حملته أمانة ثقيلة.","You went to buy water and bread from another neighborhood. The road was dangerous, but you returned. The street became a test, returning a victory, and the bread you carried a heavy trust."],
+    ["اختبأت في الغرفة الداخلية مع أسرتك. سمعت الانفجارات، وأحصيت أنفاسك. صار النبض ساعة، والوقت سنوات، والدعاء الذي رددته وحدك صلاة ليس لها إمام.","You hid in the inner room with your family. You heard explosions and counted your breaths. Pulse became a clock, time years, and the prayer you repeated alone a prayer without an imam."],
+    ["جمعت الجيران على السطح وتبادلتم الأخبار. صار السطح منبرًا، والخبر وطنًا، والوجه الذي تراه للمرة الأولى صار وجهًا تعرفه للمرة الألف.","You gathered the neighbors on the roof and exchanged news. The roof became a pulpit, news a homeland, and a face you saw for the first time became one you knew for the thousandth."],
+    ["قاسمت مخزونك أسرة بلا طعام. صارت العلبة وليمة، والوليمة صلاة، وصار الجوع الذي حملته وحدك جوعًا نتقاسمه جميعًا في الحي.","You shared your stores with a family without food. A can became a feast, the feast a prayer, and the hunger you carried alone a hunger we all share in the neighborhood."]
+  ]
+};
+
+/* ─────────── 3) مشاهد الانتقال بين الفصول ─────────── */
+const TRANSITIONS = {
+  2:{
+    ar:"المدينة تشرق كوادٍ من ضوء وحديد. الخرطوم، حيث يلتقي النيلان، ومنها يبدأ كل شيء — أو ينتهي. هذه المرة، تدخلها وحدك، وأنت تعرف أن الأرض التي تمشي عليها ليست لك، لكنك ستقف عليها كما لو كانت لك.",
+    en:"The city rises like valleys of light and iron. Khartoum, where the two Niles meet, and where everything begins — or ends. This time, you enter alone, knowing the ground beneath you is not yours, yet you will stand on it as if it were."
+  },
+  3:{
+    ar:"ديسمبر 2018. الخبز يختفي، والصفوف تطول، والأصوات تعلو. الشارع أصبح بيتًا، والهتاف صلاة، والشباب الذين لم يعرفوا حربًا بدأوا يعرفون أن الخوف يمكن أن يُهزم — ولو لساعة.",
+    en:"December 2018. Bread disappears, lines lengthen, voices rise. The street became a home, the chant a prayer, and youth who had never known war began to know that fear could be defeated — even for an hour."
+  },
+  4:{
+    ar:"سنوات من الحياة الصغيرة: بيت، وزوجة، وأطفال يضحكون تحت المصباح. ثم رمضان 2023، حين بدأت الشائعات تتحول إلى حقيقة، والشوارع تُخزّن ما لا تقوله. الحكاية لم تنتهِ، لكنها تعرف الآن أن الحرب يمكن أن تعود.",
+    en:"Years of small life: a house, a wife, children laughing under the lamp. Then Ramadan 2023, when rumors began to become reality, and the streets hoarded what they would not say. The story is not over, but it now knows war can return."
+  },
+  5:{
+    ar:"15 أبريل 2023. الثامنة صباحًا. الدوي يعود من حيث أتى. هذه المرة، ليس في دارفور، بل في قلب العاصمة. كل ما بنيته في ثلاثين عامًا، ستنظر إليه وهو ينهار، وسيصير عليك أن تختار من أنت حين لا يبقى شيء.",
+    en:"April 15, 2023. Eight in the morning. The roar returns from where it came. This time, not in Darfur, but in the heart of the capital. Everything you built in thirty years, you will watch collapse, and you will have to choose who you are when nothing remains."
+  },
+  6:{
+    ar:"الخرطوم بعد الحرب: مدينة مفتوحة على السماء، جدرانها مثقوبة، وذكرياتها مرمية على الأرصفة. من بين الأنقاض، تحاول أن تبدأ من جديد — وأنت تعرف أن البدء من جديد ليس نسيانًا، بل طريقة أخرى للحمل.",
+    en:"Khartoum after the war: a city open to the sky, its walls pierced, its memories scattered on the pavement. Among the ruins, you try to begin again — knowing that beginning again is not forgetting, but another way of carrying."
+  }
+};
+
+/* ─────────── 4) النهايات الفرعية ─────────── */
+if (typeof END_META !== "undefined"){
+  END_META.dignity_man   = {icon:"⚖️", ar:"رجل الكرامة",  en:"Man of Dignity"};
+  END_META.keeper        = {icon:"📜", ar:"الحافظ",        en:"The Keeper"};
+  END_META.companion_man = {icon:"🤝", ar:"الرفيق",        en:"The Companion"};
+}
+
+if (typeof ENDINGS !== "undefined"){
+  ENDINGS.dignity_man = () => "<b>النهاية: رجل الكرامة</b>\n\nلم تكن الأقوى، ولا الأغنى، ولا الأنجح. لكنك كنت من وقف مع الآخرين حين كان الوقوف ممكنًا، وأعطى حين كان العطاء صعبًا. في مدن مهدّمة، حفظتَ شيئًا لم تحفظه الجيوش: الكرامة. وليس هناك نصر أكمل من هذا.";
+  ENDINGS.keeper = () => "<b>النهاية: الحافظ</b>\n\nفي الحرب، تُقتل الأسماء قبل الناس. لكنك حفظتها: على الحيطان، في دفاترك، في ذاكرتك. صرتَ متحفًا متحركًا لمدن كاملة، وأرشيفًا حيًّا لقرى مدفونة. لم تُنقذ أحدًا، لكنك أنقذتَ ما لا يُنقذ: الذاكرة.";
+  ENDINGS.companion_man = () => "<b>النهاية: الرفيق</b>\n\nلم تكن وحدك أبدًا. في الصحراء، في الرصيف، في السجن، في زنازين الموت — كان معك رفاق. لم تصنع مجدًا، لكنك صنعت شيئًا أكبر: عائلة في قلب الهاوية. حين ينتهي كل شيء، يبقى الرفيق. وقد كان لك رفاق.";
+}
+
+if (typeof ENDINGS_EN !== "undefined"){
+  ENDINGS_EN.dignity_man = () => "<b>Ending: Man of Dignity</b>\n\nYou were not the strongest, nor the richest, nor the most successful. But you were among those who stood with others when standing was possible, and gave when giving was hard. In destroyed cities, you preserved something armies did not: dignity. And there is no more complete victory than this.";
+  ENDINGS_EN.keeper = () => "<b>Ending: The Keeper</b>\n\nIn war, names are killed before people. But you preserved them: on walls, in notebooks, in your memory. You became a moving museum of whole cities, and a living archive of buried villages. You didn't save anyone, but you saved what cannot be saved: memory.";
+  ENDINGS_EN.companion_man = () => "<b>Ending: The Companion</b>\n\nYou were never alone. In the desert, on the pavement, in prison, in the cells of death — companions were with you. You did not build glory, but you built something greater: a family in the heart of the abyss. When everything ends, the companion remains. And you had companions.";
+}
+
+/* ─────────── 5) أضف للنهاية إلى EG (لتظهر في المذكرات) ─────────── */
+if (typeof EG !== "undefined"){
+  [
+    ["dignity_man","⚖️","رجل الكرامة"],
+    ["keeper","📜","الحافظ"],
+    ["companion_man","🤝","الرفيق"]
+  ].forEach(a => { if (!EG.find(x => x[0]===a[0])) EG.push(a); });
+}
+
+/* ─────────── 6) أدوات مساعدة ─────────── */
+function _L(){ return (typeof LG!=="undefined" && LG==="en") ? "en" : "ar"; }
+
+/* ─────────── 7) توسيع الخلاصة بمقاطع الحلقات ─────────── */
+function extendRecapWithLoops(){
+  const recapBody = document.querySelector(".recap-body");
+  if (!recapBody) return;
+  if (typeof s === "undefined" || !s || !Array.isArray(s.log)) return;
+  const seal = document.querySelector(".recap-seal");
+  if (!seal) return;
+  const recapCh = parseInt(seal.textContent);
+  if (!recapCh) return;
+  const l = _L();
+  const seen = {};
+  s.log.forEach(l2 => {
+    if (l2.ch !== recapCh) return;
+    if (!LOOP_PASSAGES[l2.n]) return;
+    const beats = LOOP_PASSAGES[l2.n];
+    if (!beats[l2.i]) return;
+    const key = l2.n + ":" + l2.i;
+    if (seen[key]) return;
+    seen[key] = 1;
+    const text = beats[l2.i][l==="en" ? 1 : 0];
+    if (!text) return;
+    const p = document.createElement("p");
+    p.textContent = text;
+    p.style.animationDelay = ((recapBody.children.length) * 80) + "ms";
+    recapBody.appendChild(p);
+  });
+}
+
+/* ─────────── 8) عرض مشهد الانتقال ─────────── */
+function showTransition(ch, origContinue){
+  const l = _L();
+  const t = TRANSITIONS[ch];
+  const title = CH_TITLES_T[ch] ? CH_TITLES_T[ch][l] : "";
+  document.getElementById("app").innerHTML = `
+    ${topBar()}
+    <div class="recap">
+      <div class="recap-seal">${ch}</div>
+      <div class="recap-head">${l==="en"?"Interlude":"فاصل"}</div>
+      <h1>${title}</h1>
+      <div class="tx" style="text-align:right;line-height:2;font-size:var(--fs-body);white-space:pre-line;margin:24px 0">${t[l]}</div>
+      <button class="btn pri" onclick="window._enterChapter()">${l==="en"?"Enter":"ادخل"} →</button>
+    </div>
+  `;
+  window.scrollTo({top:0,behavior:"smooth"});
+  window._enterChapter = function(){
+    window._enterChapter = null;
+    if (typeof origContinue === "function") origContinue();
+  };
+}
+
+/* ─────────── 9) التفاف _continueFromRecap لإضافة الانتقال ─────────── */
+function wrapContinueForTransition(){
+  if (typeof window._continueFromRecap !== "function") return;
+  if (typeof s === "undefined" || !s || !s._ch || s._ch < 2) return;
+  const newCh = s._ch;
+  if (!TRANSITIONS[newCh]) return;
+  const orig = window._continueFromRecap;
+  window._continueFromRecap = function(){
+    window._continueFromRecap = null;
+    showTransition(newCh, orig);
+  };
+}
+
+/* ─────────── 10) اعتراض renderNode لإضافة التوسيع ─────────── */
+const _prevRN = window.renderNode;
+window.renderNode = function(nid){
+  const result = _prevRN.apply(this, arguments);
+  if (document.querySelector(".recap-seal")){
+    try { extendRecapWithLoops(); } catch(e){ console.error(e); }
+    try { wrapContinueForTransition(); } catch(e){ console.error(e); }
+  }
+  return result;
+};
+
+/* ─────────── 11) منطق النهايات الفرعية ─────────── */
+function countFairness(){
+  if (typeof s === "undefined" || !s || !Array.isArray(s.log)) return 0;
+  const KEYS = ["s4b:0","u2:1","s1b:0","s2b:0","fs2:0","fs2b:0","q4:0","e1:0","r1:0","h1:0","h2:0","h2:1","s4c:0","r2b:1","q3:0"];
+  return s.log.filter(x => KEYS.includes(x.n+":"+x.i)).length;
+}
+function countPreservation(){
+  if (typeof s === "undefined" || !s || !Array.isArray(s.log)) return 0;
+  const KEYS = ["rev4:0","rev4:1","sd2023b:2","sd2024:2","sd2025:2","g1:1","q2:0"];
+  return s.log.filter(x => KEYS.includes(x.n+":"+x.i)).length;
+}
+function countCompanions(){
+  if (typeof s === "undefined" || !s) return 0;
+  const COMP_KEYS = ["os","sl","um","id","ys","hl","ad","el","gr"];
+  return COMP_KEYS.filter(k => s[k]).length;
+}
+
+/* ─────────── 12) اعتراض renderEnding لترقية النهايات ─────────── */
+const _prevRE = window.renderEnding;
+window.renderEnding = function(key){
+  const UPGRADEABLE = ["peace","witness","death"];
+  if (UPGRADEABLE.indexOf(key) !== -1 && typeof s !== "undefined" && s){
+    if (countFairness() >= 5) { key = "dignity_man"; }
+    else if (countPreservation() >= 3) { key = "keeper"; }
+    else if (countCompanions() >= 3) { key = "companion_man"; }
+  }
+  return _prevRE.apply(this, arguments);
+};
+
+console.log("✅ Story Weaver v3 — 36 مقطع حلقة + 5 انتقالات + 3 نهايات فرعية");
+})();
+</script>
+<!-- ═══════════════════════════════════════════════════════════════════
+     STORY WEAVER v4 — نهايات الرفاق + إحصاءات + مشاركة + مقاطع ديناميكية
+     يُضاف بعد v2 و v3 (لا يحلّ محلهما)
+     ═══════════════════════════════════════════════════════════════════ -->
+<script>
+(function(){
+"use strict";
+
+/* ═══════════════════════════════════════════════════════════════════
+   1) تصنيف القرارات — 4 سمات
+   ═══════════════════════════════════════════════════════════════════ */
+const TRAITS = {
+  mercy: {
+    ar:"الرحمة", en:"Mercy", icon:"🤲",
+    keys:["g1:0","e1:0","u2:1","s1b:0","fs2:0","fs2b:0","h1:0","h2:0","h2:1","q3:0",
+          "s6b:0","k1:1","g1:1","u1:1","jf:0","fs1:0","je:2","js:3","jd:3","jw:3",
+          "jg:3","jf:3","e2:3","sd2023:1","sd2024b:0","sd2025:0","rev5:0","rev5:1",
+          "rev6:0","sd2013:2","t1:0","u1:0","je:3"]
+  },
+  courage: {
+    ar:"الشجاعة", en:"Courage", icon:"🔥",
+    keys:["e2:2","r1:0","rev3:0","rev3:2","sd2018:0","sd2019:0","w2:0","p4:0",
+          "sd2019b:1","v2:0","sd2013:0","fs3:0","sd2021:0","sd2023:2","rev2:2",
+          "sd2019b:0","e2:0","v1:0"]
+  },
+  caution: {
+    ar:"الحذر", en:"Caution", icon:"🛡️",
+    keys:["d2:0","d3:0","s6b:1","s6c:1","q1:0","v2:1","w1:0","h1:1","je:1","q4:2",
+          "p2:1","u4:0","sd2013:1","sd2014:2","sd2021:2","e2:1","p3:2","k2:2","jw:1"]
+  },
+  harshness: {
+    ar:"القسوة", en:"Harshness", icon:"⚔️",
+    keys:["m2b:0","m3:1","s1b:1","s4:1","fs2:2","fs2b:1","h2:2","q3:1","r2:1","u3:1"]
+  }
+};
+
+function _L(){ return (typeof LG!=="undefined" && LG==="en") ? "en" : "ar"; }
+
+function countTrait(t){
+  if (typeof s==="undefined" || !s || !Array.isArray(s.log)) return 0;
+  const KEYS = TRAITS[t].keys;
+  return s.log.filter(function(x){ return KEYS.indexOf(x.n+":"+x.i) !== -1; }).length;
+}
+function computeTraits(){
+  const o = {};
+  Object.keys(TRAITS).forEach(function(t){ o[t] = countTrait(t); });
+  return o;
+}
+
+/* دوال v3 للتوافق */
+function countFairness(){
+  if (typeof s==="undefined" || !s || !Array.isArray(s.log)) return 0;
+  const K = ["s4b:0","u2:1","s1b:0","s2b:0","fs2:0","fs2b:0","q4:0","e1:0","r1:0",
+             "h1:0","h2:0","h2:1","s4c:0","r2b:1","q3:0"];
+  return s.log.filter(function(x){ return K.indexOf(x.n+":"+x.i)!==-1; }).length;
+}
+function countPreservation(){
+  if (typeof s==="undefined" || !s || !Array.isArray(s.log)) return 0;
+  const K = ["rev4:0","rev4:1","sd2023b:2","sd2024:2","sd2025:2","g1:1","q2:0"];
+  return s.log.filter(function(x){ return K.indexOf(x.n+":"+x.i)!==-1; }).length;
+}
+function countCompanions(){
+  if (typeof s==="undefined" || !s) return 0;
+  return ["os","sl","um","id","ys","hl","ad","el","gr"].filter(function(k){return s[k];}).length;
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   2) نهايات الرفاق
+   ═══════════════════════════════════════════════════════════════════ */
+if (typeof END_META !== "undefined"){
+  END_META.os_final = {icon:"👥", ar:"الرفيقان", en:"The Two Companions"};
+  END_META.sl_final = {icon:"🧒", ar:"أخو الرصيف", en:"Brother of the Pavement"};
+  END_META.um_final = {icon:"👵", ar:"يد أم حسن", en:"Umm Hasan's Hand"};
+}
+
+if (typeof ENDINGS !== "undefined"){
+  ENDINGS.os_final = function(){
+    return "<b>النهاية: الرفيقان</b>\n\nحين وجدتما بعضكما في صندوق سيارة، قرر ولدان أن يمشيا معًا. مرّت سنوات، وجاءت حروب وذهبت، وما زلتما تمشيان معًا. لم تكونا أخوين بالدم، بل بالطريق. في كل مدينة، وكل زنزانة، وكل معبر نهر — كنتما معًا. وحين سأل الناس عن أحدكما، سألوا عن الآخر.\n\nالبقاء أسهل حين تكون اثنين.";
+  };
+  ENDINGS.sl_final = function(){
+    return "<b>النهاية: أخو الرصيف</b>\n\nمن رصيف الخرطوم البارد إلى حدود العالم، مشى معك سلمان. أولًا كصبي يبيع المناديل، ثم كشاب، ثم كأخ يعرف صمتك أكثر من أي أحد. لم تبنيا شيئًا عظيمًا، لكنكما بنيتما أخوّة. وبعض الأخوّات تعيش أطول من المدن.";
+  };
+  ENDINGS.um_final = function(){
+    return "<b>النهاية: يد أم حسن</b>\n\nامرأة عجوز تبيع الشاي في ناصية الشارع. كوب شاي صار طقسًا. يد أمسكت بيدك يوم انهار العالم. أم حسن لم تنجُ من الحرب فقط — بل حملتها بكرامة. وعلّمتك، بلا كلمات، أن أقوى ما يمكن أن يفعله الإنسان هو أن يظل يُعدّ الشاي حين يحترق كل شيء آخر.";
+  };
+}
+
+if (typeof ENDINGS_EN !== "undefined"){
+  ENDINGS_EN.os_final = function(){
+    return "<b>Ending: The Two Companions</b>\n\nWhen you found each other in a car trunk, two boys decided to walk together. Years passed, wars came and went, and you walked together still. Not brothers by blood, but by the road. In every city, every cell, every river crossing — you were together. And when people asked about one, they asked about the other.\n\nSurvival is easier when you're two.";
+  };
+  ENDINGS_EN.sl_final = function(){
+    return "<b>Ending: Brother of the Pavement</b>\n\nFrom the cold pavement of Khartoum to the borders of the world, Salman walked with you. First as a boy selling tissues, then as a young man, then as a brother who knew your silence better than anyone. You built nothing grand, but you built a brotherhood. And some brotherhoods outlast cities.";
+  };
+  ENDINGS_EN.um_final = function(){
+    return "<b>Ending: Umm Hasan's Hand</b>\n\nAn old tea lady at the end of a street. A cup of tea that became a ritual. A hand that held yours on the day the world fell apart. Umm Hasan did not just survive the war — she carried it with dignity. And she taught you, without words, that the strongest thing a person can do is to keep boiling tea when everything else is on fire.";
+  };
+}
+
+if (typeof EG !== "undefined"){
+  [
+    ["os_final","👥","الرفيقان"],
+    ["sl_final","🧒","أخو الرصيف"],
+    ["um_final","👵","يد أم حسن"]
+  ].forEach(function(a){ if(!EG.find(function(x){return x[0]===a[0];})) EG.push(a); });
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   3) مقاطع ديناميكية للرفاق
+   ═══════════════════════════════════════════════════════════════════ */
+const COMPANION_BEATS = {
+  os:{
+    ch1:{ar:"عثمان، الذي وجدته في صندوق السيارة، صار أول من يعرف اسمك كاملًا. لم تكن تعرف أن أخًا يمكن أن يُلتقى به في الظلام.",
+         en:"Uthman, whom you found in the car trunk, became the first to know your full name. You didn't know a brother could be met in the dark."},
+    ch5:{ar:"عثمان، الذي بدأ معك في صندوق سيارة، شهد معك الحرب الثانية. صار الصندوق الأول يشبه كل زنزانة دخلتها معه — مكان ضيق، لكن فيه أخ.",
+         en:"Uthman, who started with you in a car trunk, witnessed the second war with you. The first trunk came to resemble every cell you entered with him — narrow, but with a brother inside."}
+  },
+  sl:{
+    ch2:{ar:"سلمان، الذي اقتسم معك غطاءً ممزقًا على الرصيف، صار أخًا لم تلده أمك. كنتما نائمين على الحجر، والسماء فوقكما واحدة.",
+         en:"Salman, who shared a torn blanket on the pavement, became a brother your mother did not bear. You slept on stone, and the sky above you was one."},
+    ch5:{ar:"سلمان، الذي علّمك أن الشارع يعطي من يعمل، كان معك حين عاد الشارع ليأخذ. لم يكن يعرف أن أخوّة الرصيف تدوم أطول من الحجر.",
+         en:"Salman, who taught you the street gives to those who work, was with you when the street returned to take. He did not know that pavement brotherhood lasts longer than stone."}
+  },
+  um:{
+    ch2:{ar:"أم حسن، التي كانت تبيع الشاي على ناصية الشارع، عرفت اسمك قبل أن تعرف أنك ستكون ابنها الثاني.",
+         en:"Umm Hasan, who sold tea at the street corner, knew your name before she knew you would become her second son."},
+    ch5:{ar:"أم حسن، التي حملت شايتها إلى المأوى، كانت تُعِدُّ الشاي بينما تنفجر القذائف. لم تتوقف يدها، ولم يتوقف قلبها.",
+         en:"Umm Hasan, who carried her tea tray to the shelter, kept brewing tea as shells fell. Her hand did not stop, and her heart did not stop."}
+  }
+};
+
+function companionDynamicLine(ch){
+  if (typeof s==="undefined" || !s) return "";
+  const l = _L();
+  const lines = [];
+  ["os","sl","um"].forEach(function(k){
+    if (s[k] && COMPANION_BEATS[k] && COMPANION_BEATS[k]["ch"+ch]){
+      lines.push(COMPANION_BEATS[k]["ch"+ch][l]);
+    }
+  });
+  return lines.join(" ");
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   4) شاشة الإحصاءات
+   ═══════════════════════════════════════════════════════════════════ */
+function personalitySummary(traits){
+  const l = _L();
+  const total = Object.keys(traits).reduce(function(a,k){return a+traits[k];},0);
+  if (total === 0){
+    return l==="en"
+      ? "You walked through the war without marking it, and it left no mark on you either."
+      : "مشيتَ في الحرب دون أن تترك فيها أثرًا، ولم تترك فيك أثرًا.";
+  }
+  const order = Object.keys(traits).sort(function(a,b){ return traits[b]-traits[a]; });
+  const SUMMARIES = {
+    mercy:{ar:"كنتَ رجلًا رحيمًا. حين كان العالم ينهار، كنت تُمسك بأيدي الآخرين.",
+           en:"You were a merciful man. When the world was collapsing, you held others' hands."},
+    courage:{ar:"كنتَ شجاعًا. لم تخف من النار حين كان الفرار ممكنًا.",
+             en:"You were brave. You did not fear the fire when fleeing was possible."},
+    caution:{ar:"كنتَ حذرًا. حافظت على نفسك لتحمي من تحب.",
+             en:"You were cautious. You kept yourself to protect those you love."},
+    harshness:{ar:"كنتَ قاسيًا أحيانًا. لكن القسوة في الحرب كانت أحيانًا رحمة.",
+               en:"You were sometimes harsh. But harshness in war is sometimes mercy."}
+  };
+  const first = order[0], second = order[1];
+  let out = SUMMARIES[first][l];
+  if (traits[second] > 0 && traits[second] * 2 > traits[first]){
+    out += " " + (l==="en" ? "And beneath that, " : "وتحتها، ")
+             + SUMMARIES[second][l].charAt(0).toLowerCase()
+             + SUMMARIES[second][l].slice(1);
+  }
+  return out;
+}
+
+function buildStatsHtml(){
+  const l = _L();
+  const traits = computeTraits();
+  const total = Object.keys(traits).reduce(function(a,k){return a+traits[k];},0);
+  const max = Math.max(1, ...Object.values(traits));
+
+  let h = '<div class="trait-stats" style="margin:18px 0;padding:16px;background:var(--card);border:1px solid var(--bd);border-radius:var(--r);text-align:right">';
+  h += '<div style="color:var(--ac);font-weight:800;margin-bottom:12px;font-size:var(--fs-small);letter-spacing:1px">';
+  h += l==="en" ? "YOUR JOURNEY IN NUMBERS" : "رحلتك في أرقام";
+  h += '</div>';
+
+  ["mercy","courage","caution","harshness"].forEach(function(k){
+    const t = TRAITS[k];
+    const n = traits[k];
+    const pct = Math.round((n / max) * 100);
+    h += '<div style="margin:9px 0">'
+       + '<div style="display:flex;justify-content:space-between;font-size:var(--fs-small);margin-bottom:4px">'
+       + '<span>' + t.icon + ' ' + (l==="en"?t.en:t.ar) + '</span>'
+       + '<span style="font-weight:700;color:var(--ac)">' + n + '</span>'
+       + '</div>'
+       + '<div style="height:7px;background:var(--bd);border-radius:4px;overflow:hidden">'
+       + '<i style="display:block;height:100%;width:' + pct + '%;background:var(--ac);border-radius:4px;transition:width .6s"></i>'
+       + '</div></div>';
+  });
+
+  h += '<div style="margin-top:14px;padding-top:12px;border-top:1px solid var(--bd);font-size:var(--fs-small);color:var(--mut);font-style:italic;line-height:1.8">';
+  h += personalitySummary(traits);
+  h += '</div></div>';
+  return h;
+}
+
+function injectStatsIntoEnding(){
+  const endDiv = document.querySelector(".end");
+  if (!endDiv) return;
+  if (endDiv.querySelector(".trait-stats")) return;
+  const playAgain = endDiv.querySelector(".btn.pri");
+  if (!playAgain) return;
+  playAgain.insertAdjacentHTML("beforebegin", buildStatsHtml());
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   5) المشاركة كصورة
+   ═══════════════════════════════════════════════════════════════════ */
+function wrapCanvasText(ctx, text, maxWidth){
+  const words = text.split(/\s+/);
+  const lines = [];
+  let cur = "";
+  for (let i=0; i<words.length; i++){
+    const test = cur ? cur + " " + words[i] : words[i];
+    if (ctx.measureText(test).width > maxWidth && cur){
+      lines.push(cur); cur = words[i];
+    } else cur = test;
+  }
+  if (cur) lines.push(cur);
+  return lines;
+}
+
+async function shareStory(mode){
+  try{
+    const l = _L();
+    const isEnding = mode === "ending";
+    const W = 1080, H = 1440;
+    const canvas = document.createElement("canvas");
+    canvas.width = W; canvas.height = H;
+    const ctx = canvas.getContext("2d");
+
+    // خلفية
+    ctx.fillStyle = "#f4efe6"; ctx.fillRect(0,0,W,H);
+
+    // إطار
+    ctx.strokeStyle = "#b5541c"; ctx.lineWidth = 8;
+    ctx.strokeRect(40,40,W-80,H-80);
+    ctx.lineWidth = 2; ctx.strokeRect(64,64,W-128,H-128);
+
+    // عنوان اللعبة
+    ctx.direction = "rtl"; ctx.textAlign = "center";
+    ctx.fillStyle = "#b5541c";
+    ctx.font = 'bold 96px "Segoe UI","SF Arabic",Tahoma,serif';
+    ctx.fillText(l==="en" ? "Survival" : "النجاة", W/2, 180);
+
+    ctx.font = '34px "Segoe UI","SF Arabic",Tahoma';
+    ctx.fillStyle = "#7a6a58";
+    ctx.fillText(l==="en" ? "A Sudanese story between two wars" : "حكاية سودانية بين حربين", W/2, 235);
+
+    // فاصل
+    ctx.strokeStyle = "#b5541c"; ctx.lineWidth = 3;
+    ctx.beginPath(); ctx.moveTo(200,290); ctx.lineTo(W-200,290); ctx.stroke();
+
+    // عنوان الفصل/النهاية
+    let title = "";
+    if (isEnding && typeof window._currentEndingKey !== "undefined" && window._currentEndingKey){
+      const meta = (typeof END_META!=="undefined") && END_META[window._currentEndingKey];
+      if (meta) title = l==="en" ? meta.en : meta.ar;
+    }
+    if (!title && typeof s!=="undefined" && s && s._ch){
+      const CH = {1:{ar:"الفصل الأول: دارفور",en:"Chapter 1: Darfur"},
+                  2:{ar:"الفصل الثاني: الخرطوم",en:"Chapter 2: Khartoum"},
+                  3:{ar:"الفصل الثالث: ديسمبر",en:"Chapter 3: December"},
+                  4:{ar:"الفصل الرابع: قبل الحرب",en:"Chapter 4: Before the War"},
+                  5:{ar:"الفصل الخامس: الحرب",en:"Chapter 5: War"},
+                  6:{ar:"الفصل السادس: الخرطوم الجريحة",en:"Chapter 6: Wounded Khartoum"}};
+      if (CH[s._ch]) title = CH[s._ch][l];
+    }
+    if (title){
+      ctx.font = 'bold 52px "Segoe UI","SF Arabic",Tahoma,serif';
+      ctx.fillStyle = "#2a2118";
+      ctx.fillText(title, W/2, 370);
+    }
+
+    // فاصل
+    ctx.strokeStyle = "#b5541c"; ctx.lineWidth = 2;
+    ctx.beginPath(); ctx.moveTo(280,410); ctx.lineTo(W-280,410); ctx.stroke();
+
+    // نص القصة
+    let story = [];
+    try{
+      if (typeof s!=="undefined" && s && s._ch){
+        const ch = isEnding ? s._ch : s._ch;
+        if (typeof window.__getStory==="function"){
+          story = window.__getStory(ch) || [];
+        }
+      }
+    }catch(e){}
+
+    // إذا فشل، استخدم آخر ما في السجل
+    if (!story.length && typeof s!=="undefined" && s && Array.isArray(s.log)){
+      const ch = s._ch || 1;
+      story = s.log.filter(function(x){return x.ch===ch;}).slice(0,3).map(function(x){return x.ar;});
+    }
+
+    ctx.direction = "rtl"; ctx.textAlign = "right";
+    ctx.font = '30px "Segoe UI","SF Arabic",Tahoma';
+    ctx.fillStyle = "#2a2118";
+    let y = 470;
+    const maxW = W - 240;
+    const lineH = 52;
+
+    const toDraw = story.slice(0, 3);
+    for (let i=0; i<toDraw.length; i++){
+      const para = toDraw[i];
+      if (!para) continue;
+      const lines = wrapCanvasText(ctx, para, maxW);
+      for (let j=0; j<lines.length; j++){
+        if (y > 1150) break;
+        ctx.fillText(lines[j], W - 120, y);
+        y += lineH;
+      }
+      y += 22;
+      if (y > 1150) break;
+    }
+
+    // خطوط إحصائية
+    const traits = computeTraits();
+    const total = Object.keys(traits).reduce(function(a,k){return a+traits[k];},0);
+    y = Math.min(y + 30, 1180);
+
+    if (total > 0){
+      ctx.textAlign = "center"; ctx.direction = "rtl";
+      ctx.font = 'bold 30px "Segoe UI","SF Arabic",Tahoma';
+      ctx.fillStyle = "#b5541c";
+      ctx.fillText(l==="en" ? "Your journey in numbers" : "رحلتك في أرقام", W/2, y);
+      y += 50;
+
+      ctx.font = '26px "Segoe UI","SF Arabic",Tahoma';
+      ctx.fillStyle = "#2a2118";
+      const parts = ["mercy","courage","caution","harshness"].map(function(k){
+        return TRAITS[k].icon + " " + (l==="en"?TRAITS[k].en:TRAITS[k].ar) + " " + traits[k];
+      });
+      ctx.fillText(parts.join("   ·   "), W/2, y);
+    }
+
+    // تذييل
+    ctx.textAlign = "center"; ctx.direction = "ltr";
+    ctx.font = 'italic 26px "Segoe UI","SF Arabic",Tahoma';
+    ctx.fillStyle = "#7a6a58";
+    ctx.fillText("al-najat · النجاة", W/2, H - 110);
+    ctx.font = '22px "Segoe UI","SF Arabic",Tahoma';
+    ctx.fillText(l==="en" ? "A work of interactive fiction" : "عمل روائي تفاعلي", W/2, H - 70);
+
+    // تحويل لصورة
+    const blob = await new Promise(function(r){ canvas.toBlob(r, "image/png"); });
+    const file = new File([blob], "najat-story.png", {type:"image/png"});
+
+    if (navigator.canShare && navigator.canShare({files:[file]})){
+      try{
+        await navigator.share({
+          files:[file],
+          title: l==="en" ? "Survival" : "النجاة",
+          text: l==="en" ? "My journey through the story" : "رحلتي في اللعبة"
+        });
+        return;
+      }catch(e){ if (e && e.name==="AbortError") return; }
+    }
+    // تحميل
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url; a.download = "najat-story.png"; a.click();
+    setTimeout(function(){ URL.revokeObjectURL(url); }, 2000);
+    if (typeof toast==="function") toast(l==="en"?"✅ Image saved":"✅ حُفظت الصورة");
+  }catch(e){
+    console.error(e);
+    if (typeof toast==="function") toast(_L()==="en"?"⚠️ Share failed":"⚠️ تعذّرت المشاركة");
+  }
+}
+window.shareStory = shareStory;
+
+/* ═══════════════════════════════════════════════════════════════════
+   6) الإلتفافات
+   ═══════════════════════════════════════════════════════════════════ */
+const _prevRE = window.renderEnding;
+window.renderEnding = function(key){
+  window._currentEndingKey = key;
+  const UPGRADEABLE = ["peace","witness","death"];
+  if (UPGRADEABLE.indexOf(key) !== -1 && typeof s!=="undefined" && s){
+    // أولوية الرفاق
+    if (s.os) key = "os_final";
+    else if (s.sl) key = "sl_final";
+    else if (s.um) key = "um_final";
+    else {
+      // نهايات السمات (إصلاح خلل v3)
+      if (countFairness() >= 5) key = "dignity_man";
+      else if (countPreservation() >= 3) key = "keeper";
+      else if (countCompanions() >= 3) key = "companion_man";
+    }
+    window._currentEndingKey = key;
+  }
+  const result = _prevRE.call(this, key);
+  // حقن الإحصاءات
+  setTimeout(injectStatsIntoEnding, 60);
+  // حقن زر المشاركة
+  setTimeout(function(){
+    const endDiv = document.querySelector(".end");
+    if (!endDiv || endDiv.querySelector("[data-share]")) return;
+    const btn = document.createElement("button");
+    btn.className = "btn";
+    btn.setAttribute("data-share","1");
+    btn.textContent = _L()==="en" ? "📤 Share this story" : "📤 شارك القصة";
+    btn.onclick = function(){ shareStory("ending"); };
+    const menuBtn = endDiv.querySelector(".btn.pri");
+    if (menuBtn) menuBtn.insertAdjacentHTML("beforebegin",
+      '<button class="btn" onclick="window.shareStory(\'ending\')" data-share="1">'
+      + (_L()==="en"?"📤 Share this story":"📤 شارك القصة") + '</button>');
+  }, 100);
+  return result;
+};
+
+/* إضافة المقطع الديناميكي للرفاق في الخلاصة */
+const _prevRN = window.renderNode;
+window.renderNode = function(nid){
+  const result = _prevRN.apply(this, arguments);
+  setTimeout(function(){
+    const recapBody = document.querySelector(".recap-body");
+    if (!recapBody || recapBody.querySelector("[data-dyn]")) return;
+    const seal = document.querySelector(".recap-seal");
+    if (!seal) return;
+    const ch = parseInt(seal.textContent);
+    if (!ch) return;
+    const line = companionDynamicLine(ch);
+    if (!line) return;
+    const p = document.createElement("p");
+    p.setAttribute("data-dyn","1");
+    p.style.fontStyle = "italic";
+    p.style.color = "var(--mut)";
+    p.textContent = line;
+    recapBody.appendChild(p);
+  }, 80);
+  return result;
+};
+
+/* إضافة زر المشاركة في لوحة «قصتي» */
+const _prevStorySoFar = window.storySoFar;
+window.storySoFar = function(){
+  const r = _prevStorySoFar.apply(this, arguments);
+  setTimeout(function(){
+    const pn = document.getElementById("pn");
+    if (!pn || pn.querySelector("[data-share-journey]")) return;
+    const closeBtn = pn.querySelector(".btn.pri");
+    if (!closeBtn) return;
+    closeBtn.insertAdjacentHTML("beforebegin",
+      '<button class="btn" onclick="window.shareStory(\'journey\')" data-share-journey="1">'
+      + (_L()==="en"?"📤 Share this image":"📤 شارك هذه الصورة") + '</button>');
+  }, 60);
+  return r;
+};
+
+/* توفير دالة للوصول للقصة من الخارج (للمشاركة) */
+try{
+  if (typeof buildStory === "function"){
+    window.__getStory = buildStory;
+  }
+}catch(e){}
+
+console.log("✅ Story Weaver v4 — نهايات الرفاق + إحصاءات + مشاركة");
+})();
+</script>
+<!-- ═══════════════════════════════════════════════════════════════════
+     STORY WEAVER v5 — الخاتمة الشخصية + أرشيف الحكايات + معرض النهايات
+     يُضاف بعد v2 و v3 و v4
+     ═══════════════════════════════════════════════════════════════════ -->
+<script>
+(function(){
+"use strict";
+
+function _L(){ return (typeof LG!=="undefined" && LG==="en") ? "en" : "ar"; }
+function _el(id){ return document.getElementById(id); }
+
+/* ─────────────── أنماط الخاتمة ─────────────── */
+const style = document.createElement("style");
+style.textContent = `
+.epilogue{margin:24px 0 8px;padding:20px 4px;border-top:1px solid var(--bd);border-bottom:1px solid var(--bd);animation:f .6s}
+.epilogue-title{text-align:center;color:var(--ac);font-size:var(--fs-small);font-weight:800;letter-spacing:2px;margin-bottom:16px}
+.epilogue p{margin:0 0 14px;line-height:1.95;font-size:var(--fs-body);text-align:justify;animation:f .6s both}
+.epitaph{margin:22px 0;padding:18px 12px;text-align:center;border-top:2px solid var(--ac);border-bottom:2px solid var(--ac);background:rgba(181,84,28,.05);border-radius:8px;animation:f .8s both}
+.epitaph::before{content:"❦";display:block;color:var(--ac);font-size:1.2rem;margin-bottom:6px}
+.epitaph-text{font-size:clamp(1rem,3.6vw,1.15rem);font-weight:700;color:var(--fg);line-height:1.6;font-style:italic}
+.life-summary{display:flex;flex-wrap:wrap;justify-content:center;gap:8px;margin:14px 0;font-size:var(--fs-small)}
+.life-summary span{background:var(--card);border:1px solid var(--bd);padding:4px 12px;border-radius:20px;color:var(--mut)}
+.ml-entry{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:10px 12px;margin:6px 0;background:var(--card);border:1px solid var(--bd);border-radius:10px;flex-wrap:wrap}
+.ml-entry .ml-info{flex:1;min-width:0}
+.ml-entry b{color:var(--ac);font-size:var(--fs-small)}
+.ml-entry small{color:var(--mut);font-size:var(--fs-small);display:block;margin-top:2px;line-height:1.5}
+.end-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:8px;margin:10px 0}
+.end-cell{background:var(--card);border:1px solid var(--bd);border-radius:10px;padding:12px 8px;text-align:center;font-size:var(--fs-small);opacity:.4;filter:grayscale(1)}
+.end-cell.seen{opacity:1;filter:none;border-color:var(--ac)}
+.end-cell .ic{font-size:1.6rem;display:block;margin-bottom:4px}
+.end-cell .nm{font-weight:700;font-size:.75rem;line-height:1.3}
+`;
+document.head.appendChild(style);
+
+/* ─────────────── إصلاح أوسمة ناقصة ─────────────── */
+const AH_AS_EG = [
+  ["reach","🏙️","الوصول"],["os","👥","الرفيق"],["bus","🚌","الكريز"],
+  ["fam","💍","الأسرة"],["lost","🔥","الخسارة"],["esc","⛓️","الهروب"],
+  ["err","🤲","غرفة الطوارئ"],["wm","🏙️","ود مدني"],["bag","🎒","حقيبة مريم"],
+  ["fsh","🔥","الفاشر"],["cross","🚪","العبور"]
+];
+try{
+  AH_AS_EG.forEach(function(a){
+    if(typeof EG!=="undefined" && !EG.find(function(x){return x[0]===a[0];})) EG.push(a);
+  });
+}catch(e){}
+
+/* ═══════════════════════════════════════════════════════════════════
+   1) نقش القبر — 18 نقشًا
+   ═══════════════════════════════════════════════════════════════════ */
+const EPITAPHS = {
+  martyr:      {ar:"من مات ليحيا بلد لا يعرفه",                    en:"Who died so a country he did not know could live"},
+  martyr_rev:  {ar:"من حمل الثورة بيديه إلى آخر نفس",               en:"Who carried the revolution in his hands to his last breath"},
+  martyr_fsh:  {ar:"من سقط في زقاق بالفاشر، وعرفه الله وحده",        en:"Who fell in an alley in Al-Fashir, known only to God"},
+  ledger:      {ar:"من حفظ الأسماء حين قُتل الناس",                  en:"Who preserved names when people were being killed"},
+  witness:     {ar:"من عاش ليحكي",                                  en:"Who lived to tell"},
+  witness_age: {ar:"من رأى كل شيء، وحفظ كل شيء",                    en:"Who saw everything, and remembered everything"},
+  er:          {ar:"من صار بيتًا لمن لا بيت له",                    en:"Who became a home for those without one"},
+  os_final:    {ar:"من مشى مع أخيه إلى آخر الطريق",                  en:"Who walked with his brother to the end of the road"},
+  sl_final:    {ar:"أخو الرصيف، الذي عاشت أخوّته أطول من المدن",       en:"Brother of the pavement, whose brotherhood outlasted cities"},
+  um_final:    {ar:"من أعدّ الشاي حين احترق كل شيء",                en:"Who brewed tea when everything else was on fire"},
+  dignity_man: {ar:"من أعطى حين كان العطاء صعبًا",                   en:"Who gave when giving was hard"},
+  keeper:      {ar:"من حفظ ما لا يُحفظ: الذاكرة",                    en:"Who preserved what cannot be preserved: memory"},
+  companion_man:{ar:"من صنع عائلة في قلب الهاوية",                  en:"Who made a family in the heart of the abyss"},
+  peace:       {ar:"من نجا ليحمل أمانة من لم ينجُ",                  en:"Who survived to carry the trust of those who did not"},
+  heart:       {ar:"من احترق قلبه، وبقي جسده",                      en:"Whose heart burned while his body survived"},
+  border:      {ar:"من عبر، وحمل معه من لم يعبروا",                  en:"Who crossed, carrying those who could not"},
+  hunger:      {ar:"من انتظر سلامًا وصل متأخرًا",                    en:"Who waited for a peace that arrived too late"},
+  death:       {ar:"من سقط على الطريق، والطريق ما زال طويلًا",         en:"Who fell on the road, and the road is still long"}
+};
+const EPITAPH_FALLBACK = {
+  mercy:     {ar:"يدٌ أعطت حين كان العطاء صعبًا",                   en:"A hand that gave when giving was hard"},
+  courage:   {ar:"من لم يخفِ النار حين كان الفرار ممكنًا",            en:"Who did not fear the fire when fleeing was possible"},
+  caution:   {ar:"من حافظ على نفسه ليحمي من يحب",                  en:"Who kept himself to protect those he loved"},
+  harshness: {ar:"من قسا ليبقى، وبقي ليحكي",                       en:"Who was harsh to survive, and survived to tell"}
+};
+
+/* ═══════════════════════════════════════════════════════════════════
+   2) انعكاسات السمات
+   ═══════════════════════════════════════════════════════════════════ */
+const TRAIT_REFLECTIONS = {
+  mercy:     {ar:"كانت رحمتك أثقل من الحرب. حين كان العالم ينهار، كنت تُمسك بأيدي الآخرين ولا تفلتها.",
+              en:"Your mercy weighed more than the war. When the world was collapsing, you held others' hands and did not let go."},
+  courage:   {ar:"كانت شجاعتك أغلى من البقاء. لم تخفِ النار حين كان الفرار ممكنًا، ولم تُغلق عينيك حين كان الإغماض أرحم.",
+              en:"Your courage was dearer than survival. You did not fear the fire when fleeing was possible, and you did not close your eyes when closing them would have been kinder."},
+  caution:   {ar:"كان حذرك حكمة. حافظت على نفسك لتحمي من تحب، وعشت لتحكي. بعض البقاء شجاعة أيضًا.",
+              en:"Your caution was wisdom. You kept yourself to protect those you love, and lived to tell. Some survival is courage too."},
+  harshness: {ar:"كنتَ قاسيًا أحيانًا، لكن القسوة في الحرب كانت أحيانًا رحمة. من نجح في البقاء لم ينجُ باللطف وحده.",
+              en:"You were sometimes harsh, but harshness in war is sometimes mercy. Whoever survived did not survive by kindness alone."}
+};
+
+/* ═══════════════════════════════════════════════════════════════════
+   3) السمات الرئيسية (نسخة محلية مبسّطة)
+   ═══════════════════════════════════════════════════════════════════ */
+const TRAIT_KEYS = {
+  mercy:["g1:0","e1:0","u2:1","s1b:0","fs2:0","fs2b:0","h1:0","h2:0","h2:1","q3:0","s6b:0","k1:1","g1:1","u1:1","jf:0","fs1:0","je:2","js:3","jd:3","jw:3","jg:3","jf:3","e2:3","sd2023:1","sd2024b:0","sd2025:0","rev5:0","rev5:1","rev6:0","sd2013:2","t1:0","u1:0","je:3"],
+  courage:["e2:2","r1:0","rev3:0","rev3:2","sd2018:0","sd2019:0","w2:0","p4:0","sd2019b:1","v2:0","sd2013:0","fs3:0","sd2021:0","sd2023:2","rev2:2","sd2019b:0","e2:0","v1:0"],
+  caution:["d2:0","d3:0","s6b:1","s6c:1","q1:0","v2:1","w1:0","h1:1","je:1","q4:2","p2:1","u4:0","sd2013:1","sd2014:2","sd2021:2","e2:1","p3:2","k2:2","jw:1"],
+  harshness:["m2b:0","m3:1","s1b:1","s4:1","fs2:2","fs2b:1","h2:2","q3:1","r2:1","u3:1"]
+};
+function computeTraits(){
+  const out = {mercy:0, courage:0, caution:0, harshness:0};
+  if (typeof s==="undefined" || !s || !Array.isArray(s.log)) return out;
+  s.log.forEach(function(x){
+    const k = x.n + ":" + x.i;
+    Object.keys(TRAIT_KEYS).forEach(function(t){
+      if (TRAIT_KEYS[t].indexOf(k) !== -1) out[t]++;
+    });
+  });
+  return out;
+}
+function topTrait(){
+  const tr = computeTraits();
+  return Object.keys(tr).sort(function(a,b){return tr[b]-tr[a];})[0] || "witness";
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   4) بناء الخاتمة
+   ═══════════════════════════════════════════════════════════════════ */
+function getMilestones(){
+  const l = _L();
+  const m = [];
+  const add = function(ar,en){ m.push({ar:ar, en:en}); };
+  if (typeof s==="undefined" || !s) return m;
+  if (s.os) add("عثمان، الذي وجدته في صندوق سيارة مظلم فصار أخًا","Uthman, whom you found in a dark car trunk and became a brother");
+  if (s.sl) add("سلمان، الذي اقتسم معك غطاءً ممزقًا على رصيف الخرطوم","Salman, who shared a torn blanket with you on a Khartoum pavement");
+  if (s.um) add("أم حسن، التي كانت تبيع الشاي عند ناصية الشارع","Umm Hasan, who sold tea at the street corner");
+  if (s.ldg) add("الدفتر الجلدي الذي سحبته من بين الأكياس دون أن يراك أحد","The leather notebook you pulled from between bags unseen");
+  if (s.martyrs) add("الدم على الأرض في الثالث من يونيو، والذي نجوت منه","The blood on the ground on June 3rd, which you survived");
+  if (s.lost) add("آمنة ويوسف ومريم، الذين فقدتهم في ليلة واحدة لا تُنسى","Amina, Yusuf and Maryam, whom you lost in a single unforgettable night");
+  if (s.fsh_siege) add("الفاشر المحاصرة، التي عدت إليها لأن الجذور لا تموت","Besieged Al-Fashir, where you returned because roots do not die");
+  if (s.sac) add("الدم الذي تبرعت به لمصاب لا تعرفه في زقاق بالفاشر","The blood you donated to a stranger in an alley in Al-Fashir");
+  if (s.C) {
+    const dest = s.C==="eg"?"مصر":(s.C==="td"?"تشاد":"جنوب السودان");
+    const destEn = s.C==="eg"?"Egypt":(s.C==="td"?"Chad":"South Sudan");
+    add("الحدود التي عبرتها نحو "+dest, "The border you crossed toward "+destEn);
+  }
+  if (s.docs) add("الوثائق التي حفظتها كأنها اسمك","The documents you kept as if they were your name");
+  return m;
+}
+
+function buildEpilogue(key){
+  const l = _L();
+  const traits = computeTraits();
+  const top = topTrait();
+  const comps = (typeof companionsOf === "function") ? companionsOf() : [];
+  const decisions = (s && Array.isArray(s.log)) ? s.log.length : 0;
+  const chapters = (s && s._ch) || 1;
+  const milestones = getMilestones();
+
+  const parts = [];
+
+  /* الفقرة 1: البداية */
+  if (l==="en"){
+    parts.push("You began in a village near Al-Fashir, a boy with prayer beads in your hand and a name you were told never to forget. Through " + chapters + " chapters and " + decisions + " decisions, the name became a story, and the road became a home.");
+  } else {
+    parts.push("بدأتَ في قرية قرب الفاشر، طفلًا بسبحة في يده واسم قيل له ألا ينساه. عبر " + chapters + " فصول و" + decisions + " قرارًا، صار الاسم حكاية، وصار الطريق وطنًا.");
+  }
+
+  /* الفقرة 2: المحطات */
+  if (milestones.length > 0){
+    const picks = milestones.slice(0, 3);
+    if (l==="en"){
+      parts.push("You carried with you: " + picks.map(function(x){return x.en;}).join(". And you held: ") + ". Each one a small weight, each one a small monument.");
+    } else {
+      parts.push("حملتَ معك: " + picks.map(function(x){return x.ar;}).join(". وحملتَ أيضًا: ") + ". كل واحد منها ثقل صغير، وكل واحد منها نصب صغير.");
+    }
+  } else {
+    if (l==="en"){
+      parts.push("You did not stop to collect memories — you were too busy surviving. But the road remembers every footstep, even when the walker forgets.");
+    } else {
+      parts.push("لم تتوقف لتجمع الذكريات — كنت مشغولًا بالبقاء. لكن الطريق يحفظ كل خطوة، حتى حين ينسى الماشي.");
+    }
+  }
+
+  /* الفقرة 3: الرفاق أو الوحدة */
+  if (comps.length > 0){
+    const names = comps.map(function(k){return l==="en"?COMP[k].en:COMP[k].ar;}).join(l==="en"?", ":"، ");
+    if (l==="en"){
+      parts.push("You did not walk alone. " + names + " walked with you. Some bonds are not made of blood, but of the road. They are the only wealth the war could not take.");
+    } else {
+      parts.push("لم تمشِ وحدك. " + names + " مشوا معك. بعض الروابط لا تُصنع من الدم، بل من الطريق. وهي الثروة الوحيدة التي لم تستطع الحرب أن تأخذها.");
+    }
+  } else {
+    if (l==="en"){
+      parts.push("You walked alone. Every crossing, every cell, every checkpoint — you carried it alone. And yet you kept walking. That is not small. That is not nothing.");
+    } else {
+      parts.push("مشيتَ وحدك. كل عبور، كل زنزانة، كل حاجز — حملتها وحدك. ومع ذلك واصلت المشي. هذا ليس قليلًا. هذا ليس لا شيء.");
+    }
+  }
+
+  /* الفقرة 4: انعكاس السمة */
+  if (TRAIT_REFLECTIONS[top]){
+    parts.push(TRAIT_REFLECTIONS[top][l]);
+  }
+
+  /* نقش القبر */
+  const ep = EPITAPHS[key] || EPITAPH_FALLBACK[top] || EPITAPH_FALLBACK.mercy;
+  return {parts: parts, epitaph: ep[l], traits: traits};
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   5) حقن الخاتمة في شاشة النهاية
+   ═══════════════════════════════════════════════════════════════════ */
+function injectEpilogue(key, epi){
+  const endDiv = document.querySelector(".end");
+  if (!endDiv || endDiv.querySelector(".epilogue")) return;
+  const tx = endDiv.querySelector(".tx");
+  if (!tx) return;
+  const l = _L();
+  const html = '<div class="epilogue">'
+    + '<div class="epilogue-title">' + (l==="en"?"YOUR STORY":"حكايتك") + '</div>'
+    + epi.parts.map(function(p,i){return '<p style="animation-delay:'+(i*150)+'ms">'+p+'</p>';}).join("")
+    + '<div class="epitaph"><div class="epitaph-text">'+epi.epitaph+'</div></div>'
+    + '</div>';
+  tx.insertAdjacentHTML("afterend", html);
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   6) أرشيف الحكايات
+   ═══════════════════════════════════════════════════════════════════ */
+const ML_KEY = "najat_ml_v1";
+function getMemoryLane(){
+  try{ return JSON.parse(localStorage.getItem(ML_KEY) || "[]"); }catch(e){ return []; }
+}
+function saveToMemoryLane(key, epi){
+  if (typeof s==="undefined" || !s) return;
+  try{
+    const lane = getMemoryLane();
+    const comps = (typeof companionsOf === "function") ? companionsOf() : [];
+    const entry = {
+      key: key,
+      epitaph: epi.epitaph,
+      date: Date.now(),
+      decisions: (s.log || []).length,
+      chapters: s._ch || 1,
+      companions: comps,
+      traits: epi.traits
+    };
+    const isDupe = lane.length > 0 && lane[0].key === key && (Date.now() - lane[0].date) < 60000;
+    if (!isDupe){
+      lane.unshift(entry);
+      if (lane.length > 20) lane.length = 20;
+      localStorage.setItem(ML_KEY, JSON.stringify(lane));
+    }
+  }catch(e){}
+}
+
+function openMemoryLane(){
+  const l = _L();
+  const e = _el("pn");
+  const lane = getMemoryLane();
+  let html = '<h3>📚 ' + (l==="en"?"Memory Lane":"أرشيف حكاياتي") + '</h3>';
+  if (!lane.length){
+    html += '<p class="mut">' + (l==="en"?"No completed journeys yet.":"لا رحلات مكتملة بعد.") + '</p>';
+  } else {
+    html += '<div class="mut" style="margin-bottom:8px">' + (l==="en"?"Last "+lane.length+" journeys":"آخر "+lane.length+" رحلة") + '</div>';
+    lane.forEach(function(entry){
+      const meta = END_META[entry.key] || {icon:"📖", ar:entry.key, en:entry.key};
+      const date = new Date(entry.date);
+      const dateStr = date.toLocaleDateString(l==="en"?"en":"ar", {year:"numeric",month:"short",day:"numeric"});
+      const compNames = entry.companions.map(function(k){ return COMP[k] ? (l==="en"?COMP[k].en:COMP[k].ar) : ""; }).filter(Boolean).join(l==="en"?", ":"، ");
+      const tr = entry.traits || {};
+      html += '<div class="ml-entry">'
+        + '<div class="ml-info">'
+        + '<b>' + meta.icon + ' ' + (l==="en"?meta.en:meta.ar) + '</b>'
+        + '<small>❝ ' + entry.epitaph + ' ❞</small>'
+        + '<small>' + dateStr + ' · ' + entry.decisions + (l==="en"?" decisions":" قرار") + (compNames?" · "+compNames:"") + '</small>'
+        + '</div></div>';
+    });
+  }
+  html += '<button class="btn pri" onclick="document.getElementById(\'pn\').classList.remove(\'on\')">' + (l==="en"?"Close":"إغلاق") + '</button>';
+  e.innerHTML = '<div>' + html + '</div>';
+  e.classList.add("on");
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   7) معرض النهايات
+   ═══════════════════════════════════════════════════════════════════ */
+function openEndingGallery(){
+  const l = _L();
+  const e = _el("pn");
+  const seen = (function(){ try{ return JSON.parse(localStorage.getItem("najat_eg")||"[]"); }catch(e){ return []; } })();
+  const all = Object.keys(EPITAPHS);
+  let html = '<h3>🏁 ' + (l==="en"?"Endings Gallery":"معرض النهايات") + '</h3>';
+  html += '<div class="mut" style="margin-bottom:10px">' + (l==="en"?"Discovered "+seen.filter(function(x){return all.indexOf(x)!==-1;}).length+" of "+all.length:"اكتشفتَ "+seen.filter(function(x){return all.indexOf(x)!==-1;}).length+" من "+all.length) + '</div>';
+  html += '<div class="end-grid">';
+  all.forEach(function(k){
+    const meta = (typeof END_META!=="undefined" && END_META[k]) ? END_META[k] : {icon:"📖", ar:k, en:k};
+    const isSeen = seen.indexOf(k) !== -1;
+    html += '<div class="end-cell' + (isSeen?" seen":"") + '">'
+      + '<span class="ic">' + (isSeen ? meta.icon : "❓") + '</span>'
+      + '<div class="nm">' + (isSeen ? (l==="en"?meta.en:meta.ar) : (l==="en"?"Undiscovered":"لم تُكتشف")) + '</div>'
+      + '</div>';
+  });
+  html += '</div>';
+  if (seen.length < all.length){
+    html += '<div class="mut" style="margin-top:12px;font-style:italic;text-align:center">' + (l==="en"?"Every choice opens a door. Some doors you have not yet tried.":"كل قرار يفتح بابًا. بعض الأبواب لم تجرّبها بعد.") + '</div>';
+  }
+  html += '<button class="btn pri" onclick="document.getElementById(\'pn\').classList.remove(\'on\')">' + (l==="en"?"Close":"إغلاق") + '</button>';
+  e.innerHTML = '<div>' + html + '</div>';
+  e.classList.add("on");
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   8) تصدير الحكاية كملف Markdown
+   ═══════════════════════════════════════════════════════════════════ */
+const CHAPTER_NAMES = {
+  1:{ar:"الفصل الأول: دارفور",en:"Chapter 1: Darfur"},
+  2:{ar:"الفصل الثاني: الخرطوم",en:"Chapter 2: Khartoum"},
+  3:{ar:"الفصل الثالث: ديسمبر",en:"Chapter 3: December"},
+  4:{ar:"الفصل الرابع: قبل الحرب",en:"Chapter 4: Before the War"},
+  5:{ar:"الفصل الخامس: الحرب",en:"Chapter 5: War"},
+  6:{ar:"الفصل السادس: الخرطوم الجريحة",en:"Chapter 6: Wounded Khartoum"}
+};
+
+function exportStory(key, epi){
+  const l = _L();
+  const traits = epi ? epi.traits : computeTraits();
+  const comps = (typeof companionsOf === "function") ? companionsOf() : [];
+  const meta = (typeof END_META!=="undefined" && END_META[key]) ? END_META[key] : {icon:"📖", ar:key, en:key};
+  const dateStr = new Date().toLocaleString(l==="en"?"en":"ar");
+
+  let md = "";
+  if (l==="en"){
+    md += "# Survival — My Story\n\n";
+    md += "**Date:** " + dateStr + "  \n";
+    md += "**Chapters:** " + ((s && s._ch) || 1) + "  \n";
+    md += "**Decisions:** " + ((s && s.log) ? s.log.length : 0) + "  \n";
+    if (comps.length) md += "**Companions:** " + comps.map(function(k){return COMP[k].en;}).join(", ") + "  \n";
+    md += "\n---\n\n";
+  } else {
+    md += "# النجاة — حكايتي\n\n";
+    md += "**التاريخ:** " + dateStr + "  \n";
+    md += "**الفصول:** " + ((s && s._ch) || 1) + "  \n";
+    md += "**القرارات:** " + ((s && s.log) ? s.log.length : 0) + "  \n";
+    if (comps.length) md += "**الرفاق:** " + comps.map(function(k){return COMP[k].ar;}).join("، ") + "  \n";
+    md += "\n---\n\n";
+  }
+
+  for (let c=1; c<=6; c++){
+    const labels = (s && s.log) ? s.log.filter(function(x){return x.ch===c;}) : [];
+    if (!labels.length) continue;
+    md += "## " + CHAPTER_NAMES[c][l] + "\n\n";
+    labels.forEach(function(x){
+      md += "- " + (x.ar || "") + "\n";
+    });
+    md += "\n";
+  }
+
+  md += "\n---\n\n## " + (l==="en"?"Ending":"النهاية") + ": " + (l==="en"?meta.en:meta.ar) + "\n\n";
+  if (epi && epi.parts){
+    epi.parts.forEach(function(p){ md += p + "\n\n"; });
+    md += "\n> ❦ **" + epi.epitaph + "** ❦\n\n";
+  }
+
+  md += "\n---\n\n## " + (l==="en"?"Traits":"السمات") + "\n\n";
+  const traitNames = {mercy:{ar:"الرحمة",en:"Mercy"},courage:{ar:"الشجاعة",en:"Courage"},caution:{ar:"الحذر",en:"Caution"},harshness:{ar:"القسوة",en:"Harshness"}};
+  Object.keys(traits).forEach(function(k){
+    md += "- " + traitNames[k][l] + ": " + traits[k] + "\n";
+  });
+
+  md += "\n---\n\n*" + (l==="en"?"Generated by Survival — an interactive fiction game.":"صُنعت بواسطة النجاة — لعبة قصصية تفاعلية.") + "*\n";
+
+  try{
+    const blob = new Blob([md], {type:"text/markdown;charset=utf-8"});
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "najat-story-" + Date.now() + ".md";
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    setTimeout(function(){ URL.revokeObjectURL(url); }, 2000);
+    if (typeof toast==="function") toast(l==="en"?"✅ Story exported":"✅ صُدّرت الحكاية");
+  }catch(e){
+    console.error(e);
+    if (typeof toast==="function") toast(l==="en"?"⚠️ Export failed":"⚠️ تعذّر التصدير");
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   9) اعتراض renderEnding — حقن الخاتمة + الحفظ + الأزرار
+   ═══════════════════════════════════════════════════════════════════ */
+const _prevRE = window.renderEnding;
+window.renderEnding = function(key){
+  window._currentEndingKey = key;
+  const result = _prevRE.apply(this, arguments);
+
+  setTimeout(function(){
+    try{
+      const epi = buildEpilogue(key);
+      injectEpilogue(key, epi);
+      saveToMemoryLane(key, epi);
+
+      const endDiv = document.querySelector(".end");
+      if (!endDiv || endDiv.querySelector("[data-v5]")) return;
+      const priBtn = endDiv.querySelector(".btn.pri");
+      if (!priBtn) return;
+
+      const l = _L();
+      const btnRow = document.createElement("div");
+      btnRow.setAttribute("data-v5","1");
+      btnRow.style.marginTop = "12px";
+
+      const btns = [
+        {icon:"📚", ar:"أرشيف حكاياتي", en:"Memory Lane", fn:openMemoryLane},
+        {icon:"🏁", ar:"معرض النهايات", en:"Endings Gallery", fn:openEndingGallery},
+        {icon:"📥", ar:"صدّر الحكاية", en:"Export Story", fn:function(){ exportStory(key, epi); }}
+      ];
+      btns.forEach(function(b){
+        const btn = document.createElement("button");
+        btn.className = "btn";
+        btn.innerHTML = b.icon + " " + (l==="en"?b.en:b.ar);
+        btn.onclick = b.fn;
+        btnRow.appendChild(btn);
+      });
+      priBtn.insertAdjacentElement("beforebegin", btnRow);
+    }catch(e){
+      console.error("v5 ending injection failed:", e);
+    }
+  }, 120);
+
+  return result;
+};
+
+/* ═══════════════════════════════════════════════════════════════════
+   10) إضافة أزرار المعارض إلى القائمة الرئيسية
+   ═══════════════════════════════════════════════════════════════════ */
+const _prevMenu = window.showMenu;
+window.showMenu = function(){
+  const result = _prevMenu.apply(this, arguments);
+  try{
+    const app = _el("app");
+    if (!app || app.querySelector("[data-v5-menu]")) return result;
+    const settingsBtn = Array.from(app.querySelectorAll("button")).find(function(b){
+      const t = b.textContent || "";
+      return t.indexOf("الإعدادات")!==-1 || t.indexOf("Settings")!==-1;
+    });
+    if (!settingsBtn) return result;
+    const l = _L();
+    const wrap = document.createElement("div");
+    wrap.setAttribute("data-v5-menu","1");
+    wrap.innerHTML = ''
+      + '<button class="btn" onclick="window.openEndingGallery()">🏁 ' + (l==="en"?"Endings Gallery":"معرض النهايات") + '</button>'
+      + '<button class="btn" onclick="window.openMemoryLane()">📚 ' + (l==="en"?"Memory Lane":"أرشيف حكاياتي") + '</button>';
+    settingsBtn.insertAdjacentElement("afterend", wrap);
+  }catch(e){}
+  return result;
+};
+
+/* توفير الدوال عالميًا */
+window.openEndingGallery = openEndingGallery;
+window.openMemoryLane = openMemoryLane;
+
+console.log("✅ Story Weaver v5 — الخاتمة الشخصية + الأرشيف + معرض النهايات + التصدير");
+})();
+</script>
+<!-- ═══════════════════════════════════════════════════════════════════
+     STORY WEAVER v5 — الإضافة الكاملة
+     الخاتمة الشخصية + نقش القبر + أرشيف الحكايات + معرض النهايات + التصدير
+     يُضاف بعد v2 و v3 و v4
+     ═══════════════════════════════════════════════════════════════════ -->
+<script>
+(function(){
+"use strict";
+
+/* ═══════════════ أدوات مساعدة ═══════════════ */
+function _L(){ return (typeof LG!=="undefined" && LG==="en") ? "en" : "ar"; }
+function _el(id){ return document.getElementById(id); }
+
+/* ═══════════════ أنماط v5 ═══════════════ */
+const styleV5 = document.createElement("style");
+styleV5.textContent = `
+.epilogue{margin:24px 0 8px;padding:20px 4px;border-top:1px solid var(--bd);border-bottom:1px solid var(--bd);animation:f .6s}
+.epilogue-title{text-align:center;color:var(--ac);font-size:var(--fs-small);font-weight:800;letter-spacing:2px;margin-bottom:16px}
+.epilogue p{margin:0 0 14px;line-height:1.95;font-size:var(--fs-body);text-align:justify;animation:f .6s both}
+.epitaph{margin:22px 0;padding:18px 12px;text-align:center;border-top:2px solid var(--ac);border-bottom:2px solid var(--ac);background:rgba(181,84,28,.05);border-radius:8px;animation:f .8s both}
+.epitaph::before{content:"❦";display:block;color:var(--ac);font-size:1.2rem;margin-bottom:6px}
+.epitaph-text{font-size:clamp(1rem,3.6vw,1.15rem);font-weight:700;color:var(--fg);line-height:1.6;font-style:italic}
+.ml-entry{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:10px 12px;margin:6px 0;background:var(--card);border:1px solid var(--bd);border-radius:10px;flex-wrap:wrap}
+.ml-entry .ml-info{flex:1;min-width:0}
+.ml-entry b{color:var(--ac);font-size:var(--fs-small)}
+.ml-entry small{color:var(--mut);font-size:var(--fs-small);display:block;margin-top:2px;line-height:1.5}
+.end-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:8px;margin:10px 0}
+.end-cell{background:var(--card);border:1px solid var(--bd);border-radius:10px;padding:12px 8px;text-align:center;font-size:var(--fs-small);opacity:.4;filter:grayscale(1)}
+.end-cell.seen{opacity:1;filter:none;border-color:var(--ac)}
+.end-cell .ic{font-size:1.6rem;display:block;margin-bottom:4px}
+.end-cell .nm{font-weight:700;font-size:.75rem;line-height:1.3}
+`;
+document.head.appendChild(styleV5);
+
+/* ═══════════════ إصلاح أوسمة ناقصة ═══════════════ */
+const AH_AS_EG_V5 = [
+  ["reach","🏙️","الوصول"],["os","👥","الرفيق"],["bus","🚌","الكريز"],
+  ["fam","💍","الأسرة"],["lost","🔥","الخسارة"],["esc","⛓️","الهروب"],
+  ["err","🤲","غرفة الطوارئ"],["wm","🏙️","ود مدني"],["bag","🎒","حقيبة مريم"],
+  ["fsh","🔥","الفاشر"],["cross","🚪","العبور"]
+];
+try{
+  AH_AS_EG_V5.forEach(function(a){
+    if(typeof EG!=="undefined" && !EG.find(function(x){return x[0]===a[0];})) EG.push(a);
+  });
+}catch(e){}
+
+/* ═══════════════ 1) نقش القبر — 18 نقشًا ═══════════════ */
+const EPITAPHS = {
+  martyr:      {ar:"من مات ليحيا بلد لا يعرفه",                    en:"Who died so a country he did not know could live"},
+  martyr_rev:  {ar:"من حمل الثورة بيديه إلى آخر نفس",               en:"Who carried the revolution in his hands to his last breath"},
+  martyr_fsh:  {ar:"من سقط في زقاق بالفاشر، وعرفه الله وحده",        en:"Who fell in an alley in Al-Fashir, known only to God"},
+  ledger:      {ar:"من حفظ الأسماء حين قُتل الناس",                  en:"Who preserved names when people were being killed"},
+  witness:     {ar:"من عاش ليحكي",                                  en:"Who lived to tell"},
+  witness_age: {ar:"من رأى كل شيء، وحفظ كل شيء",                    en:"Who saw everything, and remembered everything"},
+  er:          {ar:"من صار بيتًا لمن لا بيت له",                    en:"Who became a home for those without one"},
+  os_final:    {ar:"من مشى مع أخيه إلى آخر الطريق",                  en:"Who walked with his brother to the end of the road"},
+  sl_final:    {ar:"أخو الرصيف، الذي عاشت أخوّته أطول من المدن",       en:"Brother of the pavement, whose brotherhood outlasted cities"},
+  um_final:    {ar:"من أعدّ الشاي حين احترق كل شيء",                en:"Who brewed tea when everything else was on fire"},
+  dignity_man: {ar:"من أعطى حين كان العطاء صعبًا",                   en:"Who gave when giving was hard"},
+  keeper:      {ar:"من حفظ ما لا يُحفظ: الذاكرة",                    en:"Who preserved what cannot be preserved: memory"},
+  companion_man:{ar:"من صنع عائلة في قلب الهاوية",                  en:"Who made a family in the heart of the abyss"},
+  peace:       {ar:"من نجا ليحمل أمانة من لم ينجُ",                  en:"Who survived to carry the trust of those who did not"},
+  heart:       {ar:"من احترق قلبه، وبقي جسده",                      en:"Whose heart burned while his body survived"},
+  border:      {ar:"من عبر، وحمل معه من لم يعبروا",                  en:"Who crossed, carrying those who could not"},
+  hunger:      {ar:"من انتظر سلامًا وصل متأخرًا",                    en:"Who waited for a peace that arrived too late"},
+  death:       {ar:"من سقط على الطريق، والطريق ما زال طويلًا",         en:"Who fell on the road, and the road is still long"}
+};
+const EPITAPH_FALLBACK_V5 = {
+  mercy:     {ar:"يدٌ أعطت حين كان العطاء صعبًا",                   en:"A hand that gave when giving was hard"},
+  courage:   {ar:"من لم يخفِ النار حين كان الفرار ممكنًا",            en:"Who did not fear the fire when fleeing was possible"},
+  caution:   {ar:"من حافظ على نفسه ليحمي من يحب",                  en:"Who kept himself to protect those he loved"},
+  harshness: {ar:"من قسا ليبقى، وبقي ليحكي",                       en:"Who was harsh to survive, and survived to tell"}
+};
+
+/* ═══════════════ 2) انعكاسات السمات ═══════════════ */
+const TRAIT_REFLECTIONS_V5 = {
+  mercy:     {ar:"كانت رحمتك أثقل من الحرب. حين كان العالم ينهار، كنت تُمسك بأيدي الآخرين ولا تفلتها.",
+              en:"Your mercy weighed more than the war. When the world was collapsing, you held others' hands and did not let go."},
+  courage:   {ar:"كانت شجاعتك أغلى من البقاء. لم تخفِ النار حين كان الفرار ممكنًا، ولم تُغلق عينيك حين كان الإغماض أرحم.",
+              en:"Your courage was dearer than survival. You did not fear the fire when fleeing was possible, and you did not close your eyes when closing them would have been kinder."},
+  caution:   {ar:"كان حذرك حكمة. حافظت على نفسك لتحمي من تحب، وعشت لتحكي. بعض البقاء شجاعة أيضًا.",
+              en:"Your caution was wisdom. You kept yourself to protect those you love, and lived to tell. Some survival is courage too."},
+  harshness: {ar:"كنتَ قاسيًا أحيانًا، لكن القسوة في الحرب كانت أحيانًا رحمة. من نجح في البقاء لم ينجُ باللطف وحده.",
+              en:"You were sometimes harsh, but harshness in war is sometimes mercy. Whoever survived did not survive by kindness alone."}
+};
+
+/* ═══════════════ 3) مفاتيح السمات ═══════════════ */
+const TRAIT_KEYS_V5 = {
+  mercy:["g1:0","e1:0","u2:1","s1b:0","fs2:0","fs2b:0","h1:0","h2:0","h2:1","q3:0","s6b:0","k1:1","g1:1","u1:1","jf:0","fs1:0","je:2","js:3","jd:3","jw:3","jg:3","jf:3","e2:3","sd2023:1","sd2024b:0","sd2025:0","rev5:0","rev5:1","rev6:0","sd2013:2","t1:0","u1:0","je:3"],
+  courage:["e2:2","r1:0","rev3:0","rev3:2","sd2018:0","sd2019:0","w2:0","p4:0","sd2019b:1","v2:0","sd2013:0","fs3:0","sd2021:0","sd2023:2","rev2:2","sd2019b:0","e2:0","v1:0"],
+  caution:["d2:0","d3:0","s6b:1","s6c:1","q1:0","v2:1","w1:0","h1:1","je:1","q4:2","p2:1","u4:0","sd2013:1","sd2014:2","sd2021:2","e2:1","p3:2","k2:2","jw:1"],
+  harshness:["m2b:0","m3:1","s1b:1","s4:1","fs2:2","fs2b:1","h2:2","q3:1","r2:1","u3:1"]
+};
+function computeTraitsV5(){
+  const out = {mercy:0, courage:0, caution:0, harshness:0};
+  if (typeof s==="undefined" || !s || !Array.isArray(s.log)) return out;
+  s.log.forEach(function(x){
+    const k = x.n + ":" + x.i;
+    Object.keys(TRAIT_KEYS_V5).forEach(function(t){
+      if (TRAIT_KEYS_V5[t].indexOf(k) !== -1) out[t]++;
+    });
+  });
+  return out;
+}
+function topTraitV5(){
+  const tr = computeTraitsV5();
+  return Object.keys(tr).sort(function(a,b){return tr[b]-tr[a];})[0] || "mercy";
+}
+
+/* ═══════════════ 4) المحطات الرئيسية ═══════════════ */
+function getMilestonesV5(){
+  const l = _L();
+  const m = [];
+  const add = function(ar,en){ m.push({ar:ar, en:en}); };
+  if (typeof s==="undefined" || !s) return m;
+  if (s.os) add("عثمان، الذي وجدته في صندوق سيارة مظلم فصار أخًا","Uthman, whom you found in a dark car trunk and became a brother");
+  if (s.sl) add("سلمان، الذي اقتسم معك غطاءً ممزقًا على رصيف الخرطوم","Salman, who shared a torn blanket with you on a Khartoum pavement");
+  if (s.um) add("أم حسن، التي كانت تبيع الشاي عند ناصية الشارع","Umm Hasan, who sold tea at the street corner");
+  if (s.ldg) add("الدفتر الجلدي الذي سحبته من بين الأكياس دون أن يراك أحد","The leather notebook you pulled from between bags unseen");
+  if (s.martyrs) add("الدم على الأرض في الثالث من يونيو، والذي نجوت منه","The blood on the ground on June 3rd, which you survived");
+  if (s.lost) add("آمنة ويوسف ومريم، الذين فقدتهم في ليلة واحدة لا تُنسى","Amina, Yusuf and Maryam, whom you lost in a single unforgettable night");
+  if (s.fsh_siege) add("الفاشر المحاصرة، التي عدت إليها لأن الجذور لا تموت","Besieged Al-Fashir, where you returned because roots do not die");
+  if (s.sac) add("الدم الذي تبرعت به لمصاب لا تعرفه في زقاق بالفاشر","The blood you donated to a stranger in an alley in Al-Fashir");
+  if (s.C) {
+    const dest = s.C==="eg"?"مصر":(s.C==="td"?"تشاد":"جنوب السودان");
+    const destEn = s.C==="eg"?"Egypt":(s.C==="td"?"Chad":"South Sudan");
+    add("الحدود التي عبرتها نحو "+dest, "The border you crossed toward "+destEn);
+  }
+  if (s.docs) add("الوثائق التي حفظتها كأنها اسمك","The documents you kept as if they were your name");
+  return m;
+}
+
+/* ═══════════════ 5) بناء الخاتمة ═══════════════ */
+function buildEpilogueV5(key){
+  const l = _L();
+  const top = topTraitV5();
+  const comps = (typeof companionsOf === "function") ? companionsOf() : [];
+  const decisions = (s && Array.isArray(s.log)) ? s.log.length : 0;
+  const chapters = (s && s._ch) || 1;
+  const milestones = getMilestonesV5();
+  const parts = [];
+
+  /* الفقرة 1: البداية */
+  if (l==="en"){
+    parts.push("You began in a village near Al-Fashir, a boy with prayer beads in your hand and a name you were told never to forget. Through " + chapters + " chapters and " + decisions + " decisions, the name became a story, and the road became a home.");
+  } else {
+    parts.push("بدأتَ في قرية قرب الفاشر، طفلًا بسبحة في يده واسم قيل له ألا ينساه. عبر " + chapters + " فصول و" + decisions + " قرارًا، صار الاسم حكاية، وصار الطريق وطنًا.");
+  }
+
+  /* الفقرة 2: المحطات */
+  if (milestones.length > 0){
+    const picks = milestones.slice(0, 3);
+    if (l==="en"){
+      parts.push("You carried with you: " + picks.map(function(x){return x.en;}).join(". And you held: ") + ". Each one a small weight, each one a small monument.");
+    } else {
+      parts.push("حملتَ معك: " + picks.map(function(x){return x.ar;}).join(". وحملتَ أيضًا: ") + ". كل واحد منها ثقل صغير، وكل واحد منها نصب صغير.");
+    }
+  } else {
+    if (l==="en"){
+      parts.push("You did not stop to collect memories — you were too busy surviving. But the road remembers every footstep, even when the walker forgets.");
+    } else {
+      parts.push("لم تتوقف لتجمع الذكريات — كنت مشغولًا بالبقاء. لكن الطريق يحفظ كل خطوة، حتى حين ينسى الماشي.");
+    }
+  }
+
+  /* الفقرة 3: الرفاق أو الوحدة */
+  if (comps.length > 0){
+    const names = comps.map(function(k){return l==="en"?COMP[k].en:COMP[k].ar;}).join(l==="en"?", ":"، ");
+    if (l==="en"){
+      parts.push("You did not walk alone. " + names + " walked with you. Some bonds are not made of blood, but of the road. They are the only wealth the war could not take.");
+    } else {
+      parts.push("لم تمشِ وحدك. " + names + " مشوا معك. بعض الروابط لا تُصنع من الدم، بل من الطريق. وهي الثروة الوحيدة التي لم تستطع الحرب أن تأخذها.");
+    }
+  } else {
+    if (l==="en"){
+      parts.push("You walked alone. Every crossing, every cell, every checkpoint — you carried it alone. And yet you kept walking. That is not small. That is not nothing.");
+    } else {
+      parts.push("مشيتَ وحدك. كل عبور، كل زنزانة، كل حاجز — حملتها وحدك. ومع ذلك واصلت المشي. هذا ليس قليلًا. هذا ليس لا شيء.");
+    }
+  }
+
+  /* الفقرة 4: انعكاس السمة */
+  if (TRAIT_REFLECTIONS_V5[top]){
+    parts.push(TRAIT_REFLECTIONS_V5[top][l]);
+  }
+
+  /* نقش القبر */
+  const ep = EPITAPHS[key] || EPITAPH_FALLBACK_V5[top] || EPITAPH_FALLBACK_V5.mercy;
+  return {parts: parts, epitaph: ep[l], traits: computeTraitsV5()};
+}
+
+/* ═══════════════ 6) حقن الخاتمة في شاشة النهاية ═══════════════ */
+function injectEpilogueV5(key, epi){
+  const endDiv = document.querySelector(".end");
+  if (!endDiv || endDiv.querySelector(".epilogue")) return;
+  const tx = endDiv.querySelector(".tx");
+  if (!tx) return;
+  const l = _L();
+  const html = '<div class="epilogue">'
+    + '<div class="epilogue-title">' + (l==="en"?"YOUR STORY":"حكايتك") + '</div>'
+    + epi.parts.map(function(p,i){return '<p style="animation-delay:'+(i*150)+'ms">'+p+'</p>';}).join("")
+    + '<div class="epitaph"><div class="epitaph-text">'+epi.epitaph+'</div></div>'
+    + '</div>';
+  tx.insertAdjacentHTML("afterend", html);
+}
+
+/* ═══════════════ 7) أرشيف الحكايات ═══════════════ */
+const ML_KEY_V5 = "najat_ml_v1";
+function getMemoryLaneV5(){
+  try{ return JSON.parse(localStorage.getItem(ML_KEY_V5) || "[]"); }catch(e){ return []; }
+}
+function saveToMemoryLaneV5(key, epi){
+  if (typeof s==="undefined" || !s) return;
+  try{
+    const lane = getMemoryLaneV5();
+    const comps = (typeof companionsOf === "function") ? companionsOf() : [];
+    const entry = {
+      key: key,
+      epitaph: epi.epitaph,
+      date: Date.now(),
+      decisions: (s.log || []).length,
+      chapters: s._ch || 1,
+      companions: comps,
+      traits: epi.traits
+    };
+    const isDupe = lane.length > 0 && lane[0].key === key && (Date.now() - lane[0].date) < 60000;
+    if (!isDupe){
+      lane.unshift(entry);
+      if (lane.length > 20) lane.length = 20;
+      localStorage.setItem(ML_KEY_V5, JSON.stringify(lane));
+    }
+  }catch(e){}
+}
+
+function openMemoryLaneV5(){
+  const l = _L();
+  const e = _el("pn");
+  const lane = getMemoryLaneV5();
+  let html = '<h3>📚 ' + (l==="en"?"Memory Lane":"أرشيف حكاياتي") + '</h3>';
+  if (!lane.length){
+    html += '<p class="mut">' + (l==="en"?"No completed journeys yet.":"لا رحلات مكتملة بعد.") + '</p>';
+  } else {
+    html += '<div class="mut" style="margin-bottom:8px">' + (l==="en"?"Last "+lane.length+" journeys":"آخر "+lane.length+" رحلة") + '</div>';
+    lane.forEach(function(entry){
+      const meta = (typeof END_META!=="undefined" && END_META[entry.key]) ? END_META[entry.key] : {icon:"📖", ar:entry.key, en:entry.key};
+      const date = new Date(entry.date);
+      const dateStr = date.toLocaleDateString(l==="en"?"en":"ar", {year:"numeric",month:"short",day:"numeric"});
+      const compNames = (entry.companions || []).map(function(k){ return COMP[k] ? (l==="en"?COMP[k].en:COMP[k].ar) : ""; }).filter(Boolean).join(l==="en"?", ":"، ");
+      html += '<div class="ml-entry">'
+        + '<div class="ml-info">'
+        + '<b>' + meta.icon + ' ' + (l==="en"?meta.en:meta.ar) + '</b>'
+        + '<small>❝ ' + entry.epitaph + ' ❞</small>'
+        + '<small>' + dateStr + ' · ' + entry.decisions + (l==="en"?" decisions":" قرار") + (compNames?" · "+compNames:"") + '</small>'
+        + '</div></div>';
+    });
+  }
+  html += '<button class="btn pri" onclick="document.getElementById(\'pn\').classList.remove(\'on\')">' + (l==="en"?"Close":"إغلاق") + '</button>';
+  e.innerHTML = '<div>' + html + '</div>';
+  e.classList.add("on");
+}
+
+/* ═══════════════ 8) معرض النهايات ═══════════════ */
+function openEndingGalleryV5(){
+  const l = _L();
+  const e = _el("pn");
+  const seen = (function(){ try{ return JSON.parse(localStorage.getItem("najat_eg")||"[]"); }catch(e){ return []; } })();
+  const all = Object.keys(EPITAPHS);
+  const found = seen.filter(function(x){return all.indexOf(x)!==-1;}).length;
+  let html = '<h3>🏁 ' + (l==="en"?"Endings Gallery":"معرض النهايات") + '</h3>';
+  html += '<div class="mut" style="margin-bottom:10px">' + (l==="en"?"Discovered "+found+" of "+all.length:"اكتشفتَ "+found+" من "+all.length) + '</div>';
+  html += '<div class="end-grid">';
+  all.forEach(function(k){
+    const meta = (typeof END_META!=="undefined" && END_META[k]) ? END_META[k] : {icon:"📖", ar:k, en:k};
+    const isSeen = seen.indexOf(k) !== -1;
+    html += '<div class="end-cell' + (isSeen?" seen":"") + '">'
+      + '<span class="ic">' + (isSeen ? meta.icon : "❓") + '</span>'
+      + '<div class="nm">' + (isSeen ? (l==="en"?meta.en:meta.ar) : (l==="en"?"Undiscovered":"لم تُكتشف")) + '</div>'
+      + '</div>';
+  });
+  html += '</div>';
+  if (found < all.length){
+    html += '<div class="mut" style="margin-top:12px;font-style:italic;text-align:center">' + (l==="en"?"Every choice opens a door. Some doors you have not yet tried.":"كل قرار يفتح بابًا. بعض الأبواب لم تجرّبها بعد.") + '</div>';
+  }
+  html += '<button class="btn pri" onclick="document.getElementById(\'pn\').classList.remove(\'on\')">' + (l==="en"?"Close":"إغلاق") + '</button>';
+  e.innerHTML = '<div>' + html + '</div>';
+  e.classList.add("on");
+}
+
+/* ═══════════════ 9) تصدير الحكاية ═══════════════ */
+const CHAPTER_NAMES_V5 = {
+  1:{ar:"الفصل الأول: دارفور",en:"Chapter 1: Darfur"},
+  2:{ar:"الفصل الثاني: الخرطوم",en:"Chapter 2: Khartoum"},
+  3:{ar:"الفصل الثالث: ديسمبر",en:"Chapter 3: December"},
+  4:{ar:"الفصل الرابع: قبل الحرب",en:"Chapter 4: Before the War"},
+  5:{ar:"الفصل الخامس: الحرب",en:"Chapter 5: War"},
+  6:{ar:"الفصل السادس: الخرطوم الجريحة",en:"Chapter 6: Wounded Khartoum"}
+};
+
+function exportStoryV5(key, epi){
+  const l = _L();
+  const traits = epi ? epi.traits : computeTraitsV5();
+  const comps = (typeof companionsOf === "function") ? companionsOf() : [];
+  const meta = (typeof END_META!=="undefined" && END_META[key]) ? END_META[key] : {icon:"📖", ar:key, en:key};
+  const dateStr = new Date().toLocaleString(l==="en"?"en":"ar");
+
+  let md = "";
+  if (l==="en"){
+    md += "# Survival — My Story\n\n";
+    md += "**Date:** " + dateStr + "  \n";
+    md += "**Chapters:** " + ((s && s._ch) || 1) + "  \n";
+    md += "**Decisions:** " + ((s && s.log) ? s.log.length : 0) + "  \n";
+    if (comps.length) md += "**Companions:** " + comps.map(function(k){return COMP[k].en;}).join(", ") + "  \n";
+    md += "\n---\n\n";
+  } else {
+    md += "# النجاة — حكايتي\n\n";
+    md += "**التاريخ:** " + dateStr + "  \n";
+    md += "**الفصول:** " + ((s && s._ch) || 1) + "  \n";
+    md += "**القرارات:** " + ((s && s.log) ? s.log.length : 0) + "  \n";
+    if (comps.length) md += "**الرفاق:** " + comps.map(function(k){return COMP[k].ar;}).join("، ") + "  \n";
+    md += "\n---\n\n";
+  }
+
+  for (let c=1; c<=6; c++){
+    const labels = (s && s.log) ? s.log.filter(function(x){return x.ch===c;}) : [];
+    if (!labels.length) continue;
+    md += "## " + CHAPTER_NAMES_V5[c][l] + "\n\n";
+    labels.forEach(function(x){ md += "- " + (x.ar || "") + "\n"; });
+    md += "\n";
+  }
+
+  md += "\n---\n\n## " + (l==="en"?"Ending":"النهاية") + ": " + (l==="en"?meta.en:meta.ar) + "\n\n";
+  if (epi && epi.parts){
+    epi.parts.forEach(function(p){ md += p + "\n\n"; });
+    md += "\n> ❦ **" + epi.epitaph + "** ❦\n\n";
+  }
+
+  md += "\n---\n\n## " + (l==="en"?"Traits":"السمات") + "\n\n";
+  const traitNames = {mercy:{ar:"الرحمة",en:"Mercy"},courage:{ar:"الشجاعة",en:"Courage"},caution:{ar:"الحذر",en:"Caution"},harshness:{ar:"القسوة",en:"Harshness"}};
+  Object.keys(traits).forEach(function(k){
+    md += "- " + traitNames[k][l] + ": " + traits[k] + "\n";
+  });
+
+  md += "\n---\n\n*" + (l==="en"?"Generated by Survival — an interactive fiction game.":"صُنعت بواسطة النجاة — لعبة قصصية تفاعلية.") + "*\n";
+
+  try{
+    const blob = new Blob([md], {type:"text/markdown;charset=utf-8"});
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "najat-story-" + Date.now() + ".md";
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    setTimeout(function(){ URL.revokeObjectURL(url); }, 2000);
+    if (typeof toast==="function") toast(l==="en"?"✅ Story exported":"✅ صُدّرت الحكاية");
+  }catch(e){
+    console.error(e);
+    if (typeof toast==="function") toast(l==="en"?"⚠️ Export failed":"⚠️ تعذّر التصدير");
+  }
+}
+
+/* ═══════════════ 10) اعتراض renderEnding ═══════════════ */
+const _prevREv5 = window.renderEnding;
+window.renderEnding = function(key){
+  window._currentEndingKey = key;
+  const result = _prevREv5.apply(this, arguments);
+
+  setTimeout(function(){
+    try{
+      const epi = buildEpilogueV5(key);
+      injectEpilogueV5(key, epi);
+      saveToMemoryLaneV5(key, epi);
+
+      const endDiv = document.querySelector(".end");
+      if (!endDiv || endDiv.querySelector("[data-v5]")) return;
+      const priBtn = endDiv.querySelector(".btn.pri");
+      if (!priBtn) return;
+
+      const l = _L();
+      const btnRow = document.createElement("div");
+      btnRow.setAttribute("data-v5","1");
+      btnRow.style.marginTop = "12px";
+
+      const btns = [
+        {icon:"📚", ar:"أرشيف حكاياتي", en:"Memory Lane", fn:openMemoryLaneV5},
+        {icon:"🏁", ar:"معرض النهايات", en:"Endings Gallery", fn:openEndingGalleryV5},
+        {icon:"📥", ar:"صدّر الحكاية", en:"Export Story", fn:function(){ exportStoryV5(key, epi); }}
+      ];
+      btns.forEach(function(b){
+        const btn = document.createElement("button");
+        btn.className = "btn";
+        btn.innerHTML = b.icon + " " + (l==="en"?b.en:b.ar);
+        btn.onclick = b.fn;
+        btnRow.appendChild(btn);
+      });
+      priBtn.insertAdjacentElement("beforebegin", btnRow);
+    }catch(e){
+      console.error("v5 ending injection failed:", e);
+    }
+  }, 120);
+
+  return result;
+};
+
+/* ═══════════════ 11) إضافة أزرار للقائمة الرئيسية ═══════════════ */
+const _prevMenuV5 = window.showMenu;
+window.showMenu = function(){
+  const result = _prevMenuV5.apply(this, arguments);
+  try{
+    const app = _el("app");
+    if (!app || app.querySelector("[data-v5-menu]")) return result;
+    const settingsBtn = Array.from(app.querySelectorAll("button")).find(function(b){
+      const t = b.textContent || "";
+      return t.indexOf("الإعدادات")!==-1 || t.indexOf("Settings")!==-1;
+    });
+    if (!settingsBtn) return result;
+    const l = _L();
+    const wrap = document.createElement("div");
+    wrap.setAttribute("data-v5-menu","1");
+    wrap.innerHTML = ''
+      + '<button class="btn" onclick="window.openEndingGalleryV5()">🏁 ' + (l==="en"?"Endings Gallery":"معرض النهايات") + '</button>'
+      + '<button class="btn" onclick="window.openMemoryLaneV5()">📚 ' + (l==="en"?"Memory Lane":"أرشيف حكاياتي") + '</button>';
+    settingsBtn.insertAdjacentElement("afterend", wrap);
+  }catch(e){}
+  return result;
+};
+
+/* ═══════════════ 12) توفير الدوال عالميًا ═══════════════ */
+window.openEndingGalleryV5 = openEndingGalleryV5;
+window.openMemoryLaneV5 = openMemoryLaneV5;
+window.exportStoryV5 = exportStoryV5;
+window.__buildEpilogueV5 = buildEpilogueV5;
+
+console.log("✅ Story Weaver v5 — الخاتمة الشخصية + الأرشيف + معرض النهايات + التصدير");
+})();
+</script>
 </body>
 </html>
