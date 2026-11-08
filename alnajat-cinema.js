@@ -35,9 +35,10 @@
   transition.setAttribute("aria-hidden", "true");
   transition.innerHTML = '<div class="at-card"><div class="at-kicker">ALNAJAT · THE JOURNEY</div><div class="at-title"></div><div class="at-sub"></div></div>';
   document.body.appendChild(transition);
-  let previousNode = null, transitionTimer = 0;
+  let previousNode = null, activeNode = null, transitionTimer = 0;
 
   function cinematic(nid) {
+    activeNode = nid || activeNode;
     if (!nid || !previousNode || previousNode === nid) { previousNode = nid; return; }
     previousNode = nid;
     const title = document.querySelector("#app .ch");
@@ -75,7 +76,7 @@
     const isEn = document.documentElement.lang === "en";
     let unlocked = [];
     try { unlocked = JSON.parse(localStorage.getItem("najat_chapters") || "[]"); } catch (_) {}
-    const current = window.id || null;
+    const current = activeNode;
     const rows = chapters.map(function (c, i) {
       const open = unlocked.indexOf(c.id) !== -1 || current === c.id;
       const active = current === c.id;
