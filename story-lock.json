@@ -1,0 +1,36 @@
+{
+  "schema": "alnajat-story-lock-v1",
+  "source": "index.html",
+  "method": "FNV-1a-64 over UTF-16 code units in exact source blocks; accidental-change guard, not a cryptographic signature",
+  "expectedFingerprint": "e9a3d7f49032c29e",
+  "protectedSections": [
+    {
+      "start": "/* ==================== STORY DATA (Arabic) ==================== */",
+      "end": "/* ==================== DEATH EVENTS (AR + EN) ==================== */",
+      "characters": 22727
+    },
+    {
+      "start": "/* ==================== DEATH EVENTS (AR + EN) ==================== */",
+      "end": "/* ==================== ART (SVG scenes) ==================== */",
+      "characters": 4743
+    },
+    {
+      "start": "/* ==================== ENGLISH TRANSLATIONS (all ~98 scenes) ==================== */",
+      "end": "/* ==================== TRANSLATION HELPERS ==================== */",
+      "characters": 24675
+    },
+    {
+      "start": "/* ==================== ITEMS / ACHIEVEMENTS / ENDINGS ==================== */",
+      "end": "/* ==================== UTILS ==================== */",
+      "characters": 5503
+    }
+  ],
+  "inventory": {
+    "baseSceneIds": 54,
+    "additionalSceneIds": 34,
+    "loopIds": 9,
+    "englishTranslationKeys": 97,
+    "endingIds": 9
+  },
+  "note": "Generated from reviewed main-branch source before cinematic/audio changes. Any mismatch requires explicit story-owner review; do not update this fingerprint merely to make a failing check pass."
+}
