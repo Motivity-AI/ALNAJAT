@@ -1,12 +1,13 @@
 /* ==================== النجاة — Service Worker ==================== */
-const VERSION = 'najat-v2';
+const VERSION = 'najat-v3';
 const SHELL = [
   './',
   './index.html',
   './manifest.json',
   './alnajat-v2.js?v=2',
   './alnajat-cinema.js?v=1',
-  './alnajat-world.js?v=1'
+  './alnajat-world.js?v=1',
+  './alnajat-characters.js?v=1'
 ];
 
 self.addEventListener('install', (e) => {
