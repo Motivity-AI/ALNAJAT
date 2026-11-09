@@ -55,9 +55,20 @@ try {
   if (!safety.includes('aria-modal","true"') || !safety.includes("aria-labelledby")) {
     fail("Scene safety dialog is missing basic accessible dialog semantics");
   } else pass("Scene safety dialog has accessible labeling and modal semantics");
-  const sceneSafetyIds = ["d1","d2","d3","d4","d5b","r2","w1","v1","v2","w2","v3","q3","q4","p1","p2","p4","e1","e2","fs1","fs3","je","jp","jf","jw"];
-  for (const id of sceneSafetyIds) if (!safety.includes(id + ":{")) fail("Missing scene-level safety metadata: " + id);
-  if (!process.exitCode) pass("Expanded scene-level safety metadata is present");
+  const storyNodeIds = new Set();
+  const baseStory = html.match(/const S=\{([\s\S]*?)\n\};/);
+  if (!baseStory) fail("Could not locate the base story node table");
+  else for (const match of baseStory[1].matchAll(/^\s*([A-Za-z0-9_]+):\[/gm)) storyNodeIds.add(match[1]);
+  const nodePatterns = [
+    /\bS\.([A-Za-z0-9_]+)\s*=\s*\[/g,
+    /\bS\[\s*["']([^"']+)["']\s*\]\s*=\s*\[/g,
+    /\bN\(\s*["']([^"']+)["']/g,
+    /\bLOOP\(\s*["']([^"']+)["']/g
+  ];
+  for (const pattern of nodePatterns) for (const match of html.matchAll(pattern)) storyNodeIds.add(match[1]);
+  const sceneSafetyIds = [...safety.matchAll(/^\s{4}([A-Za-z0-9_]+):\{level:/gm)].map(match => match[1]);
+  for (const id of sceneSafetyIds) if (!storyNodeIds.has(id)) fail("Safety metadata points to an unknown story node: " + id);
+  if (!process.exitCode) pass("All " + sceneSafetyIds.length + " scene safety entries map to real story nodes");
   if (/user-scalable\s*=\s*no/i.test(html)) fail("Viewport still disables user zoom");
   else pass("User zoom is not disabled by the viewport meta tag");
 
