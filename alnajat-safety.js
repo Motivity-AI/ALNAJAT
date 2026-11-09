@@ -28,7 +28,7 @@
   ].join("");
   document.head.appendChild(style);
 
-  function isEnglish(){return document.documentElement.lang==="en"||document.documentElement.dir==="ltr";}
+  function isEnglish(){return (typeof LG!=="undefined"&&LG==="en")||document.documentElement.lang==="en"||document.documentElement.dir==="ltr";}
   function element(tag,cls,txt){var e=document.createElement(tag);if(cls)e.className=cls;if(txt!==undefined)e.textContent=txt;return e;}
   function trap(overlay,buttons){
     overlay.addEventListener("keydown",function(e){
