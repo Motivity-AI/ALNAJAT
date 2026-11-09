@@ -2,22 +2,22 @@
   "schema": "alnajat-story-lock-v1",
   "source": "index.html",
   "method": "FNV-1a-64 over UTF-16 code units in exact source blocks; accidental-change guard, not a cryptographic signature",
-  "expectedFingerprint": "e9a3d7f49032c29e",
+  "expectedFingerprint": "23f756a0ec2b0417",
   "protectedSections": [
     {
       "start": "/* ==================== STORY DATA (Arabic) ==================== */",
       "end": "/* ==================== DEATH EVENTS (AR + EN) ==================== */",
-      "characters": 22727
+      "characters": 22872
     },
     {
       "start": "/* ==================== DEATH EVENTS (AR + EN) ==================== */",
       "end": "/* ==================== ART (SVG scenes) ==================== */",
-      "characters": 4743
+      "characters": 5181
     },
     {
       "start": "/* ==================== ENGLISH TRANSLATIONS (all ~98 scenes) ==================== */",
       "end": "/* ==================== TRANSLATION HELPERS ==================== */",
-      "characters": 24675
+      "characters": 24863
     },
     {
       "start": "/* ==================== ITEMS / ACHIEVEMENTS / ENDINGS ==================== */",
@@ -32,5 +32,5 @@
     "englishTranslationKeys": 97,
     "endingIds": 9
   },
-  "note": "Generated from reviewed main-branch source before cinematic/audio changes. Any mismatch requires explicit story-owner review; do not update this fingerprint merely to make a failing check pass."
+  "note": "Updated after explicit story-owner approval of the June 3, 2019 historical casualty wording in Arabic and English. Scene IDs, choice labels, choice targets, effects, death rules and ending definitions were reviewed and remain unchanged. This is a regression guard, not a cryptographic signature."
 }
