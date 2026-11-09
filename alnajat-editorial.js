@@ -79,6 +79,10 @@
     fs1:["2024 وما بعده","الفاشر","El Fasher","فترة سردية تقريبية","Approximate narrative period"],
     fs2:["2024 وما بعده","الفاشر","El Fasher","فترة سردية تقريبية","Approximate narrative period"],
     fs3:["أكتوبر 2025","الفاشر","El Fasher","فترة محددة في النص","Period stated in story"],
+    s4c:["2013 تقريبًا – قبل احتجاجات سبتمبر","الخرطوم","Khartoum","فترة سردية تقريبية","Approximate narrative period"],
+    s5:["2016 – 2018","أطراف الخرطوم","Greater Khartoum","فترة سردية تقريبية","Approximate narrative period"],
+    s5b:["قبل ديسمبر 2018","طريق أم درمان","Omdurman road","فترة سردية تقريبية","Approximate narrative period"],
+    sd2013b:["سبتمبر 2013","الخرطوم","Khartoum","فترة محددة في النص","Period stated in story"],
     rev1:["يناير 2019","الخرطوم","Khartoum","فترة محددة في النص","Period stated in story"],
     rev2:["6 أبريل 2019","القيادة العامة","General Command","فترة محددة في النص","Period stated in story"],
     rev3:["3 يونيو 2019","القيادة العامة","General Command","فترة محددة في النص","Period stated in story"],
@@ -117,8 +121,8 @@
 
   const sceneMeta = {
     ...approximateSceneMeta,
-    d1:["بداية الألفينات (تقريبًا)","دارفور","Darfur","فترة تقريبية","Approximate period"], sd2013:["سبتمبر 2013","مدن السودان","Sudanese cities","أرشيف تاريخي","Historical archive"],
-    sd2014:["2014 – 2016","الخرطوم","Khartoum","أرشيف تاريخي","Historical archive"], sd2018:["19 ديسمبر 2018","عطبرة","Atbara"],
+    d1:["بداية الألفينات (تقريبًا)","دارفور","Darfur","فترة تقريبية","Approximate period"], sd2013:["سبتمبر 2013","مدن السودان","Sudanese cities","فترة محددة في النص","Period stated in story"],
+    sd2014:["2014 – 2016","الخرطوم","Khartoum","فترة محددة في النص","Period stated in story"], sd2018:["19 ديسمبر 2018","عطبرة","Atbara"],
     sd2019:["يناير – أبريل 2019","السودان","Sudan"], rev1:["يناير 2019","الخرطوم","Khartoum"],
     rev2:["6 أبريل 2019","القيادة العامة","General Command"], rev3:["3 يونيو 2019","القيادة العامة","General Command"],
     rev4:["4 يونيو 2019","الخرطوم","Khartoum"], rev5:["يونيو 2019","الخرطوم","Khartoum"],
@@ -217,7 +221,7 @@
     const rows=events.map(function(e){
       return '<article class="event '+(e.emphasis?"key":"")+'"><div class="date">'+safe(e.date)+'</div><div><h4>'+(en?safe(e.placeEn):safe(e.placeAr))+'</h4><p>'+(en?safe(e.en):safe(e.ar))+'</p><button type="button" class="archive-read" data-archive-scene="'+safe(e.id)+'">'+(en?"Read scene":"اقرأ المشهد")+'</button></div></article>';
     }).join("");
-    panel.innerHTML='<div><h3>'+(en?"Historical chronology":"التسلسل الزمني للأحداث")+'</h3><p class="intro">'+(en?"A chronological historical record. The main survival route moves forward in time; scenes outside that route remain available here as a read-only archive and never rewind your game.":"هذا سجل تاريخي مرتب، أما مسار النجاة الرئيسي فيتقدم إلى الأمام زمنيًا. المشاهد التي لا تدخل المسار الرئيسي محفوظة هنا في أرشيف للقراءة، ولا تعيدك إلى نقطة سابقة من اللعبة.")+'</p><section id="alnajat-chronology">'+rows+'</section><p class="footnote">'+(en?"Historical references are presented as context for an interactive fictional narrative. Estimates and disputed figures are attributed in the relevant entries; this is not a complete historical record.":"تُعرض الوقائع بوصفها سياقًا تاريخيًا لحكاية تفاعلية خيالية. تُنسب التقديرات والأرقام المختلف عليها إلى مصادرها في مواضعها؛ وهذا السجل ليس تأريخًا شاملًا لكل أحداث السودان.")+'</p><button class="btn pri" onclick="document.getElementById(\'pn\').classList.remove(\'on\')">'+(en?"Close":"إغلاق")+'</button></div>';
+    panel.innerHTML='<div><h3>'+(en?"Historical chronology":"التسلسل الزمني للأحداث")+'</h3><p class="intro">'+(en?"A chronological historical record. The main survival route moves forward in time, with optional documentary branches at their proper dates. The archive lets you read scenes and choices without changing saved progress.":"هذا سجل تاريخي مرتب. مسار النجاة الرئيسي يتقدم إلى الأمام زمنيًا، وتوجد مسارات توثيقية اختيارية عند نقاطها التاريخية لمن يريد التعمق. أما الأرشيف فيتيح قراءة المشاهد والاختيارات دون تغيير تقدمك المحفوظ.")+'</p><section id="alnajat-chronology">'+rows+'</section><p class="footnote">'+(en?"Historical references are presented as context for an interactive fictional narrative. Estimates and disputed figures are attributed in the relevant entries; this is not a complete historical record.":"تُعرض الوقائع بوصفها سياقًا تاريخيًا لحكاية تفاعلية خيالية. تُنسب التقديرات والأرقام المختلف عليها إلى مصادرها في مواضعها؛ وهذا السجل ليس تأريخًا شاملًا لكل أحداث السودان.")+'</p><button class="btn pri" onclick="document.getElementById(\'pn\').classList.remove(\'on\')">'+(en?"Close":"إغلاق")+'</button></div>';
     panel.classList.add("on");
   }
   function openArchiveScene(id){
@@ -277,8 +281,8 @@
   ];
   function stageFor(nid){
     if(/^(d[0-6]|jd|x1)$/.test(nid))return 0;
-    if(/^(m[0-4]|s[1-5](?:b|c)?|u[1-4]|js|s[1-4]b|s[1-4]c)$/.test(nid))return 1;
-    if(/^(r1|r1b|rev[1-6])$/.test(nid))return 2;
+    if(/^(m[0-4]|s[1-5](?:b|c)?|u[1-4]|js|sd2013|sd2013b|sd2014)$/.test(nid))return 1;
+    if(/^(r1|r1b|rev[1-6]|sd2018|sd2019|sd2019b)$/.test(nid))return 2;
     if(/^(sd2020|sd2021|sd2022|r2b|s6(?:b|c|d)?)$/.test(nid))return 3;
     return 4;
   }
