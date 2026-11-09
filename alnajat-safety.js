@@ -5,6 +5,7 @@
   var ACK_KEY="alnajat_content_notice_ack_v1";
   var QUIET_KEY="alnajat_quiet_mode_v1";
   var acknowledged=false;
+  var activeGate=null;
   try{acknowledged=localStorage.getItem(ACK_KEY)==="1";}catch(_){}
 
   var style=document.createElement("style");
@@ -39,7 +40,8 @@
       else if(!e.shiftKey&&document.activeElement===last){e.preventDefault();first.focus();}
     });
   }
-  function makeGate(){
+  function makeGate(onProceed){
+    if(activeGate)return;
     var en=isEnglish(),overlay=element("div");overlay.id="alnajat-safety-gate";
     overlay.setAttribute("role","dialog");overlay.setAttribute("aria-modal","true");
     overlay.setAttribute("aria-labelledby","alnajat-safety-title");overlay.setAttribute("aria-describedby","alnajat-safety-description");
@@ -56,17 +58,19 @@
     var proceed=element("button","as-primary",en?"I understand — begin":"فهمت التنبيه — ابدأ");
     var leave=element("button","",en?"Return to menu":"العودة إلى القائمة");
     actions.append(proceed,leave);card.append(title,intro,note,actions);overlay.append(card);document.body.append(overlay);
-    function close(){overlay.remove();}
+    function close(){overlay.remove();activeGate=null;}
     proceed.addEventListener("click",function(){
       acknowledged=true;try{localStorage.setItem(ACK_KEY,"1");}catch(_){}
-      close();if(typeof window.__ALNAJAT_originalStartGame==="function")window.__ALNAJAT_originalStartGame.apply(window,[]);
+      close();
+      if(typeof onProceed==="function")onProceed();
+      else if(typeof window.__ALNAJAT_originalStartGame==="function")window.__ALNAJAT_originalStartGame.apply(window,[]);
     });
-    leave.addEventListener("click",close);trap(overlay,[proceed,leave]);proceed.focus();
+    leave.addEventListener("click",close);trap(overlay,[proceed,leave]);activeGate=overlay;proceed.focus();
   }
 
   if(typeof window.startGame==="function"){
     window.__ALNAJAT_originalStartGame=window.startGame;
-    window.startGame=function(){if(acknowledged)return window.__ALNAJAT_originalStartGame.apply(this,arguments);makeGate();};
+    window.startGame=function(){var self=this,args=arguments;if(acknowledged)return window.__ALNAJAT_originalStartGame.apply(self,args);makeGate(function(){window.__ALNAJAT_originalStartGame.apply(self,args);});};
   }
 
   /* Scene notices are editorial metadata only. Summaries never replace the source story. */
@@ -144,6 +148,10 @@
   }
   if(typeof originalRender==="function"){
     window.renderNode=function(nid){
+      if(!acknowledged&&!window.__ALNAJAT_safetyBypass){
+        makeGate(function(){window.renderNode(nid);});
+        return;
+      }
       if(SCENES[nid]&&!window.__ALNAJAT_safetyBypass){
         if(activeWarning)return;
         showSceneWarning(nid,function(mode){
@@ -192,7 +200,26 @@
     showNotice:function(){acknowledged=false;try{localStorage.removeItem(ACK_KEY);}catch(_){}makeGate();},
     setQuietMode:applyQuiet,
     getState:function(){return{noticeAcknowledged:acknowledged,quietMode:document.body.classList.contains("alnajat-quiet-mode")};},
-    getSensitiveScenes:function(){return Object.keys(SCENES);}
+    getSensitiveScenes:function(){return Object.keys(SCENES);},
+
+    r1:{level:"متوسط",enLevel:"Moderate",topics:"إصابات خلال احتجاجات ديسمبر 2018",enTopics:"injuries during the December 2018 protests",summary:"يتناول المشهد احتجاجات ديسمبر ووجود مصابين قرب الميدان، مع إمكانية مساعدة الجرحى أو متابعة الطريق.",enSummary:"This scene addresses the December protests and injured people near the square, including the choice to help or continue."},
+    q1:{level:"متوسط",enLevel:"Moderate",topics:"توتر عسكري ومخاوف قبيل الحرب",enTopics:"military tension and fears before the war",summary:"يتناول المشهد الشائعات والتحركات العسكرية في الأحياء وقلق السكان قبيل اندلاع القتال.",enSummary:"This scene addresses rumors, military movements in neighborhoods and residents' anxiety before fighting begins."},
+    g1:{level:"متوسط",enLevel:"Moderate",topics:"أسر فقدت معيلين واحتياجات إنسانية",enTopics:"families who lost providers and humanitarian needs",summary:"يتناول المشهد عمل غرفة طوارئ الحي لحصر الأسر التي فقدت أفراداً وتحتاج إلى الدواء والماء.",enSummary:"This scene addresses a neighborhood emergency room identifying families who have lost members and need medicine and water."},
+    gd:{level:"متوسط",enLevel:"Moderate",topics:"نزوح ومأوى وعدم يقين",enTopics:"displacement, shelter and uncertainty",summary:"يتناول المشهد الوصول إلى مدرسة تحولت إلى مأوى للنازحين وسط أخبار غير مؤكدة عن الهدنة والمفاوضات.",enSummary:"This scene addresses reaching a school shelter amid uncertain news about ceasefires and negotiations."},
+    fs2:{level:"متوسط",enLevel:"Moderate",topics:"مصاب والتبرع بالدم ونقص الغذاء",enTopics:"injured person, blood donation and food scarcity",summary:"يتناول المشهد مطبخاً جماعياً وغرفة طوارئ تحتاج إلى متبرعين بالدم ومساعدة المنتظرين.",enSummary:"This scene addresses a community kitchen and emergency room seeking blood donors and support for people waiting."},
+    s5b:{level:"مرتفع",enLevel:"High",topics:"تهديد مسلح للحافلة وركابها",enTopics:"armed threat to a bus and its passengers",summary:"يتناول المشهد إيقاف حافلة ليلاً بواسطة شبان ملثمين ووجود امرأة حامل وطفلين بين الركاب.",enSummary:"This scene addresses a bus being stopped at night by masked men while a pregnant woman and two children are aboard."},
+    z1:{level:"متوسط",enLevel:"Moderate",topics:"آثار الرصاص وفقدان الأسرة",enTopics:"bullet damage and family loss",summary:"يتناول المشهد العودة إلى حي قديم متضرر والعثور على حقيبة مدرسية مرتبطة بذكرى أحد أفراد الأسرة.",enSummary:"This scene addresses returning to a damaged former neighborhood and finding a schoolbag tied to a family memory."},
+    w3:{level:"مرتفع",enLevel:"High",topics:"اختطاف واحتجاز في معسكر",enTopics:"abduction and detention in a camp",summary:"يتناول المشهد اقتياد الشخصية إلى معسكر واحتجازها بعيداً عن أهلها.",enSummary:"This scene addresses the protagonist being taken to a camp and detained away from family."},
+    p3:{level:"متوسط",enLevel:"Moderate",topics:"سجن ومحاولة التعامل مع حارس",enTopics:"prison and an encounter with a guard",summary:"يتناول المشهد التفاعل مع حارس سجين في سياق محاولة النجاة أو الهروب من الاحتجاز.",enSummary:"This scene addresses an encounter with a prison guard in the context of surviving or escaping detention."},
+    o1:{level:"مرتفع",enLevel:"High",topics:"مدينة مدمرة وجوع وفقد الأسرة",enTopics:"destroyed city, hunger and family loss",summary:"يتناول المشهد الوصول إلى مدينة متضررة بعد فقدان البيت والأسرة والبحث عن الطعام والمساعدة.",enSummary:"This scene addresses arriving in a damaged city after losing home and family, while seeking food and help."},
+    o2:{level:"مرتفع",enLevel:"High",topics:"حصار ونقص الغذاء وخيارات النزوح",enTopics:"siege, food shortages and displacement choices",summary:"يتناول المشهد اشتداد الحصار ونقص الغذاء والاختيار بين مساعدة الآخرين أو الانتظار أو عبور الحدود أو العودة إلى الفاشر.",enSummary:"This scene addresses a tightening siege, food shortages and choices between helping others, waiting, crossing a border or returning to El Fasher."},
+    rev1:{level:"متوسط",enLevel:"Moderate",topics:"ذكرى ضحية احتجاج وفقد أخ",enTopics:"remembrance of a protest victim and loss of a brother",summary:"يتناول المشهد لقاء ناشطين في يناير 2019، ومن بينهم شاب فقد أخاه خلال احتجاج.",enSummary:"This scene addresses meeting activists in January 2019, including a young man who lost his brother during a protest."},
+    rev2:{level:"مرتفع",enLevel:"High",topics:"إطلاق نار خلال اعتصام أبريل 2019",enTopics:"gunfire during the April 2019 sit-in",summary:"يتناول المشهد الاعتصام أمام القيادة العامة في أبريل 2019 وبدء إطلاق النار ليلاً.",enSummary:"This scene addresses the April 2019 sit-in outside General Command and gunfire beginning at night."},
+    sd2014:{level:"متوسط",enLevel:"Moderate",topics:"استمرار النزاعات المسلحة في مناطق سودانية",enTopics:"ongoing armed conflicts in Sudanese regions",summary:"يتناول المشهد الحوار الوطني والوثيقة الوطنية مع استمرار النزاعات في دارفور والنيل الأزرق وجنوب كردفان.",enSummary:"This scene addresses the national dialogue and National Document alongside continuing conflicts in Darfur, Blue Nile and South Kordofan."},
+    sd2019:{level:"مرتفع",enLevel:"High",topics:"قتلى واعتداء على مستشفى وإطلاق نار",enTopics:"deaths, hospital raid and gunfire",summary:"يتناول المشهد سقوط قتلى خلال الاحتجاجات واقتحام مستشفى في أم درمان وإطلاق النار بحثاً عن مصابين.",enSummary:"This scene addresses deaths during protests and a hospital raid in Omdurman involving gunfire in pursuit of injured people."},
+    sd2019b:{level:"مرتفع",enLevel:"High",topics:"فض اعتصام القيادة العامة وقتلى ومفقودون",enTopics:"General Command sit-in dispersal, deaths and missing people",summary:"يتناول المشهد فض اعتصام القيادة العامة في 3 يونيو 2019، مع الإشارة إلى اختلاف الحصائل المنشورة وشهادات الفقد.",enSummary:"This scene addresses the 3 June 2019 General Command sit-in dispersal, noting differing published casualty estimates and accounts of missing people."},
+    sd2020:{level:"متوسط",enLevel:"Moderate",topics:"جائحة كورونا وأزمة اقتصادية",enTopics:"COVID-19 pandemic and economic crisis",summary:"يتناول المشهد توقيع اتفاق جوبا للسلام ثم انتشار جائحة كورونا وتفاقم الأزمة الاقتصادية.",enSummary:"This scene addresses the Juba Peace Agreement followed by the spread of COVID-19 and a worsening economic crisis."},
+    sd2022:{level:"مرتفع",enLevel:"High",topics:"تصاعد التوتر بين الجيش والدعم السريع وبداية الحرب",enTopics:"escalating tensions between the army and RSF and the outbreak of war",summary:"يتناول المشهد تصاعد الخلافات العسكرية والسياسية وصولاً إلى اندلاع الحرب في 15 أبريل 2023.",enSummary:"This scene addresses escalating military and political tensions leading to the outbreak of war on 15 April 2023."}
   };
   console.info("ALNAJAT safety layer v2 loaded");
 })();
