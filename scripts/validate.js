@@ -48,13 +48,13 @@ try {
   const sourcesPage = read("sources.html");
   if (!sw.includes("'./sources.html'")) fail("Offline shell does not cache the historical sources page");
   else pass("Historical sources page is cached for offline use");
-  for (const sourceId of ["SRC-001","SRC-002","SRC-003","SRC-004","SRC-005","SRC-006","SRC-007","SRC-008","SRC-009","SRC-010"]) {
+  for (const sourceId of ["SRC-001","SRC-002","SRC-003","SRC-004","SRC-005","SRC-006","SRC-007","SRC-008","SRC-009","SRC-010","SRC-011","SRC-012"]) {
     if (!sourcesPage.includes('id="' + sourceId + '"')) fail("Missing source card: " + sourceId);
   }
   const safety = read("alnajat-safety.js");
-  if (!html.includes('alnajat-safety.js?v=6') || !sw.includes("'./alnajat-safety.js?v=6'")) {
-    fail("Scene safety layer v6 is not referenced by both the page and offline shell");
-  } else pass("Scene safety layer v6 is loaded and included in the offline shell");
+  if (!html.includes('alnajat-safety.js?v=7') || !sw.includes("'./alnajat-safety.js?v=7'")) {
+    fail("Scene safety layer v7 is not referenced by both the page and offline shell");
+  } else pass("Scene safety layer v7 is loaded and included in the offline shell");
   for (const marker of ["function sharedContinuation", "function showSceneWarning", "Read a safe summary", "Skip this scene", "choice[4]||choice[5]", "choice[5]", 'target.charAt(0)==="@', 'if(target!=="fin"&&!S[target])return null;', 'makeGate(function(){window.renderNode(nid);});', 'if(typeof onProceed==="function")onProceed();']) {
     if (!safety.includes(marker)) fail("Safety layer is missing expected feature marker: " + marker);
   }
@@ -77,6 +77,9 @@ try {
   if (sceneSafetyIds.length < 53) fail("Expected at least 53 scene safety entries, found " + sceneSafetyIds.length);
   if (!process.exitCode) pass("All " + sceneSafetyIds.length + " scene safety entries map to real story nodes");
   if (!safety.includes("var SCENE_SOURCES=") || !safety.includes("sources.html#")) fail("Scene-to-source links are missing");
+  const sourceMapBlock = (safety.match(/var SCENE_SOURCES=\\{([\\s\\S]*?)\\n  \\};/) || [])[1] || "";
+  const mappedSceneIds = [...sourceMapBlock.matchAll(/([A-Za-z][A-Za-z0-9_]*):\\[/g)].map(match => match[1]);
+  for (const id of mappedSceneIds) if (!storyNodeIds.has(id)) fail("Source map points to an unknown story node: " + id);
   if (!safety.includes("injectSourcesButton")) fail("Main-menu source navigation is missing");
   if (/user-scalable\s*=\s*no/i.test(html)) fail("Viewport still disables user zoom");
   else pass("User zoom is not disabled by the viewport meta tag");
