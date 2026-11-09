@@ -49,7 +49,7 @@ try {
   if (!html.includes('alnajat-safety.js?v=5') || !sw.includes("'./alnajat-safety.js?v=5'")) {
     fail("Scene safety layer v5 is not referenced by both the page and offline shell");
   } else pass("Scene safety layer v5 is loaded and included in the offline shell");
-  for (const marker of ["function sharedContinuation", "function showSceneWarning", "Read a safe summary", "Skip this scene", "choice[4]||choice[5]", "choice[5]", 'target.charAt(0)==="@', 'if(target!=="fin"&&!S[target])return null;']) {
+  for (const marker of ["function sharedContinuation", "function showSceneWarning", "Read a safe summary", "Skip this scene", "choice[4]||choice[5]", "choice[5]", 'target.charAt(0)==="@', 'if(target!=="fin"&&!S[target])return null;', 'makeGate(function(){window.renderNode(nid);});', 'if(typeof onProceed==="function")onProceed();']) {
     if (!safety.includes(marker)) fail("Safety layer is missing expected feature marker: " + marker);
   }
   if (!safety.includes('aria-modal","true"') || !safety.includes("aria-labelledby")) {
