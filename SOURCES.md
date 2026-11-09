@@ -27,7 +27,7 @@
 
 ### SRC-002 — فض اعتصام القيادة العامة 3 يونيو 2019
 - **الجهة:** Human Rights Watch.
-- **التاريخ:** 17 نوفمبر 2019.
+- **التاريخ:** 18 نوفمبر 2019.
 - **العنوان:** *“They Were Shouting ‘Kill Them’”: Sudan’s Violent Crackdown on Protesters in Khartoum*.
 - **الرابط:** https://www.hrw.org/report/2019/11/18/they-were-shouting-kill-them/sudans-violent-crackdown-protesters-khartoum
 - **مشاهد ذات صلة:** `rev2`, `rev3`, `rev4`, `rev5`, `r2`, `sd2019`, `sd2019b`.
