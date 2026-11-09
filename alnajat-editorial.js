@@ -78,7 +78,23 @@
     gd:["النزوح بعد ديسمبر 2023","القضارف","Gedaref","فترة سردية تقريبية","Approximate narrative period"],
     fs1:["2024 وما بعده","الفاشر","El Fasher","فترة سردية تقريبية","Approximate narrative period"],
     fs2:["2024 وما بعده","الفاشر","El Fasher","فترة سردية تقريبية","Approximate narrative period"],
-    fs3:["أكتوبر 2025","الفاشر","El Fasher","فترة محددة في النص","Period stated in story"]
+    fs3:["أكتوبر 2025","الفاشر","El Fasher","فترة محددة في النص","Period stated in story"],
+    r2:["أبريل – 3 يونيو 2019","القيادة العامة","General Command","فترة محددة في النص","Period stated in story"],
+    q4:["الحرب والاحتجاز – 2023 وما بعده","موقع احتجاز","Detention site","زمن سردي تقريبي","Approximate narrative period"],
+    h1:["الحرب والنزوح – 2023 وما بعده","مدرسة تحولت إلى مستشفى ميداني","School field hospital","زمن سردي تقريبي","Approximate narrative period"],
+    q3:["الحرب والاحتجاز – 2023 وما بعده","موقع احتجاز","Detention site","زمن سردي تقريبي","Approximate narrative period"],
+    z1:["ما بعد الخروج من الاحتجاز – 2023 وما بعده","الخرطوم","Khartoum","زمن سردي تقريبي","Approximate narrative period"],
+    bd:["مسارات العبور – 2023 وما بعده","مفترق طرق حدودي","Border crossroads","زمن سردي تقريبي","Approximate narrative period"],
+    e1:["الحصار والنزوح – 2023 وما بعده","الخرطوم","Khartoum","زمن سردي تقريبي","Approximate narrative period"],
+    e2:["النزوح على طريق ود مدني – 2023 وما بعده","طريق ود مدني","Road to Wad Madani","زمن سردي تقريبي","Approximate narrative period"],
+    q2:["الاحتجاز – 2023 وما بعده","موقع احتجاز","Detention site","زمن سردي تقريبي","Approximate narrative period"],
+    w3:["الاحتجاز – 2023 وما بعده","معسكر احتجاز","Detention camp","زمن سردي تقريبي","Approximate narrative period"],
+    p1:["السجن – 2023 وما بعده","معتقل","Prison","زمن سردي تقريبي","Approximate narrative period"],
+    p2:["السجن – 2023 وما بعده","معتقل","Prison","زمن سردي تقريبي","Approximate narrative period"],
+    p3:["السجن – 2023 وما بعده","معتقل","Prison","زمن سردي تقريبي","Approximate narrative period"],
+    p4:["السجن – 2023 وما بعده","معتقل","Prison","زمن سردي تقريبي","Approximate narrative period"],
+    o1:["ما بعد الخروج – الخرطوم الجريحة","الخرطوم","Khartoum","زمن سردي تقريبي","Approximate narrative period"],
+    o2:["الحصار والعبور – 2023 وما بعده","الخرطوم","Khartoum","زمن سردي تقريبي","Approximate narrative period"]
   };
 
   const sceneMeta = {
