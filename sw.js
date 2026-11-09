@@ -1,6 +1,13 @@
 /* ==================== النجاة — Service Worker ==================== */
-const VERSION = 'najat-v1';
-const SHELL = ['./', './index.html', './manifest.json'];
+const VERSION = 'najat-v2';
+const SHELL = [
+  './',
+  './index.html',
+  './manifest.json',
+  './alnajat-v2.js?v=2',
+  './alnajat-cinema.js?v=1',
+  './alnajat-world.js?v=1'
+];
 
 self.addEventListener('install', (e) => {
   e.waitUntil(
