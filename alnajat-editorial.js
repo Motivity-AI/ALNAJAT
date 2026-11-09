@@ -26,14 +26,14 @@
   ].sort((a,b)=>a.sort.localeCompare(b.sort));
 
   const sceneMeta = {
-    d1:["2003","دارفور","Darfur"], sd2013:["سبتمبر 2013","مدن السودان","Sudanese cities"],
-    sd2014:["2014 – 2016","الخرطوم","Khartoum"], sd2018:["19 ديسمبر 2018","عطبرة","Atbara"],
+    d1:["2003","دارفور","Darfur"], sd2013:["سبتمبر 2013","مدن السودان","Sudanese cities","استرجاع تاريخي","Historical flashback"],
+    sd2014:["2014 – 2016","الخرطوم","Khartoum","استرجاع تاريخي","Historical flashback"], sd2018:["19 ديسمبر 2018","عطبرة","Atbara"],
     sd2019:["يناير – أبريل 2019","السودان","Sudan"], rev1:["يناير 2019","الخرطوم","Khartoum"],
     rev2:["6 أبريل 2019","القيادة العامة","General Command"], rev3:["3 يونيو 2019","القيادة العامة","General Command"],
     rev4:["4 يونيو 2019","الخرطوم","Khartoum"], rev5:["يونيو 2019","الخرطوم","Khartoum"],
     sd2019b:["أبريل – يونيو 2019","الخرطوم","Khartoum"], r2:["أبريل – 3 يونيو 2019","القيادة العامة","General Command"],
     sd2020:["3 أكتوبر 2020","جوبا","Juba"], sd2021:["25 أكتوبر 2021","الخرطوم","Khartoum"],
-    sd2022:["2022","السودان","Sudan"], sd2023:["15 أبريل 2023","الخرطوم","Khartoum"],
+    sd2022:["2022 – 15 أبريل 2023","السودان","Sudan"], sd2023:["15 أبريل 2023","الخرطوم","Khartoum"],
     sd2023b:["يونيو 2023","الجنينة","El Geneina"], sd2023c:["18 ديسمبر 2023","ود مدني","Wad Madani"],
     k2:["ديسمبر 2023","الجزيرة","Al Jazirah"], sd2024:["2024","الفاشر ومخيم زمزم","El Fasher and Zamzam"],
     fs1:["2024","الفاشر","El Fasher"], sd2025:["2025","السودان","Sudan"],
@@ -145,7 +145,7 @@
     const en=isEn();
     const el=document.createElement("div");
     el.className="alnajat-scene-meta";
-    el.textContent=(en?meta[0]+"  /  "+meta[2]:meta[0]+"  /  "+meta[1]);
+    el.textContent=(en?meta[0]+"  /  "+meta[2]:meta[0]+"  /  "+meta[1])+(meta[3]?"  ·  "+(en?meta[4]:meta[3]):"");
     const chapter=app.querySelector(".ch");
     if(chapter)chapter.insertAdjacentElement("afterend",el);
   }
