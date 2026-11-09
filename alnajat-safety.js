@@ -103,8 +103,9 @@
       var en = labels();
       button.textContent = on ? (en?"Quiet mode: on":"الوضع الهادئ: مفعّل") : (en?"Quiet mode":"الوضع الهادئ");
     }
+    try { if(window.ALNAJAT_AUDIO && window.ALNAJAT_AUDIO.setQuietMode) window.ALNAJAT_AUDIO.setQuietMode(!!on); } catch (_) {}
     if(on){
-      try { if(window.ALNAJAT_AUDIO) window.ALNAJAT_AUDIO.setMusic(false); } catch (_) {}
+      try {
       try { if(window.speechSynthesis) window.speechSynthesis.cancel(); } catch (_) {}
     }
     try { localStorage.setItem(QUIET_KEY,on?"1":"0"); } catch (_) {}
