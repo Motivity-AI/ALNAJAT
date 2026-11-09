@@ -47,9 +47,9 @@ try {
 
   const safety = read("alnajat-safety.js");
   if (!html.includes('alnajat-safety.js?v=3') || !sw.includes("'./alnajat-safety.js?v=3'")) {
-    fail("Scene safety layer v2 is not referenced by both the page and offline shell");
-  } else pass("Scene safety layer v2 is loaded and included in the offline shell");
-  for (const marker of ["function sharedContinuation", "function showSceneWarning", "Read a safe summary", "Skip this scene", "!choice[4]", "choice[5]", 'target.charAt(0)==="@']) {
+    fail("Scene safety layer v3 is not referenced by both the page and offline shell");
+  } else pass("Scene safety layer v3 is loaded and included in the offline shell");
+  for (const marker of ["function sharedContinuation", "function showSceneWarning", "Read a safe summary", "Skip this scene", "choice[4]||choice[5]", "choice[5]", 'target.charAt(0)==="@']) {
     if (!safety.includes(marker)) fail("Safety layer is missing expected feature marker: " + marker);
   }
   if (!safety.includes('aria-modal","true"') || !safety.includes("aria-labelledby")) {
