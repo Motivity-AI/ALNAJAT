@@ -20,13 +20,70 @@
     { date:"15 أبريل 2023", sort:"2023-04-15", placeAr:"الخرطوم", placeEn:"Khartoum", ar:"اندلاع الحرب بين القوات المسلحة وقوات الدعم السريع في الخرطوم.", en:"War erupts in Khartoum between the Sudanese Armed Forces and the Rapid Support Forces.", id:"sd2023" },
     { date:"13 – 21 يونيو 2023", sort:"2023-06-13", placeAr:"الجنينة – غرب دارفور", placeEn:"El Geneina, West Darfur", ar:"أحداث الجنينة؛ يورد المشهد تقديرات وشهادات عن القتل والدفن الجماعي.", en:"Events in El Geneina; the story scene cites estimates and testimony about killings and mass burial.", id:"sd2023b" },
     { date:"18 ديسمبر 2023", sort:"2023-12-18", placeAr:"ود مدني – الجزيرة", placeEn:"Wad Madani, Al Jazirah", ar:"سقوط ود مدني ونزوح أعداد كبيرة من السكان.", en:"Wad Madani falls and large numbers of residents are displaced.", id:"sd2023c" },
-    { date:"مايو – يوليو 2024", sort:"2024-05-01", placeAr:"الفاشر ومخيم زمزم", placeEn:"El Fasher and Zamzam camp", ar:"حصار الفاشر وإعلان المجاعة في مخيم زمزم، مع اتساع الاحتياجات الإنسانية.", en:"The siege of El Fasher and the famine declaration in Zamzam camp deepen humanitarian needs.", id:"sd2024" },
+    { date:"أبريل – أغسطس 2024", sort:"2024-04-01", placeAr:"الفاشر ومخيم زمزم", placeEn:"El Fasher and Zamzam camp", ar:"اشتداد حصار الفاشر؛ وأُعلنت المجاعة في مخيم زمزم في أغسطس 2024.", en:"The siege of El Fasher intensifies; famine is declared in Zamzam camp in August 2024.", id:"sd2024" },
     { date:"يناير – أكتوبر 2025", sort:"2025-01-01", placeAr:"ود مدني والخرطوم والفاشر", placeEn:"Wad Madani, Khartoum and El Fasher", ar:"تغيرات ميدانية في ود مدني والخرطوم، ثم سقوط الفاشر في أكتوبر وفق سرد اللعبة.", en:"The story records shifts in Wad Madani and Khartoum, followed by El Fasher's fall in October.", id:"sd2025" },
     { date:"26 أكتوبر 2026", sort:"2026-10-26", placeAr:"وسط وشرق السودان", placeEn:"Central and eastern Sudan", ar:"مشهد تطورات الحرب والهجمات على البنية التحتية كما يوردها النص الروائي.", en:"A story scene on later war developments and attacks on infrastructure.", id:"sd2026" }
   ].sort((a,b)=>a.sort.localeCompare(b.sort));
 
+  // Broad narrative periods for scenes whose exact calendar date is not stated.
+  // These are deliberately labelled approximate rather than inventing day/month dates.
+  const approximateSceneMeta = {
+    d0:["بداية الألفينات – طفولة دارفور","قرب الفاشر","Near El Fasher","فترة تقريبية","Approximate period"],
+    d0b:["بداية الألفينات – طفولة دارفور","دارفور","Darfur","فترة تقريبية","Approximate period"],
+    d1:["بداية الألفينات – طفولة دارفور","دارفور","Darfur","فترة تقريبية","Approximate period"],
+    d2:["بداية الألفينات – النزوح من دارفور","طريق النزوح","Displacement route","فترة تقريبية","Approximate period"],
+    d2b:["بداية الألفينات – النزوح من دارفور","طريق النزوح","Displacement route","فترة تقريبية","Approximate period"],
+    d3:["بداية الألفينات – النزوح من دارفور","دارفور","Darfur","فترة تقريبية","Approximate period"],
+    d3b:["بداية الألفينات – النزوح من دارفور","ريف دارفور","Rural Darfur","فترة تقريبية","Approximate period"],
+    d4:["بداية الألفينات – النزوح من دارفور","طريق الخرطوم","Road to Khartoum","فترة تقريبية","Approximate period"],
+    d5:["بداية الألفينات – الطريق إلى الخرطوم","طريق الخرطوم","Road to Khartoum","فترة تقريبية","Approximate period"],
+    d5b:["بداية الألفينات – الطريق إلى الخرطوم","طريق الخرطوم","Road to Khartoum","فترة تقريبية","Approximate period"],
+    d5c:["بداية الألفينات – الطريق إلى الخرطوم","طريق الخرطوم","Road to Khartoum","فترة تقريبية","Approximate period"],
+    d6:["بداية الألفينات – الوصول إلى الخرطوم","الخرطوم","Khartoum","فترة تقريبية","Approximate period"],
+    jd:["بداية الألفينات – النجاة من دارفور","دارفور","Darfur","فترة تقريبية","Approximate period"],
+    x1:["بداية الألفينات – النجاة من دارفور","دارفور","Darfur","فترة تقريبية","Approximate period"],
+    m1:["سنوات التكوين بعد النزوح","الخرطوم","Khartoum","زمن سردي تقريبي","Approximate narrative period"],
+    m2:["سنوات التكوين بعد النزوح","الخرطوم","Khartoum","زمن سردي تقريبي","Approximate narrative period"],
+    m2b:["سنوات التكوين بعد النزوح","الخرطوم","Khartoum","زمن سردي تقريبي","Approximate narrative period"],
+    m3:["سنوات التكوين بعد النزوح","الخرطوم","Khartoum","زمن سردي تقريبي","Approximate narrative period"],
+    m3b:["سنوات التكوين بعد النزوح","الخرطوم","Khartoum","زمن سردي تقريبي","Approximate narrative period"],
+    m3c:["سنوات التكوين بعد النزوح","الخرطوم","Khartoum","زمن سردي تقريبي","Approximate narrative period"],
+    m4:["سنوات التكوين بعد النزوح","الخرطوم","Khartoum","زمن سردي تقريبي","Approximate narrative period"],
+    m4b:["سنوات التكوين بعد النزوح","الخرطوم","Khartoum","زمن سردي تقريبي","Approximate narrative period"],
+    s1:["سنوات التكوين والعمل","الخرطوم","Khartoum","زمن سردي تقريبي","Approximate narrative period"],
+    s1b:["سنوات التكوين والعمل","الخرطوم","Khartoum","زمن سردي تقريبي","Approximate narrative period"],
+    s2:["سنوات التكوين والعمل","الخرطوم","Khartoum","زمن سردي تقريبي","Approximate narrative period"],
+    s2b:["سنوات التكوين والعمل","الخرطوم","Khartoum","زمن سردي تقريبي","Approximate narrative period"],
+    s3:["سنوات التكوين والعمل","الخرطوم","Khartoum","زمن سردي تقريبي","Approximate narrative period"],
+    s3b:["سنوات التكوين والعمل","الخرطوم","Khartoum","زمن سردي تقريبي","Approximate narrative period"],
+    s4:["سنوات التكوين والعمل","الخرطوم","Khartoum","زمن سردي تقريبي","Approximate narrative period"],
+    s4b:["سنوات التكوين والعمل","الخرطوم","Khartoum","زمن سردي تقريبي","Approximate narrative period"],
+    s5:["سنوات الاستقرار وتكوين الأسرة","أطراف الخرطوم","Greater Khartoum","زمن سردي تقريبي","Approximate narrative period"],
+    s5b:["سنوات الاستقرار وتكوين الأسرة","أم درمان","Omdurman","زمن سردي تقريبي","Approximate narrative period"],
+    s6:["سنوات الاستقرار وتكوين الأسرة","الخرطوم","Khartoum","زمن سردي تقريبي","Approximate narrative period"],
+    s6b:["سنوات الاستقرار وتكوين الأسرة","الخرطوم","Khartoum","زمن سردي تقريبي","Approximate narrative period"],
+    s6c:["سنوات الاستقرار وتكوين الأسرة","المقرن – الخرطوم","Mogran, Khartoum","زمن سردي تقريبي","Approximate narrative period"],
+    s6d:["سنوات الاستقرار وتكوين الأسرة","الخرطوم","Khartoum","زمن سردي تقريبي","Approximate narrative period"],
+    r1:["ديسمبر 2018 – بداية الثورة","الخرطوم","Khartoum","فترة محددة في النص","Period stated in story"],
+    r1b:["ديسمبر 2018 – بداية الثورة","الخرطوم","Khartoum","فترة محددة في النص","Period stated in story"],
+    q1:["رمضان 2023 – ما قبل الحرب","الخرطوم","Khartoum","فترة محددة في النص","Period stated in story"],
+    q1b:["رمضان 2023 – ما قبل الحرب","الخرطوم","Khartoum","فترة محددة في النص","Period stated in story"],
+    w1:["15 أبريل 2023 وما بعده","الخرطوم","Khartoum","فترة مرتبطة ببداية الحرب","War period"],
+    w2:["الحرب والنزوح – 2023 وما بعده","الخرطوم","Khartoum","فترة سردية تقريبية","Approximate narrative period"],
+    u1:["الحرب والنزوح – 2023 وما بعده","أم درمان","Omdurman","فترة سردية تقريبية","Approximate narrative period"],
+    u2:["الحرب والنزوح – 2023 وما بعده","أم درمان","Omdurman","فترة سردية تقريبية","Approximate narrative period"],
+    g1:["الحرب والنزوح – 2023 وما بعده","الخرطوم","Khartoum","فترة سردية تقريبية","Approximate narrative period"],
+    k1:["النزوح إلى ود مدني – 2023","ود مدني","Wad Madani","فترة سردية تقريبية","Approximate narrative period"],
+    k2:["ديسمبر 2023","الجزيرة","Al Jazirah","فترة محددة في النص","Period stated in story"],
+    gd:["النزوح بعد ديسمبر 2023","القضارف","Gedaref","فترة سردية تقريبية","Approximate narrative period"],
+    fs1:["2024 وما بعده","الفاشر","El Fasher","فترة سردية تقريبية","Approximate narrative period"],
+    fs2:["2024 وما بعده","الفاشر","El Fasher","فترة سردية تقريبية","Approximate narrative period"],
+    fs3:["أكتوبر 2025","الفاشر","El Fasher","فترة محددة في النص","Period stated in story"]
+  };
+
   const sceneMeta = {
-    d1:["2003","دارفور","Darfur"], sd2013:["سبتمبر 2013","مدن السودان","Sudanese cities","استرجاع تاريخي","Historical flashback"],
+    ...approximateSceneMeta,
+    d1:["بداية الألفينات (تقريبًا)","دارفور","Darfur","فترة تقريبية","Approximate period"], sd2013:["سبتمبر 2013","مدن السودان","Sudanese cities","استرجاع تاريخي","Historical flashback"],
     sd2014:["2014 – 2016","الخرطوم","Khartoum","استرجاع تاريخي","Historical flashback"], sd2018:["19 ديسمبر 2018","عطبرة","Atbara"],
     sd2019:["يناير – أبريل 2019","السودان","Sudan"], rev1:["يناير 2019","الخرطوم","Khartoum"],
     rev2:["6 أبريل 2019","القيادة العامة","General Command"], rev3:["3 يونيو 2019","القيادة العامة","General Command"],
@@ -174,5 +231,5 @@
       return html;
     };
   }
-  console.info("ALNAJAT Editorial Experience v1 loaded");
+  console.info("ALNAJAT Editorial Experience v2 loaded");
 })();
