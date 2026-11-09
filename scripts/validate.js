@@ -12,6 +12,7 @@ const pass = (message) => console.log("✓ " + message);
 try {
   const html = read("index.html");
   const sw = read("sw.js");
+  execFileSync(process.execPath, [path.join(__dirname, "story-integrity.js")], { stdio: "inherit" });
   const manifest = JSON.parse(read("manifest.json"));
   if (!html.includes("</body>") || !html.includes("</html>")) fail("index.html is missing closing document tags");
   else pass("HTML document has closing tags");
