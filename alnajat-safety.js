@@ -256,5 +256,12 @@
     sd2020:{level:"متوسط",enLevel:"Moderate",topics:"جائحة كورونا وأزمة اقتصادية",enTopics:"COVID-19 pandemic and economic crisis",summary:"يتناول المشهد توقيع اتفاق جوبا للسلام ثم انتشار جائحة كورونا وتفاقم الأزمة الاقتصادية.",enSummary:"This scene addresses the Juba Peace Agreement followed by the spread of COVID-19 and a worsening economic crisis."},
     sd2022:{level:"مرتفع",enLevel:"High",topics:"تصاعد التوتر بين الجيش والدعم السريع وبداية الحرب",enTopics:"escalating tensions between the army and RSF and the outbreak of war",summary:"يتناول المشهد تصاعد الخلافات العسكرية والسياسية وصولاً إلى اندلاع الحرب في 15 أبريل 2023.",enSummary:"This scene addresses escalating military and political tensions leading to the outbreak of war on 15 April 2023."}
   };
-  console.info("ALNAJAT safety layer v7 loaded");
+  /* Promote the additional exported scene metadata into the live lookup table.
+     Without this merge, these entries exist in the public API but never trigger scene warnings. */
+  Object.keys(window.ALNAJAT_SAFETY).forEach(function(key){
+    var value=window.ALNAJAT_SAFETY[key];
+    if(value&&typeof value==="object"&&value.level&&value.summary)SCENES[key]=value;
+  });
+
+  console.info("ALNAJAT safety layer v8 loaded");
 })();
