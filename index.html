@@ -1354,9 +1354,17 @@ try{
   const rev6 = S["rev6"];
   if(rev6 && rev6[2]) rev6[2].forEach(function(c){ c[1]="sd2020"; });
 
-  /* 2020 → 2021 → 2022 → لقاء آمنة وتكوين الأسرة → رمضان 2023. */
+  /* 2020 → لقاء آمنة → الأسرة → 2021 → 2022 → ذكرى الميلاد → رمضان 2023. */
+  const sd2020 = S["sd2020"];
+  if(sd2020 && sd2020[2]) sd2020[2].forEach(function(c){ c[1]="r2b"; });
+  const s6 = S["s6"];
+  if(s6 && s6[2]) s6[2].forEach(function(c){ c[1]="sd2021"; });
   const sd2022 = S["sd2022"];
-  if(sd2022 && sd2022[2]) sd2022[2].forEach(function(c){ c[1]="r2b"; });
+  if(sd2022 && sd2022[2]) sd2022[2].forEach(function(c){ c[1]="s6d"; });
+  const s6d = S["s6d"];
+  if(s6d && s6d[2]) s6d[2].forEach(function(c){ c[1]="s6b"; });
+  const s6c = S["s6c"];
+  if(s6c && s6c[2]) s6c[2].forEach(function(c){ c[1]="q1"; });
 
   /* مسار توثيقي اختياري من اليوم السابق للحرب، يحفظ أحداث 2023–2026 واختياراتها. */
   const q1b = S["q1b"];
