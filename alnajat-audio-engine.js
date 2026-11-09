@@ -217,7 +217,7 @@
     if (ctx && buses) ramp(buses.music.gain, 0, 0.22);
     window.setTimeout(function () {
       stopNodes(musicNodes);
-      if (buses && ctx) ramp(buses.music.gain, settings.music, 0.08);
+      if (buses && ctx) ramp(buses.music.gain, quietMode ? 0 : settings.music, 0.08);
     }, 320);
   }
   function setQuietMode(on) {
