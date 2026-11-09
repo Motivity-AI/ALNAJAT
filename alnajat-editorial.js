@@ -106,7 +106,9 @@
     const panel=document.getElementById("pn");
     if(!panel)return;
     const en=isEn();
-    const rows=events.map((e,i)=>'<article class="event '+(e.emphasis?"key":"")+'"><div class="date">'+safe(e.date)+'</div><div><h4>'+(en?safe(e.en):safe(e.ar))+'</h4><p>'+(en?safe(e.en):safe(e.ar))+'</p><span class="place">'+(en?safe(e.placeEn):safe(e.placeAr))+'</span></div></article>').join("");
+    const rows=events.map(function(e){
+      return '<article class="event '+(e.emphasis?"key":"")+'"><div class="date">'+safe(e.date)+'</div><div><h4>'+(en?safe(e.placeEn):safe(e.placeAr))+'</h4><p>'+(en?safe(e.en):safe(e.ar))+'</p></div></article>';
+    }).join("");
     panel.innerHTML='<div><h3>'+(en?"Historical chronology":"التسلسل الزمني للأحداث")+'</h3><p class="intro">'+(en?"A chronological reference for the historical context of the story. Branching scenes may revisit earlier periods; this chronology remains in calendar order.":"مرجع زمني مرتب للأحداث التاريخية الواردة في الحكاية. قد تعود بعض المسارات السردية إلى فترات سابقة؛ أما هذا السجل فيبقى مرتبًا حسب التاريخ.")+'</p><section id="alnajat-chronology">'+rows+'</section><p class="footnote">'+(en?"Historical references are presented as context for an interactive fictional narrative. Estimates and disputed figures are attributed in the relevant entries; this is not a complete historical record.":"تُعرض الوقائع بوصفها سياقًا تاريخيًا لحكاية تفاعلية خيالية. تُنسب التقديرات والأرقام المختلف عليها إلى مصادرها في مواضعها؛ وهذا السجل ليس تأريخًا شاملًا لكل أحداث السودان.")+'</p><button class="btn pri" onclick="document.getElementById(\'pn\').classList.remove(\'on\')">'+(en?"Close":"إغلاق")+'</button></div>';
     panel.classList.add("on");
   }
