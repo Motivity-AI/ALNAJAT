@@ -20,7 +20,9 @@
     "#alnajat-safety-gate .as-actions,#alnajat-scene-warning .as-actions{display:grid;gap:10px;margin-top:20px}",
     "#alnajat-safety-gate button,#alnajat-scene-warning button{min-height:48px;border:1px solid #8b745c;border-radius:10px;padding:11px 15px;font:inherit;font-weight:700;cursor:pointer;background:#fff;color:#211d18}",
     "#alnajat-safety-gate button.as-primary,#alnajat-scene-warning button.as-primary{background:#8f4324;color:#fff;border-color:#8f4324}",
-    "#alnajat-safety-gate button:focus-visible,#alnajat-scene-warning button:focus-visible,#alnajat-quiet-toggle:focus-visible{outline:3px solid #1769aa;outline-offset:3px}",
+    "#alnajat-safety-gate button:focus-visible,#alnajat-scene-warning button:focus-visible,#alnajat-quiet-toggle:focus-visible,#alnajat-scene-warning a:focus-visible{outline:3px solid #1769aa;outline-offset:3px}",
+    "#alnajat-scene-warning .as-source-links{display:flex;flex-wrap:wrap;gap:8px;margin:12px 0;padding:10px 12px;border:1px solid #b7a48a;border-radius:10px;background:#eee9df}",
+    "#alnajat-scene-warning .as-source-links a{color:#174f7b;font-weight:700;text-underline-offset:3px}",
     "#alnajat-quiet-toggle{position:fixed;z-index:100050;inset-inline-start:12px;inset-block-end:calc(14px + env(safe-area-inset-bottom,0px));min-height:44px;padding:8px 12px;border:1px solid #8c765e;border-radius:999px;background:#f7f2e9;color:#211d18;font:600 13px/1.3 system-ui,sans-serif;box-shadow:0 3px 16px #0003;cursor:pointer}",
     "body.alnajat-quiet-mode *,body.alnajat-quiet-mode *::before,body.alnajat-quiet-mode *::after{animation:none!important;transition:none!important;scroll-behavior:auto!important}",
     "body.alnajat-quiet-mode #ptc,body.alnajat-quiet-mode #cb{display:none!important}",
@@ -112,6 +114,21 @@
     jf:{level:"مرتفع",enLevel:"High",topics:"حصار الفاشر وقصف ونقص الغذاء",enTopics:"El Fasher siege, shelling and food scarcity",summary:"يتناول هذا المقطع المتكرر الحياة تحت الحصار مع القصف ونقص الطعام.",enSummary:"This repeating segment addresses life under siege amid shelling and food shortages."},
     jw:{level:"مرتفع",enLevel:"High",topics:"قصف الخرطوم ونقص الماء والغذاء",enTopics:"Khartoum bombardment and shortages of water and food",summary:"يتناول هذا المقطع المتكرر القصف ونقص الاحتياجات الأساسية ومحاولة حماية الأسرة.",enSummary:"This repeating segment addresses bombardment, shortages of essentials and efforts to protect a family."}
   };
+  var SCENE_SOURCES={
+    sd2013:["SRC-001"],
+    rev2:["SRC-002"],rev3:["SRC-002"],rev4:["SRC-002"],rev5:["SRC-002"],r2:["SRC-002"],sd2019:["SRC-002"],sd2019b:["SRC-002"],
+    sd2021:["SRC-003"],
+    sd2023:["SRC-004"],w1:["SRC-004"],v1:["SRC-004"],v2:["SRC-004"],w2:["SRC-004"],o1:["SRC-004"],o2:["SRC-004"],gd:["SRC-004"],
+    sd2023b:["SRC-005"],d1:["SRC-005"],d2:["SRC-005"],d3:["SRC-005"],d4:["SRC-005"],d5b:["SRC-005"],
+    sd2024:["SRC-006"],fs1:["SRC-006"],jf:["SRC-006"],
+    fs3:["SRC-007","SRC-008","SRC-009","SRC-010"],sd2025:["SRC-007","SRC-008","SRC-009","SRC-010"]
+  };
+  var SCENE_SOURCE_LABELS={
+    "SRC-001":"Amnesty International — 2013","SRC-002":"Human Rights Watch — 2019",
+    "SRC-003":"FCDO — 2021","SRC-004":"OHCHR / UN — 2023","SRC-005":"Human Rights Watch — El Geneina",
+    "SRC-006":"IPC — Zamzam 2024","SRC-007":"UN — April 2025","SRC-008":"OHCHR — Zamzam 2025",
+    "SRC-009":"IPC — October 2025","SRC-010":"UN Fact-Finding Mission"
+  };
   var originalRender=window.renderNode;
   var activeWarning=null;
   var summaryMode=null;
@@ -133,12 +150,14 @@
     var category=element("p","",en?"Content level: "+meta.enLevel+" — "+meta.enTopics:"مستوى الحساسية: "+meta.level+" — "+meta.topics);
     var note=element("p","as-note",en?"You may read the full scene, use a non-graphic summary, or skip it. Skipping does not apply any choice effects.":"يمكنك قراءة المشهد كاملاً، أو الاكتفاء بملخص غير وصفي، أو تخطيه. التخطي لا يطبّق آثار أي اختيار.");
     var actions=element("div","as-actions");
+    var sourceIds=SCENE_SOURCES[nid]||[],sourceBox=null;
+    if(sourceIds.length){sourceBox=element("div","as-source-links");sourceIds.forEach(function(sourceId){var link=element("a","",sourceId+" · "+SCENE_SOURCE_LABELS[sourceId]);link.href="sources.html#"+sourceId;link.target="_blank";link.rel="noopener noreferrer";sourceBox.appendChild(link);});}
     var full=element("button","as-primary",en?"Read the full scene":"قراءة المشهد كاملاً");
     var summary=element("button","",en?"Read a safe summary":"قراءة ملخص آمن");
     var skip=element("button","",en?"Skip this scene":"تخطي هذا المشهد");
     var cancel=element("button","",en?"Return to menu":"العودة إلى القائمة");
     if(skipTarget)actions.append(full,summary,skip,cancel);else actions.append(full,summary,cancel);
-    card.append(title,category,note,actions);overlay.append(card);document.body.append(overlay);
+    card.append(title,category,note);if(sourceBox)card.append(sourceBox);card.append(actions);overlay.append(card);document.body.append(overlay);
     function close(){overlay.remove();activeWarning=null;}
     full.addEventListener("click",function(){close();done("full");});
     summary.addEventListener("click",function(){close();done("summary");});
@@ -183,6 +202,21 @@
     };
   }
 
+  function injectSourcesButton(){
+    var app=document.getElementById("app");
+    if(!app||!app.querySelector("button.pri")||app.querySelector("[data-alnajat-sources]"))return;
+    var settings=Array.prototype.slice.call(app.querySelectorAll("button")).find(function(button){var label=button.textContent||"";return label.indexOf("الإعدادات")!==-1||label.indexOf("Settings")!==-1;});
+    if(!settings)return;
+    var link=element("a","btn",isEnglish()?"📚 Historical sources":"📚 المصادر التاريخية");
+    link.href="sources.html";link.setAttribute("data-alnajat-sources","1");
+    settings.insertAdjacentElement("afterend",link);
+  }
+  var priorShowMenu=window.showMenu;
+  if(typeof priorShowMenu==="function"){
+    window.showMenu=function(){var result=priorShowMenu.apply(this,arguments);injectSourcesButton();return result;};
+  }
+  injectSourcesButton();
+
   function applyQuiet(on){
     document.body.classList.toggle("alnajat-quiet-mode",!!on);
     var button=document.getElementById("alnajat-quiet-toggle");
@@ -221,5 +255,5 @@
     sd2020:{level:"متوسط",enLevel:"Moderate",topics:"جائحة كورونا وأزمة اقتصادية",enTopics:"COVID-19 pandemic and economic crisis",summary:"يتناول المشهد توقيع اتفاق جوبا للسلام ثم انتشار جائحة كورونا وتفاقم الأزمة الاقتصادية.",enSummary:"This scene addresses the Juba Peace Agreement followed by the spread of COVID-19 and a worsening economic crisis."},
     sd2022:{level:"مرتفع",enLevel:"High",topics:"تصاعد التوتر بين الجيش والدعم السريع وبداية الحرب",enTopics:"escalating tensions between the army and RSF and the outbreak of war",summary:"يتناول المشهد تصاعد الخلافات العسكرية والسياسية وصولاً إلى اندلاع الحرب في 15 أبريل 2023.",enSummary:"This scene addresses escalating military and political tensions leading to the outbreak of war on 15 April 2023."}
   };
-  console.info("ALNAJAT safety layer v5 loaded");
+  console.info("ALNAJAT safety layer v6 loaded");
 })();
