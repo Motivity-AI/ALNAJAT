@@ -1,5 +1,5 @@
 /* ==================== النجاة — Service Worker ==================== */
-const VERSION = 'najat-v15';
+const VERSION = 'najat-v16';
 const SHELL = [
   './',
   './index.html',
@@ -12,7 +12,7 @@ const SHELL = [
   './alnajat-memory-book.js?v=1',
   './alnajat-audio-engine.js?v=1',
   './alnajat-cinema-pro.js?v=1',
-  './alnajat-editorial.js?v=5'
+  './alnajat-editorial.js?v=6'
 ];
 
 self.addEventListener('install', (e) => {
