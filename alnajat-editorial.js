@@ -66,7 +66,7 @@
     #app .btn.pri{background:#b2935c!important;color:#111820!important;border:1px solid #d4bb8a!important;font-weight:700}
     #app .tx~.btn{position:relative;padding-inline-start:52px!important}
     #app .tx~.btn:before{content:counter(alnajat-choice);counter-increment:alnajat-choice;position:absolute;inset-inline-start:17px;top:50%;transform:translateY(-50%);font:600 12px/1 Georgia,serif;color:#c4a66b}
-    #app .tx{counter-reset:alnajat-choice}
+    #app{counter-reset:alnajat-choice}
     #app .ccard{background:#202b36!important;color:#cbd3dc!important;border:1px solid #ffffff1b;border-radius:2px!important}
     #app .risk{background:#7e3333!important}
     #app .mut{color:#9ba7b4!important}
