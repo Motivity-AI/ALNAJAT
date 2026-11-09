@@ -46,15 +46,18 @@ try {
   else pass("Core application mount points are present");
 
   const safety = read("alnajat-safety.js");
-  if (!html.includes('alnajat-safety.js?v=2') || !sw.includes("'./alnajat-safety.js?v=2'")) {
+  if (!html.includes('alnajat-safety.js?v=3') || !sw.includes("'./alnajat-safety.js?v=3'")) {
     fail("Scene safety layer v2 is not referenced by both the page and offline shell");
   } else pass("Scene safety layer v2 is loaded and included in the offline shell");
-  for (const marker of ["function sharedContinuation", "function showSceneWarning", "Read a safe summary", "Skip this scene"]) {
+  for (const marker of ["function sharedContinuation", "function showSceneWarning", "Read a safe summary", "Skip this scene", "!choice[4]", "choice[5]", 'target.charAt(0)==="@']) {
     if (!safety.includes(marker)) fail("Safety layer is missing expected feature marker: " + marker);
   }
   if (!safety.includes('aria-modal","true"') || !safety.includes("aria-labelledby")) {
     fail("Scene safety dialog is missing basic accessible dialog semantics");
   } else pass("Scene safety dialog has accessible labeling and modal semantics");
+  const sceneSafetyIds = ["d1","d2","d3","d4","d5b","r2","w1","v1","v2","w2","v3","q3","q4","p1","p2","p4","e1","e2","fs1","fs3","je","jp","jf","jw"];
+  for (const id of sceneSafetyIds) if (!safety.includes(id + ":{")) fail("Missing scene-level safety metadata: " + id);
+  if (!process.exitCode) pass("Expanded scene-level safety metadata is present");
   if (/user-scalable\s*=\s*no/i.test(html)) fail("Viewport still disables user zoom");
   else pass("User zoom is not disabled by the viewport meta tag");
 
