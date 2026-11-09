@@ -16,8 +16,8 @@ try {
   if (!html.includes("</body>") || !html.includes("</html>")) fail("index.html is missing closing document tags");
   else pass("HTML document has closing tags");
 
-  const tags = [...html.matchAll(/<script\b[^>]*\bsrc=["']([^"']+)["'][^>]*>/gi)].map(m => m[1]);
-  const unique = new Set(tags);
+  const uncommented = html.replace(/<!--[\s\S]*?-->/g, "");
+  const tags = [...uncommented.matchAll(/<script\b[^>]*\bsrc=["\']([^"\']+)["\'][^>]*>/gi)].map(m => m[1]);
   if (tags.length !== unique.size) fail("Duplicate external script tags found");
   else pass("External script tags are unique");
 
