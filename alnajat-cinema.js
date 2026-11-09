@@ -88,7 +88,7 @@
       '<p class="map-note">' + (isEn ? "A narrative route through the story chapters — an illustrative guide, not a geographic or navigation map." : "مسار سردي يربط فصول الحكاية — دليل توضيحي وليس خريطة جغرافية أو أداة ملاحة.") + '</p>' +
       '<div class="map-legend"><span><i class="legend-dot"></i>' + (isEn ? "Reached" : "تم الوصول") + '</span><span><i class="legend-lock"></i>' + (isEn ? "Not reached yet" : "لم يُفتح بعد") + '</span></div>' +
       '<div class="journey">' + rows + '</div>' +
-      '<button class="btn pri" onclick="document.getElementById(\\'pn\\').classList.remove(\\'on\\')">' + (isEn ? "Close" : "إغلاق") + '</button></div>';
+      '<button class="btn pri" onclick="document.getElementById(&quot;pn&quot;).classList.remove(&quot;on&quot;)">' + (isEn ? "Close" : "إغلاق") + '</button></div>';
   }
 
   window.openAlnajatJourneyMap = function () {
