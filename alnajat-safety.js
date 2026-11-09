@@ -117,7 +117,7 @@
       var choices=S[nid][2],target=choices[0][1];
       if(typeof target!=="string"||!target||target.charAt(0)==="@")return null;
       if(choices.some(function(choice){return !Array.isArray(choice)||choice[1]!==target||choice[4]||choice[5];}))return null;
-      if(target!=="fin"&&!S[target]&&!(typeof X!=="undefined"&&X[target]))return null;
+      if(target!=="fin"&&!S[target])return null;
       return target;
     }catch(_){return null;}
   }
@@ -153,7 +153,7 @@
             /* All choices in these tagged scenes share this same next node.
                We advance without calling choose(), so no choice effects are applied. */
             window.__ALNAJAT_safetyBypass=true;
-            try{if(target==="fin"&&typeof window.finish==="function")window.finish();else if(typeof window.X!=="undefined"&&window.X[target]&&typeof window.renderDeath==="function")window.renderDeath(target);else originalRender.call(this,target);}finally{window.__ALNAJAT_safetyBypass=false;}
+            try{if(target==="fin"&&typeof window.finish==="function")window.finish();else originalRender.call(this,target);}finally{window.__ALNAJAT_safetyBypass=false;}
             return;
           }
           summaryMode=mode==="summary"?nid:null;
