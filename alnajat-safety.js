@@ -105,7 +105,6 @@
     }
     try { if(window.ALNAJAT_AUDIO && window.ALNAJAT_AUDIO.setQuietMode) window.ALNAJAT_AUDIO.setQuietMode(!!on); } catch (_) {}
     if(on){
-      try {
       try { if(window.speechSynthesis) window.speechSynthesis.cancel(); } catch (_) {}
     }
     try { localStorage.setItem(QUIET_KEY,on?"1":"0"); } catch (_) {}
