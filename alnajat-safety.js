@@ -86,8 +86,11 @@
   var originalRender=window.renderNode;
   var activeWarning=null;
   var summaryMode=null;
+  function sharedContinuation(nid){
+    try{if(typeof S==="undefined"||!S[nid]||!Array.isArray(S[nid][2])||!S[nid][2].length)return null;var target=S[nid][2][0][1];return S[nid][2].every(function(choice){return choice[1]===target;})?target:null;}catch(_){return null;}
+  }
   function showSceneWarning(nid,done){
-    var meta=SCENES[nid],en=isEnglish(),overlay=element("div");overlay.id="alnajat-scene-warning";
+    var meta=SCENES[nid],en=isEnglish(),skipTarget=sharedContinuation(nid),overlay=element("div");overlay.id="alnajat-scene-warning";
     overlay.setAttribute("role","dialog");overlay.setAttribute("aria-modal","true");overlay.setAttribute("aria-labelledby","alnajat-scene-warning-title");
     var card=element("section","as-card");
     var title=element("h2","",en?"Before this scene":"تنبيه قبل هذا المشهد");title.id="alnajat-scene-warning-title";
@@ -98,13 +101,14 @@
     var summary=element("button","",en?"Read a safe summary":"قراءة ملخص آمن");
     var skip=element("button","",en?"Skip this scene":"تخطي هذا المشهد");
     var cancel=element("button","",en?"Return to menu":"العودة إلى القائمة");
-    actions.append(full,summary,skip,cancel);card.append(title,category,note,actions);overlay.append(card);document.body.append(overlay);
+    if(skipTarget)actions.append(full,summary,skip,cancel);else actions.append(full,summary,cancel);
+    card.append(title,category,note,actions);overlay.append(card);document.body.append(overlay);
     function close(){overlay.remove();activeWarning=null;}
     full.addEventListener("click",function(){close();done("full");});
     summary.addEventListener("click",function(){close();done("summary");});
     skip.addEventListener("click",function(){close();done("skip");});
     cancel.addEventListener("click",function(){close();if(typeof window.showMenu==="function")window.showMenu();});
-    trap(overlay,[full,summary,skip,cancel]);full.focus();activeWarning=overlay;
+    trap(overlay,skipTarget?[full,summary,skip,cancel]:[full,summary,cancel]);full.focus();activeWarning=overlay;
   }
   if(typeof originalRender==="function"){
     window.renderNode=function(nid){
@@ -112,12 +116,12 @@
         if(activeWarning)return;
         showSceneWarning(nid,function(mode){
           if(mode==="skip"){
-            var target=SCENES[nid].skipTo;
+            var target=sharedContinuation(nid);
             if(!target){window.renderNode(nid);return;}
             /* All choices in these tagged scenes share this same next node.
                We advance without calling choose(), so no choice effects are applied. */
             window.__ALNAJAT_safetyBypass=true;
-            try{originalRender.call(this,target);}finally{window.__ALNAJAT_safetyBypass=false;}
+            try{if(target==="fin"&&typeof window.finish==="function")window.finish();else if(typeof window.X!=="undefined"&&window.X[target]&&typeof window.renderDeath==="function")window.renderDeath(target);else originalRender.call(this,target);}finally{window.__ALNAJAT_safetyBypass=false;}
             return;
           }
           summaryMode=mode==="summary"?nid:null;
