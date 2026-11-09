@@ -142,10 +142,58 @@
       card(t("أثر قراراتي","My decision trail"),t("شاهد تسلسل اختياراتك وما قادت إليه.","Review choices and where they led."),"📜","openAlnajatChronicle()")+
       card(t("أرشيف النهايات","Ending gallery"),t("اكتشف النهايات التي وصلت إليها.","See the endings you have unlocked."),"🏁","openAlnajatEndings()")+
       card(t("تقرير الرحلة","Journey report"),t("مؤشراتك ورفاقك ومحطاتك في ملخص واحد.","Your traits, companions and visited places."),"🧭","openAlnajatReport()")+
+      card(t("بطاقة رحلتي","My journey card"),t("صمّم بطاقة فنية تلخّص أثر رحلتك واحفظها كصورة.","Create a visual keepsake of your journey and save it as an image."),"🎴","downloadAlnajatCard()")+
       card(t("نسخة احتياطية","Backup & restore"),t("احفظ تقدمك أو استعده على هذا الجهاز.","Export or restore your local progress."),"💾","openAlnajatBackup()")+
       card(t("تثبيت اللعبة","Install the game"),t("أضف النجاة إلى الشاشة الرئيسية.","Add Survival to your home screen."),"📲","installAlnajat()")+
       '<div class="alnajat-dc-note">'+t("تنبيه: السجل الجديد يبدأ من لحظة تثبيت هذه الإضافة؛ لا يمكنه استعادة قرارات لم تكن مسجلة سابقاً.","Note: the new decision trail starts now; it cannot reconstruct choices made before this add-on.")+'</div>'+closeHtml());
   }
+
+  window.downloadAlnajatCard=function(){
+    try{
+      const canvas=document.createElement("canvas");canvas.width=1200;canvas.height=1600;
+      const ctx=canvas.getContext("2d");if(!ctx)throw new Error("canvas");
+      const en=lang()==="en";
+      let unlocked=0;try{unlocked=JSON.parse(localStorage.getItem("najat_eg")||"[]").length}catch(_){}
+      let scene="";try{if(typeof id!=="undefined"&&id)scene=sceneTitle(id)}catch(_){}
+      const gradient=ctx.createLinearGradient(0,0,1200,1600);
+      gradient.addColorStop(0,"#10151d");gradient.addColorStop(.55,"#20232b");gradient.addColorStop(1,"#3b211c");
+      ctx.fillStyle=gradient;ctx.fillRect(0,0,1200,1600);
+      ctx.strokeStyle="rgba(225,177,105,.24)";ctx.lineWidth=2;
+      for(let r=120;r<700;r+=90){ctx.beginPath();ctx.arc(1050,180,r,0,Math.PI*2);ctx.stroke();}
+      ctx.strokeStyle="rgba(255,255,255,.12)";ctx.lineWidth=3;ctx.strokeRect(54,54,1092,1492);
+      ctx.strokeStyle="#d8ad70";ctx.lineWidth=4;ctx.strokeRect(78,78,1044,1444);
+      ctx.textAlign="center";ctx.textBaseline="middle";ctx.direction=en?"ltr":"rtl";
+      ctx.fillStyle="#e7c18a";ctx.font="600 30px system-ui,sans-serif";
+      ctx.fillText(en?"A PERSONAL JOURNEY":"حكاية شخصية",600,250);
+      ctx.fillStyle="#fff4e4";ctx.font="bold 112px system-ui,sans-serif";
+      ctx.fillText(en?"SURVIVAL":"النجاة",600,430);
+      ctx.fillStyle="#e7c18a";ctx.font="36px system-ui,sans-serif";
+      ctx.fillText(en?"My choices. My journey. My trace.":"اختياراتي • رحلتي • أثري",600,535);
+      if(scene){
+        ctx.fillStyle="rgba(255,255,255,.72)";ctx.font="30px system-ui,sans-serif";
+        ctx.fillText(en?"CURRENT CHAPTER":"محطتي الحالية",600,700);
+        ctx.fillStyle="#fff4e4";ctx.font="38px system-ui,sans-serif";
+        ctx.fillText(scene.length>38?scene.slice(0,37)+"…":scene,600,765);
+      }
+      const metrics=[[String(state.visited.length),en?"SCENES VISITED":"مشهد زرته"],[String(state.events.length),en?"CHOICES RECORDED":"قرار موثّق"],[String(unlocked),en?"ENDINGS UNLOCKED":"نهاية اكتشفتها"]];
+      metrics.forEach((m,i)=>{
+        const y=930+i*145;ctx.fillStyle="rgba(255,255,255,.07)";ctx.fillRect(170,y-48,860,112);
+        ctx.fillStyle="#e7c18a";ctx.font="bold 48px system-ui,sans-serif";ctx.fillText(m[0],en?320:880,y+7);
+        ctx.fillStyle="#fff4e4";ctx.font="30px system-ui,sans-serif";ctx.fillText(m[1],en?720:470,y+7);
+      });
+      ctx.fillStyle="rgba(255,255,255,.65)";ctx.font="25px system-ui,sans-serif";
+      ctx.fillText(new Date().toLocaleDateString(en?"en-US":"ar"),600,1430);
+      ctx.fillStyle="#e7c18a";ctx.font="24px system-ui,sans-serif";
+      ctx.fillText(en?"AN INTERACTIVE STORY":"قصة تفاعلية",600,1490);
+      canvas.toBlob(function(blob){
+        if(!blob){toast(t("تعذّر إنشاء الصورة على هذا الجهاز.","Could not create the image on this device."));return;}
+        const url=URL.createObjectURL(blob),a=document.createElement("a");
+        a.href=url;a.download="alnajat-journey-card.png";document.body.appendChild(a);a.click();a.remove();
+        setTimeout(()=>URL.revokeObjectURL(url),2000);
+        toast(t("تم إنشاء بطاقة رحلتك وحفظها كصورة.","Your journey card has been created and downloaded."));
+      },"image/png");
+    }catch(_){toast(t("تعذّر إنشاء البطاقة في هذا المتصفح.","Card creation is not supported in this browser."));}
+  };
 
   window.openAlnajatChronicle=function(){
     const events=state.events.slice().reverse();
