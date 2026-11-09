@@ -55,7 +55,7 @@ try {
   if (!safety.includes('aria-modal","true"') || !safety.includes("aria-labelledby")) {
     fail("Scene safety dialog is missing basic accessible dialog semantics");
   } else pass("Scene safety dialog has accessible labeling and modal semantics");
-  if (/user-scalable\\s*=\\s*no/i.test(html)) fail("Viewport still disables user zoom");
+  if (/user-scalable\s*=\s*no/i.test(html)) fail("Viewport still disables user zoom");
   else pass("User zoom is not disabled by the viewport meta tag");
 
   if (process.exitCode) process.exit(process.exitCode);
