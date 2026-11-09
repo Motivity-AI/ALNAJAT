@@ -119,7 +119,7 @@
     rev2:["SRC-002"],rev3:["SRC-002"],rev4:["SRC-002"],rev5:["SRC-002"],r2:["SRC-002"],sd2019:["SRC-002"],sd2019b:["SRC-002"],
     sd2021:["SRC-003"],
     sd2023:["SRC-004"],w1:["SRC-004"],v1:["SRC-004"],v2:["SRC-004"],w2:["SRC-004"],o1:["SRC-004"],o2:["SRC-004"],gd:["SRC-004"],
-    sd2023b:["SRC-005"],d1:["SRC-005"],d2:["SRC-005"],d3:["SRC-005"],d4:["SRC-005"],d5b:["SRC-005"],
+    sd2023b:["SRC-005","SRC-012"],d1:["SRC-011"],d2:["SRC-011"],d3:["SRC-011"],d4:["SRC-011"],d5b:["SRC-011"],
     sd2024:["SRC-006"],fs1:["SRC-006"],jf:["SRC-006"],
     fs3:["SRC-007","SRC-008","SRC-009","SRC-010"],sd2025:["SRC-007","SRC-008","SRC-009","SRC-010"]
   };
@@ -127,7 +127,8 @@
     "SRC-001":"Amnesty International — 2013","SRC-002":"Human Rights Watch — 2019",
     "SRC-003":"FCDO — 2021","SRC-004":"OHCHR / UN — 2023","SRC-005":"Human Rights Watch — El Geneina",
     "SRC-006":"IPC — Zamzam 2024","SRC-007":"UN — April 2025","SRC-008":"OHCHR — Zamzam 2025",
-    "SRC-009":"IPC — October 2025","SRC-010":"UN Fact-Finding Mission"
+    "SRC-009":"IPC — October 2025","SRC-010":"UN Fact-Finding Mission",
+    "SRC-011":"Human Rights Watch — Darfur 2003–04","SRC-012":"OHCHR — Mass grave, July 2023"
   };
   var originalRender=window.renderNode;
   var activeWarning=null;
@@ -255,5 +256,5 @@
     sd2020:{level:"متوسط",enLevel:"Moderate",topics:"جائحة كورونا وأزمة اقتصادية",enTopics:"COVID-19 pandemic and economic crisis",summary:"يتناول المشهد توقيع اتفاق جوبا للسلام ثم انتشار جائحة كورونا وتفاقم الأزمة الاقتصادية.",enSummary:"This scene addresses the Juba Peace Agreement followed by the spread of COVID-19 and a worsening economic crisis."},
     sd2022:{level:"مرتفع",enLevel:"High",topics:"تصاعد التوتر بين الجيش والدعم السريع وبداية الحرب",enTopics:"escalating tensions between the army and RSF and the outbreak of war",summary:"يتناول المشهد تصاعد الخلافات العسكرية والسياسية وصولاً إلى اندلاع الحرب في 15 أبريل 2023.",enSummary:"This scene addresses escalating military and political tensions leading to the outbreak of war on 15 April 2023."}
   };
-  console.info("ALNAJAT safety layer v6 loaded");
+  console.info("ALNAJAT safety layer v7 loaded");
 })();
