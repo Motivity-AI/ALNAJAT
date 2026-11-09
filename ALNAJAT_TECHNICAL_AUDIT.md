@@ -79,3 +79,15 @@
 - أضيف مصدر OHCHR المحدد لتوثيق خبر دفن 87 جثماناً قرب الجنينة في يونيو 2023 (`SRC-012`) إلى جانب تقرير HRW الأوسع.
 - أُضيفت اختبارات تتحقق من وجود بطاقات المصادر الـ12 ومن أن كل معرّف مشهد في خريطة المصادر يشير إلى عقدة قصة فعلية.
 - رُفعت طبقة السلامة إلى v7 وService Worker إلى najat-v23.
+
+
+## 2026-11-09 — Scene safety registry correction (v8)
+
+A follow-up runtime-path audit found that 18 scene metadata records were exported under `window.ALNAJAT_SAFETY` but were not part of the private `SCENES` lookup used by `renderNode`. As a result, those records were visible through the diagnostics API but did not actually trigger the scene-level warning dialog. The fix promotes metadata-shaped records into `SCENES` before the safety script completes. No story text, choices, effects, routes, or endings were changed.
+
+- Scene-level metadata now resolves to 53 unique live entries (35 original registry entries + 18 promoted entries).
+- All 53 safety IDs were checked against the combined story sources (119 discovered story node IDs); no unknown IDs remain.
+- All 28 scene-to-source mappings were checked against the same story node inventory; no unknown IDs remain.
+- Safety script, validator, service worker, and story-integrity script passed JavaScript syntax compilation.
+- `index.html` and the service worker now load safety v8; the offline cache is `najat-v24`.
+- Browser/device interaction testing and final Pages deployment verification remain outstanding; static checks are not a substitute for those tests.
