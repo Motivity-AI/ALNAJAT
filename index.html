@@ -295,16 +295,63 @@ let au,mu=0,wm=0,iv;
 const SC=[293.7,311.1,370,392,440,466.2,554.4],WS=[146.8,155.6,164.8,207.7];
 let nz,bp,ng;
 let audioUnlocked=false;
-function nzs(){const b=au.createBuffer(1,au.sampleRate*2,au.sampleRate),d=b.getChannelData(0);for(let i=0;i<d.length;i++)d[i]=Math.random()*2-1;nz=au.createBufferSource();nz.buffer=b;nz.loop=true;bp=au.createBiquadFilter();bp.type="bandpass";bp.frequency.value=500;ng=au.createGain();ng.gain.value=.04;nz.connect(bp);bp.connect(ng);ng.connect(au.destination);nz.start()}
-function mood(k){wm=["war","night","prison","dark"].includes(k)?1:0;if(!ng)return;const f={desert:600,road:500,market:1500,city:900,street:1000,war:220,night:260,prison:300,ruin:400,peace:1800,dark:200,shelter:500,checkpoint:400,hospital:350,river:900}[k]||500;bp.frequency.setTargetAtTime(f,au.currentTime,1);ng.gain.setTargetAtTime(k==="war"?.12:k==="market"?.06:.04,au.currentTime,1)}
-function pl(f,v){const o=au.createOscillator(),g=au.createGain(),x=au.currentTime;o.type="triangle";o.frequency.value=f;g.gain.setValueAtTime(0.0001,x);g.gain.linearRampToValueAtTime(v,x+.05);g.gain.exponentialRampToValueAtTime(.0001,x+2.6);o.connect(g);g.connect(au.destination);o.start(x);o.stop(x+2.7)}
-async function unlockAudio(){if(audioUnlocked)return true;try{if(!au)au=new (window.AudioContext||window.webkitAudioContext)();if(au.state==="suspended")await au.resume();audioUnlocked=true;return true}catch(e){return false}}
-async function snd(){
+function nzs(){
+  if(!au||au.state!=="running")return;
   try{
-    if(mu){clearInterval(iv);if(au){try{await au.close()}catch(e){}}mu=0;ng=null;au=null;audioUnlocked=false}
-    else{const ok=await unlockAudio();if(!ok){toast("🔇 الصوت غير متاح");return}mu=1;pl(440,.25);nzs();if(id)mood(K(id));iv=setInterval(()=>{const a=wm?WS:SC;pl(a[Math.floor(Math.random()*a.length)],wm?.22:.18);if(Math.random()<.35)pl(a[0]/2,.2)},1700)}
-  }catch(e){mu=0}
-  document.getElementById("mb").textContent=mu?"🔊":"🔇"
+    const b=au.createBuffer(1,au.sampleRate*2,au.sampleRate),d=b.getChannelData(0);
+    for(let i=0;i<d.length;i++)d[i]=Math.random()*2-1;
+    nz=au.createBufferSource();nz.buffer=b;nz.loop=true;
+    bp=au.createBiquadFilter();bp.type="bandpass";bp.frequency.value=500;
+    ng=au.createGain();ng.gain.value=.035;
+    nz.connect(bp);bp.connect(ng);ng.connect(au.destination);nz.start();
+  }catch(e){console.warn("Alnajat ambience:",e)}
+}
+function mood(k){
+  wm=["war","night","prison","dark"].includes(k)?1:0;
+  if(!ng||!bp||!au||au.state!=="running")return;
+  const f={desert:600,road:500,market:1500,city:900,street:1000,war:220,night:260,prison:300,ruin:400,peace:1800,dark:200,shelter:500,checkpoint:400,hospital:350,river:900}[k]||500;
+  try{bp.frequency.setTargetAtTime(f,au.currentTime,1);ng.gain.setTargetAtTime(k==="war"?.10:k==="market"?.055:.035,au.currentTime,1)}catch(e){}
+}
+function pl(f,v){
+  if(!au||au.state!=="running")return;
+  try{
+    const o=au.createOscillator(),g=au.createGain(),x=au.currentTime;
+    o.type="triangle";o.frequency.value=f;
+    g.gain.setValueAtTime(.0001,x);g.gain.linearRampToValueAtTime(v,x+.05);
+    g.gain.exponentialRampToValueAtTime(.0001,x+1.4);
+    o.connect(g);g.connect(au.destination);o.start(x);o.stop(x+1.5);
+  }catch(e){console.warn("Alnajat sound effect:",e)}
+}
+async function unlockAudio(){
+  try{
+    if(!au){const Ctx=window.AudioContext||window.webkitAudioContext;if(!Ctx)return false;au=new Ctx()}
+    if(au.state!=="running")await au.resume();
+    audioUnlocked=au.state==="running";
+    return audioUnlocked;
+  }catch(e){audioUnlocked=false;return false}
+}
+async function snd(){
+  const button=document.getElementById("mb");
+  try{
+    if(mu){
+      clearInterval(iv);iv=null;
+      try{if(nz){nz.stop();nz.disconnect()}}catch(e){}
+      try{if(bp)bp.disconnect();if(ng)ng.disconnect()}catch(e){}
+      nz=bp=ng=null;mu=0;
+      if(au&&au.state==="running")await au.suspend();
+    }else{
+      const ok=await unlockAudio();
+      if(!ok){toast("تعذّر تشغيل الصوت. المس الشاشة ثم جرّب مجدداً.");return}
+      mu=1;pl(440,.20);nzs();if(id)mood(K(id));
+      iv=setInterval(()=>{
+        if(!au||au.state!=="running")return;
+        const a=wm?WS:SC;pl(a[Math.floor(Math.random()*a.length)],wm?.16:.13);
+        if(Math.random()<.30)pl(a[0]/2,.12);
+      },1900);
+    }
+  }catch(e){console.warn("Alnajat audio:",e);mu=0;clearInterval(iv);iv=null}
+  if(button)button.textContent=mu?"🔊":"🔇";
+  if(button)button.setAttribute("aria-pressed",mu?"true":"false");
 }
 
 /* ==================== ITEMS / ACHIEVEMENTS / ENDINGS ==================== */
@@ -848,7 +895,9 @@ window.addEventListener("load",()=>{
   updateMusicBtn();
   showMenu();
 });
-document.addEventListener("click",()=>{unlockAudio()},{once:true});
+document.addEventListener("pointerdown",()=>{unlockAudio()},{passive:true});
+document.addEventListener("touchend",()=>{unlockAudio()},{passive:true});
+document.addEventListener("keydown",()=>{unlockAudio()});
 </script>
   <!-- ========== How to Play — self-contained add-on ========== -->
 <script>
