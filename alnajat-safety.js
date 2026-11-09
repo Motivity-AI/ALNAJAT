@@ -221,5 +221,5 @@
     sd2020:{level:"متوسط",enLevel:"Moderate",topics:"جائحة كورونا وأزمة اقتصادية",enTopics:"COVID-19 pandemic and economic crisis",summary:"يتناول المشهد توقيع اتفاق جوبا للسلام ثم انتشار جائحة كورونا وتفاقم الأزمة الاقتصادية.",enSummary:"This scene addresses the Juba Peace Agreement followed by the spread of COVID-19 and a worsening economic crisis."},
     sd2022:{level:"مرتفع",enLevel:"High",topics:"تصاعد التوتر بين الجيش والدعم السريع وبداية الحرب",enTopics:"escalating tensions between the army and RSF and the outbreak of war",summary:"يتناول المشهد تصاعد الخلافات العسكرية والسياسية وصولاً إلى اندلاع الحرب في 15 أبريل 2023.",enSummary:"This scene addresses escalating military and political tensions leading to the outbreak of war on 15 April 2023."}
   };
-  console.info("ALNAJAT safety layer v2 loaded");
+  console.info("ALNAJAT safety layer v5 loaded");
 })();
