@@ -52,7 +52,7 @@ try {
     if (!sourcesPage.includes('id="' + sourceId + '"')) fail("Missing source card: " + sourceId);
   }
   const safety = read("alnajat-safety.js");
-  if (!html.includes('alnajat-safety.js?v=7') || !sw.includes("'./alnajat-safety.js?v=7'")) {
+  if (!html.includes('alnajat-safety.js?v=8') || !sw.includes("'./alnajat-safety.js?v=8'")) {
     fail("Scene safety layer v7 is not referenced by both the page and offline shell");
   } else pass("Scene safety layer v7 is loaded and included in the offline shell");
   for (const marker of ["function sharedContinuation", "function showSceneWarning", "Read a safe summary", "Skip this scene", "choice[4]||choice[5]", "choice[5]", 'target.charAt(0)==="@', 'if(target!=="fin"&&!S[target])return null;', 'makeGate(function(){window.renderNode(nid);});', 'if(typeof onProceed==="function")onProceed();']) {
@@ -81,6 +81,8 @@ try {
   const mappedSceneIds = [...sourceMapBlock.matchAll(/([A-Za-z][A-Za-z0-9_]*):\[/g)].map(match => match[1]);
   for (const id of mappedSceneIds) if (!storyNodeIds.has(id)) fail("Source map points to an unknown story node: " + id);
   if (!safety.includes("injectSourcesButton")) fail("Main-menu source navigation is missing");
+  if (!safety.includes("SCENES[key]=value")) fail("Extended safety metadata is not merged into the live scene registry");
+  else pass("Extended safety metadata is merged into the live scene registry");
   if (/user-scalable\s*=\s*no/i.test(html)) fail("Viewport still disables user zoom");
   else pass("User zoom is not disabled by the viewport meta tag");
 
