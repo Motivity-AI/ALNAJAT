@@ -120,3 +120,7 @@
 - `alnajat-memory-book.js` يتيح حفظ أي مشهد، وإضافة تأملات شخصية، والبحث والنسخ وتصدير الدفتر بصيغة Markdown.
 - تُحفظ الملاحظات محلياً على الجهاز ولا تُرسل إلى خادم، ولا تؤثر في قرارات القصة أو نهاياتها.
 - الحد الأقصى ٢٠٠ ذكرى، ويمكن حذف الذكريات أو تصديرها للاحتفاظ بها.
+
+
+## Historical source register
+The initial research and source-to-scene map is maintained in [SOURCES.md](./SOURCES.md). It records scope, limitations and scene IDs for each reference. The registry is an editorial starting point, not a claim that every historical statement in the game has been independently verified.
