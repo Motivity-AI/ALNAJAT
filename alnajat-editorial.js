@@ -17,7 +17,7 @@
     { date:"3 أكتوبر 2020", sort:"2020-10-03", placeAr:"جوبا", placeEn:"Juba", ar:"توقيع اتفاق جوبا للسلام، بالتزامن مع تفشي جائحة كورونا وتفاقم الأزمة الاقتصادية.", en:"The Juba Peace Agreement is signed amid the COVID-19 pandemic and worsening economic conditions.", id:"sd2020" },
     { date:"25 أكتوبر 2021", sort:"2021-10-25", placeAr:"الخرطوم", placeEn:"Khartoum", ar:"انقلاب عسكري وحل الحكومة واعتقال رئيس الوزراء وعدد من الوزراء.", en:"A military coup dissolves the transitional government and detains the prime minister and ministers.", id:"sd2021" },
     { date:"2022", sort:"2022-01-01", placeAr:"السودان", placeEn:"Sudan", ar:"تصاعد الخلافات حول الانتقال المدني وترتيبات دمج القوات، قبل اندلاع الحرب.", en:"Disputes deepen over the civilian transition and security-sector integration before war breaks out.", id:"sd2022" },
-    { date:"15 أبريل 2023", sort:"2023-04-15", placeAr:"الخرطوم", placeEn:"Khartoum", ar:"اندلاع الحرب بين القوات المسلحة وقوات الدعم السريع في الخرطوم.", en:"War erupts in Khartoum between the Sudanese Armed Forces and the Rapid Support Forces.", id:"sd2023" },
+    { date:"15 أبريل 2023", sort:"2023-04-15", placeAr:"الخرطوم", placeEn:"Khartoum", ar:"اندلاع الحرب بين القوات المسلحة وقوات الدعم السريع في الخرطوم.", en:"War erupts in Khartoum between the Sudanese Armed Forces and the Rapid Support Forces.", id:"w1" },
     { date:"13 – 21 يونيو 2023", sort:"2023-06-13", placeAr:"الجنينة – غرب دارفور", placeEn:"El Geneina, West Darfur", ar:"أحداث الجنينة؛ يورد المشهد تقديرات وشهادات عن القتل والدفن الجماعي.", en:"Events in El Geneina; the story scene cites estimates and testimony about killings and mass burial.", id:"sd2023b" },
     { date:"18 ديسمبر 2023", sort:"2023-12-18", placeAr:"ود مدني – الجزيرة", placeEn:"Wad Madani, Al Jazirah", ar:"سقوط ود مدني ونزوح أعداد كبيرة من السكان.", en:"Wad Madani falls and large numbers of residents are displaced.", id:"sd2023c" },
     { date:"أبريل – أغسطس 2024", sort:"2024-04-01", placeAr:"الفاشر ومخيم زمزم", placeEn:"El Fasher and Zamzam camp", ar:"اشتداد حصار الفاشر؛ وأُعلنت المجاعة في مخيم زمزم في أغسطس 2024.", en:"The siege of El Fasher intensifies; famine is declared in Zamzam camp in August 2024.", id:"sd2024" },
@@ -88,6 +88,12 @@
     sd2020:["3 أكتوبر 2020","جوبا","Juba","فترة محددة في النص","Period stated in story"],
     sd2021:["25 أكتوبر 2021","الخرطوم","Khartoum","فترة محددة في النص","Period stated in story"],
     sd2022:["2022 – ديسمبر 2022","السودان","Sudan","فترة محددة في النص","Period stated in story"],
+    r1b:["ديسمبر 2018","الخرطوم","Khartoum","فترة محددة في النص","Period stated in story"],
+    r2b:["2022 – مطلع 2023","سوق الخضار – الخرطوم","Vegetable market, Khartoum","فترة سردية تقريبية","Approximate narrative period"],
+    s6:["2022 – مطلع 2023","الخرطوم","Khartoum","فترة سردية تقريبية","Approximate narrative period"],
+    s6b:["2022 – مطلع 2023","الخرطوم","Khartoum","فترة سردية تقريبية","Approximate narrative period"],
+    s6c:["2022 – مطلع 2023","المقرن – الخرطوم","Mogran, Khartoum","فترة سردية تقريبية","Approximate narrative period"],
+    s6d:["2022 – مطلع 2023","الخرطوم","Khartoum","فترة سردية تقريبية","Approximate narrative period"],
     q1:["رمضان 2023 – قبل 15 أبريل","الخرطوم","Khartoum","فترة محددة في النص","Period stated in story"],
     q1b:["14 أبريل 2023","الخرطوم","Khartoum","اليوم السابق للحرب","The day before the war"],
     w1:["15 أبريل 2023","الخرطوم","Khartoum","بداية الحرب","Beginning of the war"],
@@ -271,9 +277,9 @@
   ];
   function stageFor(nid){
     if(/^(d[0-6]|jd|x1)$/.test(nid))return 0;
-    if(/^(m[0-4]|s[1-6]|u[1-4]|js|s[1-4]b|s[1-4]c)$/.test(nid))return 1;
+    if(/^(m[0-4]|s[1-5](?:b|c)?|u[1-4]|js|s[1-4]b|s[1-4]c)$/.test(nid))return 1;
     if(/^(r1|r1b|rev[1-6])$/.test(nid))return 2;
-    if(/^(sd2020|sd2021|sd2022)$/.test(nid))return 3;
+    if(/^(sd2020|sd2021|sd2022|r2b|s6(?:b|c|d)?)$/.test(nid))return 3;
     return 4;
   }
   let lastStage=null;
