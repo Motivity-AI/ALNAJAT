@@ -68,6 +68,7 @@ try {
   for (const pattern of nodePatterns) for (const match of html.matchAll(pattern)) storyNodeIds.add(match[1]);
   const sceneSafetyIds = [...safety.matchAll(/^\s{4}([A-Za-z0-9_]+):\{level:/gm)].map(match => match[1]);
   for (const id of sceneSafetyIds) if (!storyNodeIds.has(id)) fail("Safety metadata points to an unknown story node: " + id);
+  if (sceneSafetyIds.length < 53) fail("Expected at least 53 scene safety entries, found " + sceneSafetyIds.length);
   if (!process.exitCode) pass("All " + sceneSafetyIds.length + " scene safety entries map to real story nodes");
   if (/user-scalable\s*=\s*no/i.test(html)) fail("Viewport still disables user zoom");
   else pass("User zoom is not disabled by the viewport meta tag");
