@@ -330,9 +330,28 @@
   metaStyle.textContent=".alnajat-scene-meta{font:600 11px/1.7 system-ui,sans-serif;letter-spacing:.04em;color:#b9a276;margin:-8px 0 14px;padding-inline-start:2px;text-transform:none}";
   document.head.appendChild(metaStyle);
 
+  function migrateLegacyBacktrack(nid){
+    const legacyNodes=["sd2013","sd2013b","sd2014","sd2018","sd2019","sd2019b"];
+    if(legacyNodes.indexOf(nid)===-1||typeof s==="undefined"||!s||!Array.isArray(s.log))return nid;
+    let lastRev=-1,lastEarly2013=-1;
+    s.log.forEach(function(entry,index){
+      if(entry&&entry.n==="rev6")lastRev=index;
+      if(entry&&entry.n==="s4c")lastEarly2013=index;
+    });
+    if(lastRev>lastEarly2013&&lastRev>=0){
+      try{if(typeof toast==="function")toast(isEn()?"Chronology corrected: continuing from 2020.":"تم تصحيح التسلسل الزمني: نتابع من عام 2020.");}catch(_){}
+      return "sd2020";
+    }
+    return nid;
+  }
   const oldRender=window.renderNode;
   if(typeof oldRender==="function"){
-    window.renderNode=function(nid){const result=oldRender.apply(this,arguments);decorateScene(nid);return result;};
+    window.renderNode=function(nid){
+      nid=migrateLegacyBacktrack(nid);
+      const result=oldRender.apply(this,[nid].concat(Array.prototype.slice.call(arguments,1)));
+      decorateScene(nid);
+      return result;
+    };
   }
   const oldMenu=window.showMenu;
   if(typeof oldMenu==="function"){
