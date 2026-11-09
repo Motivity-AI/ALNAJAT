@@ -1,4 +1,4 @@
-/* ALNAJAT EDITORIAL EXPERIENCE — v1
+/* ALNAJAT EDITORIAL EXPERIENCE — v3
    Mature visual system and ordered historical chronology.
    Additive presentation only: does not change story nodes, choices, effects, saves or endings. */
 (function () {
@@ -10,10 +10,10 @@
     { date:"2003", sort:"2003-01-01", placeAr:"دارفور", placeEn:"Darfur", ar:"اندلاع نزاع دارفور، وارتباط ميليشيات الجنجويد بعمليات قتل وتهجير واسعة.", en:"The Darfur conflict escalates, with Janjaweed militias linked to widespread killings and displacement.", id:"d1" },
     { date:"سبتمبر 2013", sort:"2013-09-01", placeAr:"مدن السودان", placeEn:"Sudanese cities", ar:"احتجاجات سبتمبر بعد رفع الدعم عن الوقود وارتفاع الأسعار، وسقوط قتلى واعتقالات.", en:"September protests follow fuel-subsidy cuts and rising prices; deaths and arrests are reported.", id:"sd2013" },
     { date:"2014 – 2016", sort:"2014-01-01", placeAr:"الخرطوم", placeEn:"Khartoum", ar:"إعلان الحوار الوطني ثم إجازة الوثيقة الوطنية، بينما استمرت الحروب والنزوح.", en:"The national dialogue is announced and the National Document is adopted, while conflict and displacement continue.", id:"sd2014" },
-    { date:"19 ديسمبر 2018", sort:"2018-12-19", placeAr:"عطبرة", placeEn:"Atbara", ar:"اندلاع احتجاجات عطبرة على الخبز والوقود، ثم امتداد الاحتجاجات إلى مدن السودان.", en:"Protests begin in Atbara over bread and fuel, then spread across Sudan.", id:"sd2018" },
-    { date:"يناير – 11 أبريل 2019", sort:"2019-01-01", placeAr:"السودان", placeEn:"Sudan", ar:"تصاعد الاحتجاجات وإعلان الطوارئ، ثم الاعتصام أمام القيادة العامة وسقوط حكم البشير.", en:"Protests intensify; emergency rule is declared; a sit-in forms at Army Headquarters and Omar al-Bashir is removed.", id:"sd2019" },
+    { date:"19 ديسمبر 2018", sort:"2018-12-19", placeAr:"عطبرة", placeEn:"Atbara", ar:"اندلاع احتجاجات عطبرة على الخبز والوقود، ثم امتداد الاحتجاجات إلى مدن السودان.", en:"Protests begin in Atbara over bread and fuel, then spread across Sudan.", id:"r1" },
+    { date:"يناير – 11 أبريل 2019", sort:"2019-01-01", placeAr:"السودان", placeEn:"Sudan", ar:"تصاعد الاحتجاجات وإعلان الطوارئ، ثم الاعتصام أمام القيادة العامة وسقوط حكم البشير.", en:"Protests intensify; emergency rule is declared; a sit-in forms at Army Headquarters and Omar al-Bashir is removed.", id:"rev1" },
     { date:"6 أبريل 2019", sort:"2019-04-06", placeAr:"القيادة العامة – الخرطوم", placeEn:"General Command, Khartoum", ar:"وصول الحشود إلى محيط القيادة العامة وبدء الاعتصام.", en:"Crowds gather at Army Headquarters and the sit-in begins.", id:"rev2" },
-    { date:"3 يونيو 2019", sort:"2019-06-03", placeAr:"القيادة العامة – الخرطوم", placeEn:"General Command, Khartoum", ar:"مجزرة فض اعتصام القيادة العامة. تشير تقديرات وشهادات إلى مقتل 150 شخصًا على الأقل؛ وتختلف الحصائل المنشورة.", en:"The General Command sit-in massacre. Estimates and testimonies put the death toll at at least 150; published tolls differ.", id:"r2", emphasis:true },
+    { date:"3 يونيو 2019", sort:"2019-06-03", placeAr:"القيادة العامة – الخرطوم", placeEn:"General Command, Khartoum", ar:"مجزرة فض اعتصام القيادة العامة. تشير تقديرات وشهادات إلى مقتل 150 شخصًا على الأقل؛ وتختلف الحصائل المنشورة.", en:"The General Command sit-in massacre. Estimates and testimonies put the death toll at at least 150; published tolls differ.", id:"rev3", emphasis:true },
     { date:"3 أكتوبر 2020", sort:"2020-10-03", placeAr:"جوبا", placeEn:"Juba", ar:"توقيع اتفاق جوبا للسلام، بالتزامن مع تفشي جائحة كورونا وتفاقم الأزمة الاقتصادية.", en:"The Juba Peace Agreement is signed amid the COVID-19 pandemic and worsening economic conditions.", id:"sd2020" },
     { date:"25 أكتوبر 2021", sort:"2021-10-25", placeAr:"الخرطوم", placeEn:"Khartoum", ar:"انقلاب عسكري وحل الحكومة واعتقال رئيس الوزراء وعدد من الوزراء.", en:"A military coup dissolves the transitional government and detains the prime minister and ministers.", id:"sd2021" },
     { date:"2022", sort:"2022-01-01", placeAr:"السودان", placeEn:"Sudan", ar:"تصاعد الخلافات حول الانتقال المدني وترتيبات دمج القوات، قبل اندلاع الحرب.", en:"Disputes deepen over the civilian transition and security-sector integration before war breaks out.", id:"sd2022" },
@@ -79,6 +79,18 @@
     fs1:["2024 وما بعده","الفاشر","El Fasher","فترة سردية تقريبية","Approximate narrative period"],
     fs2:["2024 وما بعده","الفاشر","El Fasher","فترة سردية تقريبية","Approximate narrative period"],
     fs3:["أكتوبر 2025","الفاشر","El Fasher","فترة محددة في النص","Period stated in story"],
+    rev1:["يناير 2019","الخرطوم","Khartoum","فترة محددة في النص","Period stated in story"],
+    rev2:["6 أبريل 2019","القيادة العامة","General Command","فترة محددة في النص","Period stated in story"],
+    rev3:["3 يونيو 2019","القيادة العامة","General Command","فترة محددة في النص","Period stated in story"],
+    rev4:["4 يونيو 2019","الخرطوم","Khartoum","فترة محددة في النص","Period stated in story"],
+    rev5:["منتصف يونيو 2019","الخرطوم","Khartoum","فترة سردية تقريبية","Approximate narrative period"],
+    rev6:["أواخر 2019","الخرطوم","Khartoum","فترة سردية تقريبية","Approximate narrative period"],
+    sd2020:["3 أكتوبر 2020","جوبا","Juba","فترة محددة في النص","Period stated in story"],
+    sd2021:["25 أكتوبر 2021","الخرطوم","Khartoum","فترة محددة في النص","Period stated in story"],
+    sd2022:["2022 – ديسمبر 2022","السودان","Sudan","فترة محددة في النص","Period stated in story"],
+    q1:["رمضان 2023 – قبل 15 أبريل","الخرطوم","Khartoum","فترة محددة في النص","Period stated in story"],
+    q1b:["14 أبريل 2023","الخرطوم","Khartoum","اليوم السابق للحرب","The day before the war"],
+    w1:["15 أبريل 2023","الخرطوم","Khartoum","بداية الحرب","Beginning of the war"],
     r2:["أبريل – 3 يونيو 2019","القيادة العامة","General Command","فترة محددة في النص","Period stated in story"],
     q4:["الحرب والاحتجاز – 2023 وما بعده","موقع احتجاز","Detention site","زمن سردي تقريبي","Approximate narrative period"],
     h1:["الحرب والنزوح – 2023 وما بعده","مدرسة تحولت إلى مستشفى ميداني","School field hospital","زمن سردي تقريبي","Approximate narrative period"],
@@ -99,8 +111,8 @@
 
   const sceneMeta = {
     ...approximateSceneMeta,
-    d1:["بداية الألفينات (تقريبًا)","دارفور","Darfur","فترة تقريبية","Approximate period"], sd2013:["سبتمبر 2013","مدن السودان","Sudanese cities","استرجاع تاريخي","Historical flashback"],
-    sd2014:["2014 – 2016","الخرطوم","Khartoum","استرجاع تاريخي","Historical flashback"], sd2018:["19 ديسمبر 2018","عطبرة","Atbara"],
+    d1:["بداية الألفينات (تقريبًا)","دارفور","Darfur","فترة تقريبية","Approximate period"], sd2013:["سبتمبر 2013","مدن السودان","Sudanese cities","أرشيف تاريخي","Historical archive"],
+    sd2014:["2014 – 2016","الخرطوم","Khartoum","أرشيف تاريخي","Historical archive"], sd2018:["19 ديسمبر 2018","عطبرة","Atbara"],
     sd2019:["يناير – أبريل 2019","السودان","Sudan"], rev1:["يناير 2019","الخرطوم","Khartoum"],
     rev2:["6 أبريل 2019","القيادة العامة","General Command"], rev3:["3 يونيو 2019","القيادة العامة","General Command"],
     rev4:["4 يونيو 2019","الخرطوم","Khartoum"], rev5:["يونيو 2019","الخرطوم","Khartoum"],
@@ -159,6 +171,22 @@
     #alnajat-chronology .event.key{background:linear-gradient(90deg,#c4a66b12,transparent);border-inline-start:2px solid #c4a66b}
     #alnajat-chronology .event.key h4{color:#ead4a8}
     #alnajat-chronology .footnote{margin:14px 0;color:#8f9aa6;font-size:11px;line-height:1.8}
+    #alnajat-chronology .archive-read{margin-top:9px;border:1px solid #b99c67aa;background:#c4a66b12;color:#e5d2a9;padding:6px 10px;border-radius:2px;font:600 11px system-ui;cursor:pointer}
+    .alnajat-archive-view{max-height:min(72vh,760px);overflow:auto;padding:2px 4px 12px}
+    .alnajat-archive-view .archive-kicker{font:600 10px system-ui;letter-spacing:.18em;color:#c4a66b}
+    .alnajat-archive-view h3{margin:8px 0;color:#ead9b6}
+    .alnajat-archive-view .archive-place{font:12px system-ui;color:#9ca8b5;margin:0 0 16px}
+    .alnajat-archive-view .archive-copy{font:17px/2.05 "Noto Naskh Arabic","Geeza Pro",serif;color:#e6e2d9;padding:18px;background:#151d26;border-inline-start:2px solid #b99c67;margin:14px 0}
+    .alnajat-archive-view h4{font:600 12px system-ui;color:#d6bd8b;margin:18px 0 8px}
+    .alnajat-archive-view .archive-choices{padding-inline-start:24px;color:#c3cbd3;font:13px/1.9 system-ui}
+    #alnajat-time-ribbon{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:5px;margin:0 0 12px}
+    #alnajat-time-ribbon .era{height:3px;background:#39434d;position:relative}
+    #alnajat-time-ribbon .era:after{content:attr(data-label);position:absolute;top:6px;inset-inline-start:0;white-space:nowrap;font:500 9px system-ui;color:#778492}
+    #alnajat-time-ribbon .era.done,#alnajat-time-ribbon .era.current{background:#c4a66b}
+    #alnajat-time-ribbon .era.current{box-shadow:0 0 9px #c4a66b77}
+    #alnajat-transition .at-kicker{letter-spacing:.18em}
+    #alnajat-transition .at-title{font-family:Georgia,"Noto Naskh Arabic",serif;color:#e8d5ae}
+    #alnajat-transition .at-sub{color:#c5cbd1}
     @media(max-width:640px){
       #app{width:min(100% - 22px,940px)!important;padding-top:12px!important}
       #app .bt{overflow-x:auto;flex-wrap:nowrap;scrollbar-width:none}
@@ -178,12 +206,38 @@
   function openChronology(){
     const panel=document.getElementById("pn");
     if(!panel)return;
+    bindArchiveActions();
     const en=isEn();
     const rows=events.map(function(e){
-      return '<article class="event '+(e.emphasis?"key":"")+'"><div class="date">'+safe(e.date)+'</div><div><h4>'+(en?safe(e.placeEn):safe(e.placeAr))+'</h4><p>'+(en?safe(e.en):safe(e.ar))+'</p></div></article>';
+      return '<article class="event '+(e.emphasis?"key":"")+'"><div class="date">'+safe(e.date)+'</div><div><h4>'+(en?safe(e.placeEn):safe(e.placeAr))+'</h4><p>'+(en?safe(e.en):safe(e.ar))+'</p><button type="button" class="archive-read" data-archive-scene="'+safe(e.id)+'">'+(en?"Read scene":"اقرأ المشهد")+'</button></div></article>';
     }).join("");
-    panel.innerHTML='<div><h3>'+(en?"Historical chronology":"التسلسل الزمني للأحداث")+'</h3><p class="intro">'+(en?"A chronological reference for the historical context of the story. Branching scenes may revisit earlier periods; this chronology remains in calendar order.":"مرجع زمني مرتب للأحداث التاريخية الواردة في الحكاية. قد تعود بعض المسارات السردية إلى فترات سابقة؛ أما هذا السجل فيبقى مرتبًا حسب التاريخ.")+'</p><section id="alnajat-chronology">'+rows+'</section><p class="footnote">'+(en?"Historical references are presented as context for an interactive fictional narrative. Estimates and disputed figures are attributed in the relevant entries; this is not a complete historical record.":"تُعرض الوقائع بوصفها سياقًا تاريخيًا لحكاية تفاعلية خيالية. تُنسب التقديرات والأرقام المختلف عليها إلى مصادرها في مواضعها؛ وهذا السجل ليس تأريخًا شاملًا لكل أحداث السودان.")+'</p><button class="btn pri" onclick="document.getElementById(\'pn\').classList.remove(\'on\')">'+(en?"Close":"إغلاق")+'</button></div>';
+    panel.innerHTML='<div><h3>'+(en?"Historical chronology":"التسلسل الزمني للأحداث")+'</h3><p class="intro">'+(en?"A chronological historical record. The main survival route moves forward in time; scenes outside that route remain available here as a read-only archive and never rewind your game.":"هذا سجل تاريخي مرتب، أما مسار النجاة الرئيسي فيتقدم إلى الأمام زمنيًا. المشاهد التي لا تدخل المسار الرئيسي محفوظة هنا في أرشيف للقراءة، ولا تعيدك إلى نقطة سابقة من اللعبة.")+'</p><section id="alnajat-chronology">'+rows+'</section><p class="footnote">'+(en?"Historical references are presented as context for an interactive fictional narrative. Estimates and disputed figures are attributed in the relevant entries; this is not a complete historical record.":"تُعرض الوقائع بوصفها سياقًا تاريخيًا لحكاية تفاعلية خيالية. تُنسب التقديرات والأرقام المختلف عليها إلى مصادرها في مواضعها؛ وهذا السجل ليس تأريخًا شاملًا لكل أحداث السودان.")+'</p><button class="btn pri" onclick="document.getElementById(\'pn\').classList.remove(\'on\')">'+(en?"Close":"إغلاق")+'</button></div>';
     panel.classList.add("on");
+  }
+  function openArchiveScene(id){
+    const panel=document.getElementById("pn");
+    if(!panel)return;
+    const en=isEn();
+    const node=(typeof S!=="undefined"&&S[id])?S[id]:null;
+    if(!node){openChronology();return;}
+    const meta=sceneMeta[id]||[];
+    const body=(typeof txt==="function"?txt(id):node[1]||"");
+    const choices=(node[2]||[]).map(function(c,i){
+      const label=typeof choiceLabel==="function"?choiceLabel(id,i):(c[0]||"");
+      return '<li>'+safe(label)+'</li>';
+    }).join("");
+    panel.innerHTML='<div class="alnajat-archive-view"><p class="archive-kicker">'+(en?"HISTORICAL ARCHIVE · READ ONLY":"الأرشيف التاريخي · قراءة فقط")+'</p><h3>'+(meta[0]?safe(meta[0]):safe(id))+'</h3><p class="archive-place">'+(en?safe(meta[2]||meta[1]||""):safe(meta[1]||""))+'</p><div class="archive-copy">'+safe(body).replace(/\n/g,"<br>")+'</div><h4>'+(en?"Choices in the original scene":"الاختيارات الواردة في المشهد الأصلي")+'</h4><ol class="archive-choices">'+choices+'</ol><p class="footnote">'+(en?"Archive reading only. These historical scenes do not change your active story, choices or saved progress.":"قراءة أرشيفية فقط؛ هذه المشاهد لا تغيّر مسار قصتك الحالية أو اختياراتك أو تقدمك المحفوظ.")+'</p><button type="button" class="btn" data-archive-back="1">'+(en?"Back to chronology":"العودة إلى التسلسل الزمني")+'</button></div>';
+    panel.classList.add("on");
+  }
+  function bindArchiveActions(){
+    const panel=document.getElementById("pn");
+    if(!panel||panel.dataset.archiveBound)return;
+    panel.dataset.archiveBound="1";
+    panel.addEventListener("click",function(event){
+      const read=event.target.closest("[data-archive-scene]");
+      if(read){openArchiveScene(read.dataset.archiveScene);return;}
+      if(event.target.closest("[data-archive-back]"))openChronology();
+    });
   }
   window.openAlnajatChronology=openChronology;
   if(typeof window.openTimeline==="function")window.openTimeline=openChronology;
@@ -208,19 +262,59 @@
       if(about)about.insertAdjacentElement("afterend",b);else app.appendChild(b);
     }
   }
+  const eras=[
+    {labelAr:"الجذور",labelEn:"ORIGINS"},
+    {labelAr:"بناء الحياة",labelEn:"LIFE"},
+    {labelAr:"الثورة",labelEn:"REVOLUTION"},
+    {labelAr:"الانتقال",labelEn:"TRANSITION"},
+    {labelAr:"الحرب",labelEn:"WAR"}
+  ];
+  function stageFor(nid){
+    if(/^(d[0-6]|jd|x1)$/.test(nid))return 0;
+    if(/^(m[0-4]|s[1-6]|u[1-4]|js|s[1-4]b|s[1-4]c)$/.test(nid))return 1;
+    if(/^(r1|r1b|rev[1-6])$/.test(nid))return 2;
+    if(/^(sd2020|sd2021|sd2022)$/.test(nid))return 3;
+    return 4;
+  }
+  let lastStage=null;
   function decorateScene(nid){
     const app=document.getElementById("app");
     if(!app)return;
     const old=app.querySelector(".alnajat-scene-meta");
     if(old)old.remove();
+    const oldRibbon=app.querySelector("#alnajat-time-ribbon");
+    if(oldRibbon)oldRibbon.remove();
     const meta=sceneMeta[nid];
-    if(!meta)return;
+    const stage=stageFor(nid);
     const en=isEn();
-    const el=document.createElement("div");
-    el.className="alnajat-scene-meta";
-    el.textContent=(en?meta[0]+"  /  "+meta[2]:meta[0]+"  /  "+meta[1])+(meta[3]?"  ·  "+(en?meta[4]:meta[3]):"");
+    const ribbon=document.createElement("div");
+    ribbon.id="alnajat-time-ribbon";
+    ribbon.setAttribute("aria-label",en?"Story timeline":"الخط الزمني للقصة");
+    ribbon.innerHTML=eras.map(function(era,i){
+      const cls=i<stage?"era done":(i===stage?"era current":"era");
+      return '<span class="'+cls+'" data-label="'+(en?era.labelEn:era.labelAr)+'"></span>';
+    }).join("");
     const chapter=app.querySelector(".ch");
-    if(chapter)chapter.insertAdjacentElement("afterend",el);
+    if(chapter)chapter.insertAdjacentElement("afterend",ribbon);
+    if(meta){
+      const el=document.createElement("div");
+      el.className="alnajat-scene-meta";
+      el.textContent=(en?meta[0]+"  /  "+meta[2]:meta[0]+"  /  "+meta[1])+(meta[3]?"  ·  "+(en?meta[4]:meta[3]):"");
+      ribbon.insertAdjacentElement("afterend",el);
+    }
+    const transition=document.getElementById("alnajat-transition");
+    if(transition&&transition.classList.contains("show")){
+      const title=transition.querySelector(".at-title");
+      const sub=transition.querySelector(".at-sub");
+      const kicker=transition.querySelector(".at-kicker");
+      if(title&&meta)title.textContent=meta[0];
+      if(sub&&meta)sub.textContent=en?meta[2]:meta[1];
+      if(kicker)kicker.textContent=en?"ALNAJAT · STORY TIME":"النجاة · زمن الحكاية";
+    }
+    if(lastStage!==null&&lastStage!==stage){
+      try{if(window.ALNAJAT_AUDIO)window.ALNAJAT_AUDIO.playSfx("open");}catch(_){}
+    }
+    lastStage=stage;
   }
   const metaStyle=document.createElement("style");
   metaStyle.textContent=".alnajat-scene-meta{font:600 11px/1.7 system-ui,sans-serif;letter-spacing:.04em;color:#b9a276;margin:-8px 0 14px;padding-inline-start:2px;text-transform:none}";
@@ -247,5 +341,5 @@
       return html;
     };
   }
-  console.info("ALNAJAT Editorial Experience v2 loaded");
+  console.info("ALNAJAT Editorial Experience v3 loaded");
 })();
