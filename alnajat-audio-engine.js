@@ -17,7 +17,7 @@
   let ctx = null, master = null, compressor = null;
   let buses = null, ambienceNodes = [], musicNodes = [], musicTimer = null;
   let unlocked = false, currentScene = "desert", currentMood = "desert";
-  let noteIndex = 0, lastCueAt = 0, settingsDialog = null;
+  let noteIndex = 0, lastCueAt = 0, settingsDialog = null, quietMode = false;
 
   const patterns = {
     desert: [220, 261.63, 293.66, 349.23, 293.66, 261.63, 196, 220],
@@ -86,6 +86,13 @@
   }
   function applyVolumes() {
     if (!buses) return;
+    if (quietMode) {
+      ramp(buses.music.gain, 0, 0.08);
+      ramp(buses.ambience.gain, 0, 0.08);
+      ramp(buses.sfx.gain, 0, 0.04);
+      ramp(buses.voice.gain, 0, 0.08);
+      return;
+    }
     ramp(buses.music.gain, settings.music, 0.12);
     ramp(buses.ambience.gain, settings.ambienceOn ? settings.ambience : 0, 0.2);
     ramp(buses.sfx.gain, settings.sfxOn ? settings.sfx : 0, 0.06);
@@ -144,7 +151,7 @@
   }
   function refreshAmbience() {
     stopNodes(ambienceNodes);
-    if (settings.ambienceOn && unlocked && ctx && ctx.state === "running") startAmbience();
+    if (!quietMode && settings.ambienceOn && unlocked && ctx && ctx.state === "running") startAmbience();
   }
   function pluck(frequency, velocity) {
     if (!ctx || ctx.state !== "running" || !buses) return;
@@ -169,7 +176,7 @@
     if (musicNodes.length > 90) musicNodes.splice(0, 30);
   }
   function startMusic() {
-    if (!ctx || ctx.state !== "running" || musicTimer) return;
+    if (quietMode || !ctx || ctx.state !== "running" || musicTimer) return;
     const drone = ctx.createOscillator();
     const drone2 = ctx.createOscillator();
     const lowpass = ctx.createBiquadFilter();
@@ -213,6 +220,18 @@
       if (buses && ctx) ramp(buses.music.gain, settings.music, 0.08);
     }, 320);
   }
+  function setQuietMode(on) {
+    quietMode = !!on;
+    if (quietMode) {
+      stopMusic();
+      stopNodes(ambienceNodes);
+      applyVolumes();
+    } else {
+      applyVolumes();
+      if (settings.musicOn && unlocked && ctx && ctx.state === "running") startMusic();
+      if (settings.ambienceOn && unlocked && ctx && ctx.state === "running") refreshAmbience();
+    }
+  }
   function setMusic(on) {
     settings.musicOn = !!on;
     if (settings.musicOn) {
@@ -243,7 +262,7 @@
     }
   }
   function playSfx(kind, value) {
-    if (!settings.sfxOn || !unlocked || !ctx || ctx.state !== "running" || !buses) return;
+    if (quietMode || !settings.sfxOn || !unlocked || !ctx || ctx.state !== "running" || !buses) return;
     const now = ctx.currentTime;
     const tones = {
       choice: [392, 523.25], open: [523.25, 659.25],
@@ -364,6 +383,7 @@
     setScene: setScene,
     playSfx: playSfx,
     setMusic: setMusic,
+    setQuietMode: setQuietMode,
     openSettings: openSettings,
     getState: function () { return { unlocked: unlocked, musicOn: !!settings.musicOn, ambienceOn: !!settings.ambienceOn, sfxOn: !!settings.sfxOn, contextState: ctx ? ctx.state : "not-created" }; }
   };
