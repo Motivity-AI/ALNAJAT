@@ -45,6 +45,19 @@ try {
   if (!html.includes('id="app"') || !html.includes('id="pn"')) fail("Core app or panel mount point is missing");
   else pass("Core application mount points are present");
 
+  const safety = read("alnajat-safety.js");
+  if (!html.includes('alnajat-safety.js?v=2') || !sw.includes("'./alnajat-safety.js?v=2'")) {
+    fail("Scene safety layer v2 is not referenced by both the page and offline shell");
+  } else pass("Scene safety layer v2 is loaded and included in the offline shell");
+  for (const marker of ["function sharedContinuation", "function showSceneWarning", "Read a safe summary", "Skip this scene"]) {
+    if (!safety.includes(marker)) fail("Safety layer is missing expected feature marker: " + marker);
+  }
+  if (!safety.includes('aria-modal","true"') || !safety.includes("aria-labelledby")) {
+    fail("Scene safety dialog is missing basic accessible dialog semantics");
+  } else pass("Scene safety dialog has accessible labeling and modal semantics");
+  if (/user-scalable\\s*=\\s*no/i.test(html)) fail("Viewport still disables user zoom");
+  else pass("User zoom is not disabled by the viewport meta tag");
+
   if (process.exitCode) process.exit(process.exitCode);
   console.log("\nALNAJAT static release checks passed.");
 } catch (error) {
