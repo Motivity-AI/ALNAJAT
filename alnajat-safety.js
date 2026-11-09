@@ -113,7 +113,7 @@
         showSceneWarning(nid,function(mode){
           if(mode==="skip"){
             var target=SCENES[nid].skipTo;
-            if(!target||!window.S||!window.S[target]){window.renderNode(nid);return;}
+            if(!target){window.renderNode(nid);return;}
             /* All choices in these tagged scenes share this same next node.
                We advance without calling choose(), so no choice effects are applied. */
             window.__ALNAJAT_safetyBypass=true;
