@@ -45,6 +45,24 @@ try {
   if (!html.includes('id="app"') || !html.includes('id="pn"')) fail("Core app or panel mount point is missing");
   else pass("Core application mount points are present");
 
+  // Chronology regression guards: historical branches must never jump backwards.
+  const rev6Start = html.indexOf("S.rev6 =");
+  const sd2013Start = html.indexOf("S.sd2013 =");
+  const sd2026Start = html.indexOf("S.sd2026 =");
+  const translationsStart = html.indexOf("/* ═══", sd2026Start);
+  if (rev6Start < 0 || sd2013Start <= rev6Start) fail("Could not locate the post-2019 chronology branch");
+  else {
+    const rev6Block = html.slice(rev6Start, sd2013Start);
+    if (!rev6Block.includes('"sd2020"') || rev6Block.includes('"sd2013"')) fail("The post-June-2019 branch must continue to 2020, not return to 2013");
+    else pass("Post-2019 revolution branch continues forward to 2020");
+  }
+  if (sd2026Start < 0) fail("Could not locate the 2026 chronology endpoint");
+  else {
+    const sd2026Block = html.slice(sd2026Start, translationsStart > sd2026Start ? translationsStart : sd2026Start + 12000);
+    if (!sd2026Block.includes('"fin"') || sd2026Block.includes('"r2"')) fail("The 2026 endpoint must finish the journey, not return to the 2019 General Command scene");
+    else pass("2026 chronology endpoint finishes without a backward jump to 2019");
+  }
+
   const sourcesPage = read("sources.html");
   if (!sw.includes("'./sources.html'")) fail("Offline shell does not cache the historical sources page");
   else pass("Historical sources page is cached for offline use");
