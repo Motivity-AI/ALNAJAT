@@ -1,5 +1,5 @@
 /* ==================== النجاة — Service Worker ==================== */
-const VERSION = 'najat-v24';
+const VERSION = 'najat-v25';
 const SHELL = [
   './',
   './index.html',
