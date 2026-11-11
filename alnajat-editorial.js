@@ -331,8 +331,16 @@
   document.head.appendChild(metaStyle);
 
   function migrateLegacyBacktrack(nid){
+    if(typeof s==="undefined"||!s||!Array.isArray(s.log))return nid;
+    // Older releases routed every 2026 choice back to r2 (April–June 2019).
+    // If that exact transition was already saved, finish from the 2026 endpoint.
+    const last=s.log[s.log.length-1];
+    if(nid==="r2"&&last&&last.n==="sd2026"){
+      try{if(typeof toast==="function")toast(isEn()?"Chronology corrected: your 2026 journey is complete.":"تم تصحيح التسلسل الزمني: اكتملت رحلتك عند أحداث 2026.");}catch(_){}
+      return "__ALNAJAT_FINISH__";
+    }
     const legacyNodes=["sd2013","sd2013b","sd2014","sd2018","sd2019","sd2019b"];
-    if(legacyNodes.indexOf(nid)===-1||typeof s==="undefined"||!s||!Array.isArray(s.log))return nid;
+    if(legacyNodes.indexOf(nid)===-1)return nid;
     let lastRev=-1,lastEarly2013=-1;
     s.log.forEach(function(entry,index){
       if(entry&&entry.n==="rev6")lastRev=index;
@@ -348,6 +356,7 @@
   if(typeof oldRender==="function"){
     window.renderNode=function(nid){
       nid=migrateLegacyBacktrack(nid);
+      if(nid==="__ALNAJAT_FINISH__"){if(typeof finish==="function")finish();return;}
       const result=oldRender.apply(this,[nid].concat(Array.prototype.slice.call(arguments,1)));
       decorateScene(nid);
       return result;
