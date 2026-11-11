@@ -63,6 +63,13 @@ try {
     else pass("2026 chronology endpoint finishes without a backward jump to 2019");
   }
 
+  const editorial = read("alnajat-editorial.js");
+  if (!html.includes('alnajat-editorial.js?v=7') || !sw.includes("'./alnajat-editorial.js?v=7'")) {
+    fail("Updated chronology migration is not loaded by both the page and offline shell");
+  } else if (!editorial.includes('nid==="r2"&&last&&last.n==="sd2026"') || !editorial.includes('nid==="__ALNAJAT_FINISH__"')) {
+    fail("Legacy 2026-to-2019 save migration is missing");
+  } else pass("Legacy saves at the 2026-to-2019 loop are migrated to the ending");
+
   const sourcesPage = read("sources.html");
   if (!sw.includes("'./sources.html'")) fail("Offline shell does not cache the historical sources page");
   else pass("Historical sources page is cached for offline use");
