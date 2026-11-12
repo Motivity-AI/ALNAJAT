@@ -133,6 +133,25 @@ async function main() {
     }, firstSceneText, { timeout: 10000 });
     check("Undo restores the previous scene", (await page.locator("#app .tx").innerText()) === firstSceneText);
 
+    await page.reload({ waitUntil: "domcontentloaded" });
+    await page.locator("#app h1").waitFor({ state: "visible" });
+    await page.getByRole("button", { name: "متابعة", exact: true }).click();
+    await page.locator("#app .tx").waitFor({ state: "visible" });
+    await page.waitForFunction(expected => document.querySelector("#app .tx")?.innerText === expected,
+      firstSceneText, { timeout: 10000 });
+    check("Autosaved progress survives a page reload", (await page.locator("#app .tx").innerText()) === firstSceneText);
+
+    await page.evaluate(() => window.toggleLang());
+    await page.waitForFunction(() => document.documentElement.lang === "en");
+    check("In-game language switch updates the document to English", await page.evaluate(() =>
+      document.documentElement.dir === "ltr" && document.querySelector("#app h1")?.textContent?.trim() === "Survival"
+    ));
+    await page.evaluate(() => window.toggleLang());
+    await page.waitForFunction(() => document.documentElement.lang === "ar");
+    check("In-game language switch returns to Arabic", await page.evaluate(() =>
+      document.documentElement.dir === "rtl" && document.querySelector("#app h1")?.textContent?.trim() === "النجاة"
+    ));
+
     const audioTrigger = page.locator("[data-alnajat-audio-settings]");
     await audioTrigger.waitFor({ state: "visible", timeout: 10000 });
     await audioTrigger.click();
