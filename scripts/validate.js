@@ -109,9 +109,7 @@ try {
 
   const director = read("alnajat-director.js");
   for (const marker of [
-    "const MAX_FILE_BYTES=8*1024*1024",
-    "const MAX_KEYS=100",
-    "const MAX_VALUE_CHARS=2*1024*1024",
+    "const MAX_FILE_BYTES=8*1024*1024,MAX_KEYS=100,MAX_VALUE_CHARS=2*1024*1024;",
     "!/^(najat|alnajat)_[a-z0-9_-]{1,80}$/i.test(key)",
     "const previous=new Map(entries.map(([key])=>[key,localStorage.getItem(key)]))",
     "localStorage.removeItem(key)",
