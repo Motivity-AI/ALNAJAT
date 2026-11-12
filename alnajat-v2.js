@@ -7,7 +7,14 @@
   const KEY = "alnajat_a11y_v2";
   const defaults = { scale: 100, contrast: false, motion: false, voice: true };
   let prefs = Object.assign({}, defaults);
-  try { prefs = Object.assign(prefs, JSON.parse(localStorage.getItem(KEY) || "{}")); } catch (_) {}
+  try {
+    const saved = JSON.parse(localStorage.getItem(KEY) || "{}");
+    prefs = Object.assign(prefs, saved);
+    prefs.scale = [100, 112, 125].includes(Number(prefs.scale)) ? Number(prefs.scale) : defaults.scale;
+    ["contrast", "motion", "voice"].forEach(function (key) {
+      prefs[key] = typeof prefs[key] === "boolean" ? prefs[key] : defaults[key];
+    });
+  } catch (_) { prefs = Object.assign({}, defaults); }
 
   const css = [
     "body.alnajat-large-text #app{font-size:calc(1em * var(--alnajat-reader-scale,1))}",
@@ -51,7 +58,7 @@
 
   const backdrop = document.createElement("div");
   backdrop.id = "alnajat-a11y-backdrop";
-  backdrop.innerHTML = '<section id="alnajat-a11y-panel" role="dialog" aria-modal="true" aria-labelledby="alnajat-a11y-title" tabindex="-1"><h2 id="alnajat-a11y-title">إعدادات القراءة والراحة</h2><p>خيارات تساعدك على قراءة الحكاية والتنقل فيها براحة. لا تغيّر أحداث القصة أو اختياراتك.</p><div class="a11y-row"><strong>حجم النص</strong><div><button type="button" data-scale="100">عادي</button> <button type="button" data-scale="112">كبير</button> <button type="button" data-scale="125">أكبر</button></div></div><div class="a11y-row"><span>تباين أعلى</span><button type="button" data-toggle="contrast">تشغيل</button></div><div class="a11y-row"><span>تقليل الحركة والمؤثرات</span><button type="button" data-toggle="motion">تشغيل</button></div><div class="a11y-row"><span>القراءة الصوتية</span><button type="button" data-toggle="voice">تشغيل</button></div><div class="a11y-actions"><button type="button" id="alnajat-a11y-read">🔊 اقرأ المشهد</button><button type="button" id="alnajat-a11y-stop">إيقاف الصوت</button><button type="button" class="a11y-close" id="alnajat-a11y-close">إغلاق</button></div></section>';
+  backdrop.innerHTML = '<section id="alnajat-a11y-panel" role="dialog" aria-modal="true" aria-labelledby="alnajat-a11y-title" aria-describedby="alnajat-a11y-desc" tabindex="-1"><h2 id="alnajat-a11y-title">إعدادات القراءة والراحة</h2><p id="alnajat-a11y-desc">خيارات تساعدك على قراءة الحكاية والتنقل فيها براحة. لا تغيّر أحداث القصة أو اختياراتك.</p><div class="a11y-row"><strong data-a11y-label="scale">حجم النص</strong><div><button type="button" data-scale="100">عادي</button> <button type="button" data-scale="112">كبير</button> <button type="button" data-scale="125">أكبر</button></div></div><div class="a11y-row"><span data-a11y-label="contrast">تباين أعلى</span><button type="button" data-toggle="contrast">تشغيل</button></div><div class="a11y-row"><span data-a11y-label="motion">تقليل الحركة والمؤثرات</span><button type="button" data-toggle="motion">تشغيل</button></div><div class="a11y-row"><span data-a11y-label="voice">القراءة الصوتية</span><button type="button" data-toggle="voice">تشغيل</button></div><div class="a11y-actions"><button type="button" id="alnajat-a11y-read">🔊 اقرأ المشهد</button><button type="button" id="alnajat-a11y-stop">إيقاف الصوت</button><button type="button" class="a11y-close" id="alnajat-a11y-close">إغلاق</button></div></section>';
   document.body.appendChild(backdrop);
   const panel = backdrop.querySelector("#alnajat-a11y-panel");
   const live = document.createElement("div");
@@ -60,11 +67,50 @@
   live.setAttribute("aria-atomic", "true");
   document.body.appendChild(live);
 
+  function applyLanguage() {
+    const en = document.documentElement.lang === "en";
+    const labels = en ? {
+      launch: "♿ Accessibility", title: "Reading & comfort settings",
+      desc: "Tools to make the story easier to read and navigate. They do not change story events or choices.",
+      scale: "Text size", normal: "Default", large: "Large", larger: "Larger",
+      contrast: "Higher contrast", motion: "Reduce motion and effects", voice: "Read aloud",
+      read: "🔊 Read scene", stop: "Stop speech", close: "Close",
+      on: "On", off: "Off", enabled: "Enabled", disabled: "Disabled",
+      unsupported: "Speech reading is not supported in this browser.",
+      empty: "There is no visible story text to read right now.",
+      activate: "Enable read aloud in settings first."
+    } : {
+      launch: "♿ سهولة الوصول", title: "إعدادات القراءة والراحة",
+      desc: "خيارات تساعدك على قراءة الحكاية والتنقل فيها براحة. لا تغيّر أحداث القصة أو اختياراتك.",
+      scale: "حجم النص", normal: "عادي", large: "كبير", larger: "أكبر",
+      contrast: "تباين أعلى", motion: "تقليل الحركة والمؤثرات", voice: "القراءة الصوتية",
+      read: "🔊 اقرأ المشهد", stop: "إيقاف الصوت", close: "إغلاق",
+      on: "مفعّل", off: "متوقف", enabled: "فعّل القراءة الصوتية من الإعدادات أولاً.",
+      disabled: "لا يوجد نص ظاهر لقراءته حالياً.",
+      unsupported: "القراءة الصوتية غير مدعومة في هذا المتصفح.",
+      empty: "لا يوجد نص ظاهر لقراءته حالياً.",
+      activate: "فعّل القراءة الصوتية من الإعدادات أولاً."
+    };
+    launch.textContent = labels.launch;
+    backdrop.querySelector("#alnajat-a11y-title").textContent = labels.title;
+    backdrop.querySelector("#alnajat-a11y-desc").textContent = labels.desc;
+    backdrop.querySelectorAll("[data-a11y-label]").forEach(function (node) { node.textContent = labels[node.dataset.a11yLabel]; });
+    backdrop.querySelector('[data-scale="100"]').textContent = labels.normal;
+    backdrop.querySelector('[data-scale="112"]').textContent = labels.large;
+    backdrop.querySelector('[data-scale="125"]').textContent = labels.larger;
+    backdrop.querySelector("#alnajat-a11y-read").textContent = labels.read;
+    backdrop.querySelector("#alnajat-a11y-stop").textContent = labels.stop;
+    backdrop.querySelector("#alnajat-a11y-close").textContent = labels.close;
+    backdrop.dir = en ? "ltr" : "rtl";
+    backdrop.lang = en ? "en" : "ar";
+    return labels;
+  }
   function update() {
+    const labels = applyLanguage();
     backdrop.querySelectorAll("[data-toggle]").forEach(function (b) {
       const on = !!prefs[b.dataset.toggle];
       b.setAttribute("aria-pressed", String(on));
-      b.textContent = on ? "مفعّل" : "متوقف";
+      b.textContent = on ? labels.on : labels.off;
     });
     backdrop.querySelectorAll("[data-scale]").forEach(function (b) {
       b.setAttribute("aria-pressed", String(Number(b.dataset.scale) === prefs.scale));
@@ -79,19 +125,28 @@
     return (clone.innerText || clone.textContent || "").replace(/\s+/g, " ").trim().slice(0, 5000);
   }
   function speak() {
-    if (!prefs.voice) { live.textContent = "فعّل القراءة الصوتية من الإعدادات أولاً."; return; }
-    if (!("speechSynthesis" in window)) { live.textContent = "القراءة الصوتية غير مدعومة في هذا المتصفح."; return; }
+    const labels = applyLanguage();
+    if (!prefs.voice) { live.textContent = labels.activate; return; }
+    if (!("speechSynthesis" in window)) { live.textContent = labels.unsupported; return; }
     const value = sceneText();
-    if (!value) { live.textContent = "لا يوجد نص ظاهر لقراءته حالياً."; return; }
+    if (!value) { live.textContent = labels.empty; return; }
     window.speechSynthesis.cancel();
     const utterance = new SpeechSynthesisUtterance(value);
-    utterance.lang = /[ء-ي]/.test(value.slice(0, 160)) ? "ar" : "en-US";
+    utterance.lang = document.documentElement.lang === "en" ? "en-US" : "ar";
     utterance.rate = 0.94;
     window.speechSynthesis.speak(utterance);
   }
 
   launch.addEventListener("click", openPanel);
   backdrop.querySelector("#alnajat-a11y-close").addEventListener("click", closePanel);
+  backdrop.addEventListener("keydown", function (e) {
+    if (e.key === "Escape") { e.preventDefault(); closePanel(); return; }
+    if (e.key !== "Tab") return;
+    const items = Array.from(panel.querySelectorAll("button,[href],[tabindex]:not([tabindex='-1'])")).filter(function (x) { return !x.disabled; });
+    if (!items.length) return;
+    if (e.shiftKey && document.activeElement === items[0]) { e.preventDefault(); items[items.length - 1].focus(); }
+    else if (!e.shiftKey && document.activeElement === items[items.length - 1]) { e.preventDefault(); items[0].focus(); }
+  });
   backdrop.addEventListener("click", function (e) { if (e.target === backdrop) closePanel(); });
   backdrop.querySelectorAll("[data-scale]").forEach(function (b) {
     b.addEventListener("click", function () { prefs.scale = Number(b.dataset.scale); save(); update(); });
@@ -121,6 +176,14 @@
       timer = setTimeout(function () { const value = sceneText(); if (value) live.textContent = value.slice(0, 280); }, 500);
     });
     observer.observe(app, { childList: true, subtree: true, characterData: true });
+  }
+  const originalToggleLang = window.toggleLang;
+  if (typeof originalToggleLang === "function") {
+    window.toggleLang = function () {
+      const result = originalToggleLang.apply(this, arguments);
+      update();
+      return result;
+    };
   }
   update();
   console.info("ALNAJAT 2.0 accessibility layer loaded");
