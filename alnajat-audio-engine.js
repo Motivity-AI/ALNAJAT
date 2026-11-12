@@ -7,11 +7,18 @@
   if (window.ALNAJAT_AUDIO) return;
 
   const KEY = "alnajat_audio_settings_v1";
-  const defaults = { music: 0.72, ambience: 0.34, sfx: 0.62, voice: 0.9, ambienceOn: false, sfxOn: true };
+  const defaults = { music: 0.72, ambience: 0.34, sfx: 0.62, voice: 0.9, musicOn: false, ambienceOn: false, sfxOn: true };
   let settings = Object.assign({}, defaults);
   try {
     const saved = JSON.parse(localStorage.getItem(KEY) || "{}");
     settings = Object.assign(settings, saved);
+    ["music", "ambience", "sfx", "voice"].forEach(function (key) {
+      const value = Number(settings[key]);
+      settings[key] = Number.isFinite(value) ? Math.max(0, Math.min(1, value)) : defaults[key];
+    });
+    ["musicOn", "ambienceOn", "sfxOn"].forEach(function (key) {
+      settings[key] = typeof settings[key] === "boolean" ? settings[key] : defaults[key];
+    });
   } catch (_) {}
 
   let ctx = null, master = null, compressor = null;
@@ -103,7 +110,11 @@
       if (!ensureContext()) return false;
       if (ctx.state !== "running") await ctx.resume();
       unlocked = ctx.state === "running";
-      if (unlocked && settings.ambienceOn) setScene(currentScene, currentMood);
+      if (unlocked) {
+        applyVolumes();
+        if (settings.musicOn) startMusic();
+        if (settings.ambienceOn) refreshAmbience();
+      }
       return unlocked;
     } catch (error) {
       unlocked = false;
@@ -416,9 +427,16 @@
   }
   document.addEventListener("pointerdown", function () { unlock(); }, { passive: true });
   document.addEventListener("keydown", function () { unlock(); });
+  let resumeAfterVisibility = false;
   document.addEventListener("visibilitychange", function () {
     if (!ctx) return;
-    if (document.hidden && ctx.state === "running") ctx.suspend().catch(function () {});
+    if (document.hidden && ctx.state === "running") {
+      resumeAfterVisibility = true;
+      ctx.suspend().catch(function () {});
+    } else if (!document.hidden && resumeAfterVisibility) {
+      resumeAfterVisibility = false;
+      unlock();
+    }
   });
   window.addEventListener("pagehide", function () {
     if (ctx && ctx.state === "running") ctx.suspend().catch(function () {});
