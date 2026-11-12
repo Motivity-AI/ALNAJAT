@@ -63,6 +63,17 @@ try {
     else pass("2026 chronology endpoint finishes without a backward jump to 2019");
   }
 
+  const a11y = read("alnajat-v2.js");
+  for (const marker of [
+    'function applyLanguage()',
+    'document.documentElement.lang === "en" ? "en-US" : "ar"',
+    'if (e.key === "Escape")',
+    'prefs.scale = [100, 112, 125].includes(Number(prefs.scale))'
+  ]) if (!a11y.includes(marker)) fail("Accessibility layer regression guard missing: " + marker);
+  if (!html.includes('alnajat-v2.js?v=3') || !sw.includes("'./alnajat-v2.js?v=3'")) {
+    fail("Accessibility layer v3 is not loaded by both page and offline shell");
+  } else pass("Accessibility panel is bilingual, validates saved preferences and supports keyboard dismissal");
+
   const audio = read("alnajat-audio-engine.js");
   for (const marker of [
     'musicOn: false',
