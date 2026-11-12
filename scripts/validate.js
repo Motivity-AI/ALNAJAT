@@ -72,8 +72,8 @@ try {
     'let resumeAfterVisibility = false;',
     'else if (!document.hidden && resumeAfterVisibility)'
   ]) if (!audio.includes(marker)) fail("Audio engine regression guard missing: " + marker);
-  if (!html.includes('alnajat-audio-engine.js?v=2') || !sw.includes("'./alnajat-audio-engine.js?v=2'")) {
-    fail("Audio engine v2 is not loaded by both the page and offline shell");
+  if (!html.includes('alnajat-audio-engine.js?v=3') || !sw.includes("'./alnajat-audio-engine.js?v=3'")) {
+    fail("Audio engine v3 is not loaded by both the page and offline shell");
   } else pass("Audio settings persistence, unlock, visibility resume and offline version are wired");
 
   const cinema = read("alnajat-cinema-pro.js");
