@@ -256,16 +256,34 @@
     const input=$("#alnajat-dc-import");
     if(input)input.addEventListener("change",async function(){
       const file=input.files&&input.files[0];if(!file)return;
+      const MAX_FILE_BYTES=8*1024*1024,MAX_KEYS=100,MAX_VALUE_CHARS=2*1024*1024;
       try{
+        if(file.size>MAX_FILE_BYTES)throw new Error("size");
         const parsed=JSON.parse(await file.text());
-        if(parsed.app!=="ALNAJAT"||parsed.format!==1||!parsed.storage||typeof parsed.storage!=="object")throw new Error("format");
+        if(!parsed||parsed.app!=="ALNAJAT"||parsed.format!==1||!parsed.storage||typeof parsed.storage!=="object"||Array.isArray(parsed.storage))throw new Error("format");
+        if(parsed.exportedAt&&(!Number.isFinite(Date.parse(parsed.exportedAt))))throw new Error("date");
         const entries=Object.entries(parsed.storage);
-        if(!entries.length||entries.some(([k,v])=>(!k.startsWith("najat_")&&!k.startsWith("alnajat_"))||typeof v!=="string"))throw new Error("keys");
+        if(!entries.length||entries.length>MAX_KEYS)throw new Error("count");
+        let totalChars=0;
+        for(const [key,value] of entries){
+          if(!/^(najat|alnajat)_[a-z0-9_-]{1,80}$/i.test(key)||typeof value!=="string"||value.length>MAX_VALUE_CHARS)throw new Error("entry");
+          totalChars+=key.length+value.length;
+          if(totalChars>MAX_FILE_BYTES)throw new Error("total");
+        }
         if(!confirm(t("سيتم استبدال بيانات تقدم اللعبة المطابقة على هذا الجهاز. هل تريد المتابعة؟","Matching game progress on this device will be replaced. Continue?")))return;
-        entries.forEach(([k,v])=>localStorage.setItem(k,v));
+        const previous=new Map(entries.map(([key])=>[key,localStorage.getItem(key)]));
+        try{
+          for(const [key,value] of entries)localStorage.setItem(key,value);
+        }catch(writeError){
+          for(const [key,oldValue] of previous){
+            try{if(oldValue===null)localStorage.removeItem(key);else localStorage.setItem(key,oldValue);}catch(_){}
+          }
+          throw writeError;
+        }
         toast(t("اكتملت الاستعادة. ستُعاد الصفحة الآن.","Restore complete. Reloading now."));
         setTimeout(()=>location.reload(),650);
-      }catch(_){toast(t("الملف غير صالح أو غير متوافق.","Invalid or incompatible backup file."));}
+      }catch(_){toast(t("الملف غير صالح أو تعذّر حفظه. لم تكتمل الاستعادة.","Invalid backup or storage error. Restore was not completed."));}
+      finally{input.value="";}
     });
   };
 
