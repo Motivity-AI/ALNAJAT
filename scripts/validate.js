@@ -129,6 +129,170 @@ try {
     pass("Complete story-node inventory matches story-lock.json");
   }
 
+  // Build the effective story graph from the original scene table, N()/LOOP()
+  // declarations, later S.* assignments, and explicit runtime-added choices.
+  function balancedEnd(source, start, open, close) {
+    let depth = 0, quote = null, escaped = false;
+    for (let i = start; i < source.length; i++) {
+      const ch = source[i];
+      if (quote) {
+        if (escaped) { escaped = false; continue; }
+        if (ch === "\\") { escaped = true; continue; }
+        if (ch === quote) quote = null;
+        continue;
+      }
+      if (ch === "'" || ch === '"' || ch === "\`") { quote = ch; continue; }
+      if (ch === open) depth++;
+      else if (ch === close && --depth === 0) return i + 1;
+    }
+    return -1;
+  }
+  function splitTopLevel(source) {
+    const parts = [];
+    let start = 0, depth = 0, quote = null, escaped = false;
+    for (let i = 0; i < source.length; i++) {
+      const ch = source[i];
+      if (quote) {
+        if (escaped) { escaped = false; continue; }
+        if (ch === "\\") { escaped = true; continue; }
+        if (ch === quote) quote = null;
+        continue;
+      }
+      if (ch === "'" || ch === '"' || ch === "\`") { quote = ch; continue; }
+      if (ch === "(" || ch === "[" || ch === "{") depth++;
+      else if (ch === ")" || ch === "]" || ch === "}") depth--;
+      else if (ch === "," && depth === 0) {
+        parts.push(source.slice(start, i).trim());
+        start = i + 1;
+      }
+    }
+    parts.push(source.slice(start).trim());
+    return parts;
+  }
+  function literalString(expression) {
+    const match = expression.match(/^\s*(["'])(.*?)\1\s*$/s);
+    return match ? match[2] : null;
+  }
+  const graphNodes = new Set();
+  const graphEdges = [];
+  const loopNodes = new Set();
+  function addSceneArray(id, source) {
+    if (!id || !source || source[0] !== "[") return;
+    graphNodes.add(id);
+    const fields = splitTopLevel(source.slice(1, -1));
+    if (fields.length < 3) return;
+    for (const choice of fields[2].matchAll(/\[\s*(["'])(.*?)\1\s*,\s*(["'])(.*?)\3/g)) {
+      const target = choice[4].startsWith("@") ? choice[4].slice(1) : choice[4];
+      graphEdges.push([id, target]);
+    }
+  }
+  const baseObjectStart = html.indexOf("const S={");
+  if (baseObjectStart < 0) fail("Could not locate the base story object for graph audit");
+  else {
+    const objectOpen = html.indexOf("{", baseObjectStart);
+    const objectEnd = balancedEnd(html, objectOpen, "{", "}");
+    if (objectEnd < 0) fail("Could not parse the base story object");
+    else {
+      for (const entry of splitTopLevel(html.slice(objectOpen + 1, objectEnd - 1))) {
+        const key = entry.match(/^([A-Za-z_$][\w$]*)\s*:\s*\[/);
+        if (key) addSceneArray(key[1], entry.slice(entry.indexOf("[")));
+      }
+    }
+  }
+  for (const pattern of [
+    /\bS\.([A-Za-z0-9_]+)\s*=\s*\[/g,
+    /\bS\[\s*["']([^"']+)["']\s*\]\s*=\s*\[/g
+  ]) {
+    for (const match of html.matchAll(pattern)) {
+      const start = match.index + match[0].lastIndexOf("[");
+      const end = balancedEnd(html, start, "[", "]");
+      if (end > 0) addSceneArray(match[1], html.slice(start, end));
+    }
+  }
+  function callArguments(match) {
+    const open = html.indexOf("(", match.index);
+    const end = balancedEnd(html, open, "(", ")");
+    return end < 0 ? [] : splitTopLevel(html.slice(open + 1, end - 1));
+  }
+  for (const match of html.matchAll(/\bN\s*\(/g)) {
+    const args = callArguments(match);
+    const id = literalString(args[0] || "");
+    const target = literalString(args[2] || "");
+    if (id) {
+      graphNodes.add(id);
+      if (target) graphEdges.push([id, target]);
+    }
+  }
+  for (const match of html.matchAll(/\bLOOP\s*\(/g)) {
+    const args = callArguments(match);
+    const id = literalString(args[0] || "");
+    const target = literalString(args[1] || "");
+    if (id) {
+      graphNodes.add(id);
+      loopNodes.add(id);
+      graphEdges.push([id, id]);
+      if (target) graphEdges.push([id, target]);
+    }
+  }
+  const pushPattern = /\b(?:S\.([A-Za-z0-9_]+)|([A-Za-z0-9_]+))\s*\[\s*2\s*\]\s*\.push\(\s*\[/g;
+  for (const match of html.matchAll(pushPattern)) {
+    const owner = match[1] || match[2];
+    const start = match.index + match[0].lastIndexOf("[");
+    const end = balancedEnd(html, start, "[", "]");
+    if (end > 0) {
+      const pushed = html.slice(start, end);
+      const target = pushed.match(/^\[\s*["'][^"']*["']\s*,\s*["']([^"']+)["']/);
+      if (target) graphEdges.push([owner, target[1].startsWith("@") ? target[1].slice(1) : target[1]]);
+    }
+  }
+  const effectiveTargets = {
+    sd2014: ["s5"],
+    sd2020: ["r2b"],
+    s6: ["sd2021"],
+    sd2022: ["s6d"],
+    s6d: ["s6b"],
+    s6c: ["q1"]
+  };
+  for (const [owner, targets] of Object.entries(effectiveTargets)) {
+    for (let i = graphEdges.length - 1; i >= 0; i--) {
+      if (graphEdges[i][0] === owner) graphEdges.splice(i, 1);
+    }
+    targets.forEach(target => graphEdges.push([owner, target]));
+  }
+  const deathBlock = (html.match(/const X=\{([\s\S]*?)\n\};/) || [])[1] || "";
+  const deathIds = new Set([...deathBlock.matchAll(/^\s*([A-Za-z0-9_]+):/gm)].map(match => match[1]));
+  const invalidTargets = [...new Set(graphEdges
+    .filter(([, target]) => target !== "fin" && !graphNodes.has(target) && !deathIds.has(target))
+    .map(([, target]) => target))];
+  if (invalidTargets.length) fail("Story graph contains unknown targets: " + invalidTargets.join(", "));
+  const reachableNodes = new Set(["d0"]);
+  const queue = ["d0"];
+  while (queue.length) {
+    const current = queue.shift();
+    for (const [from, to] of graphEdges) {
+      if (from === current && graphNodes.has(to) && !reachableNodes.has(to)) {
+        reachableNodes.add(to);
+        queue.push(to);
+      }
+    }
+  }
+  const unreachableNodes = [...graphNodes].filter(id => !reachableNodes.has(id));
+  if (unreachableNodes.length) fail("Story nodes unreachable from d0: " + unreachableNodes.join(", "));
+  else pass("All " + graphNodes.size + " story nodes are reachable from d0");
+  for (const id of loopNodes) {
+    const outgoing = graphEdges.filter(([from]) => from === id).map(([, to]) => to);
+    if (!outgoing.includes(id) || outgoing.length < 2) fail("Loop node lacks a self-cycle or exit: " + id);
+  }
+  if (loopNodes.size && [...loopNodes].every(id => {
+    const outgoing = graphEdges.filter(([from]) => from === id).map(([, to]) => to);
+    return outgoing.includes(id) && outgoing.some(target => target !== id && graphNodes.has(target));
+  })) pass("All " + loopNodes.size + " repeat loops have a valid exit path");
+  if (graphNodes.size !== lock.inventory.totalStoryNodes) {
+    fail("Story graph node count does not match Story Lock: " + graphNodes.size + " vs " + lock.inventory.totalStoryNodes);
+  }
+  if (!graphEdges.some(([, target]) => target === "fin")) fail("No route reaches the canonical ending node");
+  else pass("At least one valid route reaches the canonical ending node");
+
   if (process.exitCode) process.exit(process.exitCode);
   console.log("\nALNAJAT static release checks passed.");
 } catch (error) {
