@@ -1,10 +1,10 @@
 /* ==================== النجاة — Service Worker ==================== */
-const VERSION = 'najat-v30';
+const VERSION = 'najat-v31';
 const SHELL = [
   './',
   './index.html',
   './manifest.json',
-  './alnajat-v2.js?v=3',
+  './alnajat-v2.js?v=4',
   './alnajat-cinema.js?v=1',
   './alnajat-world.js?v=1',
   './alnajat-characters.js?v=1',
