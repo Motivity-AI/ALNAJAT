@@ -114,10 +114,10 @@ try {
   // Every story node must have an English counterpart, including nodes
   // declared after the original S/EN object literals.
   const translationIds = new Set();
-  const baseTranslations = html.match(/const EN=\\{([\\s\\S]*?)\\n\\};/);
+  const baseTranslations = html.match(/const EN=\{([\s\S]*?)\n\};/);
   if (!baseTranslations) fail("Could not locate the English translation table");
-  else for (const match of baseTranslations[1].matchAll(/^\\s*([A-Za-z0-9_]+):/gm)) translationIds.add(match[1]);
-  for (const match of html.matchAll(/\\bEN\\.([A-Za-z0-9_]+)\\s*=/g)) translationIds.add(match[1]);
+  else for (const match of baseTranslations[1].matchAll(/^\s*([A-Za-z0-9_]+):/gm)) translationIds.add(match[1]);
+  for (const match of html.matchAll(/\bEN\.([A-Za-z0-9_]+)\s*=/g)) translationIds.add(match[1]);
   const missingTranslations = [...storyNodeIds].filter(id => !translationIds.has(id));
   if (missingTranslations.length) fail("Missing English translations for: " + missingTranslations.join(", "));
   else pass("All " + storyNodeIds.size + " story nodes have English translations");
