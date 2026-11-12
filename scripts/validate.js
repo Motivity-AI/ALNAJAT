@@ -63,6 +63,19 @@ try {
     else pass("2026 chronology endpoint finishes without a backward jump to 2019");
   }
 
+  const audio = read("alnajat-audio-engine.js");
+  for (const marker of [
+    'musicOn: false',
+    'Number.isFinite(value) ? Math.max(0, Math.min(1, value))',
+    'if (settings.musicOn) startMusic();',
+    'if (settings.ambienceOn) refreshAmbience();',
+    'let resumeAfterVisibility = false;',
+    'else if (!document.hidden && resumeAfterVisibility)'
+  ]) if (!audio.includes(marker)) fail("Audio engine regression guard missing: " + marker);
+  if (!html.includes('alnajat-audio-engine.js?v=2') || !sw.includes("'./alnajat-audio-engine.js?v=2'")) {
+    fail("Audio engine v2 is not loaded by both the page and offline shell");
+  } else pass("Audio settings persistence, unlock, visibility resume and offline version are wired");
+
   const editorial = read("alnajat-editorial.js");
   if (!html.includes('alnajat-editorial.js?v=7') || !sw.includes("'./alnajat-editorial.js?v=7'")) {
     fail("Updated chronology migration is not loaded by both the page and offline shell");
