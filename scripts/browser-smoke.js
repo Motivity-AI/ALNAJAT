@@ -132,6 +132,13 @@ async function main() {
       return !!node && node.innerText === previous;
     }, firstSceneText, { timeout: 10000 });
     check("Undo restores the previous scene", (await page.locator("#app .tx").innerText()) === firstSceneText);
+    await page.waitForFunction(() => {
+      try {
+        const saved = JSON.parse(localStorage.getItem("najat_saves_v2") || "{}");
+        return saved.auto && saved.auto.id === "d0";
+      } catch (_) { return false; }
+    }, null, { timeout: 5000 });
+    check("Autosave writes the current scene to localStorage", true);
 
     await page.reload({ waitUntil: "domcontentloaded" });
     await page.locator("#app h1").waitFor({ state: "visible" });
