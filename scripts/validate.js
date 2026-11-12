@@ -107,6 +107,18 @@ try {
     fail("Audio engine v3 is not loaded by both page and offline shell");
   } else pass("Audio settings are bilingual, keyboard-dismissible and focus-contained");
 
+  const director = read("alnajat-director.js");
+  for (const marker of [
+    "const MAX_FILE_BYTES=8*1024*1024",
+    "const MAX_KEYS=100",
+    "const MAX_VALUE_CHARS=2*1024*1024",
+    "!/^(najat|alnajat)_[a-z0-9_-]{1,80}$/i.test(key)",
+    "const previous=new Map(entries.map(([key])=>[key,localStorage.getItem(key)]))",
+    "localStorage.removeItem(key)",
+    "finally{input.value=\"\";}"
+  ]) if (!director.includes(marker)) fail("Backup restore safety guard missing: " + marker);
+  else pass("Backup restore validates size, key namespace and rolls back failed writes");
+
   const editorial = read("alnajat-editorial.js");
   if (!html.includes('alnajat-editorial.js?v=7') || !sw.includes("'./alnajat-editorial.js?v=7'")) {
     fail("Updated chronology migration is not loaded by both the page and offline shell");
