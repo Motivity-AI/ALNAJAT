@@ -245,7 +245,13 @@
       const k=localStorage.key(i);
       if(k&&(k.startsWith("najat_")||k.startsWith("alnajat_")))data.storage[k]=localStorage.getItem(k);
     }
-    download("alnajat-backup-"+new Date().toISOString().slice(0,10)+".json",JSON.stringify(data,null,2));
+    const entries=Object.entries(data.storage);
+    const serialized=JSON.stringify(data,null,2);
+    if(entries.length>100||entries.some(([k,v])=>v.length>2*1024*1024)||new Blob([serialized]).size>8*1024*1024){
+      toast(t("حجم بياناتك أكبر من حدود النسخ الاحتياطي الحالية؛ لم يُنشأ ملف ناقص.","Your saved data exceeds the current backup limits; no incomplete backup was created."));
+      return;
+    }
+    download("alnajat-backup-"+new Date().toISOString().slice(0,10)+".json",serialized);
     toast(t("تم تجهيز النسخة الاحتياطية","Backup file prepared"));
   };
   window.openAlnajatBackup=function(){
