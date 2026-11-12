@@ -113,7 +113,9 @@ function hashFingerprint(source) {
     additionalSceneIds: extraSceneIds,
     loopIds,
     englishTranslationKeys,
-    endingIds
+    endingIds,
+    totalStoryNodes: baseSceneIds + extraSceneIds + loopIds + extendedScenes.length,
+    totalEnglishTranslations: englishTranslationKeys + extendedTranslations.length
   };
   for (const [key, expected] of Object.entries(baseline.inventory)) {
     if (actual[key] !== expected) fail(key + " inventory mismatch: expected " + expected + ", got " + actual[key]);
