@@ -91,7 +91,7 @@ try {
     'if (e.key === "Escape")',
     'prefs.scale = [100, 112, 125].includes(Number(prefs.scale))'
   ]) if (!a11y.includes(marker)) fail("Accessibility layer regression guard missing: " + marker);
-  if (!html.includes('alnajat-v2.js?v=3') || !sw.includes("'./alnajat-v2.js?v=3'")) {
+  if (!html.includes('alnajat-v2.js?v=4') || !sw.includes("'./alnajat-v2.js?v=4'")) {
     fail("Accessibility layer v3 is not loaded by both page and offline shell");
   } else pass("Accessibility panel is bilingual, validates saved preferences and supports keyboard dismissal");
 
