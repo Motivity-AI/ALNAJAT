@@ -100,7 +100,7 @@ async function main() {
     check("Initial Arabic menu renders", (await page.locator("#app h1").innerText()).includes("النجاة"));
 
     await page.getByRole("button", { name: "English", exact: true }).click();
-    await page.locator("#app h1").getByText("Survival").waitFor();
+    await page.waitForFunction(() => document.querySelector("#app h1")?.textContent?.trim() === "Survival");
     check("Menu switches to English and LTR", await page.evaluate(() =>
       document.documentElement.lang === "en" && document.documentElement.dir === "ltr"
     ));
@@ -126,7 +126,7 @@ async function main() {
     const nextSceneText = await page.locator("#app .tx").innerText();
     check("A story choice advances to another scene", nextSceneText !== firstSceneText);
 
-    await page.locator("#app .bt button").nth(5).click();
+    await page.locator("#app .bt button").filter({ hasText: "↩️" }).first().click();
     await page.waitForFunction(previous => {
       const node = document.querySelector("#app .tx");
       return !!node && node.innerText === previous;
