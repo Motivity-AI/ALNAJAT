@@ -44,7 +44,7 @@ function assignedArrayBlocks(source, pattern) {
   return blocks;
 }
 
-function fingerprint(source) {
+function hashFingerprint(source) {
   let hash = 0xcbf29ce484222325n;
   for (let i = 0; i < source.length; i++) {
     hash ^= BigInt(source.charCodeAt(i));
@@ -95,10 +95,10 @@ function fingerprint(source) {
   const endingObject = (endingsSource.match(/const END(?:INGS|_META)?=\{([\s\S]*?)\n\};/) || [])[1];
   const endingIds = endingObject ? [...endingObject.matchAll(/^\s*([A-Za-z_$][\w$]*):/gm)].length : 0;
 
-  const extendedScenes = assignedArrayBlocks(html, /\\bS\\.([A-Za-z0-9_]+)\\s*=\\s*\\[/g);
-  const extendedTranslations = assignedArrayBlocks(html, /\\bEN\\.([A-Za-z0-9_]+)\\s*=\\s*\\[/g);
-  const sceneFingerprint = fingerprint(extendedScenes.join("\\n/* SCENE */\\n"));
-  const translationFingerprint = fingerprint(extendedTranslations.join("\\n/* TRANSLATION */\\n"));
+  const extendedScenes = assignedArrayBlocks(html, /\bS\.([A-Za-z0-9_]+)\s*=\s*\[/g);
+  const extendedTranslations = assignedArrayBlocks(html, /\bEN\.([A-Za-z0-9_]+)\s*=\s*\[/g);
+  const sceneFingerprint = hashFingerprint(extendedScenes.join("\n/* SCENE */\n"));
+  const translationFingerprint = hashFingerprint(extendedTranslations.join("\n/* TRANSLATION */\n"));
   if (extendedScenes.length !== baseline.extendedAssignments.sceneCount
       || sceneFingerprint !== baseline.extendedAssignments.sceneFingerprint) {
     fail("additional scene assignments changed or are missing; review every scene before updating story-lock.json");
