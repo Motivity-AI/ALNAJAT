@@ -176,11 +176,13 @@ try {
   const graphNodes = new Set();
   const graphEdges = [];
   const loopNodes = new Set();
+  const sceneChoiceCounts = new Map();
   function addSceneArray(id, source) {
     if (!id || !source || source[0] !== "[") return;
     graphNodes.add(id);
     const fields = splitTopLevel(source.slice(1, -1));
     if (fields.length < 3) return;
+    sceneChoiceCounts.set(id, fields[2][0] === "[" ? splitTopLevel(fields[2].slice(1, -1)).filter(Boolean).length : 0);
     for (const choice of fields[2].matchAll(/\[\s*(["'])(.*?)\1\s*,\s*(["'])(.*?)\3/g)) {
       const target = choice[4].startsWith("@") ? choice[4].slice(1) : choice[4];
       graphEdges.push([id, target]);
@@ -220,6 +222,7 @@ try {
     const target = literalString(args[2] || "");
     if (id) {
       graphNodes.add(id);
+      sceneChoiceCounts.set(id, args[4] && literalString(args[4]) !== null ? 2 : 1);
       if (target) graphEdges.push([id, target]);
     }
   }
@@ -230,6 +233,7 @@ try {
     if (id) {
       graphNodes.add(id);
       loopNodes.add(id);
+      sceneChoiceCounts.set(id, args[4] && args[4][0] === "[" ? splitTopLevel(args[4].slice(1, -1)).filter(Boolean).length : 0);
       graphEdges.push([id, id]);
       if (target) graphEdges.push([id, target]);
     }
@@ -242,7 +246,10 @@ try {
     if (end > 0) {
       const pushed = html.slice(start, end);
       const target = pushed.match(/^\[\s*["'][^"']*["']\s*,\s*["']([^"']+)["']/);
-      if (target) graphEdges.push([owner, target[1].startsWith("@") ? target[1].slice(1) : target[1]]);
+      if (target) {
+        graphEdges.push([owner, target[1].startsWith("@") ? target[1].slice(1) : target[1]]);
+        sceneChoiceCounts.set(owner, (sceneChoiceCounts.get(owner) || 0) + 1);
+      }
     }
   }
   const effectiveTargets = {
@@ -259,6 +266,44 @@ try {
     }
     targets.forEach(target => graphEdges.push([owner, target]));
   }
+  // Verify the correct EN schema for both [text, choices] and
+  // [chapterTitle, text, choices] nodes, including dynamically appended choices.
+  const englishChoiceCounts = new Map();
+  function addEnglishArray(id, source) {
+    if (!id || !source || source[0] !== "[") return;
+    const fields = splitTopLevel(source.slice(1, -1));
+    const choiceField = fields[2] && fields[2][0] === "[" ? fields[2] : fields[1];
+    englishChoiceCounts.set(id, choiceField && choiceField[0] === "["
+      ? splitTopLevel(choiceField.slice(1, -1)).filter(Boolean).length : 0);
+  }
+  const enObjectStart = html.indexOf("const EN={");
+  if (enObjectStart < 0) fail("Could not locate the English translation object for choice coverage");
+  else {
+    const enOpen = html.indexOf("{", enObjectStart);
+    const enEnd = balancedEnd(html, enOpen, "{", "}");
+    if (enEnd < 0) fail("Could not parse the English translation object");
+    else {
+      for (const entry of splitTopLevel(html.slice(enOpen + 1, enEnd - 1))) {
+        const key = entry.match(/^([A-Za-z_$][\w$]*)\s*:\s*\[/);
+        if (key) addEnglishArray(key[1], entry.slice(entry.indexOf("[")));
+      }
+    }
+  }
+  for (const match of html.matchAll(/\bEN\.([A-Za-z0-9_]+)\s*=\s*\[/g)) {
+    const start = match.index + match[0].lastIndexOf("[");
+    const end = balancedEnd(html, start, "[", "]");
+    if (end > 0) addEnglishArray(match[1], html.slice(start, end));
+  }
+  for (const match of html.matchAll(/\bEN\.([A-Za-z0-9_]+)\s*\[\s*\d+\s*\]\s*\.push\(/g)) {
+    englishChoiceCounts.set(match[1], (englishChoiceCounts.get(match[1]) || 0) + 1);
+  }
+  const choiceTranslationMismatches = [...graphNodes].filter(id =>
+    (sceneChoiceCounts.get(id) || 0) !== (englishChoiceCounts.get(id) || 0));
+  if (choiceTranslationMismatches.length) {
+    fail("English choice coverage mismatch: " + choiceTranslationMismatches.map(id =>
+      id + " (AR " + (sceneChoiceCounts.get(id) || 0) + ", EN " + (englishChoiceCounts.get(id) || 0) + ")").join(", "));
+  } else pass("Arabic/English choice counts match for all " + graphNodes.size + " story nodes");
+
   const deathBlock = (html.match(/const X=\{([\s\S]*?)\n\};/) || [])[1] || "";
   const deathIds = new Set([...deathBlock.matchAll(/^\s*([A-Za-z0-9_]+):/gm)].map(match => match[1]));
   const invalidTargets = [...new Set(graphEdges
@@ -285,7 +330,7 @@ try {
   }
   if (loopNodes.size && [...loopNodes].every(id => {
     const outgoing = graphEdges.filter(([from]) => from === id).map(([, to]) => to);
-    return outgoing.includes(id) && outgoing.some(target => target !== id && graphNodes.has(target));
+    return outgoing.includes(id) && outgoing.some(target => target !== id && (target === "fin" || graphNodes.has(target) || deathIds.has(target)));
   })) pass("All " + loopNodes.size + " repeat loops have a valid exit path");
   if (graphNodes.size !== lock.inventory.totalStoryNodes) {
     fail("Story graph node count does not match Story Lock: " + graphNodes.size + " vs " + lock.inventory.totalStoryNodes);
