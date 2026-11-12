@@ -76,6 +76,26 @@ try {
     fail("Audio engine v2 is not loaded by both the page and offline shell");
   } else pass("Audio settings persistence, unlock, visibility resume and offline version are wired");
 
+  const cinema = read("alnajat-cinema-pro.js");
+  for (const marker of [
+    'prefers-reduced-motion: reduce',
+    'alnajat-cinema-static',
+    'art.addEventListener("load", reveal',
+    'art.addEventListener("error", reveal'
+  ]) if (!cinema.includes(marker)) fail("Cinematic accessibility/loading guard missing: " + marker);
+  if (!html.includes('alnajat-cinema-pro.js?v=2') || !sw.includes("'./alnajat-cinema-pro.js?v=2'")) {
+    fail("Cinematic layer v2 is not loaded by both page and offline shell");
+  } else pass("Cinematic image reveal and reduced-motion preferences are supported");
+  for (const marker of [
+    'function syncSettingsLanguage(overlay)',
+    'if (event.key === "Escape")',
+    'event.shiftKey && document.activeElement === items[0]',
+    'previousSettingsFocus = document.activeElement'
+  ]) if (!audio.includes(marker)) fail("Audio dialog accessibility guard missing: " + marker);
+  if (!html.includes('alnajat-audio-engine.js?v=3') || !sw.includes("'./alnajat-audio-engine.js?v=3'")) {
+    fail("Audio engine v3 is not loaded by both page and offline shell");
+  } else pass("Audio settings are bilingual, keyboard-dismissible and focus-contained");
+
   const editorial = read("alnajat-editorial.js");
   if (!html.includes('alnajat-editorial.js?v=7') || !sw.includes("'./alnajat-editorial.js?v=7'")) {
     fail("Updated chronology migration is not loaded by both the page and offline shell");
