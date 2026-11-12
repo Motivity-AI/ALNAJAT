@@ -18,6 +18,41 @@ function section(start, end) {
 }
 
 try {
+function assignedArrayBlocks(source, pattern) {
+  const blocks = [];
+  for (const match of source.matchAll(pattern)) {
+    const start = match.index;
+    const open = source.indexOf("[", start);
+    let depth = 0, quote = null, escaped = false, end = -1;
+    for (let i = open; i < source.length; i++) {
+      const ch = source[i];
+      if (quote) {
+        if (escaped) { escaped = false; continue; }
+        if (ch === "\\\\") { escaped = true; continue; }
+        if (ch === quote) quote = null;
+        continue;
+      }
+      if (ch === "'" || ch === '"' || ch === "`") { quote = ch; continue; }
+      if (ch === "[") depth++;
+      else if (ch === "]" && --depth === 0) { end = i + 1; break; }
+    }
+    if (end < 0) throw new Error("Unclosed scene/translation assignment: " + match[1]);
+    while (end < source.length && /\\s/.test(source[end])) end++;
+    if (source[end] === ";") end++;
+    blocks.push(source.slice(start, end));
+  }
+  return blocks;
+}
+
+function fingerprint(source) {
+  let hash = 0xcbf29ce484222325n;
+  for (let i = 0; i < source.length; i++) {
+    hash ^= BigInt(source.charCodeAt(i));
+    hash = BigInt.asUintN(64, hash * 0x100000001b3n);
+  }
+  return hash.toString(16).padStart(16, "0");
+}
+
   const protectedText = baseline.protectedSections
     .map((part) => section(part.start, part.end))
     .join("\n/* ALNAJAT STORY LOCK SECTION */\n");
@@ -59,6 +94,19 @@ try {
   const endingsSource = html.slice(endingsStart, endingsEnd);
   const endingObject = (endingsSource.match(/const END(?:INGS|_META)?=\{([\s\S]*?)\n\};/) || [])[1];
   const endingIds = endingObject ? [...endingObject.matchAll(/^\s*([A-Za-z_$][\w$]*):/gm)].length : 0;
+
+  const extendedScenes = assignedArrayBlocks(html, /\\bS\\.([A-Za-z0-9_]+)\\s*=\\s*\\[/g);
+  const extendedTranslations = assignedArrayBlocks(html, /\\bEN\\.([A-Za-z0-9_]+)\\s*=\\s*\\[/g);
+  const sceneFingerprint = fingerprint(extendedScenes.join("\\n/* SCENE */\\n"));
+  const translationFingerprint = fingerprint(extendedTranslations.join("\\n/* TRANSLATION */\\n"));
+  if (extendedScenes.length !== baseline.extendedAssignments.sceneCount
+      || sceneFingerprint !== baseline.extendedAssignments.sceneFingerprint) {
+    fail("additional scene assignments changed or are missing; review every scene before updating story-lock.json");
+  } else pass("all additional scene texts and choices match the approved Story Lock");
+  if (extendedTranslations.length !== baseline.extendedAssignments.translationCount
+      || translationFingerprint !== baseline.extendedAssignments.translationFingerprint) {
+    fail("additional English translations changed or are missing; review every translation before updating story-lock.json");
+  } else pass("all additional English translations match the approved Story Lock");
 
   const actual = {
     baseSceneIds,
