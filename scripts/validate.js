@@ -113,6 +113,8 @@ try {
     "!/^(najat|alnajat)_[a-z0-9_-]{1,80}$/i.test(key)",
     "const previous=new Map(entries.map(([key])=>[key,localStorage.getItem(key)]))",
     "localStorage.removeItem(key)",
+    "new Blob([serialized]).size>8*1024*1024",
+    "entries.length>100",
     "finally{input.value=\"\";}"
   ]) if (!director.includes(marker)) fail("Backup restore safety guard missing: " + marker);
   else pass("Backup restore validates size, key namespace and rolls back failed writes");
