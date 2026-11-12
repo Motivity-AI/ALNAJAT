@@ -28,16 +28,16 @@ function assignedArrayBlocks(source, pattern) {
       const ch = source[i];
       if (quote) {
         if (escaped) { escaped = false; continue; }
-        if (ch === "\\\\") { escaped = true; continue; }
+        if (ch === "\\") { escaped = true; continue; }
         if (ch === quote) quote = null;
         continue;
       }
-      if (ch === "'" || ch === '"' || ch === "`") { quote = ch; continue; }
+      if (ch === "'" || ch === '"' || ch === "\`") { quote = ch; continue; }
       if (ch === "[") depth++;
       else if (ch === "]" && --depth === 0) { end = i + 1; break; }
     }
     if (end < 0) throw new Error("Unclosed scene/translation assignment: " + match[1]);
-    while (end < source.length && /\\s/.test(source[end])) end++;
+    while (end < source.length && /\s/.test(source[end])) end++;
     if (source[end] === ";") end++;
     blocks.push(source.slice(start, end));
   }
