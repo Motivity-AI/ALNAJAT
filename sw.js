@@ -1,5 +1,5 @@
 /* ==================== النجاة — Service Worker ==================== */
-const VERSION = 'najat-v28';
+const VERSION = 'najat-v29';
 const SHELL = [
   './',
   './index.html',
@@ -10,8 +10,8 @@ const SHELL = [
   './alnajat-characters.js?v=1',
   './alnajat-director.js?v=2',
   './alnajat-memory-book.js?v=1',
-  './alnajat-audio-engine.js?v=2',
-  './alnajat-cinema-pro.js?v=1',
+  './alnajat-audio-engine.js?v=3',
+  './alnajat-cinema-pro.js?v=2',
   './alnajat-editorial.js?v=7',
   './alnajat-safety.js?v=8',
   './sources.html'
