@@ -12,6 +12,27 @@ const pass = (message) => console.log("✓ " + message);
 try {
   const html = read("index.html");
   const sw = read("sw.js");
+  const browserTest = read("scripts/browser-smoke.js");
+  const packageJson = JSON.parse(read("package.json"));
+  if (packageJson.devDependencies && packageJson.devDependencies.playwright === "1.56.1" &&
+      packageJson.scripts && packageJson.scripts["test:browser"] === "node scripts/browser-smoke.js") {
+    pass("Pinned Playwright browser test package is configured");
+  } else fail("Pinned Playwright browser test package configuration is missing");
+  try {
+    execFileSync(process.execPath, ["--check", path.join(__dirname, "browser-smoke.js")], { stdio: "pipe" });
+    pass("Browser smoke test JavaScript syntax is valid");
+  } catch (e) {
+    fail("Browser smoke test syntax error\\n" + (e.stderr ? e.stderr.toString() : e.message));
+  }
+  const browserWorkflow = read(".github/workflows/validate.yml");
+  for (const marker of ["browser-smoke:", "npx playwright install --with-deps chromium", "npm run test:browser"]) {
+    if (!browserWorkflow.includes(marker)) fail("Chromium browser QA workflow is missing: " + marker);
+  }
+  if (browserWorkflow.includes("browser-smoke:") &&
+      browserWorkflow.includes("npx playwright install --with-deps chromium") &&
+      browserWorkflow.includes("npm run test:browser")) {
+    pass("Chromium browser QA is wired after static validation in GitHub Actions");
+  }
   execFileSync(process.execPath, [path.join(__dirname, "story-integrity.js")], { stdio: "inherit" });
   const manifest = JSON.parse(read("manifest.json"));
   if (!html.includes("</body>") || !html.includes("</html>")) fail("index.html is missing closing document tags");
