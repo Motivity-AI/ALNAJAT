@@ -184,6 +184,7 @@ N("r2b","بعد سنوات في سوق الخضار لفتت نظرك امرأة
 N("s6d","وُلد يوسف في ليلة مطيرة وجاءت مريم بعده بعامين. حملتَ كل واحد بين يديك الخشنتين وهمستَ في أذنه اسمه كما فعل أبوك يومًا.","q1","اكتب اسميهما على الجدار","علّق سبحة أبيك فوق سريرهما",{p:8},{p:10});
 N("q1b","قبل الحرب بيوم أقمتَ عشاءً بسيطًا: عدس وخبز وشاي. ضحكت مريم حين سكبت الشاي، ونام يوسف على كتفك.","w1","تمنَّ أن يطول هذا اليوم","التقط في ذاكرتك كل وجوههم",{p:5},{p:5,F:"mem"});
 N("v1","في الفجر انقطع الإنترنت وارتجّت الجدران. جاءك صوت جيرانك: «الحرب!». ارتدى الأطفال ثيابهم وهم يبكون.","v2","أمسك بيد آمنة","تأكد من الأبواب وجمع الوثائق",{p:3},{p:2});
+if(S.v1 && S.v1[2] && !S.v1[2].some(function(c){return c[1]==="jw";})) S.v1[2].push(["ابقَ مع أسرتك خلال الأيام الأولى للحرب","jw",{p:5}]);
 N("v2","في الليلة الرابعة اقتحم رجال مسلحون الحي. سمعتَ طرقًا عنيفًا على الباب.","w2","افتح الباب لتحمي الأسرة","اختبئ مع أسرتك في الغرفة الخلفية",{p:-5},{p:-8});
 N("v3","رُميتَ في صندوق شاحنة مظلم مع رجال آخرين. الطريق طويل والهواء ثقيل، وهمس أحدهم: «اسمي حامد، كنت معلمًا». شعرتَ أنك لستَ وحدك.","p1","عرّف بنفسك","اصمت وراقب",{p:5},{p:-2});
 N("q5","في ليلة همس لك سجين: «عندي راديو صغير مخبّأ». سمعتم نشرة خافتة: مفاوضات في جدة.","q6","اطلب أن تسمع النشرة كاملة","قل له: يكفي أملٌ مزيّف",{p:10},{p:-5});
@@ -609,6 +610,8 @@ jk:["In Wad Madani: calm mornings, long bread queues, and Al-Jazira's news passe
 jw:["Khartoum in the first week: shells at night, water queues by day, phones silent.",["Go buy water and bread from another neighborhood","Hide in the inner room with your family","Gather neighbors on the roof and exchange news","Share your stores with a family without food"]],
 jg:["In Gedaref: crowded shelter, mint tea shared by strangers, and news that only comes via a small radio.",["Stand in the food distribution queue","Sleep early and save your strength","Sit with people and hear their stories","Help volunteers arrange the beds"]]
 };
+
+if(EN.v1 && !EN.v1.some(function(c){return c==="Stay with your family through the first days of war";})) EN.v1.push("Stay with your family through the first days of war");
 
 /* ==================== TRANSLATION HELPERS ==================== */
 let LG="ar";
@@ -1338,14 +1341,14 @@ AH.sd2026 = ["2026","📡","حرب المسيّرات","بلغتَ عام ٢٠٢
 try{
   /* 2013–2016 يقع قبل شراء الحافلة وقبل ديسمبر 2018. */
   const s4c = S["s4c"];
-  if(s4c && s4c[2]) s4c[2].forEach(function(c){ c[1]="sd2013"; });
+  if(s4c && s4c[2] && !s4c[2].some(function(c){return c[1]==="sd2013";})) s4c[2].push(["تتبّع مسار احتجاجات سبتمبر 2013 وما تلاها","sd2013",{p:5}]);
   const sd2014 = S["sd2014"];
   if(sd2014 && sd2014[2]) sd2014[2].forEach(function(c){ c[1]="s5"; });
 
   /* المسار الشخصي للثورة: ديسمبر 2018 → يناير/أبريل/يونيو 2019. */
   const r1b = S["r1b"];
   if(r1b && r1b[2]){
-    r1b[2].forEach(function(c){ if(c[1]==="r2") c[1]="rev1"; });
+    if(!r1b[2].some(function(c){return c[1]==="rev1";})) r1b[2].push(["اتبع المسار التفصيلي للثورة من يناير إلى يونيو 2019","rev1",{p:5}]);
     if(!r1b[2].some(function(c){return c[1]==="sd2018";}))
       r1b[2].push(["اعرض المسار التوثيقي للأحداث من ديسمبر 2018","sd2018",{p:5}]);
   }
