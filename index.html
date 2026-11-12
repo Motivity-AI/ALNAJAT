@@ -611,15 +611,23 @@ jw:["Khartoum in the first week: shells at night, water queues by day, phones si
 jg:["In Gedaref: crowded shelter, mint tea shared by strangers, and news that only comes via a small radio.",["Stand in the food distribution queue","Sleep early and save your strength","Sit with people and hear their stories","Help volunteers arrange the beds"]]
 };
 
-if(EN.v1 && !EN.v1.some(function(c){return c==="Stay with your family through the first days of war";})) EN.v1.push("Stay with your family through the first days of war");
+if(EN.v1 && Array.isArray(EN.v1[1]) && !EN.v1[1].includes("Stay with your family through the first days of war")) EN.v1[1].push("Stay with your family through the first days of war");
+if(EN.s4c && Array.isArray(EN.s4c[1]) && !EN.s4c[1].includes("Follow the documentary route through the September 2013 protests and their aftermath")) EN.s4c[1].push("Follow the documentary route through the September 2013 protests and their aftermath");
+if(EN.r1b && Array.isArray(EN.r1b[1])) {
+  if(!EN.r1b[1].includes("Follow the detailed January–June 2019 revolution route")) EN.r1b[1].push("Follow the detailed January–June 2019 revolution route");
+  if(!EN.r1b[1].includes("Read the documentary timeline beginning in December 2018")) EN.r1b[1].push("Read the documentary timeline beginning in December 2018");
+}
+if(EN.q1b && Array.isArray(EN.q1b[1]) && !EN.q1b[1].includes("Follow the documented timeline from the outbreak of war through 2026")) EN.q1b[1].push("Follow the documented timeline from the outbreak of war through 2026");
 
 /* ==================== TRANSLATION HELPERS ==================== */
 let LG="ar";
 try{LG=localStorage.getItem("najat_lang")||"ar"}catch(e){}
 function tr(t){return LG==="en"&&UI[t]?UI[t]:t}
-function txt(n){if(LG==="en"&&EN[n])return EN[n][0];return S[n]?S[n][1]:""}
+function txt(n){if(LG==="en"&&EN[n])return Array.isArray(EN[n])&&Array.isArray(EN[n][2])&&typeof EN[n][1]==="string"?EN[n][1]:EN[n][0];return S[n]?S[n][1]:""}
 function choiceLabel(n,i){
-  if(LG==="en"&&EN[n]&&EN[n][1]&&EN[n][1][i])return EN[n][1][i];
+  const entry=LG==="en"?EN[n]:null;
+  const choices=Array.isArray(entry)?(Array.isArray(entry[2])?entry[2]:entry[1]):null;
+  if(Array.isArray(choices)&&choices[i])return choices[i];
   const c=S[n]&&S[n][2]&&S[n][2][i];
   return c?c[0]:"";
 }
@@ -678,6 +686,7 @@ function renderNode(nid){
   autoSave();
   const node=S[nid];
   let title=node[0]||chapterLabel(nid);
+  if(LG==="en"&&Array.isArray(EN[nid])&&Array.isArray(EN[nid][2])&&EN[nid][0]) title=EN[nid][0];
   let text=txt(nid).replace(/\n\n/g,"<br><br>").replace(/\n/g,"<br>");
   curChoices=(node[2]||[]).filter(avail);
   let chHtml="";
