@@ -91,3 +91,13 @@ A follow-up runtime-path audit found that 18 scene metadata records were exporte
 - Safety script, validator, service worker, and story-integrity script passed JavaScript syntax compilation.
 - `index.html` and the service worker now load safety v8; the offline cache is `najat-v24`.
 - Browser/device interaction testing and final Pages deployment verification remain outstanding; static checks are not a substitute for those tests.
+
+
+## تحديث 12 نوفمبر 2026 — سلامة شجرة القصة وإتاحة المسارات
+- أظهر تدقيق الرسم البياني أن حلقة الأسبوع الأول من الحرب `jw` كانت بلا مدخل من أي مشهد، وأن عقدة `r2` الأصلية أصبحت غير قابلة للوصول بعد إعادة توجيه اختيارات `r1b` إلى مسار الثورة التفصيلي.
+- أضيف خيار مستقل من `v1` إلى حلقة `jw`، وخياران توثيقيان اختياريان من `s4c` إلى 2013 ومن `r1b` إلى مسار 2019 التفصيلي. أزيلت إعادة توجيه اختيارات `r1b` الأصلية إلى `rev1`؛ فبقيت وجهتها الأصلية `r2`، وبقيت جميع آثار الاختيارات كما هي.
+- أضيف تدقيق شجرة القصة إلى فحص الإصدار: يجمع تعريفات المشاهد الأساسية والإضافية و`N()` والحلقات، ويطبق تحويلات المسار الزمني المعلنة، ويتحقق من المراجع غير الصالحة، والوصول من `d0`، ومخارج الحلقات، والوصول إلى النهاية.
+- النتيجة على لقطة الفرع بعد التعديلات: 119/119 عقدة قابلة للوصول من بداية اللعبة، ولا توجد أهداف غير معروفة؛ 9 حلقات لها مسار خروج.
+- تم تحديث Story Lock بعد مراجعة الإضافات الثلاث فقط، دون حذف أو تقصير أي مشهد أو اختيار أو نهاية.
+- رُفع cache Service Worker إلى `najat-v28` لتحديث الغلاف والاختيارات الجديدة.
+- هذه نتيجة فحص ساكن وتحليل شجرة؛ لا تمثل اختبار متصفح حي أو اختبار جهاز فعلي.
