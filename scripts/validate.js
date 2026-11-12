@@ -73,7 +73,7 @@ try {
   const sourcesPage = read("sources.html");
   if (!sw.includes("'./sources.html'")) fail("Offline shell does not cache the historical sources page");
   else pass("Historical sources page is cached for offline use");
-  for (const sourceId of ["SRC-001","SRC-002","SRC-003","SRC-004","SRC-005","SRC-006","SRC-007","SRC-008","SRC-009","SRC-010","SRC-011","SRC-012"]) {
+  for (const sourceId of ["SRC-001","SRC-002","SRC-003","SRC-004","SRC-005","SRC-006","SRC-007","SRC-008","SRC-009","SRC-010","SRC-011","SRC-012","SRC-013"]) {
     if (!sourcesPage.includes('id="' + sourceId + '"')) fail("Missing source card: " + sourceId);
   }
   const safety = read("alnajat-safety.js");
@@ -110,6 +110,24 @@ try {
   else pass("Extended safety metadata is merged into the live scene registry");
   if (/user-scalable\s*=\s*no/i.test(html)) fail("Viewport still disables user zoom");
   else pass("User zoom is not disabled by the viewport meta tag");
+
+  // Every story node must have an English counterpart, including nodes
+  // declared after the original S/EN object literals.
+  const translationIds = new Set();
+  const baseTranslations = html.match(/const EN=\\{([\\s\\S]*?)\\n\\};/);
+  if (!baseTranslations) fail("Could not locate the English translation table");
+  else for (const match of baseTranslations[1].matchAll(/^\\s*([A-Za-z0-9_]+):/gm)) translationIds.add(match[1]);
+  for (const match of html.matchAll(/\\bEN\\.([A-Za-z0-9_]+)\\s*=/g)) translationIds.add(match[1]);
+  const missingTranslations = [...storyNodeIds].filter(id => !translationIds.has(id));
+  if (missingTranslations.length) fail("Missing English translations for: " + missingTranslations.join(", "));
+  else pass("All " + storyNodeIds.size + " story nodes have English translations");
+
+  const lock = JSON.parse(read("story-lock.json"));
+  if (lock.inventory && lock.inventory.totalStoryNodes !== storyNodeIds.size) {
+    fail("Story-lock totalStoryNodes mismatch: expected " + lock.inventory.totalStoryNodes + ", found " + storyNodeIds.size);
+  } else if (lock.inventory && lock.inventory.totalStoryNodes === storyNodeIds.size) {
+    pass("Complete story-node inventory matches story-lock.json");
+  }
 
   if (process.exitCode) process.exit(process.exitCode);
   console.log("\nALNAJAT static release checks passed.");
