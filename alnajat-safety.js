@@ -66,7 +66,7 @@
       close();
       // Safari/WebKit may restore a previously open app panel from page history.
       // Dismiss it before resuming the game so it cannot intercept story choices.
-      var panel=element("pn");if(panel)panel.classList.remove("on");
+      var panel=document.getElementById("pn");if(panel)panel.classList.remove("on");
       if(typeof onProceed==="function")onProceed();
       else if(typeof window.__ALNAJAT_originalStartGame==="function")window.__ALNAJAT_originalStartGame.apply(window,[]);
     });
