@@ -123,5 +123,11 @@
 - الحد الأقصى ٢٠٠ ذكرى، ويمكن حذف الذكريات أو تصديرها للاحتفاظ بها.
 
 
-## الخصوصية والبيانات\nتتوفر [سياسة الخصوصية بالعربية والإنجليزية](./privacy.html) من القائمة الرئيسية. لا ترفق النسخ الاحتياطية التي قد تحتوي على بيانات الرحلة أو التأملات الشخصية في البلاغات العامة.\n\n## Historical source register
+## الخصوصية والبيانات
+تتوفر [سياسة الخصوصية بالعربية والإنجليزية](./privacy.html) من القائمة الرئيسية. لا ترفق النسخ الاحتياطية التي قد تحتوي على بيانات الرحلة أو التأملات الشخصية في البلاغات العامة.
+
+## بوابة الإصدار العالمي
+راجع [قائمة التحقق للإصدار العالمي](./RELEASE_CHECKLIST.md) لمعرفة الاختبارات الآلية والمراجعات الحية والأجهزة والحقوق المطلوبة قبل إعلان النسخة مستقرة.
+
+## Historical source register
 The initial research and source-to-scene map is maintained in [SOURCES.md](./SOURCES.md). It records scope, limitations and scene IDs for each reference. The registry is an editorial starting point, not a claim that every historical statement in the game has been independently verified.
