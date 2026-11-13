@@ -308,7 +308,8 @@
     const box=document.createElement("section");box.id="alnajat-dc-menu";
     box.innerHTML='<div class="alnajat-dc-note">'+t("عِش الحكاية بطريقتك، واحتفظ بأثر كل قرار.","Live the story your way, and keep the trace of every choice.")+'</div>'+
       '<button class="btn" type="button" onclick="openAlnajatDirector()">✦ '+t("غرفة المخرج","Director’s Room")+'</button>'+
-      '<button id="alnajat-dc-install" type="button" onclick="installAlnajat()">📲 '+t("تثبيت اللعبة على جهازي","Install on this device")+'</button>';
+      '<button id="alnajat-dc-install" type="button" onclick="installAlnajat()">📲 '+t("تثبيت اللعبة على جهازي","Install on this device")+'</button>'+
+      '<a class="btn" id="alnajat-privacy-link" href="privacy.html">🔒 '+t("الخصوصية والبيانات","Privacy & data")+'</a>';
     const about=Array.from(app.querySelectorAll("button")).find(b=>/عن اللعبة|About/.test(b.textContent||""));
     if(about)about.insertAdjacentElement("afterend",box);else app.appendChild(box);
   }
