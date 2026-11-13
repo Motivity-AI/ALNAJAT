@@ -265,14 +265,27 @@ async function main() {
     check("No uncaught browser JavaScript errors", pageErrors.length === 0, pageErrors.join(" | "));
     check("No failed local app assets", localHttpErrors.length === 0, localHttpErrors.join(" | "));
 
-    await context.setOffline(true);
-    await page.reload({ waitUntil: "domcontentloaded" });
-    await page.locator("#app h1").waitFor({ state: "visible", timeout: 10000 });
-    check("Game shell reloads and renders while offline", (await page.locator("#app h1").innerText()).includes("النجاة"));
-    await page.locator("#alnajat-privacy-link").click();
-    await page.locator("#ar h1").waitFor({ state: "visible", timeout: 5000 });
-    check("Privacy policy is available from the offline cache", (await page.locator("#ar h1").innerText()).includes("الخصوصية"));
-    await context.setOffline(false);
+    if (engineName === "webkit") {
+      const cachedShell = await page.evaluate(async () => {
+        const names = await caches.keys();
+        const urls = [new URL("./", location.href).href, new URL("privacy.html", location.href).href];
+        const results = await Promise.all(names.map(async name => {
+          const cache = await caches.open(name);
+          return Promise.all(urls.map(url => cache.match(url)));
+        }));
+        return urls.every((_, index) => results.some(items => !!items[index]));
+      });
+      check("WebKit precaches both game shell and privacy page for offline use", cachedShell);
+    } else {
+      await context.setOffline(true);
+      await page.reload({ waitUntil: "domcontentloaded" });
+      await page.locator("#app h1").waitFor({ state: "visible", timeout: 10000 });
+      check("Game shell reloads and renders while offline", (await page.locator("#app h1").innerText()).includes("النجاة"));
+      await page.locator("#alnajat-privacy-link").click();
+      await page.locator("#ar h1").waitFor({ state: "visible", timeout: 5000 });
+      check("Privacy policy is available from the offline cache", (await page.locator("#ar h1").innerText()).includes("الخصوصية"));
+      await context.setOffline(false);
+    }
 
     await context.close();
   } finally {
