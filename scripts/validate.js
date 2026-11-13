@@ -61,6 +61,12 @@ try {
 
   if (!manifest.name || !manifest.start_url || !manifest.scope) fail("Web app manifest is missing required fields");
   else pass("Web app manifest parses and has required fields");
+  if (!html.includes('property="og:title"') || !html.includes('property="og:description"') ||
+      !html.includes("function syncDocumentLanguage()")) fail("Localized page metadata and social preview tags are missing");
+  else pass("Search and social metadata are present and synchronized with the selected language");
+  if (!html.includes('alnajat-director.js?v=3') || !sw.includes("'./alnajat-director.js?v=3'")) {
+    fail("Director and privacy navigation layer v3 is not loaded by both page and offline shell");
+  }
 
   const version = (sw.match(/const VERSION\s*=\s*'([^']+)'/) || [])[1];
   if (!version) fail("Service worker cache version is missing");
@@ -95,7 +101,7 @@ try {
     'prefs.scale = [100, 112, 125].includes(Number(prefs.scale))'
   ]) if (!a11y.includes(marker)) fail("Accessibility layer regression guard missing: " + marker);
   if (!html.includes('alnajat-v2.js?v=4') || !sw.includes("'./alnajat-v2.js?v=4'")) {
-    fail("Accessibility layer v3 is not loaded by both page and offline shell");
+    fail("Accessibility layer v4 is not loaded by both page and offline shell");
   } else pass("Accessibility panel is bilingual, validates saved preferences and supports keyboard dismissal");
 
   const audio = read("alnajat-audio-engine.js");
@@ -178,8 +184,8 @@ try {
   }
   const safety = read("alnajat-safety.js");
   if (!html.includes('alnajat-safety.js?v=8') || !sw.includes("'./alnajat-safety.js?v=8'")) {
-    fail("Scene safety layer v7 is not referenced by both the page and offline shell");
-  } else pass("Scene safety layer v7 is loaded and included in the offline shell");
+    fail("Scene safety layer v8 is not referenced by both the page and offline shell");
+  } else pass("Scene safety layer v8 is loaded and included in the offline shell");
   for (const marker of ["function sharedContinuation", "function showSceneWarning", "Read a safe summary", "Skip this scene", "choice[4]||choice[5]", "choice[5]", 'target.charAt(0)==="@', 'if(target!=="fin"&&!S[target])return null;', 'makeGate(function(){window.renderNode(nid);});', 'if(typeof onProceed==="function")onProceed();']) {
     if (!safety.includes(marker)) fail("Safety layer is missing expected feature marker: " + marker);
   }
