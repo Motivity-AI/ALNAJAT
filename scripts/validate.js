@@ -150,6 +150,20 @@ try {
   const sourcesPage = read("sources.html");
   if (!sw.includes("'./sources.html'")) fail("Offline shell does not cache the historical sources page");
   else pass("Historical sources page is cached for offline use");
+  const privacyPage = read("privacy.html");
+  if (!sw.includes("'./privacy.html'")) fail("Offline shell does not cache the privacy policy page");
+  if (!html.includes('alnajat-director.js?v=3') || !sw.includes("'./alnajat-director.js?v=3'")) {
+    fail("Privacy navigation layer v3 is not loaded by both page and offline shell");
+  }
+  for (const marker of ["id=\"alnajat-privacy-link\"", "Privacy & data", "الخصوصية والبيانات"]) {
+    if (!director.includes(marker)) fail("In-game privacy navigation is missing: " + marker);
+  }
+  for (const marker of ["id=\"ar\"", "id=\"en\"", "OpenStreetMap", "unpkg", "local", "Issues"]) {
+    if (!privacyPage.includes(marker)) fail("Privacy policy disclosure is missing: " + marker);
+  }
+  if (!privacyPage.includes('document.documentElement.lang=english?"ar":"en"')) {
+    fail("Privacy policy language switch does not update document language");
+  } else pass("Bilingual privacy policy is linked in-game and cached for offline use");
   for (const sourceId of ["SRC-001","SRC-002","SRC-003","SRC-004","SRC-005","SRC-006","SRC-007","SRC-008","SRC-009","SRC-010","SRC-011","SRC-012","SRC-013"]) {
     if (!sourcesPage.includes('id="' + sourceId + '"')) fail("Missing source card: " + sourceId);
   }
