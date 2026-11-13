@@ -9,7 +9,7 @@
 const http = require("node:http");
 const fs = require("node:fs");
 const path = require("node:path");
-const { chromium } = require("playwright");
+const { chromium, firefox, webkit } = require("playwright");
 
 const ROOT = path.resolve(__dirname, "..");
 const PREFIX = "/ALNAJAT";
@@ -78,7 +78,11 @@ async function main() {
   };
 
   try {
-    browser = await chromium.launch({ headless: true });
+    const engines = { chromium, firefox, webkit };
+    const engineName = process.env.PLAYWRIGHT_BROWSER || "chromium";
+    const engine = engines[engineName];
+    if (!engine) throw new Error("Unsupported PLAYWRIGHT_BROWSER: " + engineName);
+    browser = await engine.launch({ headless: true });
     const context = await browser.newContext({
       viewport: { width: 390, height: 844 },
       reducedMotion: "reduce",
