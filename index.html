@@ -6,6 +6,12 @@
 <meta name="theme-color" content="#f4efe6" media="(prefers-color-scheme:light)">
 <meta name="theme-color" content="#15110d" media="(prefers-color-scheme:dark)">
 <meta name="description" content="النجاة — لعبة قصصية عن رحلة سوداني بين حربين.">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="النجاة — ALNAJAT">
+<meta property="og:title" content="النجاة — رحلة سوداني بين حربين">
+<meta property="og:description" content="لعبة قصصية تفاعلية عن رحلة طفل سوداني عبر النزوح والثورة والحرب. عمل خيالي مستوحى من أحداث حقيقية.">
+<meta property="og:locale" content="ar_SD">
+<meta name="twitter:card" content="summary">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
 <meta name="apple-mobile-web-app-title" content="النجاة">
@@ -886,11 +892,27 @@ function openAbout(){
 }
 
 /* ==================== LANGUAGE + AUDIO + PARTICLES ==================== */
+function syncDocumentLanguage(){
+  const english=LG==="en";
+  document.documentElement.setAttribute("dir",english?"ltr":"rtl");
+  document.documentElement.setAttribute("lang",english?"en":"ar");
+  document.title=english?"ALNAJAT — A Sudanese Journey Between Wars":"النجاة — رحلة سوداني بين حربين";
+  const description=english
+    ?"An interactive fictional story about a Sudanese child through displacement, revolution and war. Inspired by real events."
+    :"النجاة — لعبة قصصية تفاعلية عن رحلة طفل سوداني عبر النزوح والثورة والحرب. عمل خيالي مستوحى من أحداث حقيقية.";
+  const meta=document.querySelector('meta[name="description"]');
+  if(meta)meta.content=description;
+  const ogTitle=document.querySelector('meta[property="og:title"]');
+  if(ogTitle)ogTitle.content=english?"ALNAJAT — A Sudanese Journey Between Wars":"النجاة — رحلة سوداني بين حربين";
+  const ogDescription=document.querySelector('meta[property="og:description"]');
+  if(ogDescription)ogDescription.content=description;
+  const ogLocale=document.querySelector('meta[property="og:locale"]');
+  if(ogLocale)ogLocale.content=english?"en_US":"ar_SD";
+}
 function toggleLang(){
   LG=LG==="en"?"ar":"en";
   try{localStorage.setItem("najat_lang",LG)}catch(e){}
-  document.documentElement.setAttribute("dir",LG==="en"?"ltr":"rtl");
-  document.documentElement.setAttribute("lang",LG);
+  syncDocumentLanguage();
   if(s&&id)renderNode(id);else showMenu();
   toast(LG==="en"?"English":"العربية");
 }
@@ -908,8 +930,7 @@ function genParticles(){
 
 /* ==================== BOOT ==================== */
 window.addEventListener("load",()=>{
-  document.documentElement.setAttribute("dir",LG==="en"?"ltr":"rtl");
-  document.documentElement.setAttribute("lang",LG);
+  syncDocumentLanguage();
   genParticles();
   updateMusicBtn();
   showMenu();
