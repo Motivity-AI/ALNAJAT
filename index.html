@@ -1047,7 +1047,7 @@ document.addEventListener("keydown",()=>{unlockAudio()});
     pn.removeAttribute("aria-labelledby");
     if(howToKeyHandler)document.removeEventListener("keydown",howToKeyHandler);
     howToKeyHandler=null;
-    const target=howToPreviousFocus&&howToPreviousFocus.isConnected?howToPreviousFocus:document.querySelector("#app .tx")||document.querySelector("#app button");
+    const target=howToPreviousFocus&&howToPreviousFocus.isConnected&&howToPreviousFocus!==document.body&&howToPreviousFocus!==document.documentElement?howToPreviousFocus:document.querySelector("#app .btn")||document.querySelector("#app button");
     if(target&&typeof target.focus==="function")target.focus();
     howToPreviousFocus=null;
   };
