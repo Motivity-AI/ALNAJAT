@@ -105,6 +105,36 @@ async function main() {
       await page.evaluate(() => document.title.includes("النجاة") &&
         document.querySelector('meta[property="og:locale"]')?.content === "ar_SD"));
 
+    const allSudanButton = page.getByRole("button", { name: /حكايات من كل السودان/ });
+    await allSudanButton.waitFor({ state: "visible", timeout: 5000 });
+    await allSudanButton.click();
+    const allSudanPanel = page.locator("#pn");
+    await allSudanPanel.getByText("كل السودان… حكايات متعددة وكرامة واحدة").waitFor({ state: "visible" });
+    check("All-Sudan story hub is reachable from the main menu", await allSudanPanel.isVisible());
+
+    for (const label of ["من الشمال:", "من الشرق:", "من جنوب البلاد:", "من الوسط والجزيرة والخرطوم:"]) {
+      check("Regional route is listed: " + label, await allSudanPanel.getByRole("button", { name: new RegExp(label) }).count() === 1);
+    }
+
+    await allSudanPanel.getByRole("button", { name: /من الشمال:/ }).click();
+    await allSudanPanel.getByText("في قرية شمالية").waitFor({ state: "visible" });
+    await allSudanPanel.getByRole("button").filter({ hasText: "يساعد أسرته في جلب الماء" }).click();
+    await allSudanPanel.getByText("خطوة صغيرة في حكاية أكبر").waitFor({ state: "visible" });
+    const regionalChoiceSaved = await page.evaluate(() => {
+      const saved = JSON.parse(localStorage.getItem("alnajat_all_sudan_v1") || "[]");
+      return saved.length === 1 && saved[0].id === "north" && saved[0].choice === 0;
+    });
+    check("Regional choice is saved separately from the original story", regionalChoiceSaved);
+
+    await page.evaluate(() => window.openAllSudanScenarios());
+    await allSudanPanel.getByRole("button", { name: /جيش واحد أم جيوش متوازية/ }).click();
+    await allSudanPanel.getByText("اتفاق جوبا للسلام").waitFor({ state: "visible" });
+    check("Civic reflection opens with its cited source links",
+      await allSudanPanel.getByRole("link", { name: /Juba Peace Agreement/ }).count() === 1 &&
+      await allSudanPanel.getByRole("link", { name: /US Treasury/ }).count() === 1);
+    await allSudanPanel.getByRole("button", { name: "إغلاق" }).click();
+    await allSudanPanel.waitFor({ state: "hidden" });
+
     await page.getByRole("button", { name: "English", exact: true }).click();
     await page.waitForFunction(() => document.querySelector("#app h1")?.textContent?.trim() === "Survival");
     check("Menu switches to English and LTR", await page.evaluate(() =>
