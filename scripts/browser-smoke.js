@@ -136,7 +136,16 @@ async function main() {
     await gate.waitFor({ state: "visible", timeout: 10000 });
     await gate.getByRole("button", { name: /فهمت التنبيه/ }).click();
     await page.locator("#app .tx").waitFor({ state: "visible" });
-    check("Content gate dismisses any stale app panel before play", !(await page.locator("#pn").evaluate(el => el.classList.contains("on"))));
+    const tutorialPanel = page.locator("#pn");
+    await tutorialPanel.waitFor({ state: "visible", timeout: 3000 });
+    check("First-run tutorial opens as a labelled modal dialog",
+      await tutorialPanel.getAttribute("role") === "dialog" &&
+      await tutorialPanel.getAttribute("aria-modal") === "true" &&
+      (await tutorialPanel.getAttribute("aria-label")) === "كيف تلعب");
+    await page.keyboard.press("Escape");
+    await tutorialPanel.waitFor({ state: "hidden", timeout: 5000 });
+    check("Tutorial closes with Escape and restores focus to the first story choice",
+      await page.evaluate(() => !!document.activeElement?.matches("#app .btn")));
     const firstSceneText = await page.locator("#app .tx").innerText();
     check("Informed-content gate opens and starts the first scene", firstSceneText.length > 40);
 
