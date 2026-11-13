@@ -30,6 +30,7 @@ These checks are not represented by a passing local Chromium CI run:
 - [ ] Test Safari on a real iPhone, including Add to Home Screen, safe areas, audio unlock, resume and offline relaunch.
 - [ ] Test Chrome on a real Android device, including install prompt, audio, orientation and offline relaunch.
 - [x] Automated Playwright coverage on Chromium, Firefox and WebKit (run #218: 26/26/25 passed, 0 failed). WebKit verifies offline cache contents; offline navigation is exercised in Chromium and Firefox.
+- [x] Final integrated CI on candidate head `5ed07093e32f779e70c3b053dd12c62f56842d17` (run #220, 13 Nov 2026): static validation passed; Chromium 26/26, Firefox 26/26, WebKit 25/25; zero failures. Chromium and Firefox verified offline game reload and offline privacy access; WebKit verified both assets are precached. This remains automated browser evidence, not real-device or assistive-technology certification.
 - [ ] Manual Firefox and desktop Safari/Chromium checks on real devices.
 - [ ] Test VoiceOver and NVDA with keyboard-only navigation, dialog focus, labels and reading order.
 - [ ] Review contrast, text scaling, reduced motion and 200% zoom against WCAG 2.2 AA criteria.
