@@ -30,6 +30,12 @@ try {
   if (!read(".github/workflows/validate.yml").includes("browser: [chromium, firefox, webkit]")) {
     fail("Cross-browser release matrix must include Chromium, Firefox and WebKit");
   } else pass("Browser QA matrix covers Chromium, Firefox and WebKit");
+  for (const marker of ["First-run tutorial opens as a labelled modal dialog", "Tutorial closes with Escape and restores focus"]) {
+    if (!browserTest.includes(marker)) fail("Browser suite is missing tutorial accessibility coverage: " + marker);
+  }
+  for (const marker of ["window.closeHowToPlay = function()", 'pn.setAttribute("role","dialog")', 'pn.setAttribute("aria-modal","true")', 'event.key==="Escape"']) {
+    if (!html.includes(marker)) fail("First-run tutorial accessibility behavior is missing: " + marker);
+  }
   const browserWorkflow = read(".github/workflows/validate.yml");
   for (const marker of ["browser-smoke:", "npx playwright install --with-deps ${{ matrix.browser }}", "npm run test:browser"]) {
     if (!browserWorkflow.includes(marker)) fail("Chromium browser QA workflow is missing: " + marker);
