@@ -161,7 +161,10 @@ try {
   else pass("Historical sources page is cached for offline use");
   const privacyPage = read("privacy.html");
   if (!sw.includes("'./privacy.html'")) fail("Offline shell does not cache the privacy policy page");
-  const privacyScript = (privacyPage.match(/<script>([\\s\\S]*?)<\\/script>/i) || [])[1];
+  const privacyScriptStart = privacyPage.indexOf("<script>");
+  const privacyScriptEnd = privacyPage.indexOf("</script>", privacyScriptStart);
+  const privacyScript = privacyScriptStart >= 0 && privacyScriptEnd > privacyScriptStart
+    ? privacyPage.slice(privacyScriptStart + 8, privacyScriptEnd) : "";
   if (!privacyScript) fail("Privacy page language switch script is missing");
   else {
     try { new Function(privacyScript); pass("Privacy page JavaScript syntax is valid"); }
