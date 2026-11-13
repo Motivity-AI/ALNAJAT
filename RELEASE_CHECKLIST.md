@@ -45,6 +45,11 @@ These checks are not represented by a passing local Chromium CI run:
 - [ ] Sensitivity review of war, displacement, hunger, death and trauma content; verify the content notice and safe-summary/skip paths.
 - [ ] Confirm fictional characters and composite scenes are never presented as real testimony.
 
+
+- [ ] Human editorial and regional sensitivity review of the new North, East, South, Centre/Gezira/Khartoum routes; verify local descriptions and avoid implying uniform conditions across each region.
+- [ ] Verify all factual claims in the new national-army and armed-groups reflection against dated primary sources; distinguish allegations, official designations and legal findings, and verify any reference to groups described as “Al-Dira'oon” before naming them.
+- [ ] Test the new bilingual all-Sudan menu, story choices, local progress storage and offline availability on real devices.
+
 ## 5. Rights and release operations / الحقوق والنشر
 
 - [ ] Decide and document the intended copyright/license policy. No LICENSE file currently exists; do not assume the story or code is open-source.
