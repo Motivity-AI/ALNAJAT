@@ -987,7 +987,7 @@ document.addEventListener("keydown",()=>{unlockAudio()});
         <br><br>
         <span style="color:var(--ac)">⚠ ملاحظة محتوى:</span> تتناول اللعبة الحرب والنزوح والجوع والموت. مستوحاة من أحداث حقيقية لكن كل الشخصيات خيالية.
       </div>
-      <button class="btn pri" onclick="document.getElementById('pn').classList.remove('on')">إغلاق</button>`;
+      <button class="btn pri" onclick="window.closeHowToPlay()">إغلاق</button>`;
   }
 
   function EN(){
@@ -1032,16 +1032,50 @@ document.addEventListener("keydown",()=>{unlockAudio()});
         <br><br>
         <span style="color:var(--ac)">⚠ Content note:</span> This game deals with war, displacement, hunger, and death. It is inspired by real events but all characters are fictional.
       </div>
-      <button class="btn pri" onclick="document.getElementById('pn').classList.remove('on')">Close</button>`;
+      <button class="btn pri" onclick="window.closeHowToPlay()">Close</button>`;
   }
 
   /* ---------- 2) دالة الفتح ---------- */
+  let howToPreviousFocus = null;
+  let howToKeyHandler = null;
+  window.closeHowToPlay = function(){
+    const pn = document.getElementById("pn");
+    if(!pn) return;
+    pn.classList.remove("on");
+    pn.removeAttribute("role");
+    pn.removeAttribute("aria-modal");
+    pn.removeAttribute("aria-labelledby");
+    if(howToKeyHandler)document.removeEventListener("keydown",howToKeyHandler);
+    howToKeyHandler=null;
+    const target=howToPreviousFocus&&howToPreviousFocus.isConnected?howToPreviousFocus:document.querySelector("#app .tx")||document.querySelector("#app button");
+    if(target&&typeof target.focus==="function")target.focus();
+    howToPreviousFocus=null;
+  };
   window.openHowToPlay = function(){
     const pn = document.getElementById("pn");
     if(!pn) return;
     const isEn = (typeof LG !== "undefined" && LG === "en");
+    howToPreviousFocus=document.activeElement;
     pn.innerHTML = `<div>${isEn ? EN() : AR()}</div>`;
+    const heading=pn.querySelector("h3");
+    if(heading){heading.id="alnajat-howto-title";pn.setAttribute("aria-labelledby",heading.id);}
+    pn.setAttribute("role","dialog");
+    pn.setAttribute("aria-modal","true");
+    pn.setAttribute("aria-label",isEn?"How to Play":"كيف تلعب");
     pn.classList.add("on");
+    const items=()=>Array.from(pn.querySelectorAll('button:not([disabled]),a[href],input:not([disabled]),select:not([disabled]),textarea:not([disabled]),[tabindex]:not([tabindex="-1"])')).filter(el=>el.getClientRects().length);
+    howToKeyHandler=function(event){
+      if(event.key==="Escape"){event.preventDefault();window.closeHowToPlay();return;}
+      if(event.key!=="Tab")return;
+      const focus=items();if(!focus.length){event.preventDefault();pn.focus();return;}
+      const first=focus[0],last=focus[focus.length-1];
+      if(event.shiftKey&&document.activeElement===first){event.preventDefault();last.focus();}
+      else if(!event.shiftKey&&document.activeElement===last){event.preventDefault();first.focus();}
+    };
+    document.addEventListener("keydown",howToKeyHandler);
+    pn.addEventListener("click",function onBackdrop(event){if(event.target===pn)window.closeHowToPlay();});
+    const closeButton=pn.querySelector("button");
+    if(closeButton)closeButton.focus();else pn.focus();
   };
 
   /* ---------- 3) زر في القائمة الرئيسية ---------- */
