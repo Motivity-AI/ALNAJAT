@@ -119,7 +119,7 @@ async function main() {
     await privacyLink.click();
     await page.locator("#ar h1").waitFor({ state: "visible" });
     check("Privacy policy opens from the game menu", (await page.locator("#ar h1").innerText()).includes("الخصوصية"));
-    await page.getByRole("button", { name: "English", exact: true }).click();
+    await page.locator("#lang").click();
     check("Privacy policy switches to English and LTR", await page.evaluate(() =>
       document.documentElement.lang === "en" && document.documentElement.dir === "ltr" &&
       !document.querySelector("#en").hidden && document.querySelector("#en h1")?.textContent === "Privacy & Data"
