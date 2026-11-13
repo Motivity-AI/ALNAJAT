@@ -189,9 +189,10 @@ try {
     if (!sourcesPage.includes('id="' + sourceId + '"')) fail("Missing source card: " + sourceId);
   }
   const safety = read("alnajat-safety.js");
-  if (!html.includes('alnajat-safety.js?v=8') || !sw.includes("'./alnajat-safety.js?v=8'")) {
-    fail("Scene safety layer v8 is not referenced by both the page and offline shell");
-  } else pass("Scene safety layer v8 is loaded and included in the offline shell");
+  if (!safety.includes('var panel=element("pn");if(panel)panel.classList.remove("on");')) fail("Content gate does not dismiss stale app panels before resuming");
+  if (!html.includes('alnajat-safety.js?v=9') || !sw.includes("'./alnajat-safety.js?v=9'")) {
+    fail("Scene safety layer v9 is not referenced by both the page and offline shell");
+  } else pass("Scene safety layer v9 is loaded and included in the offline shell");
   for (const marker of ["function sharedContinuation", "function showSceneWarning", "Read a safe summary", "Skip this scene", "choice[4]||choice[5]", "choice[5]", 'target.charAt(0)==="@', 'if(target!=="fin"&&!S[target])return null;', 'makeGate(function(){window.renderNode(nid);});', 'if(typeof onProceed==="function")onProceed();']) {
     if (!safety.includes(marker)) fail("Safety layer is missing expected feature marker: " + marker);
   }
