@@ -72,7 +72,7 @@ a{color:var(--accent);text-underline-offset:3px}.muted{color:var(--mut);font-siz
 </main>
 <script>
 const ar=document.getElementById("ar"),en=document.getElementById("en"),btn=document.getElementById("lang"),back=document.getElementById("back");
-btn.addEventListener("click",()=>{const english=!en.hidden;en.hidden=english;ar.hidden=!english;document.documentElement.lang=english?"ar":"en";document.documentElement.dir=english?"rtl":"ltr";btn.textContent=english?"English":"العربية";btn.setAttribute("aria-label",english?"Switch language":"تغيير اللغة");back.textContent=english?"العودة إلى اللعبة":"Back to game";});
+btn.addEventListener("click",()=>{const english=!en.hidden;en.hidden=english;ar.hidden=!english;document.documentElement.lang=english?"ar":"en";document.documentElement.dir=english?"rtl":"ltr";document.title=english?"Privacy & Data — ALNAJAT":"الخصوصية والبيانات — النجاة";btn.textContent=english?"English":"العربية";btn.setAttribute("aria-label",english?"Switch language":"تغيير اللغة");back.textContent=english?"العودة إلى اللعبة":"Back to game";});
 </script>
 </body>
 </html>
