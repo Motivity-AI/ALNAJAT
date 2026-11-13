@@ -12,6 +12,39 @@ const pass = (message) => console.log("✓ " + message);
 try {
   const html = read("index.html");
   const sw = read("sw.js");
+  const browserTest = read("scripts/browser-smoke.js");
+  const packageJson = JSON.parse(read("package.json"));
+  if (packageJson.devDependencies && packageJson.devDependencies.playwright === "1.56.1" &&
+      packageJson.scripts && packageJson.scripts["test:browser"] === "node scripts/browser-smoke.js") {
+    pass("Pinned Playwright browser test package is configured");
+  } else fail("Pinned Playwright browser test package configuration is missing");
+  try {
+    execFileSync(process.execPath, ["--check", path.join(__dirname, "browser-smoke.js")], { stdio: "pipe" });
+    pass("Browser smoke test JavaScript syntax is valid");
+  } catch (e) {
+    fail("Browser smoke test syntax error\\n" + (e.stderr ? e.stderr.toString() : e.message));
+  }
+  for (const marker of ["context.setOffline(true)", "Game shell reloads and renders while offline", "Privacy policy is available from the offline cache", "WebKit precaches both game shell and privacy page for offline use", "const { chromium, firefox, webkit } = require(\"playwright\")"]) {
+    if (!browserTest.includes(marker)) fail("Browser suite is missing release gate: " + marker);
+  }
+  if (!read(".github/workflows/validate.yml").includes("browser: [chromium, firefox, webkit]")) {
+    fail("Cross-browser release matrix must include Chromium, Firefox and WebKit");
+  } else pass("Browser QA matrix covers Chromium, Firefox and WebKit");
+  for (const marker of ["First-run tutorial opens as a labelled modal dialog", "Tutorial closes with Escape and restores focus"]) {
+    if (!browserTest.includes(marker)) fail("Browser suite is missing tutorial accessibility coverage: " + marker);
+  }
+  for (const marker of ["window.closeHowToPlay = function()", 'pn.setAttribute("role","dialog")', 'pn.setAttribute("aria-modal","true")', 'event.key==="Escape"']) {
+    if (!html.includes(marker)) fail("First-run tutorial accessibility behavior is missing: " + marker);
+  }
+  const browserWorkflow = read(".github/workflows/validate.yml");
+  for (const marker of ["browser-smoke:", "npx playwright install --with-deps ${{ matrix.browser }}", "npm run test:browser"]) {
+    if (!browserWorkflow.includes(marker)) fail("Chromium browser QA workflow is missing: " + marker);
+  }
+  if (browserWorkflow.includes("browser-smoke:") &&
+      browserWorkflow.includes("npx playwright install --with-deps chromium") &&
+      browserWorkflow.includes("npm run test:browser")) {
+    pass("Chromium browser QA is wired after static validation in GitHub Actions");
+  }
   execFileSync(process.execPath, [path.join(__dirname, "story-integrity.js")], { stdio: "inherit" });
   const manifest = JSON.parse(read("manifest.json"));
   if (!html.includes("</body>") || !html.includes("</html>")) fail("index.html is missing closing document tags");
@@ -37,6 +70,12 @@ try {
 
   if (!manifest.name || !manifest.start_url || !manifest.scope) fail("Web app manifest is missing required fields");
   else pass("Web app manifest parses and has required fields");
+  if (!html.includes('property="og:title"') || !html.includes('property="og:description"') ||
+      !html.includes("function syncDocumentLanguage()")) fail("Localized page metadata and social preview tags are missing");
+  else pass("Search and social metadata are present and synchronized with the selected language");
+  if (!html.includes('alnajat-director.js?v=3') || !sw.includes("'./alnajat-director.js?v=3'")) {
+    fail("Director and privacy navigation layer v3 is not loaded by both page and offline shell");
+  }
 
   const version = (sw.match(/const VERSION\s*=\s*'([^']+)'/) || [])[1];
   if (!version) fail("Service worker cache version is missing");
@@ -63,6 +102,62 @@ try {
     else pass("2026 chronology endpoint finishes without a backward jump to 2019");
   }
 
+  const a11y = read("alnajat-v2.js");
+  for (const marker of [
+    'function applyLanguage()',
+    'document.documentElement.lang === "en" ? "en-US" : "ar"',
+    'if (e.key === "Escape")',
+    'prefs.scale = [100, 112, 125].includes(Number(prefs.scale))'
+  ]) if (!a11y.includes(marker)) fail("Accessibility layer regression guard missing: " + marker);
+  if (!html.includes('alnajat-v2.js?v=4') || !sw.includes("'./alnajat-v2.js?v=4'")) {
+    fail("Accessibility layer v4 is not loaded by both page and offline shell");
+  } else pass("Accessibility panel is bilingual, validates saved preferences and supports keyboard dismissal");
+
+  const audio = read("alnajat-audio-engine.js");
+  for (const marker of [
+    'musicOn: false',
+    'Number.isFinite(value) ? Math.max(0, Math.min(1, value))',
+    'if (settings.musicOn) startMusic();',
+    'if (settings.ambienceOn) refreshAmbience();',
+    'let resumeAfterVisibility = false;',
+    'else if (!document.hidden && resumeAfterVisibility)'
+  ]) if (!audio.includes(marker)) fail("Audio engine regression guard missing: " + marker);
+  if (!html.includes('alnajat-audio-engine.js?v=3') || !sw.includes("'./alnajat-audio-engine.js?v=3'")) {
+    fail("Audio engine v3 is not loaded by both the page and offline shell");
+  } else pass("Audio settings persistence, unlock, visibility resume and offline version are wired");
+
+  const cinema = read("alnajat-cinema-pro.js");
+  for (const marker of [
+    'prefers-reduced-motion: reduce',
+    'alnajat-cinema-static',
+    'art.addEventListener("load", reveal',
+    'art.addEventListener("error", reveal'
+  ]) if (!cinema.includes(marker)) fail("Cinematic accessibility/loading guard missing: " + marker);
+  if (!html.includes('alnajat-cinema-pro.js?v=2') || !sw.includes("'./alnajat-cinema-pro.js?v=2'")) {
+    fail("Cinematic layer v2 is not loaded by both page and offline shell");
+  } else pass("Cinematic image reveal and reduced-motion preferences are supported");
+  for (const marker of [
+    'function syncSettingsLanguage(overlay)',
+    'if (event.key === "Escape")',
+    'event.shiftKey && document.activeElement === items[0]',
+    'previousSettingsFocus = document.activeElement'
+  ]) if (!audio.includes(marker)) fail("Audio dialog accessibility guard missing: " + marker);
+  if (!html.includes('alnajat-audio-engine.js?v=3') || !sw.includes("'./alnajat-audio-engine.js?v=3'")) {
+    fail("Audio engine v3 is not loaded by both page and offline shell");
+  } else pass("Audio settings are bilingual, keyboard-dismissible and focus-contained");
+
+  const director = read("alnajat-director.js");
+  for (const marker of [
+    "const MAX_FILE_BYTES=8*1024*1024,MAX_KEYS=100,MAX_VALUE_CHARS=2*1024*1024;",
+    "!/^(najat|alnajat)_[a-z0-9_-]{1,80}$/i.test(key)",
+    "const previous=new Map(entries.map(([key])=>[key,localStorage.getItem(key)]))",
+    "localStorage.removeItem(key)",
+    "new Blob([serialized]).size>8*1024*1024",
+    "entries.length>100",
+    "finally{input.value=\"\";}"
+  ]) if (!director.includes(marker)) fail("Backup restore safety guard missing: " + marker);
+  else pass("Backup restore validates size, key namespace and rolls back failed writes");
+
   const editorial = read("alnajat-editorial.js");
   if (!html.includes('alnajat-editorial.js?v=7') || !sw.includes("'./alnajat-editorial.js?v=7'")) {
     fail("Updated chronology migration is not loaded by both the page and offline shell");
@@ -73,13 +168,37 @@ try {
   const sourcesPage = read("sources.html");
   if (!sw.includes("'./sources.html'")) fail("Offline shell does not cache the historical sources page");
   else pass("Historical sources page is cached for offline use");
-  for (const sourceId of ["SRC-001","SRC-002","SRC-003","SRC-004","SRC-005","SRC-006","SRC-007","SRC-008","SRC-009","SRC-010","SRC-011","SRC-012"]) {
+  const privacyPage = read("privacy.html");
+  if (!sw.includes("'./privacy.html'")) fail("Offline shell does not cache the privacy policy page");
+  const privacyScriptStart = privacyPage.indexOf("<script>");
+  const privacyScriptEnd = privacyPage.indexOf("</script>", privacyScriptStart);
+  const privacyScript = privacyScriptStart >= 0 && privacyScriptEnd > privacyScriptStart
+    ? privacyPage.slice(privacyScriptStart + 8, privacyScriptEnd) : "";
+  if (!privacyScript) fail("Privacy page language switch script is missing");
+  else {
+    try { new Function(privacyScript); pass("Privacy page JavaScript syntax is valid"); }
+    catch (error) { fail("Privacy page JavaScript syntax error: " + error.message); }
+  }
+  if (!html.includes('alnajat-director.js?v=3') || !sw.includes("'./alnajat-director.js?v=3'")) {
+    fail("Privacy navigation layer v3 is not loaded by both page and offline shell");
+  }
+  for (const marker of ["id=\"alnajat-privacy-link\"", "Privacy & data", "الخصوصية والبيانات"]) {
+    if (!director.includes(marker)) fail("In-game privacy navigation is missing: " + marker);
+  }
+  for (const marker of ["id=\"ar\"", "id=\"en\"", "OpenStreetMap", "unpkg", "local", "Issues"]) {
+    if (!privacyPage.includes(marker)) fail("Privacy policy disclosure is missing: " + marker);
+  }
+  if (!privacyPage.includes('document.documentElement.lang=english?"ar":"en"')) {
+    fail("Privacy policy language switch does not update document language");
+  } else pass("Bilingual privacy policy is linked in-game and cached for offline use");
+  for (const sourceId of ["SRC-001","SRC-002","SRC-003","SRC-004","SRC-005","SRC-006","SRC-007","SRC-008","SRC-009","SRC-010","SRC-011","SRC-012","SRC-013"]) {
     if (!sourcesPage.includes('id="' + sourceId + '"')) fail("Missing source card: " + sourceId);
   }
   const safety = read("alnajat-safety.js");
-  if (!html.includes('alnajat-safety.js?v=8') || !sw.includes("'./alnajat-safety.js?v=8'")) {
-    fail("Scene safety layer v7 is not referenced by both the page and offline shell");
-  } else pass("Scene safety layer v7 is loaded and included in the offline shell");
+  if (!safety.includes('var panel=document.getElementById("pn");if(panel)panel.classList.remove("on");')) fail("Content gate does not dismiss stale app panels before resuming");
+  if (!html.includes('alnajat-safety.js?v=10') || !sw.includes("'./alnajat-safety.js?v=10'")) {
+    fail("Scene safety layer v10 is not referenced by both the page and offline shell");
+  } else pass("Scene safety layer v10 is loaded and included in the offline shell");
   for (const marker of ["function sharedContinuation", "function showSceneWarning", "Read a safe summary", "Skip this scene", "choice[4]||choice[5]", "choice[5]", 'target.charAt(0)==="@', 'if(target!=="fin"&&!S[target])return null;', 'makeGate(function(){window.renderNode(nid);});', 'if(typeof onProceed==="function")onProceed();']) {
     if (!safety.includes(marker)) fail("Safety layer is missing expected feature marker: " + marker);
   }
@@ -110,6 +229,233 @@ try {
   else pass("Extended safety metadata is merged into the live scene registry");
   if (/user-scalable\s*=\s*no/i.test(html)) fail("Viewport still disables user zoom");
   else pass("User zoom is not disabled by the viewport meta tag");
+
+  // Every story node must have an English counterpart, including nodes
+  // declared after the original S/EN object literals.
+  const translationIds = new Set();
+  const baseTranslations = html.match(/const EN=\{([\s\S]*?)\n\};/);
+  if (!baseTranslations) fail("Could not locate the English translation table");
+  else for (const match of baseTranslations[1].matchAll(/^\s*([A-Za-z0-9_]+):/gm)) translationIds.add(match[1]);
+  for (const match of html.matchAll(/\bEN\.([A-Za-z0-9_]+)\s*=/g)) translationIds.add(match[1]);
+  const missingTranslations = [...storyNodeIds].filter(id => !translationIds.has(id));
+  if (missingTranslations.length) fail("Missing English translations for: " + missingTranslations.join(", "));
+  else pass("All " + storyNodeIds.size + " story nodes have English translations");
+
+  const lock = JSON.parse(read("story-lock.json"));
+  if (lock.inventory && lock.inventory.totalStoryNodes !== storyNodeIds.size) {
+    fail("Story-lock totalStoryNodes mismatch: expected " + lock.inventory.totalStoryNodes + ", found " + storyNodeIds.size);
+  } else if (lock.inventory && lock.inventory.totalStoryNodes === storyNodeIds.size) {
+    pass("Complete story-node inventory matches story-lock.json");
+  }
+
+  // Build the effective story graph from the original scene table, N()/LOOP()
+  // declarations, later S.* assignments, and explicit runtime-added choices.
+  function balancedEnd(source, start, open, close) {
+    let depth = 0, quote = null, escaped = false;
+    for (let i = start; i < source.length; i++) {
+      const ch = source[i];
+      if (quote) {
+        if (escaped) { escaped = false; continue; }
+        if (ch === "\\") { escaped = true; continue; }
+        if (ch === quote) quote = null;
+        continue;
+      }
+      if (ch === "'" || ch === '"' || ch === "\`") { quote = ch; continue; }
+      if (ch === open) depth++;
+      else if (ch === close && --depth === 0) return i + 1;
+    }
+    return -1;
+  }
+  function splitTopLevel(source) {
+    const parts = [];
+    let start = 0, depth = 0, quote = null, escaped = false;
+    for (let i = 0; i < source.length; i++) {
+      const ch = source[i];
+      if (quote) {
+        if (escaped) { escaped = false; continue; }
+        if (ch === "\\") { escaped = true; continue; }
+        if (ch === quote) quote = null;
+        continue;
+      }
+      if (ch === "'" || ch === '"' || ch === "\`") { quote = ch; continue; }
+      if (ch === "(" || ch === "[" || ch === "{") depth++;
+      else if (ch === ")" || ch === "]" || ch === "}") depth--;
+      else if (ch === "," && depth === 0) {
+        parts.push(source.slice(start, i).trim());
+        start = i + 1;
+      }
+    }
+    parts.push(source.slice(start).trim());
+    return parts;
+  }
+  function literalString(expression) {
+    const match = expression.match(/^\s*(["'])(.*?)\1\s*$/s);
+    return match ? match[2] : null;
+  }
+  const graphNodes = new Set();
+  const graphEdges = [];
+  const loopNodes = new Set();
+  const sceneChoiceCounts = new Map();
+  function addSceneArray(id, source) {
+    if (!id || !source || source[0] !== "[") return;
+    graphNodes.add(id);
+    const fields = splitTopLevel(source.slice(1, -1));
+    if (fields.length < 3) return;
+    sceneChoiceCounts.set(id, fields[2][0] === "[" ? splitTopLevel(fields[2].slice(1, -1)).filter(Boolean).length : 0);
+    for (const choice of fields[2].matchAll(/\[\s*(["'])(.*?)\1\s*,\s*(["'])(.*?)\3/g)) {
+      const target = choice[4].startsWith("@") ? choice[4].slice(1) : choice[4];
+      graphEdges.push([id, target]);
+    }
+  }
+  const baseObjectStart = html.indexOf("const S={");
+  if (baseObjectStart < 0) fail("Could not locate the base story object for graph audit");
+  else {
+    const objectOpen = html.indexOf("{", baseObjectStart);
+    const objectEnd = balancedEnd(html, objectOpen, "{", "}");
+    if (objectEnd < 0) fail("Could not parse the base story object");
+    else {
+      for (const entry of splitTopLevel(html.slice(objectOpen + 1, objectEnd - 1))) {
+        const key = entry.match(/^([A-Za-z_$][\w$]*)\s*:\s*\[/);
+        if (key) addSceneArray(key[1], entry.slice(entry.indexOf("[")));
+      }
+    }
+  }
+  for (const pattern of [
+    /\bS\.([A-Za-z0-9_]+)\s*=\s*\[/g,
+    /\bS\[\s*["']([^"']+)["']\s*\]\s*=\s*\[/g
+  ]) {
+    for (const match of html.matchAll(pattern)) {
+      const start = match.index + match[0].lastIndexOf("[");
+      const end = balancedEnd(html, start, "[", "]");
+      if (end > 0) addSceneArray(match[1], html.slice(start, end));
+    }
+  }
+  function callArguments(match) {
+    const open = html.indexOf("(", match.index);
+    const end = balancedEnd(html, open, "(", ")");
+    return end < 0 ? [] : splitTopLevel(html.slice(open + 1, end - 1));
+  }
+  for (const match of html.matchAll(/\bN\s*\(/g)) {
+    const args = callArguments(match);
+    const id = literalString(args[0] || "");
+    const target = literalString(args[2] || "");
+    if (id) {
+      graphNodes.add(id);
+      sceneChoiceCounts.set(id, args[4] && literalString(args[4]) !== null ? 2 : 1);
+      if (target) graphEdges.push([id, target]);
+    }
+  }
+  for (const match of html.matchAll(/\bLOOP\s*\(/g)) {
+    const args = callArguments(match);
+    const id = literalString(args[0] || "");
+    const target = literalString(args[1] || "");
+    if (id) {
+      graphNodes.add(id);
+      loopNodes.add(id);
+      sceneChoiceCounts.set(id, args[4] && args[4][0] === "[" ? splitTopLevel(args[4].slice(1, -1)).filter(Boolean).length : 0);
+      graphEdges.push([id, id]);
+      if (target) graphEdges.push([id, target]);
+    }
+  }
+  const pushPattern = /\b(?:S\.([A-Za-z0-9_]+)|([A-Za-z0-9_]+))\s*\[\s*2\s*\]\s*\.push\(\s*\[/g;
+  for (const match of html.matchAll(pushPattern)) {
+    const owner = match[1] || match[2];
+    const start = match.index + match[0].lastIndexOf("[");
+    const end = balancedEnd(html, start, "[", "]");
+    if (end > 0) {
+      const pushed = html.slice(start, end);
+      const target = pushed.match(/^\[\s*["'][^"']*["']\s*,\s*["']([^"']+)["']/);
+      if (target) {
+        graphEdges.push([owner, target[1].startsWith("@") ? target[1].slice(1) : target[1]]);
+        sceneChoiceCounts.set(owner, (sceneChoiceCounts.get(owner) || 0) + 1);
+      }
+    }
+  }
+  const effectiveTargets = {
+    sd2014: ["s5"],
+    sd2020: ["r2b"],
+    s6: ["sd2021"],
+    sd2022: ["s6d"],
+    s6d: ["s6b"],
+    s6c: ["q1"]
+  };
+  for (const [owner, targets] of Object.entries(effectiveTargets)) {
+    for (let i = graphEdges.length - 1; i >= 0; i--) {
+      if (graphEdges[i][0] === owner) graphEdges.splice(i, 1);
+    }
+    targets.forEach(target => graphEdges.push([owner, target]));
+  }
+  // Verify the correct EN schema for both [text, choices] and
+  // [chapterTitle, text, choices] nodes, including dynamically appended choices.
+  const englishChoiceCounts = new Map();
+  function addEnglishArray(id, source) {
+    if (!id || !source || source[0] !== "[") return;
+    const fields = splitTopLevel(source.slice(1, -1));
+    const choiceField = fields[2] && fields[2][0] === "[" ? fields[2] : fields[1];
+    englishChoiceCounts.set(id, choiceField && choiceField[0] === "["
+      ? splitTopLevel(choiceField.slice(1, -1)).filter(Boolean).length : 0);
+  }
+  const enObjectStart = html.indexOf("const EN={");
+  if (enObjectStart < 0) fail("Could not locate the English translation object for choice coverage");
+  else {
+    const enOpen = html.indexOf("{", enObjectStart);
+    const enEnd = balancedEnd(html, enOpen, "{", "}");
+    if (enEnd < 0) fail("Could not parse the English translation object");
+    else {
+      for (const entry of splitTopLevel(html.slice(enOpen + 1, enEnd - 1))) {
+        const key = entry.match(/^([A-Za-z_$][\w$]*)\s*:\s*\[/);
+        if (key) addEnglishArray(key[1], entry.slice(entry.indexOf("[")));
+      }
+    }
+  }
+  for (const match of html.matchAll(/\bEN\.([A-Za-z0-9_]+)\s*=\s*\[/g)) {
+    const start = match.index + match[0].lastIndexOf("[");
+    const end = balancedEnd(html, start, "[", "]");
+    if (end > 0) addEnglishArray(match[1], html.slice(start, end));
+  }
+  for (const match of html.matchAll(/\bEN\.([A-Za-z0-9_]+)\s*\[\s*\d+\s*\]\s*\.push\(/g)) {
+    englishChoiceCounts.set(match[1], (englishChoiceCounts.get(match[1]) || 0) + 1);
+  }
+  const choiceTranslationMismatches = [...graphNodes].filter(id =>
+    (sceneChoiceCounts.get(id) || 0) !== (englishChoiceCounts.get(id) || 0));
+  if (choiceTranslationMismatches.length) {
+    fail("English choice coverage mismatch: " + choiceTranslationMismatches.map(id =>
+      id + " (AR " + (sceneChoiceCounts.get(id) || 0) + ", EN " + (englishChoiceCounts.get(id) || 0) + ")").join(", "));
+  } else pass("Arabic/English choice counts match for all " + graphNodes.size + " story nodes");
+
+  const deathBlock = (html.match(/const X=\{([\s\S]*?)\n\};/) || [])[1] || "";
+  const deathIds = new Set([...deathBlock.matchAll(/^\s*([A-Za-z0-9_]+):/gm)].map(match => match[1]));
+  const invalidTargets = [...new Set(graphEdges
+    .filter(([, target]) => target !== "fin" && !graphNodes.has(target) && !deathIds.has(target))
+    .map(([, target]) => target))];
+  if (invalidTargets.length) fail("Story graph contains unknown targets: " + invalidTargets.join(", "));
+  const reachableNodes = new Set(["d0"]);
+  const queue = ["d0"];
+  while (queue.length) {
+    const current = queue.shift();
+    for (const [from, to] of graphEdges) {
+      if (from === current && graphNodes.has(to) && !reachableNodes.has(to)) {
+        reachableNodes.add(to);
+        queue.push(to);
+      }
+    }
+  }
+  const unreachableNodes = [...graphNodes].filter(id => !reachableNodes.has(id));
+  if (unreachableNodes.length) fail("Story nodes unreachable from d0: " + unreachableNodes.join(", "));
+  else pass("All " + graphNodes.size + " story nodes are reachable from d0");
+  for (const id of loopNodes) {
+    const outgoing = graphEdges.filter(([from]) => from === id).map(([, to]) => to);
+    if (!outgoing.includes(id) || outgoing.length < 2) fail("Loop node lacks a self-cycle or exit: " + id);
+  }
+  if (loopNodes.size && [...loopNodes].every(id => {
+    const outgoing = graphEdges.filter(([from]) => from === id).map(([, to]) => to);
+    return outgoing.includes(id) && outgoing.some(target => target !== id && (target === "fin" || graphNodes.has(target) || deathIds.has(target)));
+  })) pass("All " + loopNodes.size + " repeat loops have a valid exit path");
+  if (graphNodes.size !== lock.inventory.totalStoryNodes) {
+    fail("Story graph node count does not match Story Lock: " + graphNodes.size + " vs " + lock.inventory.totalStoryNodes);
+  }
+  if (!graphEdges.some(([, target]) => target === "fin")) fail("No route reaches the canonical ending node");
+  else pass("At least one valid route reaches the canonical ending node");
 
   if (process.exitCode) process.exit(process.exitCode);
   console.log("\nALNAJAT static release checks passed.");

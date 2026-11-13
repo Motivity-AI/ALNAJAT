@@ -22,3 +22,26 @@ jobs:
           node-version: 20
       - name: Validate app shell and JavaScript
         run: node scripts/validate.js
+
+  browser-smoke:
+    needs: validate
+    strategy:
+      fail-fast: false
+      matrix:
+        browser: [chromium, firefox, webkit]
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: Install pinned Playwright
+        run: npm install --no-package-lock --ignore-scripts
+      - name: Install browser engine
+        run: npx playwright install --with-deps ${{ matrix.browser }}
+      - name: Run browser smoke and functional tests
+        env:
+          PLAYWRIGHT_BROWSER: ${{ matrix.browser }}
+        run: npm run test:browser

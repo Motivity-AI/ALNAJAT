@@ -2,7 +2,7 @@
   "schema": "alnajat-story-lock-v1",
   "source": "index.html",
   "method": "FNV-1a-64 over UTF-16 code units in exact source blocks; accidental-change guard, not a cryptographic signature",
-  "expectedFingerprint": "23f756a0ec2b0417",
+  "expectedFingerprint": "29c521a4ddb9e1ca",
   "protectedSections": [
     {
       "start": "/* ==================== STORY DATA (Arabic) ==================== */",
@@ -30,7 +30,15 @@
     "additionalSceneIds": 34,
     "loopIds": 9,
     "englishTranslationKeys": 97,
-    "endingIds": 9
+    "endingIds": 9,
+    "totalStoryNodes": 119,
+    "totalEnglishTranslations": 119
   },
-  "note": "Updated after explicit story-owner approval of the June 3, 2019 historical casualty wording in Arabic and English. Scene IDs, choice labels, choice targets, effects, death rules and ending definitions were reviewed and remain unchanged. This is a regression guard, not a cryptographic signature."
+  "note": "Updated after explicit story-owner approval of the June 3, 2019 historical casualty wording in Arabic and English. Scene IDs, choice labels, choice targets, effects, death rules and ending definitions were reviewed and remain unchanged. This is a regression guard, not a cryptographic signature. Extended runtime inventory checks include every separately assigned scene and English translation; no story content was removed or shortened in this maintenance update. All separately assigned historical scene arrays and their English translations are now independently fingerprinted; the story lock rejects unreviewed edits. Three additive route choices now make the existing 2013 documentary branch, detailed 2019 revolution branch, and first-week-of-war loop playable. All pre-existing choice labels, targets, effects, scene text and endings remain intact; no node was removed or shortened. The English rendering helpers now distinguish chapter-title/text/choices from text/choices arrays, and every appended branch choice has a corresponding English label.",
+  "extendedAssignments": {
+    "sceneCount": 22,
+    "sceneFingerprint": "aac338fa19f6514b",
+    "translationCount": 22,
+    "translationFingerprint": "ef4d6bbe6a053fcf"
+  }
 }

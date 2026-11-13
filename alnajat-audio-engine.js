@@ -7,17 +7,24 @@
   if (window.ALNAJAT_AUDIO) return;
 
   const KEY = "alnajat_audio_settings_v1";
-  const defaults = { music: 0.72, ambience: 0.34, sfx: 0.62, voice: 0.9, ambienceOn: false, sfxOn: true };
+  const defaults = { music: 0.72, ambience: 0.34, sfx: 0.62, voice: 0.9, musicOn: false, ambienceOn: false, sfxOn: true };
   let settings = Object.assign({}, defaults);
   try {
     const saved = JSON.parse(localStorage.getItem(KEY) || "{}");
     settings = Object.assign(settings, saved);
+    ["music", "ambience", "sfx", "voice"].forEach(function (key) {
+      const value = Number(settings[key]);
+      settings[key] = Number.isFinite(value) ? Math.max(0, Math.min(1, value)) : defaults[key];
+    });
+    ["musicOn", "ambienceOn", "sfxOn"].forEach(function (key) {
+      settings[key] = typeof settings[key] === "boolean" ? settings[key] : defaults[key];
+    });
   } catch (_) {}
 
   let ctx = null, master = null, compressor = null;
   let buses = null, ambienceNodes = [], musicNodes = [], musicTimer = null;
   let unlocked = false, currentScene = "desert", currentMood = "desert";
-  let noteIndex = 0, lastCueAt = 0, settingsDialog = null, quietMode = false;
+  let noteIndex = 0, lastCueAt = 0, settingsDialog = null, previousSettingsFocus = null, quietMode = false;
 
   const patterns = {
     desert: [220, 261.63, 293.66, 349.23, 293.66, 261.63, 196, 220],
@@ -103,7 +110,11 @@
       if (!ensureContext()) return false;
       if (ctx.state !== "running") await ctx.resume();
       unlocked = ctx.state === "running";
-      if (unlocked && settings.ambienceOn) setScene(currentScene, currentMood);
+      if (unlocked) {
+        applyVolumes();
+        if (settings.musicOn) startMusic();
+        if (settings.ambienceOn) refreshAmbience();
+      }
       return unlocked;
     } catch (error) {
       unlocked = false;
@@ -296,16 +307,24 @@
     overlay.innerHTML =
       '<div class="aa-panel"><button class="aa-close" type="button" aria-label="Close">×</button>' +
       '<p class="aa-kicker">ALNAJAT · SOUND DESIGN</p><h2 id="alnajat-audio-title">إعدادات الصوت</h2>' +
-      '<label class="aa-toggle"><input id="aa-music-on" type="checkbox"> <span>الموسيقى التصويرية</span></label>' +
-      '<label class="aa-range"><span>مستوى الموسيقى</span><input id="aa-music" type="range" min="0" max="1" step="0.01"></label>' +
-      '<label class="aa-toggle"><input id="aa-ambience-on" type="checkbox"> <span>أصوات البيئة والمكان</span></label>' +
-      '<label class="aa-range"><span>مستوى الأجواء</span><input id="aa-ambience" type="range" min="0" max="1" step="0.01"></label>' +
-      '<label class="aa-toggle"><input id="aa-sfx-on" type="checkbox"> <span>المؤثرات الصوتية</span></label>' +
-      '<label class="aa-range"><span>مستوى المؤثرات</span><input id="aa-sfx" type="range" min="0" max="1" step="0.01"></label>' +
+      '<label class="aa-toggle"><input id="aa-music-on" type="checkbox"> <span data-audio-label="music">الموسيقى التصويرية</span></label>' +
+      '<label class="aa-range"><span data-audio-label="musicLevel">مستوى الموسيقى</span><input id="aa-music" type="range" min="0" max="1" step="0.01" aria-label="مستوى الموسيقى"></label>' +
+      '<label class="aa-toggle"><input id="aa-ambience-on" type="checkbox"> <span data-audio-label="ambience">أصوات البيئة والمكان</span></label>' +
+      '<label class="aa-range"><span data-audio-label="ambienceLevel">مستوى الأجواء</span><input id="aa-ambience" type="range" min="0" max="1" step="0.01" aria-label="مستوى الأجواء"></label>' +
+      '<label class="aa-toggle"><input id="aa-sfx-on" type="checkbox"> <span data-audio-label="sfx">المؤثرات الصوتية</span></label>' +
+      '<label class="aa-range"><span data-audio-label="sfxLevel">مستوى المؤثرات</span><input id="aa-sfx" type="range" min="0" max="1" step="0.01" aria-label="مستوى المؤثرات"></label>' +
       '<button class="aa-done" type="button">تم</button></div>';
     document.body.appendChild(overlay);
     overlay.querySelector(".aa-close").addEventListener("click", closeSettings);
     overlay.querySelector(".aa-done").addEventListener("click", closeSettings);
+    overlay.addEventListener("keydown", function (event) {
+      if (event.key === "Escape") { event.preventDefault(); closeSettings(); return; }
+      if (event.key !== "Tab") return;
+      const items = Array.from(overlay.querySelectorAll("button,input")).filter(function (item) { return !item.disabled && !item.closest("[hidden]"); });
+      if (!items.length) return;
+      if (event.shiftKey && document.activeElement === items[0]) { event.preventDefault(); items[items.length - 1].focus(); }
+      else if (!event.shiftKey && document.activeElement === items[items.length - 1]) { event.preventDefault(); items[0].focus(); }
+    });
     overlay.addEventListener("click", function (event) { if (event.target === overlay) closeSettings(); });
     const bindRange = function (id, key) {
       overlay.querySelector("#" + id).addEventListener("input", function (event) {
@@ -329,8 +348,31 @@
     settingsDialog = overlay;
     return overlay;
   }
+  function syncSettingsLanguage(overlay) {
+    const en = document.documentElement.lang === "en";
+    const labels = en ? {
+      title: "Sound settings", music: "Cinematic soundtrack", musicLevel: "Music level",
+      ambience: "Environmental ambience", ambienceLevel: "Ambience level",
+      sfx: "Sound effects", sfxLevel: "Effects level", done: "Done", close: "Close"
+    } : {
+      title: "إعدادات الصوت", music: "الموسيقى التصويرية", musicLevel: "مستوى الموسيقى",
+      ambience: "أصوات البيئة والمكان", ambienceLevel: "مستوى الأجواء",
+      sfx: "المؤثرات الصوتية", sfxLevel: "مستوى المؤثرات", done: "تم", close: "إغلاق"
+    };
+    overlay.querySelector("#alnajat-audio-title").textContent = labels.title;
+    overlay.querySelectorAll("[data-audio-label]").forEach(function (node) { node.textContent = labels[node.dataset.audioLabel]; });
+    overlay.querySelector(".aa-done").textContent = labels.done;
+    overlay.querySelector(".aa-close").setAttribute("aria-label", labels.close);
+    [["aa-music", "musicLevel"], ["aa-ambience", "ambienceLevel"], ["aa-sfx", "sfxLevel"]].forEach(function (pair) {
+      overlay.querySelector("#" + pair[0]).setAttribute("aria-label", labels[pair[1]]);
+    });
+    overlay.dir = en ? "ltr" : "rtl";
+    overlay.lang = en ? "en" : "ar";
+  }
   function openSettings() {
     const overlay = buildSettings();
+    previousSettingsFocus = document.activeElement;
+    syncSettingsLanguage(overlay);
     overlay.hidden = false;
     overlay.querySelector("#aa-music-on").checked = !!settings.musicOn;
     overlay.querySelector("#aa-ambience-on").checked = !!settings.ambienceOn;
@@ -345,7 +387,9 @@
     if (!settingsDialog) return;
     settingsDialog.hidden = true;
     const trigger = document.querySelector("[data-alnajat-audio-settings]");
-    if (trigger) trigger.focus();
+    const restore = previousSettingsFocus && previousSettingsFocus.isConnected ? previousSettingsFocus : trigger;
+    previousSettingsFocus = null;
+    if (restore) restore.focus();
   }
   function addSettingsButton() {
     const app = document.getElementById("app");
@@ -416,9 +460,16 @@
   }
   document.addEventListener("pointerdown", function () { unlock(); }, { passive: true });
   document.addEventListener("keydown", function () { unlock(); });
+  let resumeAfterVisibility = false;
   document.addEventListener("visibilitychange", function () {
     if (!ctx) return;
-    if (document.hidden && ctx.state === "running") ctx.suspend().catch(function () {});
+    if (document.hidden && ctx.state === "running") {
+      resumeAfterVisibility = true;
+      ctx.suspend().catch(function () {});
+    } else if (!document.hidden && resumeAfterVisibility) {
+      resumeAfterVisibility = false;
+      unlock();
+    }
   });
   window.addEventListener("pagehide", function () {
     if (ctx && ctx.state === "running") ctx.suspend().catch(function () {});

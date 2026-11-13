@@ -1,29 +1,36 @@
 /* ==================== النجاة — Service Worker ==================== */
-const VERSION = 'najat-v26';
+const VERSION = 'najat-v35';
 const SHELL = [
   './',
   './index.html',
   './manifest.json',
-  './alnajat-v2.js?v=2',
+  './alnajat-v2.js?v=4',
   './alnajat-cinema.js?v=1',
   './alnajat-world.js?v=1',
   './alnajat-characters.js?v=1',
-  './alnajat-director.js?v=2',
+  './alnajat-director.js?v=3',
   './alnajat-memory-book.js?v=1',
-  './alnajat-audio-engine.js?v=1',
-  './alnajat-cinema-pro.js?v=1',
+  './alnajat-audio-engine.js?v=3',
+  './alnajat-cinema-pro.js?v=2',
   './alnajat-editorial.js?v=7',
-  './alnajat-safety.js?v=8',
-  './sources.html'
+  './alnajat-safety.js?v=10',
+  './sources.html',
+  './privacy.html'
 ];
 
-self.addEventListener('install', (e) => {
-  e.waitUntil(
-    caches.open(VERSION)
-      .then(c => c.addAll(SHELL))
-      .then(() => self.skipWaiting())
-      .catch(() => self.skipWaiting())
-  );
+self.addEventListener('install', (event) => {
+  event.waitUntil((async () => {
+    const cache = await caches.open(VERSION);
+    try {
+      // Install atomically: an incomplete shell must never replace the last
+      // working offline version. addAll rejects if any required asset fails.
+      await cache.addAll(SHELL);
+      await self.skipWaiting();
+    } catch (error) {
+      await caches.delete(VERSION);
+      throw error;
+    }
+  })());
 });
 
 self.addEventListener('activate', (e) => {

@@ -245,7 +245,13 @@
       const k=localStorage.key(i);
       if(k&&(k.startsWith("najat_")||k.startsWith("alnajat_")))data.storage[k]=localStorage.getItem(k);
     }
-    download("alnajat-backup-"+new Date().toISOString().slice(0,10)+".json",JSON.stringify(data,null,2));
+    const entries=Object.entries(data.storage);
+    const serialized=JSON.stringify(data,null,2);
+    if(entries.length>100||entries.some(([k,v])=>v.length>2*1024*1024)||new Blob([serialized]).size>8*1024*1024){
+      toast(t("حجم بياناتك أكبر من حدود النسخ الاحتياطي الحالية؛ لم يُنشأ ملف ناقص.","Your saved data exceeds the current backup limits; no incomplete backup was created."));
+      return;
+    }
+    download("alnajat-backup-"+new Date().toISOString().slice(0,10)+".json",serialized);
     toast(t("تم تجهيز النسخة الاحتياطية","Backup file prepared"));
   };
   window.openAlnajatBackup=function(){
@@ -256,16 +262,34 @@
     const input=$("#alnajat-dc-import");
     if(input)input.addEventListener("change",async function(){
       const file=input.files&&input.files[0];if(!file)return;
+      const MAX_FILE_BYTES=8*1024*1024,MAX_KEYS=100,MAX_VALUE_CHARS=2*1024*1024;
       try{
+        if(file.size>MAX_FILE_BYTES)throw new Error("size");
         const parsed=JSON.parse(await file.text());
-        if(parsed.app!=="ALNAJAT"||parsed.format!==1||!parsed.storage||typeof parsed.storage!=="object")throw new Error("format");
+        if(!parsed||parsed.app!=="ALNAJAT"||parsed.format!==1||!parsed.storage||typeof parsed.storage!=="object"||Array.isArray(parsed.storage))throw new Error("format");
+        if(parsed.exportedAt&&(!Number.isFinite(Date.parse(parsed.exportedAt))))throw new Error("date");
         const entries=Object.entries(parsed.storage);
-        if(!entries.length||entries.some(([k,v])=>(!k.startsWith("najat_")&&!k.startsWith("alnajat_"))||typeof v!=="string"))throw new Error("keys");
+        if(!entries.length||entries.length>MAX_KEYS)throw new Error("count");
+        let totalChars=0;
+        for(const [key,value] of entries){
+          if(!/^(najat|alnajat)_[a-z0-9_-]{1,80}$/i.test(key)||typeof value!=="string"||value.length>MAX_VALUE_CHARS)throw new Error("entry");
+          totalChars+=key.length+value.length;
+          if(totalChars>MAX_FILE_BYTES)throw new Error("total");
+        }
         if(!confirm(t("سيتم استبدال بيانات تقدم اللعبة المطابقة على هذا الجهاز. هل تريد المتابعة؟","Matching game progress on this device will be replaced. Continue?")))return;
-        entries.forEach(([k,v])=>localStorage.setItem(k,v));
+        const previous=new Map(entries.map(([key])=>[key,localStorage.getItem(key)]));
+        try{
+          for(const [key,value] of entries)localStorage.setItem(key,value);
+        }catch(writeError){
+          for(const [key,oldValue] of previous){
+            try{if(oldValue===null)localStorage.removeItem(key);else localStorage.setItem(key,oldValue);}catch(_){}
+          }
+          throw writeError;
+        }
         toast(t("اكتملت الاستعادة. ستُعاد الصفحة الآن.","Restore complete. Reloading now."));
         setTimeout(()=>location.reload(),650);
-      }catch(_){toast(t("الملف غير صالح أو غير متوافق.","Invalid or incompatible backup file."));}
+      }catch(_){toast(t("الملف غير صالح أو تعذّر حفظه. لم تكتمل الاستعادة.","Invalid backup or storage error. Restore was not completed."));}
+      finally{input.value="";}
     });
   };
 
@@ -284,7 +308,8 @@
     const box=document.createElement("section");box.id="alnajat-dc-menu";
     box.innerHTML='<div class="alnajat-dc-note">'+t("عِش الحكاية بطريقتك، واحتفظ بأثر كل قرار.","Live the story your way, and keep the trace of every choice.")+'</div>'+
       '<button class="btn" type="button" onclick="openAlnajatDirector()">✦ '+t("غرفة المخرج","Director’s Room")+'</button>'+
-      '<button id="alnajat-dc-install" type="button" onclick="installAlnajat()">📲 '+t("تثبيت اللعبة على جهازي","Install on this device")+'</button>';
+      '<button id="alnajat-dc-install" type="button" onclick="installAlnajat()">📲 '+t("تثبيت اللعبة على جهازي","Install on this device")+'</button>'+
+      '<a class="btn" id="alnajat-privacy-link" href="privacy.html">🔒 '+t("الخصوصية والبيانات","Privacy & data")+'</a>';
     const about=Array.from(app.querySelectorAll("button")).find(b=>/عن اللعبة|About/.test(b.textContent||""));
     if(about)about.insertAdjacentElement("afterend",box);else app.appendChild(box);
   }

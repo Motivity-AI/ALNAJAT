@@ -6,6 +6,12 @@
 <meta name="theme-color" content="#f4efe6" media="(prefers-color-scheme:light)">
 <meta name="theme-color" content="#15110d" media="(prefers-color-scheme:dark)">
 <meta name="description" content="النجاة — لعبة قصصية عن رحلة سوداني بين حربين.">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="النجاة — ALNAJAT">
+<meta property="og:title" content="النجاة — رحلة سوداني بين حربين">
+<meta property="og:description" content="لعبة قصصية تفاعلية عن رحلة طفل سوداني عبر النزوح والثورة والحرب. عمل خيالي مستوحى من أحداث حقيقية.">
+<meta property="og:locale" content="ar_SD">
+<meta name="twitter:card" content="summary">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
 <meta name="apple-mobile-web-app-title" content="النجاة">
@@ -184,6 +190,7 @@ N("r2b","بعد سنوات في سوق الخضار لفتت نظرك امرأة
 N("s6d","وُلد يوسف في ليلة مطيرة وجاءت مريم بعده بعامين. حملتَ كل واحد بين يديك الخشنتين وهمستَ في أذنه اسمه كما فعل أبوك يومًا.","q1","اكتب اسميهما على الجدار","علّق سبحة أبيك فوق سريرهما",{p:8},{p:10});
 N("q1b","قبل الحرب بيوم أقمتَ عشاءً بسيطًا: عدس وخبز وشاي. ضحكت مريم حين سكبت الشاي، ونام يوسف على كتفك.","w1","تمنَّ أن يطول هذا اليوم","التقط في ذاكرتك كل وجوههم",{p:5},{p:5,F:"mem"});
 N("v1","في الفجر انقطع الإنترنت وارتجّت الجدران. جاءك صوت جيرانك: «الحرب!». ارتدى الأطفال ثيابهم وهم يبكون.","v2","أمسك بيد آمنة","تأكد من الأبواب وجمع الوثائق",{p:3},{p:2});
+if(S.v1 && S.v1[2] && !S.v1[2].some(function(c){return c[1]==="jw";})) S.v1[2].push(["ابقَ مع أسرتك خلال الأيام الأولى للحرب","jw",{p:5}]);
 N("v2","في الليلة الرابعة اقتحم رجال مسلحون الحي. سمعتَ طرقًا عنيفًا على الباب.","w2","افتح الباب لتحمي الأسرة","اختبئ مع أسرتك في الغرفة الخلفية",{p:-5},{p:-8});
 N("v3","رُميتَ في صندوق شاحنة مظلم مع رجال آخرين. الطريق طويل والهواء ثقيل، وهمس أحدهم: «اسمي حامد، كنت معلمًا». شعرتَ أنك لستَ وحدك.","p1","عرّف بنفسك","اصمت وراقب",{p:5},{p:-2});
 N("q5","في ليلة همس لك سجين: «عندي راديو صغير مخبّأ». سمعتم نشرة خافتة: مفاوضات في جدة.","q6","اطلب أن تسمع النشرة كاملة","قل له: يكفي أملٌ مزيّف",{p:10},{p:-5});
@@ -610,13 +617,23 @@ jw:["Khartoum in the first week: shells at night, water queues by day, phones si
 jg:["In Gedaref: crowded shelter, mint tea shared by strangers, and news that only comes via a small radio.",["Stand in the food distribution queue","Sleep early and save your strength","Sit with people and hear their stories","Help volunteers arrange the beds"]]
 };
 
+if(EN.v1 && Array.isArray(EN.v1[1]) && !EN.v1[1].includes("Stay with your family through the first days of war")) EN.v1[1].push("Stay with your family through the first days of war");
+if(EN.s4c && Array.isArray(EN.s4c[1]) && !EN.s4c[1].includes("Follow the documentary route through the September 2013 protests and their aftermath")) EN.s4c[1].push("Follow the documentary route through the September 2013 protests and their aftermath");
+if(EN.r1b && Array.isArray(EN.r1b[1])) {
+  if(!EN.r1b[1].includes("Follow the detailed January–June 2019 revolution route")) EN.r1b[1].push("Follow the detailed January–June 2019 revolution route");
+  if(!EN.r1b[1].includes("Read the documentary timeline beginning in December 2018")) EN.r1b[1].push("Read the documentary timeline beginning in December 2018");
+}
+if(EN.q1b && Array.isArray(EN.q1b[1]) && !EN.q1b[1].includes("Follow the documented timeline from the outbreak of war through 2026")) EN.q1b[1].push("Follow the documented timeline from the outbreak of war through 2026");
+
 /* ==================== TRANSLATION HELPERS ==================== */
 let LG="ar";
 try{LG=localStorage.getItem("najat_lang")||"ar"}catch(e){}
 function tr(t){return LG==="en"&&UI[t]?UI[t]:t}
-function txt(n){if(LG==="en"&&EN[n])return EN[n][0];return S[n]?S[n][1]:""}
+function txt(n){if(LG==="en"&&EN[n])return Array.isArray(EN[n])&&Array.isArray(EN[n][2])&&typeof EN[n][1]==="string"?EN[n][1]:EN[n][0];return S[n]?S[n][1]:""}
 function choiceLabel(n,i){
-  if(LG==="en"&&EN[n]&&EN[n][1]&&EN[n][1][i])return EN[n][1][i];
+  const entry=LG==="en"?EN[n]:null;
+  const choices=Array.isArray(entry)?(Array.isArray(entry[2])?entry[2]:entry[1]):null;
+  if(Array.isArray(choices)&&choices[i])return choices[i];
   const c=S[n]&&S[n][2]&&S[n][2][i];
   return c?c[0]:"";
 }
@@ -675,6 +692,7 @@ function renderNode(nid){
   autoSave();
   const node=S[nid];
   let title=node[0]||chapterLabel(nid);
+  if(LG==="en"&&Array.isArray(EN[nid])&&Array.isArray(EN[nid][2])&&EN[nid][0]) title=EN[nid][0];
   let text=txt(nid).replace(/\n\n/g,"<br><br>").replace(/\n/g,"<br>");
   curChoices=(node[2]||[]).filter(avail);
   let chHtml="";
@@ -874,11 +892,27 @@ function openAbout(){
 }
 
 /* ==================== LANGUAGE + AUDIO + PARTICLES ==================== */
+function syncDocumentLanguage(){
+  const english=LG==="en";
+  document.documentElement.setAttribute("dir",english?"ltr":"rtl");
+  document.documentElement.setAttribute("lang",english?"en":"ar");
+  document.title=english?"ALNAJAT — A Sudanese Journey Between Wars":"النجاة — رحلة سوداني بين حربين";
+  const description=english
+    ?"An interactive fictional story about a Sudanese child through displacement, revolution and war. Inspired by real events."
+    :"النجاة — لعبة قصصية تفاعلية عن رحلة طفل سوداني عبر النزوح والثورة والحرب. عمل خيالي مستوحى من أحداث حقيقية.";
+  const meta=document.querySelector('meta[name="description"]');
+  if(meta)meta.content=description;
+  const ogTitle=document.querySelector('meta[property="og:title"]');
+  if(ogTitle)ogTitle.content=english?"ALNAJAT — A Sudanese Journey Between Wars":"النجاة — رحلة سوداني بين حربين";
+  const ogDescription=document.querySelector('meta[property="og:description"]');
+  if(ogDescription)ogDescription.content=description;
+  const ogLocale=document.querySelector('meta[property="og:locale"]');
+  if(ogLocale)ogLocale.content=english?"en_US":"ar_SD";
+}
 function toggleLang(){
   LG=LG==="en"?"ar":"en";
   try{localStorage.setItem("najat_lang",LG)}catch(e){}
-  document.documentElement.setAttribute("dir",LG==="en"?"ltr":"rtl");
-  document.documentElement.setAttribute("lang",LG);
+  syncDocumentLanguage();
   if(s&&id)renderNode(id);else showMenu();
   toast(LG==="en"?"English":"العربية");
 }
@@ -896,8 +930,7 @@ function genParticles(){
 
 /* ==================== BOOT ==================== */
 window.addEventListener("load",()=>{
-  document.documentElement.setAttribute("dir",LG==="en"?"ltr":"rtl");
-  document.documentElement.setAttribute("lang",LG);
+  syncDocumentLanguage();
   genParticles();
   updateMusicBtn();
   showMenu();
@@ -954,7 +987,7 @@ document.addEventListener("keydown",()=>{unlockAudio()});
         <br><br>
         <span style="color:var(--ac)">⚠ ملاحظة محتوى:</span> تتناول اللعبة الحرب والنزوح والجوع والموت. مستوحاة من أحداث حقيقية لكن كل الشخصيات خيالية.
       </div>
-      <button class="btn pri" onclick="document.getElementById('pn').classList.remove('on')">إغلاق</button>`;
+      <button class="btn pri" onclick="window.closeHowToPlay()">إغلاق</button>`;
   }
 
   function EN(){
@@ -999,16 +1032,50 @@ document.addEventListener("keydown",()=>{unlockAudio()});
         <br><br>
         <span style="color:var(--ac)">⚠ Content note:</span> This game deals with war, displacement, hunger, and death. It is inspired by real events but all characters are fictional.
       </div>
-      <button class="btn pri" onclick="document.getElementById('pn').classList.remove('on')">Close</button>`;
+      <button class="btn pri" onclick="window.closeHowToPlay()">Close</button>`;
   }
 
   /* ---------- 2) دالة الفتح ---------- */
+  let howToPreviousFocus = null;
+  let howToKeyHandler = null;
+  window.closeHowToPlay = function(){
+    const pn = document.getElementById("pn");
+    if(!pn) return;
+    pn.classList.remove("on");
+    pn.removeAttribute("role");
+    pn.removeAttribute("aria-modal");
+    pn.removeAttribute("aria-labelledby");
+    if(howToKeyHandler)document.removeEventListener("keydown",howToKeyHandler);
+    howToKeyHandler=null;
+    const target=howToPreviousFocus&&howToPreviousFocus.isConnected&&howToPreviousFocus!==document.body&&howToPreviousFocus!==document.documentElement?howToPreviousFocus:document.querySelector("#app .btn")||document.querySelector("#app button");
+    if(target&&typeof target.focus==="function")target.focus();
+    howToPreviousFocus=null;
+  };
   window.openHowToPlay = function(){
     const pn = document.getElementById("pn");
     if(!pn) return;
     const isEn = (typeof LG !== "undefined" && LG === "en");
+    howToPreviousFocus=document.activeElement;
     pn.innerHTML = `<div>${isEn ? EN() : AR()}</div>`;
+    const heading=pn.querySelector("h3");
+    if(heading){heading.id="alnajat-howto-title";pn.setAttribute("aria-labelledby",heading.id);}
+    pn.setAttribute("role","dialog");
+    pn.setAttribute("aria-modal","true");
+    pn.setAttribute("aria-label",isEn?"How to Play":"كيف تلعب");
     pn.classList.add("on");
+    const items=()=>Array.from(pn.querySelectorAll('button:not([disabled]),a[href],input:not([disabled]),select:not([disabled]),textarea:not([disabled]),[tabindex]:not([tabindex="-1"])')).filter(el=>el.getClientRects().length);
+    howToKeyHandler=function(event){
+      if(event.key==="Escape"){event.preventDefault();window.closeHowToPlay();return;}
+      if(event.key!=="Tab")return;
+      const focus=items();if(!focus.length){event.preventDefault();pn.focus();return;}
+      const first=focus[0],last=focus[focus.length-1];
+      if(event.shiftKey&&document.activeElement===first){event.preventDefault();last.focus();}
+      else if(!event.shiftKey&&document.activeElement===last){event.preventDefault();first.focus();}
+    };
+    document.addEventListener("keydown",howToKeyHandler);
+    pn.addEventListener("click",function onBackdrop(event){if(event.target===pn)window.closeHowToPlay();});
+    const closeButton=pn.querySelector("button");
+    if(closeButton)closeButton.focus();else pn.focus();
   };
 
   /* ---------- 3) زر في القائمة الرئيسية ---------- */
@@ -1058,7 +1125,7 @@ document.addEventListener("keydown",()=>{unlockAudio()});
 <!-- ========== end of How to Play add-on ========== -->
 <!-- ═══════════════════════════════════════════════════════════════════════
      إضافات شاملة: فصل الثورة + 2013–2026 + نهايات الشهادة + إصلاح الإنجازات
-     ألصقها مرة واحدة قبل   <script src="alnajat-v2.js?v=2" defer></script>
+     ألصقها مرة واحدة قبل   <script src="alnajat-v2.js?v=4" defer></script>
   <script src="alnajat-cinema.js?v=1" defer></script>
   <script src="alnajat-world.js?v=1" defer></script>
 </body>
@@ -1153,7 +1220,7 @@ S.sd2023 = ["", "١٥ أبريل ٢٠٢٣. الساعة الثامنة صباح�
   ["ابقَ وساعد الجيران", "sd2023b", {h:-15, p:12}],
   ["انضم إلى غرفة طوارئ الحي", "sd2023b", {h:-8, p:15, F:"err2023"}]
 ]];
-S.sd2023b = ["", "في غرب دارفور، كانت الجنينة تُحرق. بين ١٣ و٢١ يونيو ٢٠٢٣، قُتل ما لا يقل عن ٨٧ شخصًا — معظمهم من قبيلة المساليت — ودُفنوا في مقبرة جماعية. هيومن رايتس ووتش وصفت ما حدث بأنه «تطهير عرقي». أكثر من ١٥ ألف قُتلوا في الجنينة وحدها.\n\nثم جاءت ود مدني.", [
+S.sd2023b = ["", "في غرب دارفور، كانت الجنينة تُحرق. بين ١٣ و٢١ يونيو ٢٠٢٣، قُتل ما لا يقل عن ٨٧ شخصًا من المساليت وآخرين، ودُفنوا في مقبرة جماعية، وفق معلومات موثوقة أوردها مكتب حقوق الإنسان بالأمم المتحدة. هيومن رايتس ووتش وصفت ما حدث بأنه «تطهير عرقي». العدد الإجمالي للقتلى في الجنينة غير معروف. وقدّر فريق خبراء الأمم المتحدة، نقلاً عن مصادر استخباراتية، أن عدد القتلى في الجنينة خلال عام ٢٠٢٣ تراوح بين ١٠ آلاف و١٥ ألفًا.\n\nثم جاءت ود مدني.", [
   ["ساعد في دفن الضحايا", "sd2023c", {p:10, h:-10, F:"geneina"}],
   ["ساعد الناجين في الهروب", "sd2023c", {p:15, h:-12}],
   ["اصمت واحفظ الأسماء", "sd2023c", {p:8, F:"geneina"}]
@@ -1220,7 +1287,7 @@ EN.sd2022 = ["2022. The conflict between al-Burhan (army) and Hemedti (RSF) inte
   "Prepare for what is coming", "Say war is inevitable", "Hope the framework agreement is a new beginning"]];
 EN.sd2023 = ["15 April 2023. Eight in the morning. Explosions echoed across Khartoum. The RSF seized the Republican Palace, the airport, and large parts of the General Command. The army responded with airstrikes. Within days, fighting spread to every state.\n\nMillions were displaced. Khartoum became a ghost city.", [
   "Flee Khartoum with your family", "Stay and help the neighbors", "Join your neighborhood's emergency room"]];
-EN.sd2023b = ["In West Darfur, El Geneina was burning. Between 13 and 21 June 2023, at least 87 people — mostly Masalit — were killed and buried in a mass grave. Human Rights Watch called it 'ethnic cleansing'. Over 15,000 were killed in El Geneina alone.\n\nThen came Wad Madani.", [
+EN.sd2023b = ["In West Darfur, El Geneina was burning. Between 13 and 21 June 2023, at least 87 people — including ethnic Masalit and others — were buried in a mass grave, according to credible information obtained by the UN Human Rights Office. Human Rights Watch called it 'ethnic cleansing'. The total number of people killed in El Geneina is unknown. Citing intelligence sources, the UN Panel of Experts estimated that between 10,000 and 15,000 people were killed there in 2023.\n\nThen came Wad Madani.", [
   "Help bury the victims", "Help the survivors escape", "Stay silent and remember the names"]];
 EN.sd2023c = ["18 December 2023. Wad Madani — capital of Al-Jazira, once considered 'safe' — fell to the RSF. Hundreds of thousands were displaced again. The city that had received Khartoum's displaced became itself a war zone.\n\nAn old man told you:\n— 'Every time we say this is the last time. And every time we start from zero.'", [
   "Flee with the displaced toward Gedaref", "Help the old man catch the convoy", "Stay in the city and help those left"]];
@@ -1338,14 +1405,14 @@ AH.sd2026 = ["2026","📡","حرب المسيّرات","بلغتَ عام ٢٠٢
 try{
   /* 2013–2016 يقع قبل شراء الحافلة وقبل ديسمبر 2018. */
   const s4c = S["s4c"];
-  if(s4c && s4c[2]) s4c[2].forEach(function(c){ c[1]="sd2013"; });
+  if(s4c && s4c[2] && !s4c[2].some(function(c){return c[1]==="sd2013";})) s4c[2].push(["تتبّع مسار احتجاجات سبتمبر 2013 وما تلاها","sd2013",{p:5}]);
   const sd2014 = S["sd2014"];
   if(sd2014 && sd2014[2]) sd2014[2].forEach(function(c){ c[1]="s5"; });
 
   /* المسار الشخصي للثورة: ديسمبر 2018 → يناير/أبريل/يونيو 2019. */
   const r1b = S["r1b"];
   if(r1b && r1b[2]){
-    r1b[2].forEach(function(c){ if(c[1]==="r2") c[1]="rev1"; });
+    if(!r1b[2].some(function(c){return c[1]==="rev1";})) r1b[2].push(["اتبع المسار التفصيلي للثورة من يناير إلى يونيو 2019","rev1",{p:5}]);
     if(!r1b[2].some(function(c){return c[1]==="sd2018";}))
       r1b[2].push(["اعرض المسار التوثيقي للأحداث من ديسمبر 2018","sd2018",{p:5}]);
   }
@@ -3792,16 +3859,16 @@ console.log("✅ Story Weaver v5 — الخاتمة الشخصية + الأرش�
 </script>
 
 <!-- ALNAJAT additive experience layers: accessibility, cinematic transitions, Sudan map -->
-<script src="alnajat-v2.js?v=2" defer></script>
+<script src="alnajat-v2.js?v=4" defer></script>
 <script src="alnajat-cinema.js?v=1" defer></script>
 <script src="alnajat-world.js?v=1" defer></script>
 <script src="alnajat-characters.js?v=1" defer></script>
-<script src="alnajat-director.js?v=2" defer></script>
+<script src="alnajat-director.js?v=3" defer></script>
 
 <script src="alnajat-memory-book.js?v=1" defer></script>
-<script src="alnajat-audio-engine.js?v=1" defer></script>
-<script src="alnajat-cinema-pro.js?v=1" defer></script>
+<script src="alnajat-audio-engine.js?v=3" defer></script>
+<script src="alnajat-cinema-pro.js?v=2" defer></script>
 <script src="alnajat-editorial.js?v=7" defer></script>
-<script src="alnajat-safety.js?v=8" defer></script>
+<script src="alnajat-safety.js?v=10" defer></script>
 </body>
 </html>
