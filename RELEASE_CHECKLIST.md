@@ -11,7 +11,7 @@
 - [x] JavaScript syntax and local asset references are checked in CI.
 - [x] Chromium browser suite passes 20 checks on the previously verified revision (GitHub Actions run #178).
 - [x] Run the expanded browser suite after privacy, localized metadata and offline-mode additions (run #195: 24 passed, 0 failed).
-- [ ] Confirm the final run is green on the exact release candidate commit after the latest audit/checklist documentation updates.
+- [x] Confirm the final run is green after the latest audit/checklist updates: run #197 passed on code head `3d3318f2fdfa548ed7702125ed53fcf3fa19ea77` (24 browser checks, 0 failures).
 
 ## 2. Product and privacy / المنتج والخصوصية
 
