@@ -24,7 +24,7 @@ try {
   } catch (e) {
     fail("Browser smoke test syntax error\\n" + (e.stderr ? e.stderr.toString() : e.message));
   }
-  for (const marker of ["context.setOffline(true)", "Game shell reloads and renders while offline", "Privacy policy is available from the offline cache", "const { chromium, firefox, webkit } = require(\"playwright\")"]) {
+  for (const marker of ["context.setOffline(true)", "Game shell reloads and renders while offline", "Privacy policy is available from the offline cache", "WebKit precaches both game shell and privacy page for offline use", "const { chromium, firefox, webkit } = require(\"playwright\")"]) {
     if (!browserTest.includes(marker)) fail("Browser suite is missing release gate: " + marker);
   }
   if (!read(".github/workflows/validate.yml").includes("browser: [chromium, firefox, webkit]")) {
