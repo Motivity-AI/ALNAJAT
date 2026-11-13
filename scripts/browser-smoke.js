@@ -97,12 +97,16 @@ async function main() {
     await page.goto(baseURL, { waitUntil: "domcontentloaded" });
     await page.locator("#app h1").waitFor({ state: "visible", timeout: 15000 });
     await page.waitForTimeout(500);
-    check("Initial Arabic menu renders", (await page.locator("#app h1").innerText()).includes("النجاة"));
+    check("Initial Arabic menu and page metadata render", (await page.locator("#app h1").innerText()).includes("النجاة") &&
+      await page.evaluate(() => document.title.includes("النجاة") &&
+        document.querySelector('meta[property="og:locale"]')?.content === "ar_SD"));
 
     await page.getByRole("button", { name: "English", exact: true }).click();
     await page.waitForFunction(() => document.querySelector("#app h1")?.textContent?.trim() === "Survival");
     check("Menu switches to English and LTR", await page.evaluate(() =>
-      document.documentElement.lang === "en" && document.documentElement.dir === "ltr"
+      document.documentElement.lang === "en" && document.documentElement.dir === "ltr" &&
+      document.title.includes("A Sudanese Journey") &&
+      document.querySelector('meta[property="og:locale"]')?.content === "en_US"
     ));
 
     await page.getByRole("button", { name: "العربية", exact: true }).click();
