@@ -24,11 +24,14 @@ try {
   } catch (e) {
     fail("Browser smoke test syntax error\\n" + (e.stderr ? e.stderr.toString() : e.message));
   }
-  for (const marker of ["context.setOffline(true)", "Game shell reloads and renders while offline", "Privacy policy is available from the offline cache"]) {
+  for (const marker of ["context.setOffline(true)", "Game shell reloads and renders while offline", "Privacy policy is available from the offline cache", "const { chromium, firefox, webkit } = require(\"playwright\")"]) {
     if (!browserTest.includes(marker)) fail("Browser suite is missing release gate: " + marker);
   }
+  if (!read(".github/workflows/validate.yml").includes("browser: [chromium, firefox, webkit]")) {
+    fail("Cross-browser release matrix must include Chromium, Firefox and WebKit");
+  } else pass("Browser QA matrix covers Chromium, Firefox and WebKit");
   const browserWorkflow = read(".github/workflows/validate.yml");
-  for (const marker of ["browser-smoke:", "npx playwright install --with-deps chromium", "npm run test:browser"]) {
+  for (const marker of ["browser-smoke:", "npx playwright install --with-deps ${{ matrix.browser }}", "npm run test:browser"]) {
     if (!browserWorkflow.includes(marker)) fail("Chromium browser QA workflow is missing: " + marker);
   }
   if (browserWorkflow.includes("browser-smoke:") &&
