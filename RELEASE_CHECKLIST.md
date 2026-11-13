@@ -29,10 +29,11 @@ These checks are not represented by a passing local Chromium CI run:
 - [ ] Open the published GitHub Pages URL and verify the deployed commit/version.
 - [ ] Test Safari on a real iPhone, including Add to Home Screen, safe areas, audio unlock, resume and offline relaunch.
 - [ ] Test Chrome on a real Android device, including install prompt, audio, orientation and offline relaunch.
-- [ ] Test Firefox and desktop Safari/Chromium for core play and responsive layout.
+- [x] Automated Playwright coverage on Chromium, Firefox and WebKit (run #218: 26/26/25 passed, 0 failed). WebKit verifies offline cache contents; offline navigation is exercised in Chromium and Firefox.
+- [ ] Manual Firefox and desktop Safari/Chromium checks on real devices.
 - [ ] Test VoiceOver and NVDA with keyboard-only navigation, dialog focus, labels and reading order.
 - [ ] Review contrast, text scaling, reduced motion and 200% zoom against WCAG 2.2 AA criteria.
-- [ ] Test a cold first visit, a complete offline relaunch, an update while an older Service Worker is installed, and recovery after a failed cache install.
+- [ ] Test a cold first visit, a real Safari/iPhone offline relaunch, an update while an older Service Worker is installed, and recovery after a failed cache install.
 - [ ] Verify the optional map failure path when unpkg or OpenStreetMap is blocked.
 
 ## 4. Editorial and historical review / المراجعة التحريرية والتاريخية
