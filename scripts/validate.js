@@ -24,6 +24,9 @@ try {
   } catch (e) {
     fail("Browser smoke test syntax error\\n" + (e.stderr ? e.stderr.toString() : e.message));
   }
+  for (const marker of ["context.setOffline(true)", "Game shell reloads and renders while offline", "Privacy policy is available from the offline cache"]) {
+    if (!browserTest.includes(marker)) fail("Browser suite is missing release gate: " + marker);
+  }
   const browserWorkflow = read(".github/workflows/validate.yml");
   for (const marker of ["browser-smoke:", "npx playwright install --with-deps chromium", "npm run test:browser"]) {
     if (!browserWorkflow.includes(marker)) fail("Chromium browser QA workflow is missing: " + marker);
@@ -152,6 +155,12 @@ try {
   else pass("Historical sources page is cached for offline use");
   const privacyPage = read("privacy.html");
   if (!sw.includes("'./privacy.html'")) fail("Offline shell does not cache the privacy policy page");
+  const privacyScript = (privacyPage.match(/<script>([\\s\\S]*?)<\\/script>/i) || [])[1];
+  if (!privacyScript) fail("Privacy page language switch script is missing");
+  else {
+    try { new Function(privacyScript); pass("Privacy page JavaScript syntax is valid"); }
+    catch (error) { fail("Privacy page JavaScript syntax error: " + error.message); }
+  }
   if (!html.includes('alnajat-director.js?v=3') || !sw.includes("'./alnajat-director.js?v=3'")) {
     fail("Privacy navigation layer v3 is not loaded by both page and offline shell");
   }
