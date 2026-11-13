@@ -25,6 +25,10 @@ jobs:
 
   browser-smoke:
     needs: validate
+    strategy:
+      fail-fast: false
+      matrix:
+        browser: [chromium, firefox, webkit]
     runs-on: ubuntu-24.04
     steps:
       - name: Check out repository
@@ -36,6 +40,8 @@ jobs:
       - name: Install pinned Playwright
         run: npm install --no-package-lock --ignore-scripts
       - name: Install Chromium
-        run: npx playwright install --with-deps chromium
+        run: npx playwright install --with-deps ${{ matrix.browser }}
       - name: Run browser smoke and functional tests
+        env:
+          PLAYWRIGHT_BROWSER: ${{ matrix.browser }}
         run: npm run test:browser
