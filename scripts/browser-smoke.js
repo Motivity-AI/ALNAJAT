@@ -136,6 +136,7 @@ async function main() {
     await gate.waitFor({ state: "visible", timeout: 10000 });
     await gate.getByRole("button", { name: /فهمت التنبيه/ }).click();
     await page.locator("#app .tx").waitFor({ state: "visible" });
+    check("Content gate dismisses any stale app panel before play", !(await page.locator("#pn").evaluate(el => el.classList.contains("on"))));
     const firstSceneText = await page.locator("#app .tx").innerText();
     check("Informed-content gate opens and starts the first scene", firstSceneText.length > 40);
 
