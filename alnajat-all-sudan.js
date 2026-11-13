@@ -18,9 +18,9 @@ choices:[["يساعد أسرته في جلب الماء، ثم يسأل لماذ
 leadAr:"في الشرق، تستقبل الأسرة نازحين من ولاية أخرى. الخبز والعمل والسكن لم تعد سهلة، والطفل يسمع لهجات كثيرة في الصف نفسه. يتعلم أن ضغط الموارد لا يجعل القادم عدواً.",
 leadEn:"In the East, a family welcomes people displaced from another state. Bread, work and housing are harder to find, and many accents now share one classroom. The child learns that pressure on resources does not make newcomers enemies.",
 choices:[["يقاسم الأسرة الجديدة ما يستطيع، ويطلب من المدرسة ألا تترك أحداً خارج الصف.","Shares what the family can and asks the school not to leave anyone outside the classroom."],["ينضم إلى مبادرة محلية لتوثيق الاحتياجات وتوزيع المساعدة بعدل.","Joins a local effort to document needs and distribute aid fairly."]]},
-{id:"south",icon:"🌳",ar:"من الجنوب: طريق العودة إلى البيت",en:"From the South: The Road Home",
-leadAr:"في جنوب السودان، تتداخل مخاوف الأسرة من العنف والنزوح وتعطل الخدمات مع ذكريات قديمة عن الحرب. لا يريد الطفل أن يرث خوف الكبار ولا أن يُطلب منه أن يكره جماعة كاملة.",
-leadEn:"In southern Sudan, fears of violence, displacement and broken services mingle with older memories of war. The child does not want to inherit adults' fear or be taught to hate an entire community.",
+{id:"south",icon:"🌳",ar:"من جنوب البلاد: طريق العودة إلى البيت",en:"From Southern Sudan: The Road Home",
+leadAr:"في جنوب البلاد، تتداخل مخاوف الأسرة من العنف والنزوح وتعطل الخدمات مع ذكريات قديمة عن الحرب. لا يريد الطفل أن يرث خوف الكبار ولا أن يُطلب منه أن يكره جماعة كاملة.",
+leadEn:"In the south of Sudan, fears of violence, displacement and broken services mingle with older memories of war. The child does not want to inherit adults' fear or be taught to hate an entire community.",
 choices:[["يسأل عن مصير أصدقائه من خلفيات مختلفة، ويرفض التعميم.","Asks what happened to friends from different backgrounds and refuses to generalise."],["يبحث عن مكان آمن للتعلم واللعب، ويطلب حماية كل الأطفال.","Looks for a safe place to learn and play, asking that every child be protected."]]},
 {id:"center",icon:"🏙️",ar:"من الوسط والجزيرة والخرطوم: بيت بلا سقف",en:"From the Centre, Gezira and Khartoum: A Home Lost",
 leadAr:"نزح الطفل من حيّه. اختفت المدرسة والسوق والعيادة، وصار الهاتف وسيلة للبحث عن الأقارب. يسمع اتهامات جماعية، لكنه يعرف أن الجار لا يصبح مذنباً بسبب اسمه أو منطقته.",
@@ -28,20 +28,19 @@ leadEn:"The child fled their neighbourhood. School, market and clinic disappeare
 choices:[["يوثق ما رآه دون نشر أسماء أو تعريض أحد للخطر.","Records what was witnessed without publishing names or putting anyone at risk."],["يساعد في لمّ شمل الأسر ويبحث عن طريق آمن للمساعدة.","Helps reunite families and finds safe ways to seek assistance."]]}
 ];
 const civics={
-ar:{title:"سؤال الدولة: جيش واحد أم جيوش متوازية؟",body:"يسأل الطفل: إذا حملت كل جماعة سلاحها واحتفظت بقيادتها وقرارها، فمن يحمي المواطن عندما تختلف تلك القيادات؟ وهل نعيد إنتاج أسباب الحرب نفسها؟
-
-اتفاق جوبا للسلام نصّ على هدف جيش وطني مهني واحد، وعلى ترتيبات للدمج والتسريح وإعادة الإدماج. لكن التنفيذ تعثر، كما وثّقت تقارير أممية. هذا لا يعني أن كل مقاتل أو حركة واحدة؛ بل يعني أن وجود سلاسل قيادة مسلحة متنافسة يخلق خطراً على المدنيين وعلى وحدة الدولة.
-
-الحل الذي تناقشه الحكاية ليس إقصاء مناطق أو حركات، ولا دمجاً شكلياً بلا تدقيق: وقف نار قابل للمراقبة، حصر السلاح، تدقيق فردي مهني وحقوقي، تدريب موحد، قيادة وطنية واحدة خاضعة للقانون والرقابة المدنية، ومسارات DDR للذين لا تنطبق عليهم شروط الخدمة. العدالة والمحاسبة لا تسقطان بالاندماج.
-
-يسأل الطفل أيضاً عن جماعات تقاتل إلى جانب الجيش أو تعمل في تشكيلات ذات ولاءات خاصة. تذكر التقارير الأممية كتيبة البراء بن مالك ضمن جماعات مسلحة موالية للجيش، وتوثق اتهامات وانتهاكات منسوبة إلى أفراد وتشكيلات. وفي 2026 أدرجتها الولايات المتحدة ضمن تصنيفاتها الإرهابية؛ وهذا تصنيف صادر عن حكومة بعينها، وليس حكماً قضائياً عالمياً. لا يجوز تعميم مسؤولية أي تشكيل على سكان منطقة أو دين أو تيار بأكمله. أما أسماء مثل «الدراعون» فتحتاج تحديداً موثقاً قبل نسبة أفعال أو تصنيفات إليها.",en:{title:"The State Question: One Army or Parallel Armies?",body:"The child asks: if every group keeps its own weapons, command and decisions, who protects civilians when those commanders disagree? Would we reproduce the very conditions that helped bring another war?
-
-The Juba Peace Agreement set out the goal of one professional national army and security arrangements for integration, disarmament, demobilisation and reintegration. UN reporting documented delays and fragmentation in implementation. This does not make every fighter or movement identical; it means competing armed chains of command create risks for civilians and the state.
-
-The path explored here is neither exclusion of regions and movements nor a paper merger without vetting: a monitored ceasefire, weapons registration, individual professional and human-rights vetting, common training, one national chain of command under law and civilian oversight, and DDR pathways for those who do not qualify for service. Integration must not erase justice or accountability.
-
-The child also asks about armed formations fighting alongside the army or retaining distinct loyalties. UN reporting identifies the Al-Baraa Bin Malik Battalion among SAF-aligned armed groups and documents allegations and abuses attributed to members and formations. In 2026, the United States designated it under its terrorism framework. That is a designation by one government, not a universal court judgment. Responsibility must never be generalised to an entire region, religion or political current. Names such as “Al-Dira'oon” require a clearly identified, reliable source before claims or designations are attached to them."}
-};
+ar:{title:"سؤال الدولة: جيش واحد أم جيوش متوازية؟",body:[
+"يسأل الطفل: إذا حملت كل جماعة سلاحها واحتفظت بقيادتها وقرارها، فمن يحمي المواطن عندما تختلف تلك القيادات؟ وهل نعيد إنتاج أسباب الحرب نفسها؟",
+"اتفاق جوبا للسلام نصّ على هدف جيش وطني مهني واحد، وعلى ترتيبات للدمج والتسريح وإعادة الإدماج. لكن التنفيذ تعثر، كما وثّقت تقارير أممية. هذا لا يعني أن كل مقاتل أو حركة واحدة؛ بل يعني أن وجود سلاسل قيادة مسلحة متنافسة يخلق خطراً على المدنيين وعلى وحدة الدولة.",
+"الحل الذي تناقشه الحكاية ليس إقصاء مناطق أو حركات، ولا دمجاً شكلياً بلا تدقيق: وقف نار قابل للمراقبة، حصر السلاح، تدقيق فردي مهني وحقوقي، تدريب موحد، قيادة وطنية واحدة خاضعة للقانون والرقابة المدنية، ومسارات DDR للذين لا تنطبق عليهم شروط الخدمة. العدالة والمحاسبة لا تسقطان بالاندماج.",
+"يسأل الطفل أيضاً عن جماعات تقاتل إلى جانب الجيش أو تعمل في تشكيلات ذات ولاءات خاصة. تذكر التقارير الأممية كتيبة البراء بن مالك ضمن جماعات مسلحة موالية للجيش، وتوثق اتهامات وانتهاكات منسوبة إلى أفراد وتشكيلات. وفي 2026 أدرجتها الولايات المتحدة ضمن تصنيفاتها الإرهابية؛ وهذا تصنيف صادر عن حكومة بعينها، وليس حكماً قضائياً عالمياً. لا يجوز تعميم مسؤولية أي تشكيل على سكان منطقة أو دين أو تيار بأكمله. أما أسماء مثل «الدراعون» فتحتاج تحديداً موثقاً قبل نسبة أفعال أو تصنيفات إليها."
+].join("\n\n")},
+en:{title:"The State Question: One Army or Parallel Armies?",body:[
+"The child asks: if every group keeps its own weapons, command and decisions, who protects civilians when those commanders disagree? Would we reproduce the very conditions that helped bring another war?",
+"The Juba Peace Agreement set out the goal of one professional national army and security arrangements for integration, disarmament, demobilisation and reintegration. UN reporting documented delays and fragmentation in implementation. This does not make every fighter or movement identical; it means competing armed chains of command create risks for civilians and the state.",
+"The path explored here is neither exclusion of regions and movements nor a paper merger without vetting: a monitored ceasefire, weapons registration, individual professional and human-rights vetting, common training, one national chain of command under law and civilian oversight, and DDR pathways for those who do not qualify for service. Integration must not erase justice or accountability.",
+"The child also asks about armed formations fighting alongside the army or retaining distinct loyalties. UN reporting identifies the Al-Baraa Bin Malik Battalion among SAF-aligned armed groups and documents allegations and abuses attributed to members and formations. In 2026, the United States designated it under its terrorism framework. That is a designation by one government, not a universal court judgment. Responsibility must never be generalised to an entire region, religion or political current. Names such as “Al-Dira'oon” require a clearly identified, reliable source before claims or designations are attached to them."
+].join("\n\n")}
+}
 function close(){const p=$("#pn");if(p)p.classList.remove("on");}
 function openHome(){
 const l=lang(),p=$("#pn");if(!p)return;
