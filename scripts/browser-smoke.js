@@ -110,6 +110,19 @@ async function main() {
       document.documentElement.lang === "ar" && document.documentElement.dir === "rtl"
     ));
 
+    const privacyLink = page.locator("#alnajat-privacy-link");
+    await privacyLink.waitFor({ state: "visible", timeout: 5000 });
+    await privacyLink.click();
+    await page.locator("#ar h1").waitFor({ state: "visible" });
+    check("Privacy policy opens from the game menu", (await page.locator("#ar h1").innerText()).includes("الخصوصية"));
+    await page.getByRole("button", { name: "English", exact: true }).click();
+    check("Privacy policy switches to English and LTR", await page.evaluate(() =>
+      document.documentElement.lang === "en" && document.documentElement.dir === "ltr" &&
+      !document.querySelector("#en").hidden && document.querySelector("#en h1")?.textContent === "Privacy & Data"
+    ));
+    await page.getByRole("link", { name: /Back to game/ }).click();
+    await page.locator("#app h1").waitFor({ state: "visible" });
+
     await page.getByRole("button", { name: "بدء جديدة", exact: true }).click();
     const gate = page.locator("#alnajat-safety-gate");
     await gate.waitFor({ state: "visible", timeout: 10000 });
@@ -233,6 +246,15 @@ async function main() {
 
     check("No uncaught browser JavaScript errors", pageErrors.length === 0, pageErrors.join(" | "));
     check("No failed local app assets", localHttpErrors.length === 0, localHttpErrors.join(" | "));
+
+    await context.setOffline(true);
+    await page.reload({ waitUntil: "domcontentloaded" });
+    await page.locator("#app h1").waitFor({ state: "visible", timeout: 10000 });
+    check("Game shell reloads and renders while offline", (await page.locator("#app h1").innerText()).includes("النجاة"));
+    await page.locator("#alnajat-privacy-link").click();
+    await page.locator("#ar h1").waitFor({ state: "visible", timeout: 5000 });
+    check("Privacy policy is available from the offline cache", (await page.locator("#ar h1").innerText()).includes("الخصوصية"));
+    await context.setOffline(false);
 
     await context.close();
   } finally {
