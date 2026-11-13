@@ -10,8 +10,8 @@
 - [x] Story graph validation checks node destinations, reachability, loop exits, ending reachability and bilingual choice parity.
 - [x] JavaScript syntax and local asset references are checked in CI.
 - [x] Chromium browser suite passes 20 checks on the previously verified revision (GitHub Actions run #178).
-- [ ] Run the expanded browser suite after privacy, localized metadata and offline-mode additions.
-- [ ] Confirm the final run is green on the exact release candidate commit.
+- [x] Run the expanded browser suite after privacy, localized metadata and offline-mode additions (run #195: 24 passed, 0 failed).
+- [ ] Confirm the final run is green on the exact release candidate commit after the latest audit/checklist documentation updates.
 
 ## 2. Product and privacy / المنتج والخصوصية
 
