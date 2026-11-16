@@ -55,7 +55,7 @@ self.addEventListener('fetch', (e) => {
   const networkPromise = fetch(req).then(async (res) => {
     if (res && res.ok && res.type === 'basic') {
       const cache = await cachePromise;
-      await cache.put(req, res.clone());
+      await cache.put(req, res.clone()).catch(() => {});
     }
     return res;
   }).catch(() => null);
