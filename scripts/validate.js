@@ -207,20 +207,21 @@ try {
     fail("Scene safety dialog is missing basic accessible dialog semantics");
   } else pass("Scene safety dialog has accessible labeling and modal semantics");
   const allSudan = read("alnajat-all-sudan.js");
-  if (!html.includes('alnajat-all-sudan.js?v=1') || !sw.includes("'./alnajat-all-sudan.js?v=1'")) {
+  if (!html.includes('alnajat-all-sudan.js?v=2') || !sw.includes("'./alnajat-all-sudan.js?v=2'")) {
     fail("All-Sudan story layer is not loaded by both the page and offline shell");
   } else pass("All-Sudan story layer is wired into the online and offline app shell");
   for (const marker of [
     'id:"north"', 'id:"east"', 'id:"south"', 'id:"center"',
     'window.openAllSudanScenarios=openHome',
-    'localStorage.setItem(KEY,JSON.stringify(saved))'
+    'localStorage.setItem(KEY,JSON.stringify(saved.slice(0,30)))'
   ]) if (!allSudan.includes(marker)) fail("All-Sudan story layer is missing required route or persistence marker: " + marker);
   else pass("All-Sudan routes and isolated choice persistence are present");
   for (const marker of [
     'All-Sudan story hub is reachable from the main menu',
     'Regional route is listed:',
     'Regional choice is saved separately from the original story',
-    'Civic reflection opens with its cited source links'
+    'Civic reflection opens with its cited source links',
+    'English regional choice produces its distinct consequence'
   ]) if (!browserTest.includes(marker)) fail("Browser suite is missing All-Sudan release gate: " + marker);
   else pass("Cross-browser suite covers All-Sudan routes, saved choices and civic source links");
 
