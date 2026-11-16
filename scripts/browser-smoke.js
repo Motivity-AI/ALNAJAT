@@ -250,6 +250,17 @@ async function main() {
       document.documentElement.dir = "rtl";
       document.getElementById("pn").classList.remove("on");
     });
+    await page.evaluate(() => window.openAllSudanScenarios());
+    await page.locator('#pn [data-story="east"]').click();
+    await page.locator('#pn .asudan button').filter({ hasText: "يقاسم الأسرة الجديدة" }).click();
+    check("East route has its own Arabic consequence",
+      (await page.locator("#pn .asudan").innerText()).includes("تقاسمت الأسرة الطعام والمساحة"));
+    await page.evaluate(() => window.openAllSudanScenarios());
+    await page.locator('#pn [data-story="center"]').click();
+    await page.locator('#pn .asudan button').filter({ hasText: "يوثق ما رآه" }).click();
+    check("Centre/Gezira/Khartoum route has its own Arabic consequence",
+      (await page.locator("#pn .asudan").innerText()).includes("حفظت ما شاهدته في سجل آمن"));
+    await page.evaluate(() => document.getElementById("pn").classList.remove("on"));
 
     const audioTrigger = page.locator("[data-alnajat-audio-settings]");
     await audioTrigger.waitFor({ state: "visible", timeout: 10000 });
