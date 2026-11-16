@@ -2,7 +2,7 @@
   "schema": "alnajat-all-sudan-lock-v1",
   "source": "alnajat-all-sudan.js",
   "method": "FNV-1a-64 over UTF-16 code units; regression guard, not a cryptographic signature",
-  "expectedFingerprint": "ebdc1f7b5df58ef7",
+  "expectedFingerprint": "e7c389f615deddff",
   "routeIds": [
     "north",
     "east",
