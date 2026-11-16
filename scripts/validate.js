@@ -207,6 +207,10 @@ try {
     fail("Scene safety dialog is missing basic accessible dialog semantics");
   } else pass("Scene safety dialog has accessible labeling and modal semantics");
   const allSudan = read("alnajat-all-sudan.js");
+  if (!allSudan.includes("FTO") || !allSudan.includes("SDGT")) fail("OFAC designation categories are not explicitly identified");
+  for (const route of ["north:[[", "east:[[", "south:[[", "center:[["]) {
+    if (!allSudan.includes(route)) fail("A regional route is missing its bilingual consequence pairs: " + route);
+  }
   if (!html.includes('alnajat-all-sudan.js?v=2') || !sw.includes("'./alnajat-all-sudan.js?v=2'")) {
     fail("All-Sudan story layer is not loaded by both the page and offline shell");
   } else pass("All-Sudan story layer is wired into the online and offline app shell");
