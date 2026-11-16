@@ -46,6 +46,7 @@ try {
     pass("Chromium browser QA is wired after static validation in GitHub Actions");
   }
   execFileSync(process.execPath, [path.join(__dirname, "story-integrity.js")], { stdio: "inherit" });
+  execFileSync(process.execPath, [path.join(__dirname, "all-sudan-integrity.js")], { stdio: "inherit" });
   const manifest = JSON.parse(read("manifest.json"));
   if (!html.includes("</body>") || !html.includes("</html>")) fail("index.html is missing closing document tags");
   else pass("HTML document has closing tags");
