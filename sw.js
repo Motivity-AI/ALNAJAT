@@ -1,5 +1,5 @@
 /* ==================== النجاة — Service Worker ==================== */
-const VERSION = 'najat-v38';
+const VERSION = 'najat-v39';
 const SHELL = [
   './',
   './index.html',
@@ -17,9 +17,6 @@ const SHELL = [
   './alnajat-all-sudan.js?v=2',
   './sources.html',
   './privacy.html',
-  './analytics-config.js?v=1',
-  './alnajat-analytics.js?v=1',
-  './control-center.html'
 ];
 
 self.addEventListener('install', (event) => {
