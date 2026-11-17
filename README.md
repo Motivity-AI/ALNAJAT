@@ -142,3 +142,13 @@
 
 ## Historical source register
 The initial research and source-to-scene map is maintained in [SOURCES.md](./SOURCES.md). It records scope, limitations and scene IDs for each reference. The registry is an editorial starting point, not a claim that every historical statement in the game has been independently verified.
+
+
+## مركز تحكم النجاة — ALNAJAT CONTROL CENTER
+
+- صفحة الإدارة: [control-center.html](./control-center.html) — تتطلب تسجيل دخول Firebase مخصصاً للإدارة.
+- طبقة القياس: `alnajat-analytics.js`، اختيارية وتعمل بعد موافقة اللاعب الصريحة فقط.
+- إعداد Firebase وقواعد الأمان: [ANALYTICS_SETUP.md](./ANALYTICS_SETUP.md) و`firestore.rules`.
+- تُسجل أحداث مجمعة: بدء الجلسة، فتح المشهد، اتخاذ اختيار دون نصه، إكمال الرحلة أو نهاية مبكرة.
+- لا تُجمع أسماء أو أرقام هواتف أو رسائل أو مذكرات أو ملفات حفظ أو موقع دقيق. لا يتطلب اللعب حساباً.
+- لا تظهر بيانات تاريخية؛ يبدأ الرصد بعد إعداد Firebase وموافقة اللاعبين. إذا لم تُضبط إعدادات Firebase، لا تُرسل اللعبة أحداثاً إلى خادم.
