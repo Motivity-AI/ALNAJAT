@@ -9,6 +9,7 @@ const $=s=>document.querySelector(s);
 const lang=()=>document.documentElement.lang==="en"?"en":"ar";
 const t=(ar,en)=>lang()==="en"?en:ar;
 const esc=s=>String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+function readProgress(){try{const v=JSON.parse(localStorage.getItem(KEY)||"[]");return Array.isArray(v)?v.filter(x=>x&&stories.some(s=>s.id===x.id)&&Number.isInteger(x.choice)&&x.choice>=0&&x.choice<2):[];}catch(_){return [];}}
 const stories=[
 {id:"north",icon:"🌾",ar:"من الشمال: الماء الذي طال انتظاره",en:"From the North: The Water We Waited For",
 leadAr:"في قرية شمالية، لا يسمع الطفل صفارات القصف كل يوم. لكنه يعرف معنى أن يفتح الصنبور فلا يجد ماءً، وأن تتعطل المدرسة والعيادة، وأن يهاجر من بقي من الجيران بحثاً عن العمل.",
@@ -18,7 +19,7 @@ choices:[["يساعد أسرته في جلب الماء، ثم يسأل لماذ
 leadAr:"في الشرق، تستقبل الأسرة نازحين من ولاية أخرى. الخبز والعمل والسكن لم تعد سهلة، والطفل يسمع لهجات كثيرة في الصف نفسه. يتعلم أن ضغط الموارد لا يجعل القادم عدواً.",
 leadEn:"In the East, a family welcomes people displaced from another state. Bread, work and housing are harder to find, and many accents now share one classroom. The child learns that pressure on resources does not make newcomers enemies.",
 choices:[["يقاسم الأسرة الجديدة ما يستطيع، ويطلب من المدرسة ألا تترك أحداً خارج الصف.","Shares what the family can and asks the school not to leave anyone outside the classroom."],["ينضم إلى مبادرة محلية لتوثيق الاحتياجات وتوزيع المساعدة بعدل.","Joins a local effort to document needs and distribute aid fairly."]]},
-{id:"south",icon:"🌳",ar:"من جنوب البلاد: طريق العودة إلى البيت",en:"From Southern Sudan: The Road Home",
+{id:"south",icon:"🌳",ar:"من جنوب البلاد: طريق العودة إلى البيت",en:"From the South of Sudan: The Road Home",
 leadAr:"في جنوب البلاد، تتداخل مخاوف الأسرة من العنف والنزوح وتعطل الخدمات مع ذكريات قديمة عن الحرب. لا يريد الطفل أن يرث خوف الكبار ولا أن يُطلب منه أن يكره جماعة كاملة.",
 leadEn:"In the south of Sudan, fears of violence, displacement and broken services mingle with older memories of war. The child does not want to inherit adults' fear or be taught to hate an entire community.",
 choices:[["يسأل عن مصير أصدقائه من خلفيات مختلفة، ويرفض التعميم.","Asks what happened to friends from different backgrounds and refuses to generalise."],["يبحث عن مكان آمن للتعلم واللعب، ويطلب حماية كل الأطفال.","Looks for a safe place to learn and play, asking that every child be protected."]]},
@@ -27,18 +28,24 @@ leadAr:"نزح الطفل من حيّه. اختفت المدرسة والسوق 
 leadEn:"The child fled their neighbourhood. School, market and clinic disappeared; a phone became the way to search for relatives. They hear collective accusations, but know a neighbour is not guilty because of a name or place of origin.",
 choices:[["يوثق ما رآه دون نشر أسماء أو تعريض أحد للخطر.","Records what was witnessed without publishing names or putting anyone at risk."],["يساعد في لمّ شمل الأسر ويبحث عن طريق آمن للمساعدة.","Helps reunite families and finds safe ways to seek assistance."]]}
 ];
+const outcomes={
+north:[["ساعدت الأسرة في جلب الماء، ثم بدأت مع الجيران توثيق الأعطال ورفع طلب جماعي للجهة الخدمية. لم يصل الماء فوراً، لكن المشكلة لم تعد صامتة أو فردية.","You helped fetch water, then worked with neighbours to document the outages and submit a joint request to the service authority. Water did not return at once, but the problem was no longer invisible or carried alone."],["وجدت معلمتك مساحة تعلم مؤقتة، ووضعتما جدولاً يتيح للأطفال مواصلة الدراسة رغم نقص الموارد.","You and your teacher found a temporary learning space and made a timetable so children could continue studying despite limited resources."]],
+east:[["تقاسمت الأسرة الطعام والمساحة، ثم اتفقت مع الجيران على قائمة احتياجات معلنة حتى لا تُحرم أسرة أو تُفضّل أخرى.","Your family shared food and space, then agreed with neighbours on a public needs list so no household would be overlooked or unfairly favoured."],["سجلت المبادرة الاحتياجات دون أسماء حساسة، ووزعت المهام وفق ما توفر فعلاً لا وفق الانتماء أو الأصل.","The local effort recorded needs without sensitive names and assigned tasks according to actual capacity, never identity or origin."]],
+south:[["وجدت أخباراً متفرقة عن بعض الأصدقاء، لكنك لم تعرف مصير الجميع. قررت ألا تحوّل الخوف إلى اتهام جماعي، وأن تواصل البحث عبر قنوات آمنة.","You found fragments of news about some friends, but not everyone’s fate. You chose not to turn fear into collective accusation and continued searching through safer channels."],["شاركت في مساحة آمنة للتعلم واللعب، حيث اتفق الكبار على حماية الأطفال جميعاً وعدم سؤالهم عن انتماءاتهم قبل مساعدتهم.","You joined a safe place to learn and play, where adults agreed to protect every child and never make help depend on identity."]],
+center:[["حفظت ما شاهدته في سجل آمن، وحذفت منه الأسماء والتفاصيل التي قد تكشف هوية أحد. صار التوثيق مسؤولية لا وسيلة للانتقام.","You kept a secure record of what you witnessed, removing names and details that could identify anyone. Documentation became a responsibility, not a tool for revenge."],["ساعدت في إيصال معلومات البحث عن المفقودين إلى جهة موثوقة، وتعلمت ألا تنشر بيانات الأسرة على الملأ.","You helped pass missing-person information to a trusted service and learned not to publish family details openly."]]
+};
 const civics={
 ar:{title:"سؤال الدولة: جيش واحد أم جيوش متوازية؟",body:[
 "يسأل الطفل: إذا حملت كل جماعة سلاحها واحتفظت بقيادتها وقرارها، فمن يحمي المواطن عندما تختلف تلك القيادات؟ وهل نعيد إنتاج أسباب الحرب نفسها؟",
 "اتفاق جوبا للسلام نصّ على هدف جيش وطني مهني واحد، وعلى ترتيبات للدمج والتسريح وإعادة الإدماج. لكن التنفيذ تعثر، كما وثّقت تقارير أممية. هذا لا يعني أن كل مقاتل أو حركة واحدة؛ بل يعني أن وجود سلاسل قيادة مسلحة متنافسة يخلق خطراً على المدنيين وعلى وحدة الدولة.",
 "الحل الذي تناقشه الحكاية ليس إقصاء مناطق أو حركات، ولا دمجاً شكلياً بلا تدقيق: وقف نار قابل للمراقبة، حصر السلاح، تدقيق فردي مهني وحقوقي، تدريب موحد، قيادة وطنية واحدة خاضعة للقانون والرقابة المدنية، ومسارات DDR للذين لا تنطبق عليهم شروط الخدمة. العدالة والمحاسبة لا تسقطان بالاندماج.",
-"يسأل الطفل أيضاً عن جماعات تقاتل إلى جانب الجيش أو تعمل في تشكيلات ذات ولاءات خاصة. تذكر التقارير الأممية كتيبة البراء بن مالك ضمن جماعات مسلحة موالية للجيش، وتوثق اتهامات وانتهاكات منسوبة إلى أفراد وتشكيلات. وفي 2026 أدرجتها الولايات المتحدة ضمن تصنيفاتها الإرهابية؛ وهذا تصنيف صادر عن حكومة بعينها، وليس حكماً قضائياً عالمياً. لا يجوز تعميم مسؤولية أي تشكيل على سكان منطقة أو دين أو تيار بأكمله. أما أسماء مثل «الدراعون» فتحتاج تحديداً موثقاً قبل نسبة أفعال أو تصنيفات إليها."
+"يسأل الطفل أيضاً عن جماعات تقاتل إلى جانب الجيش أو تعمل في تشكيلات ذات ولاءات خاصة. تذكر التقارير الأممية كتيبة البراء بن مالك ضمن جماعات مسلحة موالية للجيش، وتوثق اتهامات وانتهاكات منسوبة إلى أفراد وتشكيلات. وفي 9 مارس 2026 حدّث مكتب مراقبة الأصول الأجنبية الأمريكي (OFAC) سجل العقوبات SDN، وأصبح سجل التشكيل يتضمن وسمَي FTO وSDGT وفق القانون الأمريكي. هذا إجراء حكومي أمريكي، لا حكم قضائي عالمي، ولا يثبت وحده مسؤولية فرد بعينه عن واقعة محددة. لا يجوز تعميم مسؤولية أي تشكيل على سكان منطقة أو دين أو تيار بأكمله. أما أسماء مثل «الدراعون» فتحتاج تحديداً موثقاً قبل نسبة أفعال أو تصنيفات إليها."
 ].join("\n\n")},
 en:{title:"The State Question: One Army or Parallel Armies?",body:[
 "The child asks: if every group keeps its own weapons, command and decisions, who protects civilians when those commanders disagree? Would we reproduce the very conditions that helped bring another war?",
 "The Juba Peace Agreement set out the goal of one professional national army and security arrangements for integration, disarmament, demobilisation and reintegration. UN reporting documented delays and fragmentation in implementation. This does not make every fighter or movement identical; it means competing armed chains of command create risks for civilians and the state.",
 "The path explored here is neither exclusion of regions and movements nor a paper merger without vetting: a monitored ceasefire, weapons registration, individual professional and human-rights vetting, common training, one national chain of command under law and civilian oversight, and DDR pathways for those who do not qualify for service. Integration must not erase justice or accountability.",
-"The child also asks about armed formations fighting alongside the army or retaining distinct loyalties. UN reporting identifies the Al-Baraa Bin Malik Battalion among SAF-aligned armed groups and documents allegations and abuses attributed to members and formations. In 2026, the United States designated it under its terrorism framework. That is a designation by one government, not a universal court judgment. Responsibility must never be generalised to an entire region, religion or political current. Names such as “Al-Dira'oon” require a clearly identified, reliable source before claims or designations are attached to them."
+"The child also asks about armed formations fighting alongside the army or retaining distinct loyalties. UN reporting identifies the Al-Baraa Bin Malik Battalion among SAF-aligned armed groups and documents allegations and abuses attributed to members and formations. On 9 March 2026, the US Treasury’s Office of Foreign Assets Control (OFAC) updated its SDN entry for the formation to include the FTO and SDGT tags under US law. This is a US government designation, not a universal court judgment, and does not by itself establish an individual’s responsibility for a specific incident. Responsibility must never be generalised to an entire region, religion or political current. Names such as “Al-Dira'oon” require a clearly identified, reliable source before claims or designations are attached to them."
 ].join("\n\n")}
 }
 function close(){const p=$("#pn");if(p)p.classList.remove("on");}
@@ -46,7 +53,7 @@ function openHome(){
 const l=lang(),p=$("#pn");if(!p)return;
 let h='<div class="asudan"><h3>🇸🇩 '+t("كل السودان… حكايات متعددة وكرامة واحدة","All Sudan… Many Stories, One Dignity")+'</h3><p>'+t("اختر بداية جديدة من إقليم مختلف. هذه حكايات إضافية مستقلة، ولا تستبدل رحلة دارفور الأصلية.","Choose a new beginning from another region. These are additional, independent stories; they do not replace the original Darfur journey.")+'</p>';
 stories.forEach((s,i)=>{h+='<button class="btn" type="button" data-story="'+s.id+'">'+s.icon+' '+(l==="en"?s.en:s.ar)+'</button>';});
-h+='<button class="btn" type="button" data-civics="1">⚖️ '+(l==="en"?civics.en.title:civics.ar.title)+'</button><p class="as-note">'+t("لا توجد معاناة واحدة تمثل السودان كله. الاختلاف في التجربة لا ينتقص من كرامة أي إنسان.","No single experience represents all of Sudan. Different experiences never diminish anyone's dignity.")+'</p><button class="btn pri" type="button" onclick="document.getElementById(\'pn\').classList.remove(\'on\')">'+t("إغلاق","Close")+'</button></div>';
+h+='<button class="btn" type="button" data-civics="1">⚖️ '+(l==="en"?civics.en.title:civics.ar.title)+'</button><p class="as-note">'+t("هذه مشاهد تخيلية مركبة وليست شهادات أو وصفاً لكل سكان الإقليم. لا توجد معاناة واحدة تمثل السودان كله، ولا ترتيب بين آلام الناس.","These are fictional composite scenes, not testimony or a description of every resident. No single experience represents all of Sudan, and suffering is never ranked.")+'</p><button class="btn pri" type="button" onclick="document.getElementById(\'pn\').classList.remove(\'on\')">'+t("إغلاق","Close")+'</button></div>';
 p.innerHTML=h;p.classList.add("on");
 p.querySelectorAll("[data-story]").forEach(b=>b.addEventListener("click",()=>openStory(b.dataset.story)));
 const c=p.querySelector("[data-civics]");if(c)c.addEventListener("click",openCivics);
@@ -60,11 +67,11 @@ p.innerHTML=h;p.classList.add("on");
 p.querySelectorAll("[data-choice]").forEach(b=>b.addEventListener("click",()=>finish(id,Number(b.dataset.choice))));
 }
 function finish(id,n){
-const s=stories.find(x=>x.id===id),l=lang();let saved=[];
-try{saved=JSON.parse(localStorage.getItem(KEY)||"[]");if(!Array.isArray(saved))saved=[];}catch(_){}
-saved.unshift({id,choice:n,at:new Date().toISOString()});saved=saved.slice(0,30);
-try{localStorage.setItem(KEY,JSON.stringify(saved));}catch(_){}
-const p=$("#pn");p.innerHTML='<div class="asudan"><h3>'+t("خطوة صغيرة في حكاية أكبر","A Small Step in a Larger Story")+'</h3><p>'+t("اخترتَ: ","You chose: ")+(l==="en"?s.choices[n][1]:s.choices[n][0])+'</p><p>'+t("السودان لا يُبنى بإلغاء اختلاف الناس، بل بضمان حقوقهم المتساوية، ومؤسسات تخدمهم جميعاً.","Sudan is not built by erasing differences, but by guaranteeing equal rights and institutions that serve everyone.")+'</p><button class="btn" onclick="window.openAllSudanScenarios()">'+t("استكشف مساراً آخر","Explore another story")+'</button><button class="btn pri" onclick="document.getElementById(\'pn\').classList.remove(\'on\')">'+t("إغلاق","Close")+'</button></div>';
+const s=stories.find(x=>x.id===id),l=lang();if(!s||!Number.isInteger(n)||n<0||n>1)return;
+const saved=readProgress();saved.unshift({id,choice:n,at:new Date().toISOString()});
+try{localStorage.setItem(KEY,JSON.stringify(saved.slice(0,30)));}catch(_){}
+const result=outcomes[id][n],p=$("#pn");
+p.innerHTML='<div class="asudan"><h3>'+t("خطوة صغيرة في حكاية أكبر","A Small Step in a Larger Story")+'</h3><p>'+t("اخترتَ: ","You chose: ")+(l==="en"?s.choices[n][1]:s.choices[n][0])+'</p><p>'+(l==="en"?result[1]:result[0])+'</p><p>'+t("السودان لا يُبنى بإلغاء اختلاف الناس، بل بضمان حقوقهم المتساوية، ومؤسسات تخدمهم جميعاً.","Sudan is not built by erasing differences, but by guaranteeing equal rights and institutions that serve everyone.")+'</p><button class="btn" onclick="window.openAllSudanScenarios()">'+t("استكشف مساراً آخر","Explore another story")+'</button><button class="btn pri" onclick="document.getElementById(\'pn\').classList.remove(\'on\')">'+t("إغلاق","Close")+'</button></div>';
 }
 function openCivics(){
 const l=lang(),d=civics[l],p=$("#pn");

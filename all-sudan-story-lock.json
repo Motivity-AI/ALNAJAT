@@ -1,0 +1,18 @@
+{
+  "schema": "alnajat-all-sudan-lock-v1",
+  "source": "alnajat-all-sudan.js",
+  "method": "FNV-1a-64 over UTF-16 code units; regression guard, not a cryptographic signature",
+  "expectedFingerprint": "e7c389f615deddff",
+  "routeIds": [
+    "north",
+    "east",
+    "south",
+    "center"
+  ],
+  "routeCount": 4,
+  "choicesPerRoute": 2,
+  "outcomesPerRoute": 2,
+  "independentStorageKey": "alnajat_all_sudan_v1",
+  "originalStoryStorageKeyMustRemainSeparate": true,
+  "note": "Protects the additive All Sudan layer only. Never fold this file into or replace story-lock.json; original story content remains protected separately."
+}

@@ -1,5 +1,5 @@
 /* ==================== النجاة — Service Worker ==================== */
-const VERSION = 'najat-v36';
+const VERSION = 'najat-v37';
 const SHELL = [
   './',
   './index.html',
@@ -14,7 +14,7 @@ const SHELL = [
   './alnajat-cinema-pro.js?v=2',
   './alnajat-editorial.js?v=7',
   './alnajat-safety.js?v=10',
-  './alnajat-all-sudan.js?v=1',
+  './alnajat-all-sudan.js?v=2',
   './sources.html',
   './privacy.html'
 ];
@@ -51,21 +51,23 @@ self.addEventListener('fetch', (e) => {
   try { url = new URL(req.url); } catch { return; }
   if (url.origin !== self.location.origin) return;
 
-  e.respondWith((async () => {
-    const cache = await caches.open(VERSION);
-    const cached = await cache.match(req, { ignoreSearch: true });
-    const network = fetch(req).then(res => {
-      if (res && res.ok && res.type === 'basic') {
-        cache.put(req, res.clone()).catch(() => {});
-      }
-      return res;
-    }).catch(() => null);
-    if (cached) return cached;
-    const fresh = await network;
-    if (fresh) return fresh;
-    if (req.mode === 'navigate') {
-      return cache.match('./index.html') || cache.match('./');
+  const cachePromise = caches.open(VERSION);
+  const networkPromise = fetch(req).then(async (res) => {
+    if (res && res.ok && res.type === 'basic') {
+      const cache = await cachePromise;
+      await cache.put(req, res.clone()).catch(() => {});
     }
+    return res;
+  }).catch(() => null);
+  // Keep the background refresh alive even when a cached response is returned.
+  e.waitUntil(networkPromise.then(() => undefined));
+  e.respondWith((async () => {
+    const cache = await cachePromise;
+    const cached = await cache.match(req, { ignoreSearch: true });
+    if (cached) return cached;
+    const response = await networkPromise;
+    if (response) return response;
+    if (req.mode === 'navigate') return (await cache.match('./index.html')) || (await cache.match('./'));
     return new Response('Offline', { status: 503, statusText: 'Offline' });
   })());
 });

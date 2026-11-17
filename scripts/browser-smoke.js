@@ -220,6 +220,48 @@ async function main() {
       document.documentElement.dir === "rtl" && document.querySelector("#app h1")?.textContent?.trim() === "النجاة"
     ));
 
+    // Verify the additive regional stories, bilingual labels, and isolated progress key.
+    await page.evaluate(() => window.openAllSudanScenarios());
+    await page.locator('#pn [data-story="north"]').waitFor({ state: "visible" });
+    check("All-Sudan menu exposes the four regional routes", await page.locator("#pn [data-story]").count() === 4);
+    await page.locator('#pn [data-story="north"]').click();
+    await page.locator('#pn [data-choice="0"]').click();
+    check("Regional choice stores progress independently of the original story save",
+      await page.evaluate(() => {
+        const saved = JSON.parse(localStorage.getItem("alnajat_all_sudan_v1") || "[]");
+        return saved[0]?.id === "north" && saved[0]?.choice === 0 &&
+          !!localStorage.getItem("najat_saves_v2");
+      }));
+    await page.evaluate(() => {
+      document.documentElement.lang = "en";
+      document.documentElement.dir = "ltr";
+      window.openAllSudanScenarios();
+    });
+    check("All-Sudan route menu renders in English",
+      (await page.locator('#pn [data-story="south"]').innerText()).includes("From the South of Sudan"));
+    await page.locator('#pn [data-story="south"]').click();
+    check("South route renders an English scene and choices",
+      (await page.locator("#pn .asudan").innerText()).includes("In the south of Sudan"));
+    await page.locator("#pn .asudan button").filter({ hasText: "Asks what happened" }).first().click();
+    check("English regional choice produces its distinct consequence",
+      (await page.locator("#pn .asudan").innerText()).includes("You found fragments of news"));
+    await page.evaluate(() => {
+      document.documentElement.lang = "ar";
+      document.documentElement.dir = "rtl";
+      document.getElementById("pn").classList.remove("on");
+    });
+    await page.evaluate(() => window.openAllSudanScenarios());
+    await page.locator('#pn [data-story="east"]').click();
+    await page.locator('#pn .asudan button').filter({ hasText: "يقاسم الأسرة الجديدة" }).click();
+    check("East route has its own Arabic consequence",
+      (await page.locator("#pn .asudan").innerText()).includes("تقاسمت الأسرة الطعام والمساحة"));
+    await page.evaluate(() => window.openAllSudanScenarios());
+    await page.locator('#pn [data-story="center"]').click();
+    await page.locator('#pn .asudan button').filter({ hasText: "يوثق ما رآه" }).click();
+    check("Centre/Gezira/Khartoum route has its own Arabic consequence",
+      (await page.locator("#pn .asudan").innerText()).includes("حفظت ما شاهدته في سجل آمن"));
+    await page.evaluate(() => document.getElementById("pn").classList.remove("on"));
+
     const audioTrigger = page.locator("[data-alnajat-audio-settings]");
     await audioTrigger.waitFor({ state: "visible", timeout: 10000 });
     await audioTrigger.click();
@@ -298,7 +340,7 @@ async function main() {
     if (engineName === "webkit") {
       const cachedShell = await page.evaluate(async () => {
         const names = await caches.keys();
-        const urls = [new URL("./", location.href).href, new URL("privacy.html", location.href).href];
+        const urls = [new URL("./", location.href).href, new URL("privacy.html", location.href).href, new URL("alnajat-all-sudan.js?v=2", location.href).href];
         const results = await Promise.all(names.map(async name => {
           const cache = await caches.open(name);
           return Promise.all(urls.map(url => cache.match(url)));
@@ -311,6 +353,10 @@ async function main() {
       await page.reload({ waitUntil: "domcontentloaded" });
       await page.locator("#app h1").waitFor({ state: "visible", timeout: 10000 });
       check("Game shell reloads and renders while offline", (await page.locator("#app h1").innerText()).includes("النجاة"));
+      await page.evaluate(() => window.openAllSudanScenarios());
+      await page.locator('#pn [data-story="north"]').waitFor({ state: "visible", timeout: 5000 });
+      check("All-Sudan regional stories open from the offline shell", await page.locator('#pn [data-story]').count() === 4);
+      await page.evaluate(() => document.getElementById("pn").classList.remove("on"));
       await page.locator("#alnajat-privacy-link").click();
       await page.locator("#ar h1").waitFor({ state: "visible", timeout: 5000 });
       check("Privacy policy is available from the offline cache", (await page.locator("#ar h1").innerText()).includes("الخصوصية"));
