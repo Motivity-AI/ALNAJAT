@@ -17,7 +17,10 @@
     try { let v=localStorage.getItem(key); if(!v){v=makeId();localStorage.setItem(key,v);} return v; }
     catch (_) { return makeId(); }
   };
-  const playerId=getId(PLAYER_KEY), sessionId=getId(SESSION_KEY);
+  const playerId=getId(PLAYER_KEY);
+  let sessionId;
+  try { sessionId=sessionStorage.getItem(SESSION_KEY); if(!sessionId){sessionId=makeId();sessionStorage.setItem(SESSION_KEY,sessionId);} }
+  catch (_) { sessionId=makeId(); }
   const startedAt=Date.now();
   let db=null, initialized=false, completed=false;
   function consent(){ try{return localStorage.getItem(CONSENT_KEY)||"unset";}catch(_){return "unset";} }
@@ -66,7 +69,7 @@
     const msg=accepted?"إيقاف مشاركة إحصاءات الاستخدام؟":"السماح بإحصاءات استخدام مجهولة؟";
     if(!window.confirm(msg))return;
     setConsent(accepted?"declined":"accepted");
-    if(accepted) { try{localStorage.removeItem(SESSION_KEY);}catch(_){} }
+    if(accepted) { try{sessionStorage.removeItem(SESSION_KEY);}catch(_){} }
   }
   function attach(){
     const style=document.createElement("style");
