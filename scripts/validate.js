@@ -60,9 +60,11 @@ try {
   for (const marker of ["signInWithEmailAndPassword", "onAuthStateChanged", "analyticsEvents", "noindex,nofollow"]) {
     if (!controlCenter.includes(marker)) fail("Control center is missing an authentication or privacy guard: " + marker);
   }
-  for (const marker of ["function isAdmin()", "allow read: if isAdmin()", "allow update, delete: if false", "match /admins/{uid}"]) {
+  const securityMarkers = ["function isAdmin()", "allow read: if isAdmin()", "allow update, delete: if false", "match /admins/{uid}"];
+  for (const marker of securityMarkers) {
     if (!firestoreRules.includes(marker)) fail("Firestore security rules are missing: " + marker);
-  } else pass("Control center uses authenticated access and restrictive Firestore rules");
+  }
+  if (securityMarkers.every(marker => firestoreRules.includes(marker))) pass("Control center uses authenticated access and restrictive Firestore rules");
   if (!html.includes('alnajat-analytics.js?v=1') || !sw.includes("'./alnajat-analytics.js?v=1'") ||
       !html.includes('analytics-config.js?v=1') || !sw.includes("'./analytics-config.js?v=1'") ||
       !sw.includes("'./control-center.html'")) fail("Analytics assets and control center are not wired into the offline shell");
