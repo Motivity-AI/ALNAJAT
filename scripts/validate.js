@@ -54,9 +54,12 @@ try {
   for (const marker of ["CONSENT_KEY", 'consent()!=="accepted"', "session_start", "scene_view", "choice_made", "game_completed", "loadFirebaseSdk"]) {
     if (!analytics.includes(marker)) fail("Opt-in analytics guard or event is missing: " + marker);
   }
-  if (!analyticsConfig.includes('enabled: false') || !analyticsConfig.includes("REPLACE_WITH_FIREBASE")) {
-    fail("Analytics must remain disabled until the owner supplies Firebase web configuration");
-  } else pass("Analytics is opt-in and disabled until Firebase is configured");
+  if (!analyticsConfig.includes('enabled: false') ||
+      !analyticsConfig.includes('projectId: "alnaja-b5d06"') ||
+      analyticsConfig.includes("REPLACE_WITH_FIREBASE") ||
+      analyticsConfig.includes("REPLACE_WITH_PROJECT")) {
+    fail("Firebase web configuration must be populated while analytics remains disabled pending Firestore rules and admin setup");
+  } else pass("Firebase web configuration is populated; analytics remains safely disabled pending backend security and admin setup");
   for (const marker of ["signInWithEmailAndPassword", "onAuthStateChanged", "analyticsEvents", "noindex,nofollow"]) {
     if (!controlCenter.includes(marker)) fail("Control center is missing an authentication or privacy guard: " + marker);
   }
