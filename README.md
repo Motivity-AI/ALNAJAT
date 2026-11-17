@@ -144,11 +144,10 @@
 The initial research and source-to-scene map is maintained in [SOURCES.md](./SOURCES.md). It records scope, limitations and scene IDs for each reference. The registry is an editorial starting point, not a claim that every historical statement in the game has been independently verified.
 
 
-## مركز تحكم النجاة — ALNAJAT CONTROL CENTER
+## الخصوصية وإيقاف التحليلات
 
-- صفحة الإدارة: [control-center.html](./control-center.html) — تتطلب تسجيل دخول Firebase مخصصاً للإدارة.
-- طبقة القياس: `alnajat-analytics.js`، اختيارية وتعمل بعد موافقة اللاعب الصريحة فقط.
-- إعداد Firebase وقواعد الأمان: [ANALYTICS_SETUP.md](./ANALYTICS_SETUP.md) و`firestore.rules`.
-- تُسجل أحداث مجمعة: بدء الجلسة، فتح المشهد، اتخاذ اختيار دون نصه، إكمال الرحلة أو نهاية مبكرة.
-- لا تُجمع أسماء أو أرقام هواتف أو رسائل أو مذكرات أو ملفات حفظ أو موقع دقيق. لا يتطلب اللعب حساباً.
-- لا تظهر بيانات تاريخية؛ يبدأ الرصد بعد إعداد Firebase وموافقة اللاعبين. إذا لم تُضبط إعدادات Firebase، لا تُرسل اللعبة أحداثاً إلى خادم.
+- لا تجمع اللعبة بيانات استخدام اللاعبين ولا تطلب موافقتهم على جمعها.
+- أزيلت طبقة التحليلات التي كانت تسجل معرّفات مستعارة للجلسات والمشاهد والأحداث.
+- صفحة `control-center.html` تعرض حالة إيقاف التحليلات فقط، ولا تقرأ قاعدة بيانات أو تعرض بيانات لاعبين.
+- تبقى بيانات تقدم اللعبة والذكريات محفوظة محلياً في متصفح اللاعب، وفق سياسة الخصوصية: [privacy.html](./privacy.html).
+
