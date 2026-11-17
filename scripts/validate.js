@@ -47,31 +47,10 @@ try {
   }
   execFileSync(process.execPath, [path.join(__dirname, "story-integrity.js")], { stdio: "inherit" });
   execFileSync(process.execPath, [path.join(__dirname, "all-sudan-integrity.js")], { stdio: "inherit" });
-  const analytics = read("alnajat-analytics.js");
-  const analyticsConfig = read("analytics-config.js");
-  const controlCenter = read("control-center.html");
-  const firestoreRules = read("firestore.rules");
-  for (const marker of ["CONSENT_KEY", 'consent()!=="accepted"', "session_start", "scene_view", "choice_made", "game_completed", "loadFirebaseSdk"]) {
-    if (!analytics.includes(marker)) fail("Opt-in analytics guard or event is missing: " + marker);
-  }
-  if (!analyticsConfig.includes('enabled: false') ||
-      !analyticsConfig.includes('projectId: "alnaja-b5d06"') ||
-      analyticsConfig.includes("REPLACE_WITH_FIREBASE") ||
-      analyticsConfig.includes("REPLACE_WITH_PROJECT")) {
-    fail("Firebase web configuration must be populated while analytics remains disabled pending Firestore rules and admin setup");
-  } else pass("Firebase web configuration is populated; analytics remains safely disabled pending backend security and admin setup");
-  for (const marker of ["signInWithEmailAndPassword", "onAuthStateChanged", "analyticsEvents", "noindex,nofollow"]) {
-    if (!controlCenter.includes(marker)) fail("Control center is missing an authentication or privacy guard: " + marker);
-  }
-  const securityMarkers = ["function isAdmin()", "allow read: if isAdmin()", "allow update, delete: if false", "match /admins/{uid}"];
-  for (const marker of securityMarkers) {
-    if (!firestoreRules.includes(marker)) fail("Firestore security rules are missing: " + marker);
-  }
-  if (securityMarkers.every(marker => firestoreRules.includes(marker))) pass("Control center uses authenticated access and restrictive Firestore rules");
-  if (!html.includes('alnajat-analytics.js?v=1') || !sw.includes("'./alnajat-analytics.js?v=1'") ||
-      !html.includes('analytics-config.js?v=1') || !sw.includes("'./analytics-config.js?v=1'") ||
-      !sw.includes("'./control-center.html'")) fail("Analytics assets and control center are not wired into the offline shell");
-  else pass("Analytics scripts and control center are included in the app shell");
+  if (html.includes("alnajat-analytics.js") || html.includes("analytics-config.js") ||
+      sw.includes("alnajat-analytics.js") || sw.includes("analytics-config.js")) {
+    fail("Player analytics code must remain removed");
+  } else pass("Player analytics collection is not loaded or cached");
   const manifest = JSON.parse(read("manifest.json"));
   if (!html.includes("</body>") || !html.includes("</html>")) fail("index.html is missing closing document tags");
   else pass("HTML document has closing tags");
