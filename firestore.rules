@@ -1,0 +1,45 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    function isAdmin() {
+      return request.auth != null &&
+        exists(/databases/$(database)/documents/admins/$(request.auth.uid));
+    }
+
+    match /analyticsEvents/{eventId} {
+      allow create: if request.resource.data.keys().hasOnly([
+          'eventType', 'playerId', 'sessionId', 'language',
+          'sceneId', 'appVersion', 'createdAt'
+        ]) &&
+        request.resource.data.keys().hasAll([
+          'eventType', 'playerId', 'sessionId', 'language',
+          'sceneId', 'appVersion', 'createdAt'
+        ]) &&
+        request.resource.data.eventType in [
+          'session_start', 'scene_view', 'choice_made',
+          'game_completed', 'run_ended'
+        ] &&
+        request.resource.data.playerId is string &&
+        request.resource.data.playerId.size() <= 64 &&
+        request.resource.data.sessionId is string &&
+        request.resource.data.sessionId.size() <= 64 &&
+        request.resource.data.language in ['ar', 'en'] &&
+        request.resource.data.sceneId is string &&
+        request.resource.data.sceneId.size() <= 32 &&
+        request.resource.data.appVersion is string &&
+        request.resource.data.appVersion.size() <= 24 &&
+        request.resource.data.createdAt == request.time;
+      allow read: if isAdmin();
+      allow update, delete: if false;
+    }
+
+    match /admins/{uid} {
+      allow get: if request.auth != null && request.auth.uid == uid;
+      allow list, create, update, delete: if false;
+    }
+
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}
