@@ -60,7 +60,7 @@ const snap=await db.collection("analyticsEvents").where("createdAt",">=",firebas
 lastRows=snap.docs.map(d=>({id:d.id,...d.data()}));
 const unique=new Set(lastRows.map(x=>x.playerId).filter(Boolean));
 const sessions=new Set(lastRows.filter(x=>x.eventType==="session_start").map(x=>x.sessionId));
-const completions=new Set(lastRows.filter(x=>x.eventType==="game_completed").map(x=>x.playerId));
+const completions=new Set(lastRows.filter(x=>x.eventType==="game_completed").map(x=>x.sessionId));
 const active7=new Set(lastRows.filter(x=>x.createdAt&&x.createdAt.toDate()>new Date(Date.now()-7*86400000)).map(x=>x.playerId));
 const views=lastRows.filter(x=>x.eventType==="scene_view").length;
 const choices=lastRows.filter(x=>x.eventType==="choice_made").length;
