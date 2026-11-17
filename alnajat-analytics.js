@@ -22,11 +22,10 @@
   try { sessionId=sessionStorage.getItem(SESSION_KEY); if(!sessionId){sessionId=makeId();sessionStorage.setItem(SESSION_KEY,sessionId);} }
   catch (_) { sessionId=makeId(); }
   const startedAt=Date.now();
-  let db=null, initialized=false, completed=false;
+  let db=null, sdkPromise=null, completed=false;
   function consent(){ try{return localStorage.getItem(CONSENT_KEY)||"unset";}catch(_){return "unset";} }
   function firebaseReady(){
-    if(initialized)return !!db;
-    initialized=true;
+    if(db)return true;
     if(!configured || !window.firebase || !firebaseCfg.projectId)return false;
     try{
       if(!firebase.apps.length)firebase.initializeApp(firebaseCfg);
@@ -34,8 +33,26 @@
       return true;
     }catch(e){console.warn("ALNAJAT analytics unavailable",e);return false;}
   }
+  function loadFirebaseSdk(){
+    if(firebaseReady())return Promise.resolve(true);
+    if(!configured)return Promise.resolve(false);
+    if(sdkPromise)return sdkPromise;
+    const load=(src)=>new Promise((resolve,reject)=>{
+      const script=document.createElement("script");script.src=src;script.async=true;
+      script.onload=resolve;script.onerror=()=>reject(new Error("Firebase SDK failed to load"));
+      document.head.appendChild(script);
+    });
+    sdkPromise=load("https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js")
+      .then(()=>load("https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore-compat.js"))
+      .then(()=>firebaseReady());
+    return sdkPromise;
+  }
   function log(eventType, extra){
-    if(consent()!=="accepted" || !firebaseReady())return;
+    if(consent()!=="accepted")return;
+    if(!firebaseReady()){
+      if(configured)loadFirebaseSdk().then(ok=>{if(ok)log(eventType,extra);}).catch(e=>console.warn("ALNAJAT analytics unavailable",e));
+      return;
+    }
     const payload={
       eventType,
       playerId,
