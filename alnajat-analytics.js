@@ -71,7 +71,7 @@
     if(value==="accepted") log("session_start",{});
   }
   function showConsent(){
-    if(consent()!=="unset" || document.getElementById("alnajat-consent"))return;
+    if(!configured || consent()!=="unset" || document.getElementById("alnajat-consent"))return;
     const el=document.createElement("section");
     el.id="alnajat-consent";
     el.setAttribute("role","dialog");el.setAttribute("aria-live","polite");
@@ -81,6 +81,7 @@
     document.getElementById("an-no").addEventListener("click",()=>setConsent("declined"));
   }
   function settings(){
+    if(!configured){window.alert("إحصاءات الاستخدام غير مفعّلة حالياً.");return;}
     const current=consent();
     const accepted=current==="accepted";
     const msg=accepted?"إيقاف مشاركة إحصاءات الاستخدام؟":"السماح بإحصاءات استخدام مجهولة؟";
@@ -103,7 +104,7 @@
     }
     const originalChoose=window.choose;
     if(typeof originalChoose==="function"&&!originalChoose.__anWrapped){
-      const wrapped=function(){log("choice_made",{sceneId:String(window.id||"")});return originalChoose.apply(this,arguments);};
+      const wrapped=function(){log("choice_made",{sceneId:String(typeof id!=="undefined"?id:"")});return originalChoose.apply(this,arguments);};
       wrapped.__anWrapped=true;window.choose=wrapped;
     }
     const originalEnding=window.renderEnding;
