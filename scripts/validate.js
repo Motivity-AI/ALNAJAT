@@ -48,10 +48,11 @@ try {
   execFileSync(process.execPath, [path.join(__dirname, "story-integrity.js")], { stdio: "inherit" });
   execFileSync(process.execPath, [path.join(__dirname, "all-sudan-integrity.js")], { stdio: "inherit" });
   const directorSource = read("alnajat-director.js");
-  for (const marker of ["openAlnajatInsights", "effects:cleanEffects", "Recorded net numeric effect", "Older choices without effect details"]) {
+  for (const marker of ["openAlnajatInsights", "openAlnajatRelations", "Relationship memories", "effects:cleanEffects", "Recorded net numeric effect", "Older choices without effect details"]) {
     if (!directorSource.includes(marker)) fail("Consequence insights feature is incomplete: " + marker);
   }
   if (!directorSource.includes("لا يصنّف شخصيتك أخلاقياً")) fail("Consequence insights must explain that its metrics are not a moral judgement");
+  if (!directorSource.includes("لا تقيس المحبة أو الولاء")) fail("Relationship memories must not claim to measure affection or loyalty");
   else pass("Privacy-preserving consequence insights are present and preserve legacy decision records");
   if (html.includes("alnajat-analytics.js") || html.includes("analytics-config.js") ||
       sw.includes("alnajat-analytics.js") || sw.includes("analytics-config.js")) {
