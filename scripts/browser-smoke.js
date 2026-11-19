@@ -110,6 +110,12 @@ async function main() {
     check("Consequence insights panel opens without changing the active story", await page.locator("#pn").isVisible() &&
       await page.locator("#pn").getByText("لا يصنّف شخصيتك أخلاقياً").count() === 1);
     await page.locator("#pn").getByRole("button", { name: /إغلاق|Close/ }).click();
+    await page.evaluate(() => { s.os = true; window.openAlnajatRelations(); });
+    await page.locator("#pn").getByText("ذاكرة الروابط").waitFor({ state: "visible" });
+    check("Relationship memories show existing companion records without judging the player",
+      await page.locator("#pn").getByText("عثمان").count() === 1 &&
+      await page.locator("#pn").getByText("لا تقيس المحبة أو الولاء").count() === 1);
+    await page.locator("#pn").getByRole("button", { name: /إغلاق|Close/ }).click();
 
     const allSudanButton = page.getByRole("button", { name: /حكايات من كل السودان/ });
     await allSudanButton.waitFor({ state: "visible", timeout: 5000 });
