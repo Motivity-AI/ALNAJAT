@@ -151,6 +151,7 @@
       '<div class="alnajat-dc-metric"><strong>'+events+'</strong><small>'+t("قرارات موثقة","Choices recorded")+'</small></div></div>'+
       card(t("أثر قراراتي","My decision trail"),t("شاهد تسلسل اختياراتك وما قادت إليه.","Review choices and where they led."),"📜","openAlnajatChronicle()")+
       card(t("بصمة العواقب","Consequence insights"),t("راجع الآثار المسجلة لاختياراتك على مؤشرات الرحلة.","Review recorded choice effects on journey indicators."),"⚖️","openAlnajatInsights()")+
+      card(t("ذاكرة الروابط","Relationship memories"),t("استرجع المواقف المسجلة التي جمعتك برفاق الرحلة.","Revisit recorded moments shared with your companions."),"🤝","openAlnajatRelations()")+
       card(t("أرشيف النهايات","Ending gallery"),t("اكتشف النهايات التي وصلت إليها.","See the endings you have unlocked."),"🏁","openAlnajatEndings()")+
       card(t("تقرير الرحلة","Journey report"),t("مؤشراتك ورفاقك ومحطاتك في ملخص واحد.","Your traits, companions and visited places."),"🧭","openAlnajatReport()")+
       card(t("بطاقة رحلتي","My journey card"),t("صمّم بطاقة فنية تلخّص أثر رحلتك واحفظها كصورة.","Create a visual keepsake of your journey and save it as an image."),"🎴","downloadAlnajatCard()")+
@@ -249,6 +250,36 @@
       '<div class="alnajat-dc-note">'+t("الأرقام تجمع التغييرات المسجلة وقت الاختيار، ولا تمثل الحالة الحالية للمؤشرات. لا تُستنتج منها أحكام على اللاعب. تبدأ التفاصيل من التحديث؛ السجلات القديمة تبقى محفوظة كما هي.","Totals sum changes recorded at choice time; they are not current stat values and imply no judgement about the player. Detailed capture begins with this update; older records remain intact.")+'</div>'+
       closeHtml();
     show(html);
+  };
+
+  window.openAlnajatRelations=function(){
+    const companions=(typeof COMP!=="undefined"&&typeof s!=="undefined"&&s)
+      ?Object.keys(COMP).filter(k=>s[k]===true):[];
+    let html='<h3>🤝 '+t("ذاكرة الروابط","Relationship memories")+'</h3>'+
+      '<p class="dc-lead">'+t("هذه الذاكرة تستعيد المواقف التي مررت بها مع الرفاق وفق سجل رحلتك المحلي. لا تقيس المحبة أو الولاء، ولا تضيف أحداثاً أو تغيّر القصة.","This view revisits moments shared with companions using your local journey record. It does not measure affection or loyalty, add events, or change the story.")+'</p>';
+    if(!companions.length){
+      html+='<div class="alnajat-dc-note">'+t("لم ينضم رفاق إلى رحلتك بعد. ستظهر هنا ذكريات المواقف المشتركة عندما تلتقي بهم أثناء اللعب.","No companions have joined your journey yet. Shared moments will appear here as you meet them in the story.")+'</div>';
+    }
+    companions.forEach(k=>{
+      const person=COMP[k],help=Array.isArray(person.help)?person.help:[];
+      const shared=state.visited.filter(scene=>help.includes(scene));
+      const moments=state.events.filter(event=>event&&help.includes(event.scene)).slice(-3).reverse();
+      const name=lang()==="en"?(person.en||k):(person.ar||k);
+      const role=lang()==="en"?(person.enRole||"Companion"):(person.arRole||"رفيق");
+      html+='<div class="alnajat-dc-row"><b>'+safe(person.icon||"👤")+' '+safe(name)+'</b><small>'+safe(role)+' · '+t("مواقف مشتركة مسجلة: ","Recorded shared moments: ")+shared.length+'</small>';
+      if(moments.length){
+        moments.forEach(event=>{
+          html+='<div>↳ '+safe(event.sceneTitle||sceneTitle(event.scene))+'</div><small>'+safe(event.choice||"")+'</small>';
+        });
+      }else if(shared.length){
+        html+='<small>'+t("زرت مشاهد مرتبطة بهذا الرفيق، لكن سجل القرارات لا يحتوي تفاصيلها.","You visited scenes associated with this companion, but the decision log has no details for them.")+'</small>';
+      }else{
+        html+='<small>'+t("لم يُسجّل موقف مشترك في سجل الرحلة الحالي بعد.","No shared moment has been recorded in the current journey log yet.")+'</small>';
+      }
+      html+='</div>';
+    });
+    html+='<div class="alnajat-dc-note">'+t("تعتمد هذه الصفحة على بيانات اللعبة الموجودة على هذا الجهاز فقط. لا تُرسل أسماء الرفاق أو اختياراتك إلى أي خادم.","This page uses only game data already stored on this device. Companion names and choices are not sent to any server.")+'</div>';
+    show(html+closeHtml());
   };
 
   window.openAlnajatEndings=function(){
