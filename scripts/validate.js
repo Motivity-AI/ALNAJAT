@@ -84,8 +84,8 @@ try {
   if (!html.includes('property="og:title"') || !html.includes('property="og:description"') ||
       !html.includes("function syncDocumentLanguage()")) fail("Localized page metadata and social preview tags are missing");
   else pass("Search and social metadata are present and synchronized with the selected language");
-  if (!html.includes('alnajat-director.js?v=3') || !sw.includes("'./alnajat-director.js?v=3'")) {
-    fail("Director and privacy navigation layer v3 is not loaded by both page and offline shell");
+  if (!html.includes('alnajat-director.js?v=4') || !sw.includes("'./alnajat-director.js?v=4'")) {
+    fail("Director and privacy navigation layer v4 is not loaded by both page and offline shell");
   }
 
   const version = (sw.match(/const VERSION\s*=\s*'([^']+)'/) || [])[1];
@@ -190,8 +190,8 @@ try {
     try { new Function(privacyScript); pass("Privacy page JavaScript syntax is valid"); }
     catch (error) { fail("Privacy page JavaScript syntax error: " + error.message); }
   }
-  if (!html.includes('alnajat-director.js?v=3') || !sw.includes("'./alnajat-director.js?v=3'")) {
-    fail("Privacy navigation layer v3 is not loaded by both page and offline shell");
+  if (!html.includes('alnajat-director.js?v=4') || !sw.includes("'./alnajat-director.js?v=4'")) {
+    fail("Privacy navigation layer v4 is not loaded by both page and offline shell");
   }
   for (const marker of ["id=\"alnajat-privacy-link\"", "Privacy & data", "الخصوصية والبيانات"]) {
     if (!director.includes(marker)) fail("In-game privacy navigation is missing: " + marker);
