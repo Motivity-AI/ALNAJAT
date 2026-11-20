@@ -105,6 +105,18 @@ async function main() {
       await page.evaluate(() => document.title.includes("النجاة") &&
         document.querySelector('meta[property="og:locale"]')?.content === "ar_SD"));
 
+    await page.evaluate(() => window.openAlnajatInsights());
+    await page.locator("#pn").getByText("بصمة العواقب").waitFor({ state: "visible" });
+    check("Consequence insights panel opens without changing the active story", await page.locator("#pn").isVisible() &&
+      await page.locator("#pn").getByText("لا يصنّف شخصيتك أخلاقياً").count() === 1);
+    await page.locator("#pn").getByRole("button", { name: /إغلاق|Close/ }).click();
+    await page.evaluate(() => window.openAlnajatRelations());
+    await page.locator("#pn").getByText("ذاكرة الروابط").waitFor({ state: "visible" });
+    check("Relationship memories handle a fresh journey without inventing companions",
+      await page.locator("#pn").getByText(/لم ينضم رفاق إلى رحلتك بعد/).count() === 1 &&
+      await page.locator("#pn").getByText("لا تقيس المحبة أو الولاء").count() === 1);
+    await page.locator("#pn").getByRole("button", { name: /إغلاق|Close/ }).click();
+
     const allSudanButton = page.getByRole("button", { name: /حكايات من كل السودان/ });
     await allSudanButton.waitFor({ state: "visible", timeout: 5000 });
     await allSudanButton.click();

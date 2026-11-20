@@ -98,8 +98,16 @@
     if(!nid)return;
     if(!state.visited.includes(nid)){state.visited.push(nid);write();}
   }
-  function recordChoice(scene,choice,next) {
-    state.events.push({at:Date.now(),scene,sceneTitle:sceneTitle(scene),choice:String(choice||""),next:next||"",nextTitle:sceneTitle(next)});
+  function recordChoice(scene,choice,next,effects) {
+    const cleanEffects={};
+    if(effects&&typeof effects==="object"&&!Array.isArray(effects)){
+      Object.keys(effects).forEach(k=>{
+        const v=effects[k];
+        if(/^[A-Za-z][A-Za-z0-9_]{0,24}$/.test(k)&&(typeof v==="number"&&Number.isFinite(v)||typeof v==="boolean"||typeof v==="string"&&v.length<=80))
+          cleanEffects[k]=v;
+      });
+    }
+    state.events.push({at:Date.now(),scene,sceneTitle:sceneTitle(scene),choice:String(choice||""),next:next||"",nextTitle:sceneTitle(next),effects:cleanEffects});
     if(state.events.length>MAX_EVENTS)state.events=state.events.slice(-MAX_EVENTS);
     write();
   }
@@ -107,14 +115,16 @@
   const originalChoose=window.choose;
   if(typeof originalChoose==="function"){
     window.choose=function(index){
-      let from="",choice="";
+      let from="",choice="",effects={};
       try{
         from=typeof id!=="undefined"?id:"";
-        choice=typeof choiceLabel==="function"?choiceLabel(from,index):(typeof curChoices!=="undefined"&&curChoices[index]?curChoices[index][0]:"");
+        const selected=typeof curChoices!=="undefined"&&curChoices[index]?curChoices[index]:null;
+        choice=typeof choiceLabel==="function"?choiceLabel(from,index):(selected?selected[0]:"");
+        if(selected&&selected[2]&&typeof selected[2]==="object"&&!Array.isArray(selected[2]))effects={...selected[2]};
       }catch(_){}
       const result=originalChoose.apply(this,arguments);
       let to="";try{to=typeof id!=="undefined"?id:"";}catch(_){}
-      if(from&&choice)recordChoice(from,choice,to);
+      if(from&&choice)recordChoice(from,choice,to,effects);
       return result;
     };
   }
@@ -140,6 +150,8 @@
       '<div class="alnajat-dc-metric"><strong>'+visits+'</strong><small>'+t("محطات زرتها","Scenes visited")+'</small></div>'+
       '<div class="alnajat-dc-metric"><strong>'+events+'</strong><small>'+t("قرارات موثقة","Choices recorded")+'</small></div></div>'+
       card(t("أثر قراراتي","My decision trail"),t("شاهد تسلسل اختياراتك وما قادت إليه.","Review choices and where they led."),"📜","openAlnajatChronicle()")+
+      card(t("بصمة العواقب","Consequence insights"),t("راجع الآثار المسجلة لاختياراتك على مؤشرات الرحلة.","Review recorded choice effects on journey indicators."),"⚖️","openAlnajatInsights()")+
+      card(t("ذاكرة الروابط","Relationship memories"),t("استرجع المواقف المسجلة التي جمعتك برفاق الرحلة.","Revisit recorded moments shared with your companions."),"🤝","openAlnajatRelations()")+
       card(t("أرشيف النهايات","Ending gallery"),t("اكتشف النهايات التي وصلت إليها.","See the endings you have unlocked."),"🏁","openAlnajatEndings()")+
       card(t("تقرير الرحلة","Journey report"),t("مؤشراتك ورفاقك ومحطاتك في ملخص واحد.","Your traits, companions and visited places."),"🧭","openAlnajatReport()")+
       card(t("بطاقة رحلتي","My journey card"),t("صمّم بطاقة فنية تلخّص أثر رحلتك واحفظها كصورة.","Create a visual keepsake of your journey and save it as an image."),"🎴","downloadAlnajatCard()")+
@@ -201,6 +213,72 @@
     if(!events.length)html+='<div class="alnajat-dc-note">'+t("لم تُسجّل قرارات بعد. ابدأ اللعب واختر طريقك، وسيظهر تاريخك هنا.","No decisions recorded yet. Play and make choices; your history will appear here.")+'</div>';
     events.forEach((e,i)=>{const date=new Date(e.at).toLocaleString(lang()==="en"?"en-US":"ar");html+='<div class="alnajat-dc-row"><b>'+(events.length-i)+'. '+safe(e.sceneTitle||sceneTitle(e.scene))+'</b><small>'+safe(date)+'</small><div>↳ '+safe(e.choice)+'</div><small>'+t("المشهد التالي: ","Next scene: ")+safe(e.nextTitle||sceneTitle(e.next))+'</small></div>';});
     if(events.length)html+='<div class="alnajat-dc-note">'+t("يعرض السجل آخر ","Showing the latest ")+events.length+t(" قراراً بحد أقصى."," recorded choices.")+'</div>';
+    show(html+closeHtml());
+  };
+
+  window.openAlnajatInsights=function(){
+    const keys=["h","f","p","e","c","m"];
+    const labels={
+      h:t("الصحة","Health"),f:t("الغذاء","Food"),p:t("الأمل","Hope"),
+      e:t("الطاقة","Energy"),c:t("الضمير","Conscience"),m:t("المال","Money")
+    };
+    const totals={h:0,f:0,p:0,e:0,c:0,m:0};
+    const touched={h:0,f:0,p:0,e:0,c:0,m:0};
+    let recorded=0,legacy=0,flags=0;
+    state.events.forEach(event=>{
+      const effects=event&&event.effects;
+      if(!effects||typeof effects!=="object"){legacy++;return;}
+      recorded++;
+      Object.keys(effects).forEach(k=>{
+        if(keys.includes(k)&&typeof effects[k]==="number"&&Number.isFinite(effects[k])){
+          totals[k]+=effects[k];touched[k]++;
+        }else if((k==="F"||k==="X")&&effects[k]!==undefined){flags++;}
+      });
+    });
+    const rows=keys.map(k=>{
+      const value=Math.round(totals[k]*100)/100;
+      const sign=value>0?"+":"";
+      return '<div class="alnajat-dc-row"><b>'+safe(labels[k])+'</b><small>'+t("صافي الأثر العددي المسجل: ","Recorded net numeric effect: ")+sign+value+' · '+t("قرارات مؤثرة: ","Affected choices: ")+touched[k]+'</small></div>';
+    }).join("");
+    const html='<h3>⚖️ '+t("بصمة العواقب","Consequence insights")+'</h3>'+
+      '<p class="dc-lead">'+t("ملخص حسابي للآثار التي تحملها بيانات الاختيارات نفسها. لا يصنّف شخصيتك أخلاقياً ولا يغيّر القصة أو نتائجها.","A numeric summary of effects stored with your choices. It does not judge your character or change the story or its outcomes.")+'</p>'+
+      '<div class="alnajat-dc-grid">'+
+      '<div class="alnajat-dc-metric"><strong>'+recorded+'</strong><small>'+t("قرارات لها بيانات أثر","Choices with effect data")+'</small></div>'+
+      '<div class="alnajat-dc-metric"><strong>'+legacy+'</strong><small>'+t("قرارات أقدم بلا تفاصيل أثر","Older choices without effect details")+'</small></div>'+
+      '<div class="alnajat-dc-metric"><strong>'+flags+'</strong><small>'+t("تغييرات أعلام القصة المسجلة","Recorded story-flag changes")+'</small></div></div>'+
+      rows+
+      '<div class="alnajat-dc-note">'+t("الأرقام تجمع التغييرات المسجلة وقت الاختيار، ولا تمثل الحالة الحالية للمؤشرات. لا تُستنتج منها أحكام على اللاعب. تبدأ التفاصيل من التحديث؛ السجلات القديمة تبقى محفوظة كما هي.","Totals sum changes recorded at choice time; they are not current stat values and imply no judgement about the player. Detailed capture begins with this update; older records remain intact.")+'</div>'+
+      closeHtml();
+    show(html);
+  };
+
+  window.openAlnajatRelations=function(){
+    const companions=(typeof COMP!=="undefined"&&typeof s!=="undefined"&&s)
+      ?Object.keys(COMP).filter(k=>s[k]===true):[];
+    let html='<h3>🤝 '+t("ذاكرة الروابط","Relationship memories")+'</h3>'+
+      '<p class="dc-lead">'+t("هذه الذاكرة تستعيد المواقف التي مررت بها مع الرفاق وفق سجل رحلتك المحلي. لا تقيس المحبة أو الولاء، ولا تضيف أحداثاً أو تغيّر القصة.","This view revisits moments shared with companions using your local journey record. It does not measure affection or loyalty, add events, or change the story.")+'</p>';
+    if(!companions.length){
+      html+='<div class="alnajat-dc-note">'+t("لم ينضم رفاق إلى رحلتك بعد. ستظهر هنا ذكريات المواقف المشتركة عندما تلتقي بهم أثناء اللعب.","No companions have joined your journey yet. Shared moments will appear here as you meet them in the story.")+'</div>';
+    }
+    companions.forEach(k=>{
+      const person=COMP[k],help=Array.isArray(person.help)?person.help:[];
+      const shared=state.visited.filter(scene=>help.includes(scene));
+      const moments=state.events.filter(event=>event&&help.includes(event.scene)).slice(-3).reverse();
+      const name=lang()==="en"?(person.en||k):(person.ar||k);
+      const role=lang()==="en"?(person.enRole||"Companion"):(person.arRole||"رفيق");
+      html+='<div class="alnajat-dc-row"><b>'+safe(person.icon||"👤")+' '+safe(name)+'</b><small>'+safe(role)+' · '+t("مواقف مشتركة مسجلة: ","Recorded shared moments: ")+shared.length+'</small>';
+      if(moments.length){
+        moments.forEach(event=>{
+          html+='<div>↳ '+safe(event.sceneTitle||sceneTitle(event.scene))+'</div><small>'+safe(event.choice||"")+'</small>';
+        });
+      }else if(shared.length){
+        html+='<small>'+t("زرت مشاهد مرتبطة بهذا الرفيق، لكن سجل القرارات لا يحتوي تفاصيلها.","You visited scenes associated with this companion, but the decision log has no details for them.")+'</small>';
+      }else{
+        html+='<small>'+t("لم يُسجّل موقف مشترك في سجل الرحلة الحالي بعد.","No shared moment has been recorded in the current journey log yet.")+'</small>';
+      }
+      html+='</div>';
+    });
+    html+='<div class="alnajat-dc-note">'+t("تعتمد هذه الصفحة على بيانات اللعبة الموجودة على هذا الجهاز فقط. لا تُرسل أسماء الرفاق أو اختياراتك إلى أي خادم.","This page uses only game data already stored on this device. Companion names and choices are not sent to any server.")+'</div>';
     show(html+closeHtml());
   };
 
