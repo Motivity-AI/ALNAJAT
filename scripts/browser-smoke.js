@@ -313,11 +313,8 @@ async function main() {
         const v = JSON.parse(localStorage.getItem("alnajat_next_chapter_v1") || "null");
         return v?.ended === true && v.ending === "accountable" && v.log.length === 7;
       }));
-    check("Next Chapter preserves the nine original ending definitions",
-      await page.evaluate(() => {
-        const v = JSON.parse(localStorage.getItem("najat_saves_v2") || "{}");
-        return !!v;
-      }));
+    check("Original player save remains byte-for-byte unchanged after the expansion ending",
+      await page.evaluate(expected => localStorage.getItem("najat_saves_v2") === expected, originalSaveBeforeExpansion));
     await page.evaluate(() => {
       document.documentElement.lang = "en";
       document.documentElement.dir = "ltr";
