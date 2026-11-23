@@ -304,14 +304,14 @@ async function main() {
     check("Next Chapter resumes the exact saved scene after reload", await page.evaluate(() =>
       JSON.parse(localStorage.getItem("alnajat_next_chapter_v1") || "null")?.scene === "departure"));
     // North route -> bridge -> ledger -> assembly -> decision -> accountable ending.
-    for (const choiceIndex of [0, 0, 1, 1, 0, 0]) {
+    for (const choiceIndex of [0, 0, 0, 1, 1, 0, 0]) {
       await page.locator("#pn .anx-choice").nth(choiceIndex).click();
     }
     await page.locator("#pn").getByText("دفتر لا يخاف من السؤال").waitFor({ state: "visible" });
     check("A complete North-route playthrough reaches its earned additional ending",
       await page.evaluate(() => {
         const v = JSON.parse(localStorage.getItem("alnajat_next_chapter_v1") || "null");
-        return v?.ended === true && v.ending === "accountable" && v.log.length === 7;
+        return v?.ended === true && v.ending === "accountable" && v.log.length === 8;
       }));
     check("Original player save remains byte-for-byte unchanged after the expansion ending",
       await page.evaluate(expected => localStorage.getItem("najat_saves_v2") === expected, originalSaveBeforeExpansion));
