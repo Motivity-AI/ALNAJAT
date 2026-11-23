@@ -295,7 +295,7 @@
     if(state.ended){renderEnding();return;}
     const scene=scenes[state.scene];if(!scene){state=fresh();save();renderScene();return;}
     const l=lang(),title=scene.title[l==="en"?1:0];let copy=scene.text[l==="en"?1:0];
-    if(state.scene==="bridge"&&state.route)copy+="\\n\\n"+routeEcho[state.route][l==="en"?1:0];
+    if(state.scene==="bridge"&&state.route)copy+="\n\n"+routeEcho[state.route][l==="en"?1:0];
     let html='<div class="anx-kicker">'+t("رحلة إضافية • الفصل ","ADDITIONAL JOURNEY • CHAPTER ")+scene.chapter+'</div><h3>'+esc(title)+'</h3><div class="anx-copy">'+esc(copy)+'</div>';
     scene.choices.forEach((c,i)=>{html+='<button class="anx-choice" type="button" data-choice="'+i+'">'+esc(c.label[l==="en"?1:0])+'</button>';});
     html+='<div class="anx-note">'+t("اختيارك لا يغيّر القصة الأصلية. يمكنك العودة لاحقاً؛ هذا الفصل يحفظ تقدمه في مساحة مستقلة.","Your choice does not alter the original story. You can return later; this chapter saves in a separate space.")+'</div>';
