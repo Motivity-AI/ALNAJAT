@@ -327,6 +327,7 @@ async function main() {
       await page.evaluate(() => document.documentElement.lang === "en" &&
         JSON.parse(localStorage.getItem("alnajat_next_chapter_v1") || "null")?.ending === "accountable"));
     async function verifyRegionalFollowup(routeIndex, expectedTitle, routeName) {
+      await page.evaluate(() => { document.documentElement.lang = "ar"; document.documentElement.dir = "rtl"; });
       await page.evaluate(() => window.openAlnajatNextChapter());
       await page.locator("#pn [data-action='restart']").waitFor({ state: "visible" });
       page.once("dialog", dialog => dialog.accept());
