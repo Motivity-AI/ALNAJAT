@@ -274,6 +274,64 @@ async function main() {
       (await page.locator("#pn .asudan").innerText()).includes("حفظت ما شاهدته في سجل آمن"));
     await page.evaluate(() => document.getElementById("pn").classList.remove("on"));
 
+    // Independent Next Chapter campaign: graph, bilingual rendering, save isolation and resume.
+    await page.evaluate(() => window.openAlnajatNextChapter());
+    const nextPanel = page.locator("#pn");
+    await nextPanel.getByText("الفصل التالي: وطن يتّسع للجميع").waitFor({ state: "visible" });
+    check("Next Chapter opens as an independent bilingual campaign", await nextPanel.getAttribute("role") === "dialog" &&
+      await nextPanel.getByText("رحلة جديدة بأربعة طرق إقليمية").count() === 1);
+    await nextPanel.getByRole("button", { name: "ابدأ الفصل الجديد" }).click();
+    await nextPanel.getByText("الفصل الأول: الرسالة التي لم تصل").waitFor({ state: "visible" });
+    const originalSaveBeforeExpansion = await page.evaluate(() => localStorage.getItem("najat_saves_v2"));
+    await nextPanel.locator(".anx-choice").nth(0).click();
+    await nextPanel.getByText("الفصل الأول: حقيبة صغيرة وأربعة طرق").waitFor({ state: "visible" });
+    check("Next Chapter choice advances and writes to its isolated save key", await page.evaluate(() => {
+      const v = JSON.parse(localStorage.getItem("alnajat_next_chapter_v1") || "null");
+      return v && v.scene === "departure" && v.log.length === 1 &&
+        !!localStorage.getItem("najat_saves_v2");
+    }));
+    check("Next Chapter does not overwrite the original player save",
+      await page.evaluate(expected => localStorage.getItem("najat_saves_v2") === expected, originalSaveBeforeExpansion));
+    await page.reload({ waitUntil: "domcontentloaded" });
+    await page.locator("#app h1").waitFor({ state: "visible" });
+    await page.evaluate(() => window.openAlnajatNextChapter());
+    await page.locator("#pn [data-action='resume']").waitFor({ state: "visible" });
+    await page.locator("#pn [data-action='resume']").click();
+    await page.locator("#pn").getByText("الفصل الأول: حقيبة صغيرة وأربعة طرق").waitFor({ state: "visible" });
+    check("Next Chapter resumes the exact saved scene after reload", await page.evaluate(() =>
+      JSON.parse(localStorage.getItem("alnajat_next_chapter_v1") || "null")?.scene === "departure"));
+    // North route -> bridge -> ledger -> assembly -> decision -> accountable ending.
+    for (const choiceIndex of [0, 0, 0, 0, 0, 0]) {
+      await page.locator("#pn .anx-choice").nth(choiceIndex).click();
+    }
+    await page.locator("#pn").getByText("دفتر لا يخاف من السؤال").waitFor({ state: "visible" });
+    check("A complete North-route playthrough reaches its earned additional ending",
+      await page.evaluate(() => {
+        const v = JSON.parse(localStorage.getItem("alnajat_next_chapter_v1") || "null");
+        return v?.ended === true && v.ending === "accountable" && v.log.length === 7;
+      }));
+    check("Next Chapter preserves the nine original ending definitions",
+      await page.evaluate(() => {
+        const v = JSON.parse(localStorage.getItem("najat_saves_v2") || "{}");
+        return !!v;
+      }));
+    await page.evaluate(() => {
+      document.documentElement.lang = "en";
+      document.documentElement.dir = "ltr";
+      window.openAlnajatNextChapter();
+    });
+    await page.locator("#pn").getByText("The Next Chapter: A Country with Room for Everyone").waitFor({ state: "visible" });
+    await page.locator("#pn [data-action='resume']").click();
+    await page.locator("#pn").getByText("A Ledger That Welcomes Questions").waitFor({ state: "visible" });
+    check("Next Chapter ending renders in English without changing the saved ending",
+      await page.evaluate(() => document.documentElement.lang === "en" &&
+        JSON.parse(localStorage.getItem("alnajat_next_chapter_v1") || "null")?.ending === "accountable"));
+    await page.evaluate(() => {
+      document.documentElement.lang = "ar";
+      document.documentElement.dir = "rtl";
+      document.getElementById("pn").classList.remove("on");
+    });
+
     const audioTrigger = page.locator("[data-alnajat-audio-settings]");
     await audioTrigger.waitFor({ state: "visible", timeout: 10000 });
     await audioTrigger.click();
