@@ -54,7 +54,7 @@ try{
   else pass("Expansion save and archive use independent local keys");
   if(/localStorage\.(clear|removeItem)\s*\(/.test(source)||/\bS\s*\[[^\]]+\]\s*=/.test(source))fail("Expansion must not clear saves or mutate canonical story data");
   else pass("No canonical story mutation or broad save deletion found");
-  if(!source.includes("No player analytics")||!source.includes("لا يجمع بيانات أو تحليلات"))fail("Privacy disclosure is missing");
+  if(!source.includes("no player analytics")||!source.includes("لا يجمع بيانات أو تحليلات"))fail("Privacy disclosure is missing");
   else pass("No-player-analytics disclosure is present");
   if(process.exitCode)process.exit(process.exitCode);
   console.log("\nNext Chapter integrity checks passed.");
