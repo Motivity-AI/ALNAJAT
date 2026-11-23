@@ -326,6 +326,21 @@ async function main() {
     check("Next Chapter ending renders in English without changing the saved ending",
       await page.evaluate(() => document.documentElement.lang === "en" &&
         JSON.parse(localStorage.getItem("alnajat_next_chapter_v1") || "null")?.ending === "accountable"));
+    async function verifyRegionalFollowup(routeIndex, expectedTitle, routeName) {
+      await page.evaluate(() => window.openAlnajatNextChapter());
+      await page.locator("#pn [data-action='restart']").waitFor({ state: "visible" });
+      page.once("dialog", dialog => dialog.accept());
+      await page.locator("#pn [data-action='restart']").click();
+      await page.locator("#pn .anx-choice").first().click(); // prologue -> route selection
+      await page.locator("#pn .anx-choice").nth(routeIndex).click();
+      await page.locator("#pn .anx-choice").first().click();
+      await page.locator("#pn").getByText(expectedTitle).waitFor({ state: "visible" });
+      check(routeName + " route opens its own follow-up scene",
+        await page.evaluate(() => !!JSON.parse(localStorage.getItem("alnajat_next_chapter_v1") || "null")?.companion));
+    }
+    await verifyRegionalFollowup(1, "الشرق — طاولة من مقعدين", "East");
+    await verifyRegionalFollowup(2, "الجنوب — الاسم أمانة", "South");
+    await verifyRegionalFollowup(3, "الوسط — شهادة لا تتحول إلى اتهام", "Centre/Gezira/Khartoum");
     await page.evaluate(() => {
       document.documentElement.lang = "ar";
       document.documentElement.dir = "rtl";
