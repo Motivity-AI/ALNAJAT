@@ -326,6 +326,11 @@ async function main() {
     check("Next Chapter ending renders in English without changing the saved ending",
       await page.evaluate(() => document.documentElement.lang === "en" &&
         JSON.parse(localStorage.getItem("alnajat_next_chapter_v1") || "null")?.ending === "accountable"));
+    await page.locator("#pn [data-journal='1']").click();
+    await page.locator("#pn").getByText("Journey Journal").waitFor({ state: "visible" });
+    check("Journey journal displays the English scene and choice history",
+      await page.locator("#pn").getByText(/The North — When the Ledger Became Evidence/).count() === 1);
+    await page.locator("#pn [data-close='1']").click();
     async function verifyRegionalFollowup(routeIndex, expectedTitle, routeName) {
       await page.evaluate(() => { document.documentElement.lang = "ar"; document.documentElement.dir = "rtl"; });
       await page.evaluate(() => window.openAlnajatNextChapter());
