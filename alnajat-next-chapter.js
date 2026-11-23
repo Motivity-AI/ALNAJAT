@@ -180,10 +180,15 @@
   ];
   function fresh(){return {version:VERSION,scene:"prologue",route:null,stats:{truth:0,care:0,solidarity:0,agency:0,bond:0},companion:null,flags:[],log:[],startedAt:Date.now(),updatedAt:Date.now(),ended:false,ending:null};}
   function validState(v){
-    if(!v||v.version!==VERSION||!scenes[v.scene]&&!v.ended)return false;
-    if(!v.stats||!metrics.every(m=>Number.isFinite(v.stats[m[0]])))return false;
+    if(!v||v.version!==VERSION)return false;
+    if(v.ended){if(v.scene!=="decision"||!endings[v.ending])return false;}
+    else if(!scenes[v.scene])return false;
+    if(v.route!==null&&!["north","east","south","centre"].includes(v.route))return false;
+    if(v.companion!==null&&(typeof v.companion!=="string"||v.companion.length>40))return false;
+    if(!v.stats||!metrics.every(m=>Number.isFinite(v.stats[m[0]])&&v.stats[m[0]]>=-5&&v.stats[m[0]]<=20))return false;
     if(!Array.isArray(v.log)||!Array.isArray(v.flags))return false;
     if(v.log.length>MAX_LOG||v.flags.length>80)return false;
+    if(!v.log.every(e=>e&&typeof e.from==="string"&&typeof e.to==="string"&&Array.isArray(e.title)&&e.title.length===2&&Array.isArray(e.choice)&&e.choice.length===2))return false;
     return true;
   }
   function load(){try{const v=JSON.parse(localStorage.getItem(KEY)||"null");return validState(v)?v:fresh();}catch(_){return fresh();}}
