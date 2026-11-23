@@ -286,7 +286,7 @@
   function renderJournal(){
     const l=lang();let html='<h3>📖 '+t("دفتر الرحلة","Journey Journal")+'</h3>';
     if(!state.log.length)html+='<p class="mut">'+t("لم تبدأ الرحلة بعد.","The journey has not begun yet.")+'</p>';
-    state.log.slice().reverse().forEach((entry,i)=>{html+='<div class="anx-note"><b>'+(state.log.length-i)+'. '+esc(entry.title[l])+'</b><br>'+esc(entry.choice[l])+'</div>';});
+    state.log.slice().reverse().forEach((entry,i)=>{html+='<div class="anx-note"><b>'+(state.log.length-i)+'. '+esc(entry.title[l==="en"?1:0])+'</b><br>'+esc(entry.choice[l==="en"?1:0])+'</div>';});
     html+='<div class="anx-actions"><button class="btn" type="button" data-back="1">'+t("عودة","Back")+'</button><button class="btn pri" type="button" data-close="1">'+t("إغلاق","Close")+'</button></div>';
     show(html);const p=panel();$("[data-back]",p)?.addEventListener("click",renderMenu);$("[data-close]",p)?.addEventListener("click",close);
   }
