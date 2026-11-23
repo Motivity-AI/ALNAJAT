@@ -50,8 +50,8 @@
         "وجدت دفتر صيانة قديماً. أسماء القرى مكتوبة، لكن مواعيد الأعطال غير مسجلة. طفل اسمه مأمون اقترح أن يرسم خريطة للمضخات، بينما أصرّ أحد الكبار أن المشكلة تحتاج إلى تمويل فقط. كان أمامك قرار: كيف تبدأ من دون أن تعد بما لا تملك؟"
       ],
       choices:[
-        {label:["ابدأ بسجل علني للأعطال والاحتياجات، مع حماية بيانات الأسر.","Start a public log of faults and needs while protecting household data."],to:"north_record",fx:{truth:2,care:1},tag:"evidence",companion:"نفيسة"},
-        {label:["نظّم فريقاً محلياً للصيانة والتعلّم، واطلب دعماً محدداً.","Organise a local maintenance and learning team, then request specific support."],to:"north_team",fx:{solidarity:2,agency:1},tag:"organise",companion:"مأمون"}
+        {label:["ابدأ بسجل علني للأعطال والاحتياجات، مع حماية بيانات الأسر.","Start a public log of faults and needs while protecting household data."],to:"north_record",fx:{truth:2,care:1},tag:"evidence",companion:"nafisa"},
+        {label:["نظّم فريقاً محلياً للصيانة والتعلّم، واطلب دعماً محدداً.","Organise a local maintenance and learning team, then request specific support."],to:"north_team",fx:{solidarity:2,agency:1},tag:"organise",companion:"mamoun"}
       ]
     },
     east:{
@@ -61,8 +61,8 @@
         "اقترح صاحب المخبز أن يضع قائمة بالأسر التي تحتاج إلى الخبز، بينما خافت أمّ من أن تكشف القائمة أسماء أطفالها. رأيت أن العدالة ليست إعلان كل شيء؛ إنها إعلان القواعد مع صون كرامة الناس."
       ],
       choices:[
-        {label:["ضع قواعد توزيع واضحة يراجعها ممثلون من الحي دون نشر أسماء الأسر.","Set transparent distribution rules reviewed by neighbourhood representatives without publishing family names."],to:"east_rules",fx:{solidarity:2,truth:1},tag:"fairness",companion:"هدى"},
-        {label:["افتح مساحة حوار بين السكان القدامى والجدد حول الاحتياجات المشتركة.","Create a dialogue space between long-time residents and newcomers about shared needs."],to:"east_dialogue",fx:{bond:2,care:1},tag:"dialogue",companion:"ياسر"}
+        {label:["ضع قواعد توزيع واضحة يراجعها ممثلون من الحي دون نشر أسماء الأسر.","Set transparent distribution rules reviewed by neighbourhood representatives without publishing family names."],to:"east_rules",fx:{solidarity:2,truth:1},tag:"fairness",companion:"huda"},
+        {label:["افتح مساحة حوار بين السكان القدامى والجدد حول الاحتياجات المشتركة.","Create a dialogue space between long-time residents and newcomers about shared needs."],to:"east_dialogue",fx:{bond:2,care:1},tag:"dialogue",companion:"yasser"}
       ]
     },
     south:{
@@ -72,8 +72,8 @@
         "وصلت قائمة بأسماء أطفال مفقودين من مجموعات مختلفة. لم تكن القائمة مكتملة، وبعض الأسماء متشابهة. أدركت أن نشرها بلا تحقق قد يؤذي أسراً أخرى. كيف تحمي حق الناس في المعرفة وحقهم في الخصوصية معاً؟"
       ],
       choices:[
-        {label:["اعمل مع جهة موثوقة للتحقق ولمّ الشمل، ولا تنشر بيانات حساسة.","Work with a trusted service to verify information and reunite families; do not publish sensitive data."],to:"south_verify",fx:{truth:2,care:1},tag:"protection",companion:"سارة"},
-        {label:["ابدأ مساحة لعب وتعلّم يقودها الأطفال بموافقة أسرهم.","Start a play-and-learning space shaped by children with their families' consent."],to:"south_play",fx:{care:2,bond:1},tag:"safe-space",companion:"ريم"}
+        {label:["اعمل مع جهة موثوقة للتحقق ولمّ الشمل، ولا تنشر بيانات حساسة.","Work with a trusted service to verify information and reunite families; do not publish sensitive data."],to:"south_verify",fx:{truth:2,care:1},tag:"protection",companion:"sara"},
+        {label:["ابدأ مساحة لعب وتعلّم يقودها الأطفال بموافقة أسرهم.","Start a play-and-learning space shaped by children with their families' consent."],to:"south_play",fx:{care:2,bond:1},tag:"safe-space",companion:"reem"}
       ]
     },
     centre:{
@@ -83,8 +83,8 @@
         "عرض عليك تاجر أن تنشر صوراً لوجوه أشخاص اتُّهموا بالسرقة. قال إن الناس يستحقون معرفة الحقيقة. لكن الصور غير موثقة، ونشرها قد يعرّض أبرياء للخطر. الحقيقة تحتاج إلى دليل، لا إلى سرعة الغضب."
       ],
       choices:[
-        {label:["ساعد في توثيق الخسائر والشهادات بموافقة أصحابها، دون نشر اتهامات غير مثبتة.","Help document losses and testimonies with consent, without publishing unverified accusations."],to:"centre_record",fx:{truth:2,care:1},tag:"documentation",companion:"ليلى"},
-        {label:["أنشئ تعاونية صغيرة لتبادل العمل والسلع بشروط معلنة.","Create a small cooperative for exchanging work and goods under clear terms."],to:"centre_coop",fx:{solidarity:2,agency:1},tag:"cooperative",companion:"عبدالرحمن"}
+        {label:["ساعد في توثيق الخسائر والشهادات بموافقة أصحابها، دون نشر اتهامات غير مثبتة.","Help document losses and testimonies with consent, without publishing unverified accusations."],to:"centre_record",fx:{truth:2,care:1},tag:"documentation",companion:"layla"},
+        {label:["أنشئ تعاونية صغيرة لتبادل العمل والسلع بشروط معلنة.","Create a small cooperative for exchanging work and goods under clear terms."],to:"centre_coop",fx:{solidarity:2,agency:1},tag:"cooperative",companion:"abdelrahman"}
       ]
     },
     north_record:{
@@ -322,12 +322,16 @@
     else state.scene=c.to;
     save();renderScene();
   }
+  const companionNames={
+    nafisa:["نفيسة","Nafisa"],mamoun:["مأمون","Mamoun"],huda:["هدى","Huda"],yasser:["ياسر","Yasir"],
+    sara:["سارة","Sara"],reem:["ريم","Reem"],layla:["ليلى","Layla"],abdelrahman:["عبدالرحمن","Abdulrahman"]
+  };
   function renderEnding(){
     const l=lang(),e=endings[state.ending]||endings.unfinished,copy=e[l==="en"?1:0];
     let html='<div class="anx-kicker">'+t("الفصل الرابع • خاتمة إضافية","CHAPTER FOUR • ADDITIONAL ENDING")+'</div><h3>✦ '+esc(copy[0])+'</h3><div class="anx-copy">'+esc(copy[1])+'</div>';
     html+='<div class="anx-note">'+t("هذه خاتمة إضافية مستقلة. النهايات التسع الأصلية لم تتغير، ولم تُستبدل أو تُختصر.","This is an independent additional ending. The nine original endings have not been changed, replaced or shortened.")+'</div>';
     const routeEnding=routeEcho[state.route]||["لم تنتهِ الحكاية عند حدود المنطقة التي زرتها. بقيت لك طرق أخرى وأشخاص آخرون يستحقون أن تُسمع حكاياتهم.","Your story did not end at the border of the region you visited. Other roads and people remain, with stories still worth hearing."];
-    html+='<div class="anx-note">'+esc(routeEnding[l==="en"?1:0])+(state.companion?" · "+esc(state.companion):"")+'</div>';
+    html+='<div class="anx-note">'+esc(routeEnding[l==="en"?1:0])+(state.companion?" · "+esc(companionNames[state.companion]?.[l==="en"?1:0]||""):"")+'</div>';
     html+='<div class="anx-actions"><button class="btn pri" type="button" data-journal="1">'+t("راجع قراراتك","Review your choices")+'</button><button class="btn" type="button" data-menu="1">'+t("قائمة الفصل","Chapter menu")+'</button></div>';
     show(html);const p=panel();$("[data-journal]",p)?.addEventListener("click",renderJournal);$("[data-menu]",p)?.addEventListener("click",renderMenu);
   }
