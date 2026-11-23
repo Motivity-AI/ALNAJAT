@@ -105,6 +105,9 @@ async function main() {
       await page.evaluate(() => document.title.includes("النجاة") &&
         document.querySelector('meta[property="og:locale"]')?.content === "ar_SD"));
 
+    await page.getByRole("button", { name: /الفصل التالي: وطن يتّسع للجميع/ }).waitFor({ state: "visible", timeout: 5000 });
+    check("Next Chapter is discoverable from the main menu", await page.getByRole("button", { name: /الفصل التالي: وطن يتّسع للجميع/ }).count() === 1);
+
     await page.evaluate(() => window.openAlnajatInsights());
     await page.locator("#pn").getByText("بصمة العواقب").waitFor({ state: "visible" });
     check("Consequence insights panel opens without changing the active story", await page.locator("#pn").isVisible() &&
@@ -410,19 +413,23 @@ async function main() {
     if (engineName === "webkit") {
       const cachedShell = await page.evaluate(async () => {
         const names = await caches.keys();
-        const urls = [new URL("./", location.href).href, new URL("privacy.html", location.href).href, new URL("alnajat-all-sudan.js?v=2", location.href).href];
+        const urls = [new URL("./", location.href).href, new URL("privacy.html", location.href).href, new URL("alnajat-all-sudan.js?v=2", location.href).href, new URL("alnajat-next-chapter.js?v=1", location.href).href];
         const results = await Promise.all(names.map(async name => {
           const cache = await caches.open(name);
           return Promise.all(urls.map(url => cache.match(url)));
         }));
         return urls.every((_, index) => results.some(items => !!items[index]));
       });
-      check("WebKit precaches both game shell and privacy page for offline use", cachedShell);
+      check("WebKit precaches game shell, privacy page and Next Chapter for offline use", cachedShell);
     } else {
       await context.setOffline(true);
       await page.reload({ waitUntil: "domcontentloaded" });
       await page.locator("#app h1").waitFor({ state: "visible", timeout: 10000 });
       check("Game shell reloads and renders while offline", (await page.locator("#app h1").innerText()).includes("النجاة"));
+      await page.evaluate(() => window.openAlnajatNextChapter());
+      await page.locator("#pn").getByText("الفصل التالي: وطن يتّسع للجميع").waitFor({ state: "visible", timeout: 5000 });
+      check("Next Chapter opens from the offline shell", await page.locator("#pn .anx-panel").count() === 1);
+      await page.locator("#pn").getByRole("button", { name: "إغلاق" }).click();
       await page.evaluate(() => window.openAllSudanScenarios());
       await page.locator('#pn [data-story="north"]').waitFor({ state: "visible", timeout: 5000 });
       check("All-Sudan regional stories open from the offline shell", await page.locator('#pn [data-story]').count() === 4);
