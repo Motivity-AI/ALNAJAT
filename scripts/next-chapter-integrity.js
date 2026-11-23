@@ -26,7 +26,7 @@ try{
   const scenes=new Function("return ("+extractObject("const scenes =")+")")();
   const endings=new Function("return ("+extractObject("const endings={")+")")();
   const ids=Object.keys(scenes);
-  if(ids.length!==10)fail("Expected 10 authored story scenes, found "+ids.length);
+  if(ids.length!==18)fail("Expected 18 authored story scenes, found "+ids.length);
   else pass("All "+ids.length+" authored scenes are present");
   const edges=[];
   for(const [id,scene] of Object.entries(scenes)){
@@ -45,7 +45,7 @@ try{
   const unreachable=ids.filter(id=>!reached.has(id));
   if(unreachable.length)fail("Unreachable expansion scenes: "+unreachable.join(", "));
   else pass("Every expansion scene is reachable from its prologue");
-  const routeIds=["north","east","south","centre"];
+  const routeIds=["north","east","south","centre"];\n  const followups=["north_record","north_team","east_rules","east_dialogue","south_verify","south_play","centre_record","centre_coop"];\n  if(!followups.every(id=>scenes[id]))fail("One or more branch-specific follow-up scenes are missing");\n  else pass("All eight choice-specific regional follow-up scenes exist");
   if(!routeIds.every(id=>scenes[id]))fail("One or more regional routes are missing");
   else pass("North, East, South, and Centre/Gezira/Khartoum routes exist");
   if(!Object.keys(endings).join(",").includes("accountable")||Object.keys(endings).length!==4)fail("Expected four distinct additional endings");
