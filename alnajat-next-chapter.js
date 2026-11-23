@@ -299,5 +299,7 @@
     };
   }
   window.openAlnajatNextChapter=open;
+  if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",function(){if(typeof window.showMenu==="function")window.showMenu();},{once:true});
+  else if(typeof window.showMenu==="function")window.showMenu();
   console.log("ALNAJAT Next Chapter ready — additive narrative campaign");
 })();
