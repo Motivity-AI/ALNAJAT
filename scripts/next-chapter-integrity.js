@@ -45,7 +45,10 @@ try{
   const unreachable=ids.filter(id=>!reached.has(id));
   if(unreachable.length)fail("Unreachable expansion scenes: "+unreachable.join(", "));
   else pass("Every expansion scene is reachable from its prologue");
-  const routeIds=["north","east","south","centre"];\n  const followups=["north_record","north_team","east_rules","east_dialogue","south_verify","south_play","centre_record","centre_coop"];\n  if(!followups.every(id=>scenes[id]))fail("One or more branch-specific follow-up scenes are missing");\n  else pass("All eight choice-specific regional follow-up scenes exist");
+  const routeIds=["north","east","south","centre"];
+  const followups=["north_record","north_team","east_rules","east_dialogue","south_verify","south_play","centre_record","centre_coop"];
+  if(!followups.every(id=>scenes[id]))fail("One or more branch-specific follow-up scenes are missing");
+  else pass("All eight choice-specific regional follow-up scenes exist");
   if(!routeIds.every(id=>scenes[id]))fail("One or more regional routes are missing");
   else pass("North, East, South, and Centre/Gezira/Khartoum routes exist");
   if(!Object.keys(endings).join(",").includes("accountable")||Object.keys(endings).length!==4)fail("Expected four distinct additional endings");
