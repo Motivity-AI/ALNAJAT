@@ -50,8 +50,8 @@
         "وجدت دفتر صيانة قديماً. أسماء القرى مكتوبة، لكن مواعيد الأعطال غير مسجلة. طفل اسمه مأمون اقترح أن يرسم خريطة للمضخات، بينما أصرّ أحد الكبار أن المشكلة تحتاج إلى تمويل فقط. كان أمامك قرار: كيف تبدأ من دون أن تعد بما لا تملك؟"
       ],
       choices:[
-        {label:["ابدأ بسجل علني للأعطال والاحتياجات، مع حماية بيانات الأسر.","Start a public log of faults and needs while protecting household data."],to:"bridge",fx:{truth:2,care:1},tag:"evidence"},
-        {label:["نظّم فريقاً محلياً للصيانة والتعلّم، واطلب دعماً محدداً.","Organise a local maintenance and learning team, then request specific support."],to:"bridge",fx:{solidarity:2,agency:1},tag:"organise"}
+        {label:["ابدأ بسجل علني للأعطال والاحتياجات، مع حماية بيانات الأسر.","Start a public log of faults and needs while protecting household data."],to:"north_record",fx:{truth:2,care:1},tag:"evidence",companion:"نفيسة"},
+        {label:["نظّم فريقاً محلياً للصيانة والتعلّم، واطلب دعماً محدداً.","Organise a local maintenance and learning team, then request specific support."],to:"north_team",fx:{solidarity:2,agency:1},tag:"organise",companion:"مأمون"}
       ]
     },
     east:{
@@ -61,8 +61,8 @@
         "اقترح صاحب المخبز أن يضع قائمة بالأسر التي تحتاج إلى الخبز، بينما خافت أمّ من أن تكشف القائمة أسماء أطفالها. رأيت أن العدالة ليست إعلان كل شيء؛ إنها إعلان القواعد مع صون كرامة الناس."
       ],
       choices:[
-        {label:["ضع قواعد توزيع واضحة يراجعها ممثلون من الحي دون نشر أسماء الأسر.","Set transparent distribution rules reviewed by neighbourhood representatives without publishing family names."],to:"bridge",fx:{solidarity:2,truth:1},tag:"fairness"},
-        {label:["افتح مساحة حوار بين السكان القدامى والجدد حول الاحتياجات المشتركة.","Create a dialogue space between long-time residents and newcomers about shared needs."],to:"bridge",fx:{bond:2,care:1},tag:"dialogue"}
+        {label:["ضع قواعد توزيع واضحة يراجعها ممثلون من الحي دون نشر أسماء الأسر.","Set transparent distribution rules reviewed by neighbourhood representatives without publishing family names."],to:"east_rules",fx:{solidarity:2,truth:1},tag:"fairness",companion:"هدى"},
+        {label:["افتح مساحة حوار بين السكان القدامى والجدد حول الاحتياجات المشتركة.","Create a dialogue space between long-time residents and newcomers about shared needs."],to:"east_dialogue",fx:{bond:2,care:1},tag:"dialogue",companion:"ياسر"}
       ]
     },
     south:{
@@ -72,8 +72,8 @@
         "وصلت قائمة بأسماء أطفال مفقودين من مجموعات مختلفة. لم تكن القائمة مكتملة، وبعض الأسماء متشابهة. أدركت أن نشرها بلا تحقق قد يؤذي أسراً أخرى. كيف تحمي حق الناس في المعرفة وحقهم في الخصوصية معاً؟"
       ],
       choices:[
-        {label:["اعمل مع جهة موثوقة للتحقق ولمّ الشمل، ولا تنشر بيانات حساسة.","Work with a trusted service to verify information and reunite families; do not publish sensitive data."],to:"bridge",fx:{truth:2,care:1},tag:"protection"},
-        {label:["ابدأ مساحة لعب وتعلّم يقودها الأطفال بموافقة أسرهم.","Start a play-and-learning space shaped by children with their families' consent."],to:"bridge",fx:{care:2,bond:1},tag:"safe-space"}
+        {label:["اعمل مع جهة موثوقة للتحقق ولمّ الشمل، ولا تنشر بيانات حساسة.","Work with a trusted service to verify information and reunite families; do not publish sensitive data."],to:"south_verify",fx:{truth:2,care:1},tag:"protection",companion:"سارة"},
+        {label:["ابدأ مساحة لعب وتعلّم يقودها الأطفال بموافقة أسرهم.","Start a play-and-learning space shaped by children with their families' consent."],to:"south_play",fx:{care:2,bond:1},tag:"safe-space",companion:"ريم"}
       ]
     },
     centre:{
@@ -83,9 +83,49 @@
         "عرض عليك تاجر أن تنشر صوراً لوجوه أشخاص اتُّهموا بالسرقة. قال إن الناس يستحقون معرفة الحقيقة. لكن الصور غير موثقة، ونشرها قد يعرّض أبرياء للخطر. الحقيقة تحتاج إلى دليل، لا إلى سرعة الغضب."
       ],
       choices:[
-        {label:["ساعد في توثيق الخسائر والشهادات بموافقة أصحابها، دون نشر اتهامات غير مثبتة.","Help document losses and testimonies with consent, without publishing unverified accusations."],to:"bridge",fx:{truth:2,care:1},tag:"documentation"},
-        {label:["أنشئ تعاونية صغيرة لتبادل العمل والسلع بشروط معلنة.","Create a small cooperative for exchanging work and goods under clear terms."],to:"bridge",fx:{solidarity:2,agency:1},tag:"cooperative"}
+        {label:["ساعد في توثيق الخسائر والشهادات بموافقة أصحابها، دون نشر اتهامات غير مثبتة.","Help document losses and testimonies with consent, without publishing unverified accusations."],to:"centre_record",fx:{truth:2,care:1},tag:"documentation",companion:"ليلى"},
+        {label:["أنشئ تعاونية صغيرة لتبادل العمل والسلع بشروط معلنة.","Create a small cooperative for exchanging work and goods under clear terms."],to:"centre_coop",fx:{solidarity:2,agency:1},tag:"cooperative",companion:"عبدالرحمن"}
       ]
+    },
+    north_record:{
+      chapter:2,title:["الشمال — حين صار الدفتر دليلاً","The North — When the Ledger Became Evidence"],
+      text:["جلست نفيسة معك أمام دفتر الأعطال. لم يكن تسجيل الانقطاع كافياً؛ احتجتم إلى وقت حدوثه، ومدة الإصلاح، وما إذا كان السبب نقص الوقود أم قطعة غيار. قال مأمون: «إذا كتبنا المشكلة بدقة، لن يستطيع أحد أن يقول إنها مجرد شكوى».","Nafisa sat with you over the fault ledger. Recording an outage was not enough; you needed its start time, repair duration and whether the cause was fuel or a spare part. Mamoun said: “If we record the problem precisely, no one can dismiss it as a complaint.”"],
+      choices:[{label:["تحقق من السجلات مع أكثر من أسرة قبل رفعها.","Verify the records with several households before submitting them."],to:"bridge",fx:{truth:1,agency:1},tag:"verified-ledger"},{label:["اطلب من الجهة الخدمية موعداً معلناً للرد والإصلاح.","Ask the service authority for a public response and repair deadline."],to:"bridge",fx:{agency:2,truth:1},tag:"service-deadline"}]
+    },
+    north_team:{
+      chapter:2,title:["الشمال — ورشة تحت ظل النخلة","The North — A Workshop Beneath the Palm"],
+      text:["جمع مأمون ثلاثة شبان يعرفون إصلاح المضخات، ومعلمة رتبت ساعات الدراسة حول انقطاع الماء. لم تكن لديهم كل القطع، لكنهم عرفوا ما يمكن إصلاحه محلياً وما يحتاج إلى فني متخصص. للمرة الأولى لم ينتظروا حلاً واحداً من جهة واحدة.","Mamoun gathered three young people who could repair pumps and a teacher who arranged lessons around water outages. They did not have every part, but knew what could be fixed locally and what required a specialist. For once, they were not waiting for one institution to solve everything."],
+      choices:[{label:["قسّموا العمل، وسجلوا ما لا يمكن إصلاحه بأمان.","Divide the work and record what cannot be repaired safely."],to:"bridge",fx:{solidarity:1,agency:2},tag:"local-skills"},{label:["درّبوا متطوعين جدد مع فني مؤهل قبل تشغيل المضخة.","Train new volunteers with a qualified technician before restarting the pump."],to:"bridge",fx:{care:1,agency:1,truth:1},tag:"safe-training"}]
+    },
+    east_rules:{
+      chapter:2,title:["الشرق — قائمة بلا أسماء","The East — A List Without Names"],
+      text:["راجعت هدى القواعد مع نساء الحي وشبابه. اتفقوا أن تُعلن الكميات ومواعيد التوزيع وطريقة الاعتراض، لكن لا تُعرض أسماء الأطفال أو تفاصيل الأسر. اعترض رجل قائلاً إن الشفافية تعني كشف كل شيء. أجابته هدى: «الشفافية في القرار، لا في فضح المحتاج».","Huda reviewed the rules with women and young people from the neighbourhood. They agreed to publish quantities, distribution times and an appeal process, but not children's names or household details. A man objected that transparency meant revealing everything. Huda replied: “Make the decision transparent, not the person in need.”"],
+      choices:[{label:["اعتمدوا مراجعة مستقلة لعينة من التوزيع.","Arrange an independent review of a sample of distributions."],to:"bridge",fx:{truth:2,solidarity:1},tag:"distribution-audit"},{label:["أنشئوا قناة اعتراض سرية مع موعد معلن للرد.","Create a confidential appeal channel with a published response deadline."],to:"bridge",fx:{care:1,truth:1,agency:1},tag:"appeals"}]
+    },
+    east_dialogue:{
+      chapter:2,title:["الشرق — طاولة من مقعدين","The East — A Table with Two More Chairs"],
+      text:["أحضر ياسر كرسياً إضافياً، ثم آخر. جلس أصحاب الحي والعائلات الوافدة يتحدثون عن الإيجار والماء والمدرسة. لم يتفقوا على كل شيء، لكنهم اكتشفوا أن بعض المطالب مشتركة وأن بعض المخاوف تحتاج إلى معلومات لا إلى إشاعات.","Yasir brought an extra chair, then another. Long-time residents and newly arrived families discussed rent, water and school places. They did not agree on everything, but discovered that some needs were shared and some fears required information, not rumours."],
+      choices:[{label:["ضعوا مطلباً مشتركاً للخدمات ووقعوا عليه طوعاً.","Write a shared request for services and let people sign voluntarily."],to:"bridge",fx:{bond:2,solidarity:1},tag:"shared-request"},{label:["كوّنوا فريق وساطة صغيراً يتدخل عند تصاعد التوتر.","Form a small mediation team to respond when tensions rise."],to:"bridge",fx:{care:1,bond:2},tag:"mediation"}]
+    },
+    south_verify:{
+      chapter:2,title:["الجنوب — الاسم أمانة","The South — A Name Is a Responsibility"],
+      text:["راجعت سارة القائمة مع جهة مختصة. بعض الأسماء كانت ناقصة، وبعض الأخبار قديمة، ولم يكن ممكناً تأكيد مصير الجميع. رفضت أن تملأ الفراغ بالتخمين. قالت: «حين نكتب أن شخصاً مفقود، يجب أن نعرف من أين جاءت المعلومة ومتى».","Sara reviewed the list with a specialist service. Some names were incomplete, some reports were old, and not everyone's fate could be confirmed. She refused to fill the gaps with guesses. “When we record someone as missing, we must know where the information came from and when.”"],
+      choices:[{label:["افصلوا المؤكد عن غير المؤكد، وسجلوا تاريخ كل تحديث.","Separate confirmed from unconfirmed information and date every update."],to:"bridge",fx:{truth:2,care:1},tag:"source-dates"},{label:["أوقفوا تداول القائمة حتى تُراجع حماية البيانات.","Pause circulation of the list until its data protection is reviewed."],to:"bridge",fx:{care:2,truth:1},tag:"data-protection"}]
+    },
+    south_play:{
+      chapter:2,title:["الجنوب — يوم بلا أسئلة","The South — A Day Without Questions"],
+      text:["فتحت ريم الساحة بكرات قديمة ودفاتر تلوين. لم يسأل أحد الأطفال عن قبيلته أو قصته قبل أن يشارك. طفل ظل يراقب من بعيد، ثم اقترب عندما رأى أن اللعبة لا تحتاج إلى شرح ما حدث له.","Reem opened the space with old balls and colouring books. No child was asked about community or personal history before joining. One child watched from a distance, then came closer when they saw the game did not require an explanation of what had happened."],
+      choices:[{label:["ضعوا قواعد حماية واضحة، وشخصاً بالغاً موثوقاً في كل نشاط.","Set clear safeguarding rules and a trusted adult for every activity."],to:"bridge",fx:{care:2,agency:1},tag:"child-safeguarding"},{label:["دعوا الأطفال يقترحون نشاط الأسبوع المقبل ويختارون بحرية.","Let children suggest next week's activity and choose freely."],to:"bridge",fx:{bond:1,agency:1,care:1},tag:"child-agency"}]
+    },
+    centre_record:{
+      chapter:2,title:["الوسط — شهادة لا تتحول إلى اتهام","The Centre — A Testimony Is Not a Verdict"],
+      text:["ساعدت ليلى أصحاب الدكاكين على كتابة ما فُقد وتاريخ آخر مشاهدة، وطلبت موافقتهم قبل حفظ الشهادات. حين وصلت روايتان متعارضتان، لم تحذف إحداهما ولم تختَر الأسرع انتشاراً. وضعت علامة «بحاجة إلى تحقق».","Layla helped shopkeepers record losses and last-known dates, asking consent before keeping testimonies. When two accounts conflicted, she neither erased one nor chose the more widely shared. She marked the entry “needs verification.”"],
+      choices:[{label:["احتفظوا بنسخ مؤرخة ومحمية، وافصلوا الشهادة عن الاستنتاج.","Keep dated, protected copies and distinguish testimony from inference."],to:"bridge",fx:{truth:2,care:1},tag:"testimony-protection"},{label:["اطلبوا مراجعة مستقلة قبل نشر أي اتهام محدد.","Seek independent review before publishing any specific allegation."],to:"bridge",fx:{truth:2,agency:1},tag:"independent-review"}]
+    },
+    centre_coop:{
+      chapter:2,title:["الوسط — تعاونية تبدأ صغيرة","The Centre — A Cooperative Starts Small"],
+      text:["جمع عبدالرحمن خمسة أشخاص: خبازة، وسائق، وخياط، وطالبة، وصاحب دكان. لم يملكوا رأس مال كبيراً، فبدأوا بتبادل ساعات العمل وتسجيل كل التزام. قال السائق: «لن نعد بأن السوق سيعود كما كان. سنجرب أن نجعل الغد ممكناً».","Abdulrahman brought together five people: a baker, a driver, a tailor, a student and a shopkeeper. They had little capital, so began by exchanging work hours and recording every commitment. The driver said: “We won't promise the market will return as it was. We'll try to make tomorrow possible.”"],
+      choices:[{label:["ابدأوا بتجربة أسبوع واحد، ثم راجعوا الحسابات مع الجميع.","Run a one-week pilot, then review the accounts with everyone."],to:"bridge",fx:{agency:2,solidarity:1},tag:"cooperative-pilot"},{label:["اكتبوا اتفاقاً بسيطاً يحدد الحقوق وطريقة فض النزاع.","Write a simple agreement defining rights and how disputes will be resolved."],to:"bridge",fx:{truth:1,solidarity:2},tag:"cooperative-charter"}]
     },
     bridge:{
       chapter:3,title:["الفصل الثالث: الجسر — من يساعد من؟","Chapter Three: The Bridge — Who Helps Whom?"],
@@ -138,7 +178,7 @@
     ["truth","الحقيقة","Truth"],["care","الرعاية","Care"],["solidarity","التضامن","Solidarity"],
     ["agency","المبادرة","Agency"],["bond","الروابط","Bonds"]
   ];
-  function fresh(){return {version:VERSION,scene:"prologue",route:null,stats:{truth:0,care:0,solidarity:0,agency:0,bond:0},flags:[],log:[],startedAt:Date.now(),updatedAt:Date.now(),ended:false,ending:null};}
+  function fresh(){return {version:VERSION,scene:"prologue",route:null,stats:{truth:0,care:0,solidarity:0,agency:0,bond:0},companion:null,flags:[],log:[],startedAt:Date.now(),updatedAt:Date.now(),ended:false,ending:null};}
   function validState(v){
     if(!v||v.version!==VERSION||!scenes[v.scene]&&!v.ended)return false;
     if(!v.stats||!metrics.every(m=>Number.isFinite(v.stats[m[0]])))return false;
@@ -236,7 +276,7 @@
 
   const archiveKey="alnajat_next_chapter_archive_v1";
   function archiveRun(){
-    try{const old=JSON.parse(localStorage.getItem(archiveKey)||"[]");const list=Array.isArray(old)?old:[];list.unshift({route:state.route,ending:state.ending,log:state.log.slice(-MAX_LOG),stats:state.stats,endedAt:Date.now()});localStorage.setItem(archiveKey,JSON.stringify(list.slice(0,12)));}catch(_){}
+    try{const old=JSON.parse(localStorage.getItem(archiveKey)||"[]");const list=Array.isArray(old)?old:[];list.unshift({route:state.route,companion:state.companion,ending:state.ending,log:state.log.slice(-MAX_LOG),stats:state.stats,endedAt:Date.now()});localStorage.setItem(archiveKey,JSON.stringify(list.slice(0,12)));}catch(_){}
   }
   function renderJournal(){
     const l=lang();let html='<h3>📖 '+t("دفتر الرحلة","Journey Journal")+'</h3>';
@@ -245,10 +285,17 @@
     html+='<div class="anx-actions"><button class="btn" type="button" data-back="1">'+t("عودة","Back")+'</button><button class="btn pri" type="button" data-close="1">'+t("إغلاق","Close")+'</button></div>';
     show(html);const p=panel();$("[data-back]",p)?.addEventListener("click",renderMenu);$("[data-close]",p)?.addEventListener("click",close);
   }
+  const routeEcho={
+    north:["بقيت نفيسة معك في الدفتر، وأرسل مأمون لاحقاً جدول الصيانة. لم تعد القرية مجرد محطة في رحلتك؛ صار لها موعد متابعة.","Nafisa stayed with the ledger, and Mamoun later sent the maintenance schedule. The village was no longer just a stop on your journey; it had a follow-up date."],
+    east:["احتفظت هدى بنسخة من قواعد التوزيع، ووعد ياسر أن يفتح الطاولة مجدداً عند أول خلاف. لم تختفِ الضغوط، لكن الناس صار لديهم طريق للاعتراض.","Huda kept a copy of the distribution rules, and Yasir promised to reopen the table when the next disagreement arose. Pressure remained, but people now had a way to appeal."],
+    south:["أرسلت سارة تحديثاً مؤرخاً، وبقيت ريم تفتح الساحة. لم تعرف مصير الجميع، لكنك عرفت أن الحماية لا تشترط أن يروي الطفل ألمه.","Sara sent a dated update, and Reem kept the play space open. You did not learn everyone's fate, but learned that protection never requires a child to recount their pain."],
+    centre:["احتفظت ليلى بسجل الشهادات، وبدأ عبدالرحمن تجربة التعاونية. لم يعد السوق وعداً كبيراً؛ صار عملاً صغيراً يمكن مراجعته.","Layla kept the testimony log, and Abdulrahman began the cooperative pilot. The market was no longer a grand promise; it became small work that could be reviewed."]
+  };
   function renderScene(){
     if(state.ended){renderEnding();return;}
     const scene=scenes[state.scene];if(!scene){state=fresh();save();renderScene();return;}
-    const l=lang(),title=scene.title[l==="en"?1:0],copy=scene.text[l==="en"?1:0];
+    const l=lang(),title=scene.title[l==="en"?1:0];let copy=scene.text[l==="en"?1:0];
+    if(state.scene==="bridge"&&state.route)copy+="\\n\\n"+routeEcho[state.route][l==="en"?1:0];
     let html='<div class="anx-kicker">'+t("رحلة إضافية • الفصل ","ADDITIONAL JOURNEY • CHAPTER ")+scene.chapter+'</div><h3>'+esc(title)+'</h3><div class="anx-copy">'+esc(copy)+'</div>';
     scene.choices.forEach((c,i)=>{html+='<button class="anx-choice" type="button" data-choice="'+i+'">'+esc(c.label[l==="en"?1:0])+'</button>';});
     html+='<div class="anx-note">'+t("اختيارك لا يغيّر القصة الأصلية. يمكنك العودة لاحقاً؛ هذا الفصل يحفظ تقدمه في مساحة مستقلة.","Your choice does not alter the original story. You can return later; this chapter saves in a separate space.")+'</div>';
@@ -262,6 +309,7 @@
     const from=state.scene;
     Object.keys(c.fx||{}).forEach(k=>{if(Object.prototype.hasOwnProperty.call(state.stats,k))state.stats[k]=clamp(state.stats[k]+c.fx[k]);});
     if(c.route)state.route=c.route;
+    if(c.companion)state.companion=c.companion;
     if(c.tag&&!state.flags.includes(c.tag))state.flags.push(c.tag);
     state.log.push({from,to:c.to,title:scene.title,choice:c.label,tag:c.tag||"",at:Date.now()});
     state.log=state.log.slice(-MAX_LOG);
@@ -273,6 +321,8 @@
     const l=lang(),e=endings[state.ending]||endings.unfinished,copy=e[l==="en"?1:0];
     let html='<div class="anx-kicker">'+t("الفصل الرابع • خاتمة إضافية","CHAPTER FOUR • ADDITIONAL ENDING")+'</div><h3>✦ '+esc(copy[0])+'</h3><div class="anx-copy">'+esc(copy[1])+'</div>';
     html+='<div class="anx-note">'+t("هذه خاتمة إضافية مستقلة. النهايات التسع الأصلية لم تتغير، ولم تُستبدل أو تُختصر.","This is an independent additional ending. The nine original endings have not been changed, replaced or shortened.")+'</div>';
+    const routeEnding=routeEcho[state.route]||["لم تنتهِ الحكاية عند حدود المنطقة التي زرتها. بقيت لك طرق أخرى وأشخاص آخرون يستحقون أن تُسمع حكاياتهم.","Your story did not end at the border of the region you visited. Other roads and people remain, with stories still worth hearing."];
+    html+='<div class="anx-note">'+esc(routeEnding[l==="en"?1:0])+(state.companion?" · "+esc(state.companion):"")+'</div>';
     html+='<div class="anx-actions"><button class="btn pri" type="button" data-journal="1">'+t("راجع قراراتك","Review your choices")+'</button><button class="btn" type="button" data-menu="1">'+t("قائمة الفصل","Chapter menu")+'</button></div>';
     show(html);const p=panel();$("[data-journal]",p)?.addEventListener("click",renderJournal);$("[data-menu]",p)?.addEventListener("click",renderMenu);
   }
