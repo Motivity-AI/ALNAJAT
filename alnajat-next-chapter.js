@@ -296,7 +296,6 @@
     "@keyframes anx-drift{from{transform:translate3d(-2%,0,0) scale(1)}to{transform:translate3d(2%,4%,0) scale(1.08)}}",
     "@media(prefers-reduced-motion:reduce){.anx-panel .anx-cinematic:before{animation:none}.anx-panel .anx-cinematic .anx-choice{transition:none}}"
   ].join("");
-  ].join("");
   style.id="alnajat-next-chapter-style";document.head.appendChild(style);
 
   function renderMenu(){
