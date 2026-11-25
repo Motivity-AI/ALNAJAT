@@ -447,7 +447,7 @@ async function main() {
       await page.evaluate(() => window.openAlnajatNextChapter());
       await page.locator("#pn").getByText("الفصل التالي: وطن يتّسع للجميع").waitFor({ state: "visible", timeout: 5000 });
       check("Next Chapter renders a cinematic scene container", await page.locator("#pn .anx-cinematic").count() === 0);
-      await page.locator("#pn [data-action='start']").click();
+      await page.locator("#pn [data-action='resume']").click();
       await page.locator("#pn .anx-cinematic").waitFor({ state: "visible" });
       check("Story scene uses cinematic direction and accessible scene title",
         await page.locator("#pn .anx-cinematic[aria-labelledby='anx-scene-title']").count() === 1);
