@@ -383,12 +383,16 @@
   };
   function renderEnding(){
     const l=lang(),e=endings[state.ending]||endings.unfinished,copy=e[l==="en"?1:0];
-    let html='<div class="anx-kicker">'+t("الفصل الرابع • خاتمة إضافية","CHAPTER FOUR • ADDITIONAL ENDING")+'</div><h3>✦ '+esc(copy[0])+'</h3><div class="anx-copy">'+esc(copy[1])+'</div>';
+    const atmosphere=state.route||"opening";
+    let html='<section class="anx-cinematic anx-atmos-'+atmosphere+'" aria-labelledby="anx-ending-title">';
+    html+='<div class="anx-kicker">'+t("الفصل الرابع • خاتمة إضافية","CHAPTER FOUR • ADDITIONAL ENDING")+'</div>';
+    html+='<div class="anx-scene-mark" aria-hidden="true"></div><h3 id="anx-ending-title">✦ '+esc(copy[0])+'</h3><div class="anx-copy" aria-live="polite">'+esc(copy[1])+'</div>';
+    html+=soundControl();
     html+='<div class="anx-note">'+t("هذه خاتمة إضافية مستقلة. النهايات التسع الأصلية لم تتغير، ولم تُستبدل أو تُختصر.","This is an independent additional ending. The nine original endings have not been changed, replaced or shortened.")+'</div>';
     const routeEnding=routeEcho[state.route]||["لم تنتهِ الحكاية عند حدود المنطقة التي زرتها. بقيت لك طرق أخرى وأشخاص آخرون يستحقون أن تُسمع حكاياتهم.","Your story did not end at the border of the region you visited. Other roads and people remain, with stories still worth hearing."];
     html+='<div class="anx-note">'+esc(routeEnding[l==="en"?1:0])+(state.companion?" · "+esc(companionNames[state.companion]?.[l==="en"?1:0]||""):"")+'</div>';
-    html+='<div class="anx-actions"><button class="btn pri" type="button" data-journal="1">'+t("راجع قراراتك","Review your choices")+'</button><button class="btn" type="button" data-menu="1">'+t("قائمة الفصل","Chapter menu")+'</button></div>';
-    show(html);const p=panel();$("[data-journal]",p)?.addEventListener("click",renderJournal);$("[data-menu]",p)?.addEventListener("click",renderMenu);
+    html+='<div class="anx-actions"><button class="btn pri" type="button" data-journal="1">'+t("راجع قراراتك","Review your choices")+'</button><button class="btn" type="button" data-menu="1">'+t("قائمة الفصل","Chapter menu")+'</button></div></section>';
+    show(html);const p=panel();bindSoundControl(p);$("[data-journal]",p)?.addEventListener("click",renderJournal);$("[data-menu]",p)?.addEventListener("click",renderMenu);
   }
   function open(){
     if(!panel())return;
