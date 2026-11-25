@@ -304,7 +304,7 @@ async function main() {
     check("Next Chapter resumes the exact saved scene after reload", await page.evaluate(() =>
       JSON.parse(localStorage.getItem("alnajat_next_chapter_v1") || "null")?.scene === "departure"));
     // North route -> bridge -> ledger -> assembly -> decision -> accountable ending.
-    for (const choiceIndex of [0, 0, 0, 1, 1, 0, 0]) {
+    for (const choiceIndex of [0, 0, 0, 1, 1, 0, 0, 0]) {
       await page.locator("#pn .anx-choice").nth(choiceIndex).click();
     }
     await page.locator("#pn").getByText("دفتر لا يخاف من السؤال").waitFor({ state: "visible" });
@@ -344,7 +344,7 @@ async function main() {
       check(routeName + " route opens its own follow-up scene",
         await page.evaluate(() => !!JSON.parse(localStorage.getItem("alnajat_next_chapter_v1") || "null")?.companion));
     }
-    await verifyRegionalFollowup(1, "الشرق — طاولة من مقعدين", "East");
+    await verifyRegionalFollowup(1, "الشرق — قائمة بلا أسماء", "East");
     await verifyRegionalFollowup(2, "الجنوب — الاسم أمانة", "South");
     await verifyRegionalFollowup(3, "الوسط — شهادة لا تتحول إلى اتهام", "Centre/Gezira/Khartoum");
     await page.evaluate(() => {
