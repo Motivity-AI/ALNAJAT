@@ -381,7 +381,7 @@
     sara:["سارة","Sara"],reem:["ريم","Reem"],layla:["ليلى","Layla"],abdelrahman:["عبدالرحمن","Abdulrahman"]
   };
   function renderEnding(){
-    const l=lang(),e=endings[state.ending]||endings.unfinished,copy=e[l==="en"?1:0];
+    const l=lang(),e=endings[state.ending]||endings.unfinished,copy=e[l==="en"?"en":"ar"];
     const atmosphere=state.route||"opening";
     let html='<section class="anx-cinematic anx-atmos-'+atmosphere+'" aria-labelledby="anx-ending-title">';
     html+='<div class="anx-kicker">'+t("الفصل الرابع • خاتمة إضافية","CHAPTER FOUR • ADDITIONAL ENDING")+'</div>';
