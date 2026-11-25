@@ -53,11 +53,11 @@ try{
   else pass("North, East, South, and Centre/Gezira/Khartoum routes exist");
   if(!Object.keys(endings).join(",").includes("accountable")||Object.keys(endings).length!==4)fail("Expected four distinct additional endings");
   else pass("Four distinct additional endings are defined");
-  if(!source.includes('const KEY = "alnajat_next_chapter_v1"')||!source.includes('const archiveKey="alnajat_next_chapter_archive_v1"'))fail("Expansion progress is not stored in isolated keys");
+  if(!source.includes('const KEY = "alnajat_next_chapter_v1"')||!source.includes('const archiveKey="alnajat_next_chapter_archive_v1"')||!source.includes('const PREF_KEY="alnajat_next_chapter_prefs_v1"'))fail("Expansion progress is not stored in isolated keys");
   else pass("Expansion save and archive use independent local keys");
   if(/localStorage\.(clear|removeItem)\s*\(/.test(source)||/\bS\s*\[[^\]]+\]\s*=/.test(source))fail("Expansion must not clear saves or mutate canonical story data");
   else pass("No canonical story mutation or broad save deletion found");
-  if(!source.includes("no player analytics")||!source.includes("لا يجمع بيانات أو تحليلات"))fail("Privacy disclosure is missing");
+  if(!source.includes("collects no player analytics")||!source.includes("لا يجمع الفصل بيانات أو تحليلات عن اللاعبين"))fail("Privacy disclosure is missing");
   else pass("No-player-analytics disclosure is present");
   if(process.exitCode)process.exit(process.exitCode);
   console.log("\nNext Chapter integrity checks passed.");
