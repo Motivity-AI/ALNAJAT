@@ -19,7 +19,7 @@ try{
  if(!source.includes('en:"From the South of Sudan: The Road Home"')||source.includes("From Southern Sudan"))fail("English South route label is ambiguous or incorrect");
  const page=fs.readFileSync(path.join(root,"index.html"),"utf8");const sw=fs.readFileSync(path.join(root,"sw.js"),"utf8");
  if(!page.includes('alnajat-all-sudan.js?v=2')||!sw.includes("'./alnajat-all-sudan.js?v=2'"))fail("All-Sudan script version differs between page and offline shell");
- const version=(sw.match(/const VERSION\s*=\s*'([^']+)'/)||[])[1];if(version!=="najat-v40")fail("Expected cache version najat-v40");
+ const version=(sw.match(/const VERSION\s*=\s*'([^']+)'/)||[])[1];if(version!=="najat-v42")fail("Expected cache version najat-v42");
  if(!sw.includes("e.waitUntil(networkPromise.then(() => undefined))"))fail("Background cache refresh is not protected by waitUntil");
  const sources=fs.readFileSync(path.join(root,"SOURCES.md"),"utf8");for(const marker of ["SRC-014","SRC-015","SRC-016","SRC-017","مشاهد روائية مركبة"])if(!sources.includes(marker))fail("SOURCES.md missing "+marker);
  if(!process.exitCode)pass("Bilingual routes, outcomes, independent saves, source register and offline shell are consistent");

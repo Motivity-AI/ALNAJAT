@@ -105,6 +105,9 @@ async function main() {
       await page.evaluate(() => document.title.includes("النجاة") &&
         document.querySelector('meta[property="og:locale"]')?.content === "ar_SD"));
 
+    await page.getByRole("button", { name: /الفصل التالي: وطن يتّسع للجميع/ }).waitFor({ state: "visible", timeout: 5000 });
+    check("Next Chapter is discoverable from the main menu", await page.getByRole("button", { name: /الفصل التالي: وطن يتّسع للجميع/ }).count() === 1);
+
     await page.evaluate(() => window.openAlnajatInsights());
     await page.locator("#pn").getByText("بصمة العواقب").waitFor({ state: "visible" });
     check("Consequence insights panel opens without changing the active story", await page.locator("#pn").isVisible() &&
@@ -274,6 +277,82 @@ async function main() {
       (await page.locator("#pn .asudan").innerText()).includes("حفظت ما شاهدته في سجل آمن"));
     await page.evaluate(() => document.getElementById("pn").classList.remove("on"));
 
+    // Independent Next Chapter campaign: graph, bilingual rendering, save isolation and resume.
+    await page.evaluate(() => window.openAlnajatNextChapter());
+    const nextPanel = page.locator("#pn");
+    await nextPanel.getByText("الفصل التالي: وطن يتّسع للجميع").waitFor({ state: "visible" });
+    check("Next Chapter opens as an independent bilingual campaign", await nextPanel.getAttribute("role") === "dialog" &&
+      await nextPanel.getByText("رحلة جديدة بأربعة طرق إقليمية").count() === 1);
+    await nextPanel.getByRole("button", { name: "ابدأ الفصل الجديد" }).click();
+    await nextPanel.getByText("الفصل الأول: الرسالة التي لم تصل").waitFor({ state: "visible" });
+    const originalSaveBeforeExpansion = await page.evaluate(() => localStorage.getItem("najat_saves_v2"));
+    await nextPanel.locator(".anx-choice").nth(0).click();
+    await nextPanel.getByText("الفصل الأول: حقيبة صغيرة وأربعة طرق").waitFor({ state: "visible" });
+    check("Next Chapter choice advances and writes to its isolated save key", await page.evaluate(() => {
+      const v = JSON.parse(localStorage.getItem("alnajat_next_chapter_v1") || "null");
+      return v && v.scene === "departure" && v.log.length === 1 &&
+        !!localStorage.getItem("najat_saves_v2");
+    }));
+    check("Next Chapter does not overwrite the original player save",
+      await page.evaluate(expected => localStorage.getItem("najat_saves_v2") === expected, originalSaveBeforeExpansion));
+    await page.reload({ waitUntil: "domcontentloaded" });
+    await page.locator("#app h1").waitFor({ state: "visible" });
+    await page.evaluate(() => window.openAlnajatNextChapter());
+    await page.locator("#pn [data-action='resume']").waitFor({ state: "visible" });
+    await page.locator("#pn [data-action='resume']").click();
+    await page.locator("#pn").getByText("الفصل الأول: حقيبة صغيرة وأربعة طرق").waitFor({ state: "visible" });
+    check("Next Chapter resumes the exact saved scene after reload", await page.evaluate(() =>
+      JSON.parse(localStorage.getItem("alnajat_next_chapter_v1") || "null")?.scene === "departure"));
+    // North route -> bridge -> ledger -> assembly -> decision -> accountable ending.
+    for (const choiceIndex of [0, 0, 0, 1, 1, 0, 0]) {
+      await page.locator("#pn .anx-choice").nth(choiceIndex).click();
+    }
+    await page.locator("#pn").getByText("دفتر لا يخاف من السؤال").waitFor({ state: "visible" });
+    check("A complete North-route playthrough reaches its earned additional ending",
+      await page.evaluate(() => {
+        const v = JSON.parse(localStorage.getItem("alnajat_next_chapter_v1") || "null");
+        return v?.ended === true && v.ending === "accountable" && v.log.length === 8;
+      }));
+    check("Original player save remains byte-for-byte unchanged after the expansion ending",
+      await page.evaluate(expected => localStorage.getItem("najat_saves_v2") === expected, originalSaveBeforeExpansion));
+    await page.evaluate(() => {
+      document.documentElement.lang = "en";
+      document.documentElement.dir = "ltr";
+      window.openAlnajatNextChapter();
+    });
+    await page.locator("#pn").getByText("The Next Chapter: A Country with Room for Everyone").waitFor({ state: "visible" });
+    await page.locator("#pn [data-action='resume']").click();
+    await page.locator("#pn").getByText("A Ledger That Welcomes Questions").waitFor({ state: "visible" });
+    check("Next Chapter ending renders in English without changing the saved ending",
+      await page.evaluate(() => document.documentElement.lang === "en" &&
+        JSON.parse(localStorage.getItem("alnajat_next_chapter_v1") || "null")?.ending === "accountable"));
+    await page.locator("#pn [data-journal='1']").click();
+    await page.locator("#pn").getByText("Journey Journal").waitFor({ state: "visible" });
+    check("Journey journal displays the English scene and choice history",
+      await page.locator("#pn").getByText(/The North — When the Ledger Became Evidence/).count() === 1);
+    await page.locator("#pn [data-close='1']").click();
+    async function verifyRegionalFollowup(routeIndex, expectedTitle, routeName) {
+      await page.evaluate(() => { document.documentElement.lang = "ar"; document.documentElement.dir = "rtl"; });
+      await page.evaluate(() => window.openAlnajatNextChapter());
+      await page.locator("#pn [data-action='restart']").waitFor({ state: "visible" });
+      page.once("dialog", dialog => dialog.accept());
+      await page.locator("#pn [data-action='restart']").click();
+      await page.locator("#pn .anx-choice").first().click(); // prologue -> route selection
+      await page.locator("#pn .anx-choice").nth(routeIndex).click();
+      await page.locator("#pn .anx-choice").first().click();
+      await page.locator("#pn").getByText(expectedTitle).waitFor({ state: "visible" });
+      check(routeName + " route opens its own follow-up scene",
+        await page.evaluate(() => !!JSON.parse(localStorage.getItem("alnajat_next_chapter_v1") || "null")?.companion));
+    }
+    await verifyRegionalFollowup(1, "الشرق — قائمة بلا أسماء", "East");
+    await verifyRegionalFollowup(2, "الجنوب — الاسم أمانة", "South");
+    await verifyRegionalFollowup(3, "الوسط — شهادة لا تتحول إلى اتهام", "Centre/Gezira/Khartoum");
+    await page.evaluate(() => {
+      document.documentElement.lang = "ar";
+      document.documentElement.dir = "rtl";
+      document.getElementById("pn").classList.remove("on");
+    });
+
     const audioTrigger = page.locator("[data-alnajat-audio-settings]");
     await audioTrigger.waitFor({ state: "visible", timeout: 10000 });
     await audioTrigger.click();
@@ -352,7 +431,7 @@ async function main() {
     if (engineName === "webkit") {
       const cachedShell = await page.evaluate(async () => {
         const names = await caches.keys();
-        const urls = [new URL("./", location.href).href, new URL("privacy.html", location.href).href, new URL("alnajat-all-sudan.js?v=2", location.href).href];
+        const urls = [new URL("./", location.href).href, new URL("privacy.html", location.href).href, new URL("alnajat-all-sudan.js?v=2", location.href).href, new URL("alnajat-next-chapter.js?v=2", location.href).href];
         const results = await Promise.all(names.map(async name => {
           const cache = await caches.open(name);
           return Promise.all(urls.map(url => cache.match(url)));
@@ -365,6 +444,24 @@ async function main() {
       await page.reload({ waitUntil: "domcontentloaded" });
       await page.locator("#app h1").waitFor({ state: "visible", timeout: 10000 });
       check("Game shell reloads and renders while offline", (await page.locator("#app h1").innerText()).includes("النجاة"));
+      await page.evaluate(() => window.openAlnajatNextChapter());
+      await page.locator("#pn").getByText("الفصل التالي: وطن يتّسع للجميع").waitFor({ state: "visible", timeout: 5000 });
+      check("Next Chapter renders a cinematic scene container", await page.locator("#pn .anx-cinematic").count() === 0);
+      await page.locator("#pn [data-action='resume']").click();
+      await page.locator("#pn .anx-cinematic").waitFor({ state: "visible" });
+      check("Story scene uses cinematic direction and accessible scene title",
+        await page.locator("#pn .anx-cinematic[aria-labelledby='anx-scene-title']").count() === 1);
+      check("Optional choice sound starts disabled and is user-controlled",
+        await page.locator("#pn [data-sfx-toggle][aria-pressed='false']").count() === 1);
+      await page.locator("#pn [data-sfx-toggle]").click();
+      check("Choice sound preference toggles on without autoplay",
+        await page.evaluate(() => localStorage.getItem("alnajat_next_chapter_prefs_v1") === "1"));
+      await page.locator("#pn [data-sfx-toggle]").click();
+      check("Choice sound can be disabled again",
+        await page.evaluate(() => localStorage.getItem("alnajat_next_chapter_prefs_v1") === "0"));
+      await page.locator("#pn [data-menu='1']").click();
+      check("Next Chapter opens from the offline shell", await page.locator("#pn .anx-panel").count() === 1);
+      await page.locator("#pn").getByRole("button", { name: "إغلاق" }).click();
       await page.evaluate(() => window.openAllSudanScenarios());
       await page.locator('#pn [data-story="north"]').waitFor({ state: "visible", timeout: 5000 });
       check("All-Sudan regional stories open from the offline shell", await page.locator('#pn [data-story]').count() === 4);
