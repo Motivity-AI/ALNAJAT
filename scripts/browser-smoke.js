@@ -431,7 +431,7 @@ async function main() {
     if (engineName === "webkit") {
       const cachedShell = await page.evaluate(async () => {
         const names = await caches.keys();
-        const urls = [new URL("./", location.href).href, new URL("privacy.html", location.href).href, new URL("alnajat-all-sudan.js?v=2", location.href).href, new URL("alnajat-next-chapter.js?v=1", location.href).href];
+        const urls = [new URL("./", location.href).href, new URL("privacy.html", location.href).href, new URL("alnajat-all-sudan.js?v=2", location.href).href, new URL("alnajat-next-chapter.js?v=2", location.href).href];
         const results = await Promise.all(names.map(async name => {
           const cache = await caches.open(name);
           return Promise.all(urls.map(url => cache.match(url)));
@@ -446,6 +446,20 @@ async function main() {
       check("Game shell reloads and renders while offline", (await page.locator("#app h1").innerText()).includes("النجاة"));
       await page.evaluate(() => window.openAlnajatNextChapter());
       await page.locator("#pn").getByText("الفصل التالي: وطن يتّسع للجميع").waitFor({ state: "visible", timeout: 5000 });
+      check("Next Chapter renders a cinematic scene container", await page.locator("#pn .anx-cinematic").count() === 0);
+      await page.locator("#pn [data-action='start']").click();
+      await page.locator("#pn .anx-cinematic").waitFor({ state: "visible" });
+      check("Story scene uses cinematic direction and accessible scene title",
+        await page.locator("#pn .anx-cinematic[aria-labelledby='anx-scene-title']").count() === 1);
+      check("Optional choice sound starts disabled and is user-controlled",
+        await page.locator("#pn [data-sfx-toggle][aria-pressed='false']").count() === 1);
+      await page.locator("#pn [data-sfx-toggle]").click();
+      check("Choice sound preference toggles on without autoplay",
+        await page.evaluate(() => localStorage.getItem("alnajat_next_chapter_prefs_v1") === "1"));
+      await page.locator("#pn [data-sfx-toggle]").click();
+      check("Choice sound can be disabled again",
+        await page.evaluate(() => localStorage.getItem("alnajat_next_chapter_prefs_v1") === "0"));
+      await page.locator("#pn [data-menu='1']").click();
       check("Next Chapter opens from the offline shell", await page.locator("#pn .anx-panel").count() === 1);
       await page.locator("#pn").getByRole("button", { name: "إغلاق" }).click();
       await page.evaluate(() => window.openAllSudanScenarios());
