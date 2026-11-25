@@ -193,6 +193,33 @@
   }
   function load(){try{const v=JSON.parse(localStorage.getItem(KEY)||"null");return validState(v)?v:fresh();}catch(_){return fresh();}}
   let state=load();
+  const PREF_KEY="alnajat_next_chapter_prefs_v1";
+  let sfxEnabled=false,sfxContext=null;
+  try{sfxEnabled=localStorage.getItem(PREF_KEY)==="1";}catch(_){}
+  function playCue(){
+    if(!sfxEnabled)return;
+    try{
+      const Audio=window.AudioContext||window.webkitAudioContext;if(!Audio)return;
+      if(!sfxContext)sfxContext=new Audio();
+      if(sfxContext.state==="suspended")sfxContext.resume();
+      const osc=sfxContext.createOscillator(),gain=sfxContext.createGain(),now=sfxContext.currentTime;
+      osc.type="sine";osc.frequency.setValueAtTime(587.33,now);osc.frequency.exponentialRampToValueAtTime(783.99,now+.12);
+      gain.gain.setValueAtTime(.0001,now);gain.gain.exponentialRampToValueAtTime(.025,now+.025);gain.gain.exponentialRampToValueAtTime(.0001,now+.22);
+      osc.connect(gain);gain.connect(sfxContext.destination);osc.start(now);osc.stop(now+.23);
+    }catch(_){}
+  }
+  function soundControl(){
+    return '<button class="anx-sound" type="button" data-sfx-toggle aria-pressed="'+(sfxEnabled?"true":"false")+'">'+(sfxEnabled?t("♫ صوت الاختيارات: يعمل","♫ Choice sound: on"):t("♫ صوت الاختيارات: متوقف","♫ Choice sound: off"))+'</button>';
+  }
+  function bindSoundControl(root){
+    const button=$("[data-sfx-toggle]",root);if(!button)return;
+    button.addEventListener("click",()=>{
+      sfxEnabled=!sfxEnabled;try{localStorage.setItem(PREF_KEY,sfxEnabled?"1":"0");}catch(_){}
+      button.setAttribute("aria-pressed",sfxEnabled?"true":"false");
+      button.textContent=sfxEnabled?t("♫ صوت الاختيارات: يعمل","♫ Choice sound: on"):t("♫ صوت الاختيارات: متوقف","♫ Choice sound: off");
+      if(sfxEnabled)playCue();
+    });
+  }
   function save(){
     state.updatedAt=Date.now();
     try{localStorage.setItem(KEY,JSON.stringify(state));}
@@ -249,7 +276,26 @@
     ".anx-panel .anx-note{border-inline-start:3px solid var(--ac);background:var(--card);padding:10px;border-radius:8px;color:var(--mut);font-size:12px;margin:12px 0}",
     ".anx-panel .anx-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}",
     ".anx-panel .anx-actions .btn{flex:1;min-width:125px}",
-    "@media(prefers-reduced-motion:reduce){.anx-panel *{scroll-behavior:auto!important;animation:none!important;transition:none!important}}"
+    ".anx-panel .anx-cinematic{position:relative;isolation:isolate;overflow:hidden;border:1px solid rgba(196,157,103,.28);border-radius:18px;padding:clamp(14px,4vw,22px);background:linear-gradient(155deg,rgba(30,38,43,.97),rgba(16,22,27,.98) 56%,rgba(40,31,25,.97));box-shadow:0 18px 44px rgba(0,0,0,.22)}",
+    ".anx-panel .anx-cinematic:before{content:'';position:absolute;inset:-35% -20% auto;height:70%;z-index:-1;pointer-events:none;background:radial-gradient(ellipse at 72% 38%,rgba(219,165,101,.19),transparent 58%);animation:anx-drift 12s ease-in-out infinite alternate}",
+    ".anx-panel .anx-cinematic:after{content:'';position:absolute;inset:auto -5% 0;height:34%;z-index:-1;pointer-events:none;background:linear-gradient(0deg,rgba(7,13,16,.52),transparent)}",
+    ".anx-panel .anx-cinematic.anx-atmos-north{background:linear-gradient(155deg,#283b3b,#18282c 62%,#463b2c)}",
+    ".anx-panel .anx-cinematic.anx-atmos-east{background:linear-gradient(155deg,#344044,#1b292e 60%,#594536)}",
+    ".anx-panel .anx-cinematic.anx-atmos-south{background:linear-gradient(155deg,#35443c,#1b2d2b 60%,#514335)}",
+    ".anx-panel .anx-cinematic.anx-atmos-centre{background:linear-gradient(155deg,#41403b,#222b2c 60%,#574638)}",
+    ".anx-panel .anx-cinematic .anx-kicker{color:#e5bd86;letter-spacing:.09em}",
+    ".anx-panel .anx-cinematic h3{color:#fff1d9;font-size:clamp(1.2rem,4.4vw,1.55rem);margin:10px 0 14px;text-wrap:balance}",
+    ".anx-panel .anx-cinematic .anx-copy{color:#f4eee5;font-size:clamp(1rem,3.6vw,1.08rem);line-height:2.05}",
+    ".anx-panel .anx-cinematic .anx-choice{background:rgba(255,255,255,.075);border-color:rgba(255,239,215,.2);color:#fff8ed;backdrop-filter:blur(5px);transition:transform .22s ease,border-color .22s ease,background .22s ease}",
+    ".anx-panel .anx-cinematic .anx-choice:hover{transform:translateY(-2px);border-color:#d9b27c;background:rgba(255,255,255,.12)}",
+    ".anx-panel .anx-cinematic .anx-note{background:rgba(0,0,0,.2);color:#e0d6c9;border-color:#d9b27c}",
+    ".anx-panel .anx-scene-mark{height:2px;background:linear-gradient(90deg,transparent,#d9b27c,transparent);margin:12px 0 16px;opacity:.8}",
+    ".anx-panel .anx-sound{display:inline-flex;align-items:center;min-height:38px;padding:7px 11px;border:1px solid rgba(229,189,134,.42);border-radius:999px;background:rgba(0,0,0,.2);color:#f4e5ce;font:inherit;font-size:12px;cursor:pointer}",
+    ".anx-panel .anx-sound:focus-visible{outline:3px solid #e5bd86;outline-offset:3px}",
+    ".anx-panel .anx-companion{display:inline-flex;margin:2px 0 8px;padding:4px 10px;border:1px solid rgba(229,189,134,.35);border-radius:999px;color:#f1d5ac;font-size:12px}",
+    "@keyframes anx-drift{from{transform:translate3d(-2%,0,0) scale(1)}to{transform:translate3d(2%,4%,0) scale(1.08)}}",
+    "@media(prefers-reduced-motion:reduce){.anx-panel .anx-cinematic:before{animation:none}.anx-panel .anx-cinematic .anx-choice{transition:none}}"
+  ].join("");
   ].join("");
   style.id="alnajat-next-chapter-style";document.head.appendChild(style);
 
@@ -258,6 +304,7 @@
     const l=lang(),has=state.log.length>0;
     let html='<div class="anx-panel"><div class="anx-kicker">'+t("إضافة قصصية مستقلة — لا تغيّر النهايات الأصلية","INDEPENDENT STORY EXPANSION — ORIGINAL ENDINGS UNCHANGED")+'</div>';
     html+='<h3>✦ '+t("الفصل التالي: وطن يتّسع للجميع","The Next Chapter: A Country with Room for Everyone")+'</h3>';
+    html+=soundControl();
     html+='<p class="mut">'+t("رحلة جديدة بأربعة طرق إقليمية، وشخصيات تتذكر ما حدث، وقرارات لها عواقب. تقدمها محفوظ في خانة مستقلة عن القصة الأصلية.","A new journey across four regional routes, with remembering characters and consequential choices. Progress is stored separately from the original story.")+'</p>';
     html+='<div class="anx-meter"><div class="anx-stat"><b>'+state.log.length+'</b>'+t("قرار في هذه الرحلة","decisions in this journey")+'</div><div class="anx-stat"><b>'+metrics.reduce((a,m)=>a+Math.max(0,state.stats[m[0]]),0)+'</b>'+t("أثر تراكمي","cumulative impact")+'</div></div>';
     if(!state.ended&&has)html+='<button class="btn pri" type="button" data-action="resume">'+t("متابعة من حيث توقفت","Resume where you left off")+'</button>';
@@ -268,6 +315,7 @@
     html+='<div class="anx-note">'+t("كل الشخصيات والأحداث في هذا الفصل مركّبة وخيالية. لا تمثل شخصية واحدة إقليماً أو جماعة، ولا تُرتّب المعاناة بين الناس. لا يجمع الفصل بيانات أو تحليلات عن اللاعبين.","All characters and events in this chapter are fictional composites. No character represents an entire region or community; suffering is never ranked. This chapter collects no player analytics.")+'</div>';
     html+='<button class="btn" type="button" data-action="close">'+t("إغلاق","Close")+'</button></div>';
     p.innerHTML=html;p.classList.add("on");p.setAttribute("role","dialog");p.setAttribute("aria-modal","true");
+    bindSoundControl(p);
     p.querySelectorAll("[data-action]").forEach(b=>b.addEventListener("click",()=>{
       const a=b.dataset.action;
       if(a==="close")close();
@@ -301,12 +349,19 @@
     const scene=scenes[state.scene];if(!scene){state=fresh();save();renderScene();return;}
     const l=lang(),title=scene.title[l==="en"?1:0];let copy=scene.text[l==="en"?1:0];
     if(state.scene==="bridge"&&state.route)copy+="\n\n"+routeEcho[state.route][l==="en"?1:0];
-    let html='<div class="anx-kicker">'+t("رحلة إضافية • الفصل ","ADDITIONAL JOURNEY • CHAPTER ")+scene.chapter+'</div><h3>'+esc(title)+'</h3><div class="anx-copy">'+esc(copy)+'</div>';
+    const atmosphere=state.route||"opening";
+    const routeLabels={north:t("مسار الشمال","NORTHERN ROUTE"),east:t("مسار الشرق","EASTERN ROUTE"),south:t("مسار الجنوب","SOUTHERN ROUTE"),centre:t("مسار الوسط","CENTRAL ROUTE"),opening:t("بداية الرحلة","THE JOURNEY BEGINS")};
+    const companion=state.companion?companionNames[state.companion]?.[l==="en"?1:0]:"";
+    let html='<section class="anx-cinematic anx-atmos-'+atmosphere+'" aria-labelledby="anx-scene-title">';
+    html+='<div class="anx-kicker">'+t("رحلة إضافية • الفصل ","ADDITIONAL JOURNEY • CHAPTER ")+scene.chapter+' · '+esc(routeLabels[atmosphere])+'</div>';
+    html+='<div class="anx-scene-mark" aria-hidden="true"></div><h3 id="anx-scene-title">'+esc(title)+'</h3>';
+    if(companion)html+='<div class="anx-companion">'+t("رفيق الرحلة: ","YOUR COMPANION: ")+esc(companion)+'</div>';
+    html+='<div class="anx-copy" aria-live="polite">'+esc(copy)+'</div>'+soundControl();
     scene.choices.forEach((c,i)=>{html+='<button class="anx-choice" type="button" data-choice="'+i+'">'+esc(c.label[l==="en"?1:0])+'</button>';});
     html+='<div class="anx-note">'+t("اختيارك لا يغيّر القصة الأصلية. يمكنك العودة لاحقاً؛ هذا الفصل يحفظ تقدمه في مساحة مستقلة.","Your choice does not alter the original story. You can return later; this chapter saves in a separate space.")+'</div>';
-    html+='<button class="btn" type="button" data-menu="1">'+t("قائمة الفصل","Chapter menu")+'</button>';
-    show(html);const p=panel();
-    p.querySelectorAll("[data-choice]").forEach(b=>b.addEventListener("click",()=>choose(Number(b.dataset.choice))));
+    html+='<button class="btn" type="button" data-menu="1">'+t("قائمة الفصل","Chapter menu")+'</button></section>';
+    show(html);const p=panel();bindSoundControl(p);
+    p.querySelectorAll("[data-choice]").forEach(b=>b.addEventListener("click",()=>{playCue();choose(Number(b.dataset.choice));}));
     $("[data-menu]",p)?.addEventListener("click",renderMenu);
   }
   function choose(index){
