@@ -438,7 +438,7 @@ async function main() {
         }));
         return urls.every((_, index) => results.some(items => !!items[index]));
       });
-      check("WebKit precaches game shell, privacy page and Next Chapter for offline use", cachedShell);
+      check("WebKit precaches both game shell and privacy page for offline use", cachedShell);
     } else {
       await context.setOffline(true);
       await page.reload({ waitUntil: "domcontentloaded" });
