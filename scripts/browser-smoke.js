@@ -381,6 +381,7 @@ async function main() {
 
     // Independent Missing Message puzzle: accessible dialog, logical order, outcomes and save isolation.
     await page.evaluate(() => window.showMenu());
+    await page.evaluate(() => { document.documentElement.lang = "ar"; document.documentElement.dir = "rtl"; });
     const messageLauncher = page.locator("#app [data-message-quest-launcher] button");
     await messageLauncher.waitFor({ state: "visible", timeout: 5000 });
     await messageLauncher.click();
