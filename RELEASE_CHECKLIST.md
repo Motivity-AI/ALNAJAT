@@ -4,8 +4,8 @@
 
 **Latest production main / آخر نسخة رئيسية:** `cc3146daf08eed820343bee4ae8e538eb74d3dca` (28 Nov 2026). Post-merge validation and Playwright browser matrix passed in Actions run `46118349137` (Chromium, Firefox and WebKit). This is automated evidence only; all real-device, assistive-technology, editorial and rights checks below remain open unless individually checked.
 
-**Current branch / الفرع:** `feature/global-narrative-qa-2026-11`  
-**Production baseline / خط الإنتاج:** `main` (unchanged until a reviewed release is authorized).
+**Current branch / الفرع:** `main` (latest merged production baseline; follow-up candidate is tracked in PR #13)  
+**Production baseline / خط الإنتاج:** `main` at `cc3146d` (28 Nov 2026); follow-up PR #13 is not merged until its checks pass.
 
 ## 1. Automated gates / الاختبارات الآلية
 
