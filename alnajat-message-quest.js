@@ -33,7 +33,7 @@
     protect: {
       title:["القطعة الثالثة: أسماء ليست للنشر","Fragment Three: Names Are Not for Display"],
       text:["راجعوا ما قد يكشف هوية طفل أو أسرة. حذفوا التفاصيل الحساسة، وتركوا لأصحاب الحكاية حق الموافقة أو الرفض.","They reviewed what could identify a child or family. They removed sensitive details and left each person free to consent or decline."],
-      clue:["صون الأسماء والتفاصيل الخاصة يسبق مشاركة الرسالة.","Protect names and private details before sharing the message."]
+      clue:["بعد التحقق، صون الأسماء والتفاصيل الخاصة قبل مشاركة الرسالة.","After verification, protect names and private details before sharing the message."]
     },
     share: {
       title:["القطعة الرابعة: طريق لا يملكه شخص واحد","Fragment Four: A Road No One Owns Alone"],
