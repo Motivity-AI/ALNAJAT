@@ -385,6 +385,14 @@ async function main() {
     const messageLauncher = page.locator("#app [data-message-quest-launcher] button");
     await messageLauncher.waitFor({ state: "visible", timeout: 5000 });
     await messageLauncher.click();
+    const messageQuestDebug = await page.evaluate(() => ({
+      lang: document.documentElement.lang,
+      panelOn: !!document.querySelector("#pn")?.classList.contains("on"),
+      panelText: (document.querySelector("#pn")?.innerText || "").slice(0,240),
+      openType: typeof window.openAlnajatMessageQuest,
+      launcher: document.querySelector("#app [data-message-quest-launcher] button")?.outerHTML || null
+    }));
+    console.log("MESSAGE QUEST DEBUG " + JSON.stringify(messageQuestDebug));
     const messagePanel = page.locator("#pn");
     await messagePanel.getByText("لغز الرسالة الناقصة").waitFor({ state: "visible" });
     check("Missing Message quest opens as a labelled modal dialog",
