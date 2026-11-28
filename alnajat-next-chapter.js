@@ -289,7 +289,7 @@
     p.classList.add("on");p.setAttribute("role","dialog");p.setAttribute("aria-modal","true");
     p.dataset.anxDialog="1";p.setAttribute("tabindex","-1");
     const heading=$("h3",p);
-    if(heading){heading.id="anx-dialog-title";p.setAttribute("aria-labelledby",heading.id);}
+    if(heading){if(!heading.id)heading.id="anx-dialog-title";p.setAttribute("aria-labelledby",heading.id);}
     bindDialogKeys();
     const first=$("button",p);if(first)first.focus();else p.focus();
   }
