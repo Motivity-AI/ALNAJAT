@@ -247,3 +247,13 @@ A follow-up runtime-path audit found that 18 scene metadata records were exporte
 - Chromium وFirefox اختبرا إعادة تحميل التطبيق وفتح سياسة الخصوصية أثناء فصل الشبكة المحاكى. WebKit تحقّق من وجود ملف التطبيق وسياسة الخصوصية في Cache Storage؛ لم نعتبر خطأ محرك Playwright الداخلي عند offline navigation شهادة على Safari الحقيقي.
 - هذا نجاح اختبار آلي على خوادم CI، وليس اختباراً مباشراً لموقع GitHub Pages أو أجهزة iPhone/Android حقيقية أو قارئات الشاشة. تبقى هذه بوابات يدوية قبل الإصدار المستقر.
 - PR #3 ما زال مسودة وغير مدمج، و`main` لم يتغير.
+
+
+## 2026-11-28 — Next Chapter dialog accessibility and Missing Message quest
+
+- The independent Next Chapter dialog now has a programmatic label, Escape-to-close, keyboard focus containment and focus restoration. Its script URL and offline cache were bumped together to `najat-v43`.
+- Added the optional bilingual “Missing Message” puzzle as a separate module. It asks players to order four fictional principles (listen, verify, protect identities, share) and choose how the reconstructed message should be handled.
+- The puzzle uses separate local save/archive keys and does not modify the 119-node canonical story, its nine endings, Next Chapter's 18 scenes/four endings, or any legacy saves.
+- The puzzle's bilingual cards, outcomes and ordering are protected by a separate Story Lock. Its script is included in the page and Service Worker shell `najat-v44`.
+- Automated release validation covers the Story Lock, bilingual completeness, isolated storage, privacy disclosure and asset/cache parity. Browser tests cover retry/hint, successful completion, save isolation and English resume.
+- Automated browser tests are not a substitute for VoiceOver/NVDA, real iPhone/Android, keyboard-only manual review, or independent regional/editorial review; those gates remain open.
