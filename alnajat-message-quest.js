@@ -301,7 +301,8 @@
       button.textContent = "✉️ " + t("لغز الرسالة الناقصة","The Missing Message");
       button.addEventListener("click",open);
       wrap.appendChild(button);
-      anchor.insertAdjacentElement("afterend",wrap);
+      const container = anchor.closest("[data-next-chapter]") || anchor;
+      container.insertAdjacentElement("afterend",wrap);
     } catch (error) { console.error("ALNAJAT message quest menu:",error); }
   }
   const previousMenu = window.showMenu;
