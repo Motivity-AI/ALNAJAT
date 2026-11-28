@@ -389,7 +389,7 @@ async function main() {
     check("Missing Message quest opens as a labelled modal dialog",
       await messagePanel.getAttribute("role") === "dialog" &&
       !!(await messagePanel.getAttribute("aria-labelledby")) &&
-      await messagePanel.getByText("رسالة صوتية قديمة وصلت ناقصة").count() === 1);
+      await messagePanel.getByText(/في المساء، وجدتم تسجيلاً قديماً لعثمان/).count() === 1);
     await messagePanel.getByRole("button", { name: "ابدأ اللغز" }).click();
     await messagePanel.getByRole("button", { name: "ابدأ ترتيب القطع" }).click();
     const originalSaveBeforeQuest = await page.evaluate(() => localStorage.getItem("najat_saves_v2"));
