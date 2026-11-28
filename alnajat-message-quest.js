@@ -299,7 +299,7 @@
       button.className = "btn";
       button.type = "button";
       button.textContent = "✉️ " + t("لغز الرسالة الناقصة","The Missing Message");
-      button.addEventListener("click",open);
+      button.addEventListener("click",function(event){event.preventDefault();event.stopPropagation();open();});
       wrap.appendChild(button);
       const container = anchor.closest("[data-next-chapter]") || anchor;
       container.insertAdjacentElement("afterend",wrap);
