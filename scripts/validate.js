@@ -48,6 +48,7 @@ try {
   execFileSync(process.execPath, [path.join(__dirname, "story-integrity.js")], { stdio: "inherit" });
   execFileSync(process.execPath, [path.join(__dirname, "all-sudan-integrity.js")], { stdio: "inherit" });
   execFileSync(process.execPath, [path.join(__dirname, "next-chapter-integrity.js")], { stdio: "inherit" });
+  execFileSync(process.execPath, [path.join(__dirname, "message-quest-integrity.js")], { stdio: "inherit" });
   execFileSync(process.execPath, [path.join(__dirname, "next-chapter-release-gate.js")], { stdio: "inherit" });
   const directorSource = read("alnajat-director.js");
   for (const marker of ["openAlnajatInsights", "openAlnajatRelations", "Relationship memories", "effects:cleanEffects", "Recorded net numeric effect", "Older choices without effect details"]) {
