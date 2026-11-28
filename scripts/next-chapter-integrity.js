@@ -62,7 +62,7 @@ try{
   const page=fs.readFileSync(path.resolve(__dirname,"..","index.html"),"utf8");
   const sw=fs.readFileSync(path.resolve(__dirname,"..","sw.js"),"utf8");
   if(!page.includes('alnajat-next-chapter.js?v=3')||!sw.includes("'./alnajat-next-chapter.js?v=3'"))fail("Next Chapter runtime and offline shell versions differ");
-  if(!sw.includes("const VERSION = 'najat-v43'"))fail("Next Chapter accessibility update requires the najat-v43 cache");
+  if(!sw.includes("const VERSION = 'najat-v44'"))fail("Next Chapter accessibility update requires the najat-v44 cache");
   for(const marker of ["aria-labelledby","bindDialogKeys","event.key","Escape","event.shiftKey","dialogReturnFocus"]){
     if(!source.includes(marker))fail("Accessible modal behavior is missing: "+marker);
   }

@@ -2,10 +2,10 @@
 
 **Status / الحالة:** Release candidate preparation; public release is not yet approved.  
 
-**Latest production main / آخر نسخة رئيسية:** `cc3146daf08eed820343bee4ae8e538eb74d3dca` (28 Nov 2026). Post-merge validation and Playwright browser matrix passed in Actions run `46118349137` (Chromium, Firefox and WebKit). This is automated evidence only; all real-device, assistive-technology, editorial and rights checks below remain open unless individually checked.
+**Latest production main / آخر نسخة رئيسية:** `ea25b3fa26be792aad4e6edae49d160959d61d92` (28 Nov 2026). Post-merge validation and Playwright browser matrix passed in Actions run `46118841721` (Chromium, Firefox and WebKit); GitHub Pages deployment succeeded in run `46118841522`. This is automated evidence only; all real-device, assistive-technology, editorial and rights checks below remain open unless individually checked.
 
-**Current branch / الفرع:** `main` (latest merged production baseline; follow-up candidate is tracked in PR #13)  
-**Production baseline / خط الإنتاج:** `main` at `cc3146d` (28 Nov 2026); follow-up PR #13 is not merged until its checks pass.
+**Current branch / الفرع:** `feat/missing-message-puzzle-quest` (optional puzzle candidate; tracked in PR #14)  
+**Production baseline / خط الإنتاج:** `main` at `ea25b3f` (28 Nov 2026); this candidate is not merged until its checks pass.
 
 ## 1. Automated gates / الاختبارات الآلية
 
