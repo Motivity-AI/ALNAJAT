@@ -379,6 +379,58 @@ async function main() {
       document.getElementById("pn").classList.remove("on");
     });
 
+    // Independent Missing Message puzzle: accessible dialog, logical order, outcomes and save isolation.
+    await page.evaluate(() => window.showMenu());
+    const messageLauncher = page.locator("#app [data-message-quest-launcher] button");
+    await messageLauncher.waitFor({ state: "visible", timeout: 5000 });
+    await messageLauncher.click();
+    const messagePanel = page.locator("#pn");
+    await messagePanel.getByText("لغز الرسالة الناقصة").waitFor({ state: "visible" });
+    check("Missing Message quest opens as a labelled modal dialog",
+      await messagePanel.getAttribute("role") === "dialog" &&
+      !!(await messagePanel.getAttribute("aria-labelledby")) &&
+      await messagePanel.getByText("رسالة صوتية قديمة وصلت ناقصة").count() === 1);
+    await messagePanel.getByRole("button", { name: "ابدأ اللغز" }).click();
+    await messagePanel.getByRole("button", { name: "ابدأ ترتيب القطع" }).click();
+    const originalSaveBeforeQuest = await page.evaluate(() => localStorage.getItem("najat_saves_v2"));
+    for (const id of ["verify", "protect", "share", "listen"]) {
+      await messagePanel.locator('[data-card="' + id + '"]').click();
+    }
+    check("Puzzle allows a non-destructive retry when fragments are out of order",
+      await messagePanel.getByRole("button", { name: "أعد ترتيب القطع" }).count() === 1 &&
+      await page.evaluate(() => JSON.parse(localStorage.getItem("alnajat_message_quest_v1") || "null")?.screen === "puzzle"));
+    await messagePanel.getByRole("button", { name: "أعد ترتيب القطع" }).click();
+    await messagePanel.getByRole("button", { name: "أعطني تلميحاً" }).click();
+    check("Puzzle provides an accessible hint without penalising the player",
+      await messagePanel.getByText(/الاستماع يسبق التحقق/).count() === 1);
+    for (const id of ["listen", "verify", "protect", "share"]) {
+      await messagePanel.locator('[data-card="' + id + '"]').click();
+    }
+    await messagePanel.getByText("ما الذي ستفعله بالكلمات؟").waitFor({ state: "visible" });
+    check("Correct fragment order unlocks the decision scene and stays in isolated storage",
+      await page.evaluate(() => {
+        const saved = JSON.parse(localStorage.getItem("alnajat_message_quest_v1") || "null");
+        return saved?.screen === "decision" && saved.order.join(",") === "listen,verify,protect,share";
+      }) &&
+      await page.evaluate(expected => localStorage.getItem("najat_saves_v2") === expected, originalSaveBeforeQuest));
+    await messagePanel.locator('[data-ending="consent"]').click();
+    await messagePanel.getByText("رسالة وصلت إلى أصحابها").waitFor({ state: "visible" });
+    await page.evaluate(() => {
+      document.documentElement.lang = "en";
+      document.documentElement.dir = "ltr";
+      window.openAlnajatMessageQuest();
+    });
+    await messagePanel.locator('[data-amq="resume"]').click();
+    await messagePanel.getByText("A Message Returned to Its People").waitFor({ state: "visible" });
+    check("Missing Message ending resumes in English without changing the original save",
+      await page.evaluate(expected => document.documentElement.lang === "en" &&
+        JSON.parse(localStorage.getItem("alnajat_message_quest_v1") || "null")?.ending === "consent" &&
+        localStorage.getItem("najat_saves_v2") === expected, originalSaveBeforeQuest));
+    await messagePanel.locator('[data-close="1"]').click();
+    check("Missing Message dialog restores focus to its main-menu launcher",
+      await page.evaluate(() => document.activeElement === document.querySelector("#app [data-message-quest-launcher] button")));
+    await page.evaluate(() => { document.documentElement.lang = "ar"; document.documentElement.dir = "rtl"; });
+
     const audioTrigger = page.locator("[data-alnajat-audio-settings]");
     await audioTrigger.waitFor({ state: "visible", timeout: 10000 });
     await audioTrigger.click();
