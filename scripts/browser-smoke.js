@@ -457,7 +457,7 @@ async function main() {
     if (engineName === "webkit") {
       const cachedShell = await page.evaluate(async () => {
         const names = await caches.keys();
-        const urls = [new URL("./", location.href).href, new URL("privacy.html", location.href).href, new URL("alnajat-all-sudan.js?v=2", location.href).href, new URL("alnajat-next-chapter.js?v=3", location.href).href];
+        const urls = [new URL("./", location.href).href, new URL("privacy.html", location.href).href, new URL("alnajat-all-sudan.js?v=2", location.href).href, new URL("alnajat-next-chapter.js?v=3", location.href).href, new URL("alnajat-message-quest.js?v=1", location.href).href];
         const results = await Promise.all(names.map(async name => {
           const cache = await caches.open(name);
           return Promise.all(urls.map(url => cache.match(url)));
