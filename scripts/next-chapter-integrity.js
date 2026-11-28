@@ -58,6 +58,14 @@ try{
   if(/localStorage\.(clear|removeItem)\s*\(/.test(source)||/\bS\s*\[[^\]]+\]\s*=/.test(source))fail("Expansion must not clear saves or mutate canonical story data");
   else pass("No canonical story mutation or broad save deletion found");
   if(!source.includes("collects no player analytics")||!source.includes("لا يجمع الفصل بيانات أو تحليلات عن اللاعبين"))fail("Privacy disclosure is missing");
+  const page=fs.readFileSync(path.resolve(__dirname,"..","index.html"),"utf8");
+  const sw=fs.readFileSync(path.resolve(__dirname,"..","sw.js"),"utf8");
+  if(!page.includes('alnajat-next-chapter.js?v=3')||!sw.includes("'./alnajat-next-chapter.js?v=3'"))fail("Next Chapter runtime and offline shell versions differ");
+  const cacheVersion=(sw.match(/const VERSION\\s*=\\s*'([^']+)'/)||[])[1];
+  if(cacheVersion!=="najat-v43")fail("Next Chapter accessibility update requires the najat-v43 cache");
+  for(const marker of ["aria-labelledby","bindDialogKeys","event.key===\\"Escape\\"","event.shiftKey","dialogReturnFocus"])if(!source.includes(marker))fail("Accessible modal behavior is missing: "+marker);
+  else pass("Next Chapter modal includes labelled dialog, Escape, focus trapping and focus restoration");
+
   else pass("No-player-analytics disclosure is present");
   if(process.exitCode)process.exit(process.exitCode);
   console.log("\nNext Chapter integrity checks passed.");
