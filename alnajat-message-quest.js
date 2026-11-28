@@ -285,33 +285,35 @@
   }
 
   function open() { renderMenu(); }
+  function injectLauncher() {
+    try {
+      const app = $("#app");
+      if (!app || app.querySelector("[data-message-quest-launcher]")) return;
+      const buttons = Array.from(app.querySelectorAll("button"));
+      const anchor = buttons.find(button => /الفصل التالي|Next Chapter/.test(button.textContent || "")) ||
+        buttons.find(button => /الإعدادات|Settings/.test(button.textContent || "")) || buttons[buttons.length-1];
+      if (!anchor) return;
+      const wrap = document.createElement("div");
+      wrap.dataset.messageQuestLauncher = "1";
+      const button = document.createElement("button");
+      button.className = "btn";
+      button.type = "button";
+      button.textContent = "✉️ " + t("لغز الرسالة الناقصة","The Missing Message");
+      button.addEventListener("click",open);
+      wrap.appendChild(button);
+      anchor.insertAdjacentElement("afterend",wrap);
+    } catch (error) { console.error("ALNAJAT message quest menu:",error); }
+  }
   const previousMenu = window.showMenu;
   if (typeof previousMenu === "function") {
     window.showMenu = function () {
       const result = previousMenu.apply(this,arguments);
-      try {
-        const app = $("#app");
-        if (!app || app.querySelector("[data-message-quest-launcher]")) return result;
-        const buttons = Array.from(app.querySelectorAll("button"));
-        const anchor = buttons.find(button => /الفصل التالي|Next Chapter/.test(button.textContent || "")) ||
-          buttons.find(button => /الإعدادات|Settings/.test(button.textContent || "")) || buttons[buttons.length-1];
-        if (anchor) {
-          const wrap = document.createElement("div");
-          wrap.dataset.messageQuestLauncher = "1";
-          const button = document.createElement("button");
-          button.className = "btn";
-          button.type = "button";
-          button.textContent = "✉️ " + t("لغز الرسالة الناقصة","The Missing Message");
-          button.addEventListener("click",open);
-          wrap.appendChild(button);
-          anchor.insertAdjacentElement("afterend",wrap);
-        }
-      } catch (error) { console.error("ALNAJAT message quest menu:",error); }
+      injectLauncher();
       return result;
     };
   }
   window.openAlnajatMessageQuest = open;
-  if (document.readyState === "loading") document.addEventListener("DOMContentLoaded",function(){if(typeof window.showMenu==="function")window.showMenu();},{once:true});
-  else if (typeof window.showMenu === "function") window.showMenu();
+  if (document.readyState === "loading") document.addEventListener("DOMContentLoaded",injectLauncher,{once:true});
+  else injectLauncher();
   console.info("ALNAJAT Missing Message Quest loaded — independent fictional puzzle");
 })();
