@@ -30,9 +30,9 @@ try{
  pass("Puzzle module parses as JavaScript");
  const cardsSource=extractObject("const cards =");
  const endingsSource=extractObject("const endings =");
- const orderSource=(source.match(/const EXPECTED_ORDER = \\[[^\\]]+\\];/)||[])[0];
+ const orderSource=(source.match(/const EXPECTED_ORDER = \[[^\]]+\];/)||[])[0];
  if(!orderSource)fail("Expected puzzle order is missing");
- const actual=fingerprint(cardsSource+"\\n"+endingsSource+"\\n"+orderSource);
+ const actual=fingerprint(cardsSource+"\n"+endingsSource+"\n"+orderSource);
  if(actual!=="0155623f")fail("Puzzle story lock mismatch: expected 0155623f, got "+actual);
  else pass("All bilingual clue cards, outcomes and puzzle order match the reviewed Story Lock");
  const cards=new Function("return ("+cardsSource+")")();
@@ -50,7 +50,7 @@ try{
   }
  }
  if(!source.includes('const KEY = "alnajat_message_quest_v1"')||!source.includes('const ARCHIVE_KEY = "alnajat_message_quest_archive_v1"'))fail("Independent local save/archive keys changed");
- if(/localStorage\\.(clear|removeItem)\\s*\\(/.test(source))fail("Quest must not clear or delete existing player saves");
+ if(/localStorage\.(clear|removeItem)\s*\(/.test(source))fail("Quest must not clear or delete existing player saves");
  if(!source.includes("No player data or analytics are collected")||!source.includes("لا توجد بيانات لاعبين أو تحليلات"))fail("No-analytics disclosure is missing");
  const page=fs.readFileSync(path.join(root,"index.html"),"utf8");
  const sw=fs.readFileSync(path.join(root,"sw.js"),"utf8");
@@ -60,4 +60,4 @@ try{
  if(!process.exitCode)pass("Bilingual puzzle, isolated storage, privacy disclosure, accessible dialog and offline cache are consistent");
 }catch(error){fail(error.stack||String(error));}
 if(process.exitCode)process.exit(process.exitCode);
-console.log("\\nALNAJAT message quest integrity checks passed.");
+console.log("\nALNAJAT message quest integrity checks passed.");
