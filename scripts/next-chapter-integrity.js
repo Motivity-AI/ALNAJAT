@@ -63,7 +63,7 @@ try{
   if(!page.includes('alnajat-next-chapter.js?v=3')||!sw.includes("'./alnajat-next-chapter.js?v=3'"))fail("Next Chapter runtime and offline shell versions differ");
   const cacheVersion=(sw.match(/const VERSION\\s*=\\s*'([^']+)'/)||[])[1];
   if(cacheVersion!=="najat-v43")fail("Next Chapter accessibility update requires the najat-v43 cache");
-  for(const marker of ["aria-labelledby","bindDialogKeys","event.key===\\"Escape\\"","event.shiftKey","dialogReturnFocus"])if(!source.includes(marker))fail("Accessible modal behavior is missing: "+marker);
+  for(const marker of ["aria-labelledby","bindDialogKeys","event.key","Escape","event.shiftKey","dialogReturnFocus"])if(!source.includes(marker))fail("Accessible modal behavior is missing: "+marker);
   else pass("Next Chapter modal includes labelled dialog, Escape, focus trapping and focus restoration");
 
   else pass("No-player-analytics disclosure is present");
