@@ -253,14 +253,45 @@
     }
   };
 
+  let dialogReturnFocus=null;
+  let dialogKeysBound=false;
+  function bindDialogKeys(){
+    if(dialogKeysBound)return;
+    dialogKeysBound=true;
+    document.addEventListener("keydown",function(event){
+      const p=panel();
+      if(!p||!p.classList.contains("on")||p.dataset.anxDialog!=="1")return;
+      if(event.key==="Escape"){event.preventDefault();close();return;}
+      if(event.key!=="Tab")return;
+      const items=Array.from(p.querySelectorAll('button:not([disabled]),a[href],input:not([disabled]),select:not([disabled]),textarea:not([disabled]),[tabindex]:not([tabindex="-1"])'))
+        .filter(el=>!el.hidden&&el.getAttribute("aria-hidden")!=="true"&&el.getClientRects().length>0);
+      if(!items.length){event.preventDefault();p.focus();return;}
+      const first=items[0],last=items[items.length-1];
+      if(event.shiftKey&&(document.activeElement===first||!p.contains(document.activeElement))){event.preventDefault();last.focus();}
+      else if(!event.shiftKey&&(document.activeElement===last||!p.contains(document.activeElement))){event.preventDefault();first.focus();}
+    });
+  }
   function close(){
-    const p=panel();if(p){p.classList.remove("on");p.removeAttribute("role");p.removeAttribute("aria-modal");}
+    const p=panel();
+    if(p){
+      p.classList.remove("on");
+      p.removeAttribute("role");p.removeAttribute("aria-modal");p.removeAttribute("aria-labelledby");
+      delete p.dataset.anxDialog;
+    }
+    const restore=dialogReturnFocus&&dialogReturnFocus.isConnected?dialogReturnFocus:null;
+    dialogReturnFocus=null;
+    if(restore)restore.focus();
   }
   function show(html){
     const p=panel();if(!p)return;
+    if(!p.classList.contains("on"))dialogReturnFocus=document.activeElement;
     p.innerHTML='<div class="anx-panel">'+html+'</div>';
     p.classList.add("on");p.setAttribute("role","dialog");p.setAttribute("aria-modal","true");
-    const first=$("button",p);if(first)first.focus();
+    p.dataset.anxDialog="1";p.setAttribute("tabindex","-1");
+    const heading=$("h3",p);
+    if(heading){heading.id="anx-dialog-title";p.setAttribute("aria-labelledby",heading.id);}
+    bindDialogKeys();
+    const first=$("button",p);if(first)first.focus();else p.focus();
   }
   const style=document.createElement("style");
   style.textContent=[
@@ -301,7 +332,7 @@
   function renderMenu(){
     const p=panel();if(!p)return;
     const l=lang(),has=state.log.length>0;
-    let html='<div class="anx-panel"><div class="anx-kicker">'+t("إضافة قصصية مستقلة — لا تغيّر النهايات الأصلية","INDEPENDENT STORY EXPANSION — ORIGINAL ENDINGS UNCHANGED")+'</div>';
+    let html='<div class="anx-kicker">'+t("إضافة قصصية مستقلة — لا تغيّر النهايات الأصلية","INDEPENDENT STORY EXPANSION — ORIGINAL ENDINGS UNCHANGED")+'</div>';
     html+='<h3>✦ '+t("الفصل التالي: وطن يتّسع للجميع","The Next Chapter: A Country with Room for Everyone")+'</h3>';
     html+=soundControl();
     html+='<p class="mut">'+t("رحلة جديدة بأربعة طرق إقليمية، وشخصيات تتذكر ما حدث، وقرارات لها عواقب. تقدمها محفوظ في خانة مستقلة عن القصة الأصلية.","A new journey across four regional routes, with remembering characters and consequential choices. Progress is stored separately from the original story.")+'</p>';
@@ -312,8 +343,8 @@
     if(has)html+='<button class="btn" type="button" data-action="restart">'+t("ابدأ رحلة جديدة (يحفظ سجل الرحلة السابقة)","Start a new journey (keeps the previous journey log)")+'</button>';
     html+='<button class="btn" type="button" data-action="journal">'+t("دفتر رحلتي","My journey journal")+'</button>';
     html+='<div class="anx-note">'+t("كل الشخصيات والأحداث في هذا الفصل مركّبة وخيالية. لا تمثل شخصية واحدة إقليماً أو جماعة، ولا تُرتّب المعاناة بين الناس. لا يجمع الفصل بيانات أو تحليلات عن اللاعبين.","All characters and events in this chapter are fictional composites. No character represents an entire region or community; suffering is never ranked. This chapter collects no player analytics.")+'</div>';
-    html+='<button class="btn" type="button" data-action="close">'+t("إغلاق","Close")+'</button></div>';
-    p.innerHTML=html;p.classList.add("on");p.setAttribute("role","dialog");p.setAttribute("aria-modal","true");
+    html+='<button class="btn" type="button" data-action="close">'+t("إغلاق","Close")+'</button>';
+    show(html);
     bindSoundControl(p);
     p.querySelectorAll("[data-action]").forEach(b=>b.addEventListener("click",()=>{
       const a=b.dataset.action;
