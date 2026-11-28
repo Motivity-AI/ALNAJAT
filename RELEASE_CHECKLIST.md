@@ -1,6 +1,9 @@
 # ALNAJAT — Global Release Gate / بوابة الإصدار العالمي
 
 **Status / الحالة:** Release candidate preparation; public release is not yet approved.  
+
+**Latest production main / آخر نسخة رئيسية:** `cc3146daf08eed820343bee4ae8e538eb74d3dca` (28 Nov 2026). Post-merge validation and Playwright browser matrix passed in Actions run `46118349137` (Chromium, Firefox and WebKit). This is automated evidence only; all real-device, assistive-technology, editorial and rights checks below remain open unless individually checked.
+
 **Current branch / الفرع:** `feature/global-narrative-qa-2026-11`  
 **Production baseline / خط الإنتاج:** `main` (unchanged until a reviewed release is authorized).
 
