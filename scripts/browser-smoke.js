@@ -278,11 +278,37 @@ async function main() {
     await page.evaluate(() => document.getElementById("pn").classList.remove("on"));
 
     // Independent Next Chapter campaign: graph, bilingual rendering, save isolation and resume.
-    await page.evaluate(() => window.openAlnajatNextChapter());
+    await page.evaluate(() => window.showMenu());
+    const nextChapterLauncher = page.locator("#app [data-next-chapter] button");
+    await nextChapterLauncher.waitFor({ state: "visible", timeout: 5000 });
+    await nextChapterLauncher.click();
     const nextPanel = page.locator("#pn");
     await nextPanel.getByText("الفصل التالي: وطن يتّسع للجميع").waitFor({ state: "visible" });
-    check("Next Chapter opens as an independent bilingual campaign", await nextPanel.getAttribute("role") === "dialog" &&
+    const dialogLabelled = await nextPanel.evaluate(p => {
+      const id = p.getAttribute("aria-labelledby");
+      return p.getAttribute("role") === "dialog" && p.getAttribute("aria-modal") === "true" &&
+        !!id && p.querySelector("#" + CSS.escape(id))?.tagName === "H3";
+    });
+    check("Next Chapter opens as a labelled modal dialog", dialogLabelled &&
       await nextPanel.getByText("رحلة جديدة بأربعة طرق إقليمية").count() === 1);
+    const focusCycle = await page.evaluate(() => {
+      const p = document.querySelector("#pn");
+      const items = Array.from(p.querySelectorAll("button:not([disabled])"));
+      if (items.length < 2) return { forward: false, reverse: false };
+      items[items.length - 1].focus();
+      document.dispatchEvent(new KeyboardEvent("keydown", { key: "Tab", bubbles: true }));
+      const forward = document.activeElement === items[0];
+      items[0].focus();
+      document.dispatchEvent(new KeyboardEvent("keydown", { key: "Tab", shiftKey: true, bubbles: true }));
+      return { forward, reverse: document.activeElement === items[items.length - 1] };
+    });
+    check("Next Chapter dialog traps forward and reverse keyboard focus", focusCycle.forward && focusCycle.reverse);
+    await page.keyboard.press("Escape");
+    await nextPanel.waitFor({ state: "hidden", timeout: 5000 });
+    check("Escape closes the Next Chapter dialog and restores focus to its launcher",
+      await page.evaluate(() => document.activeElement === document.querySelector("#app [data-next-chapter] button")));
+    await nextChapterLauncher.click();
+    await nextPanel.getByText("رحلة جديدة بأربعة طرق إقليمية").waitFor({ state: "visible" });
     await nextPanel.getByRole("button", { name: "ابدأ الفصل الجديد" }).click();
     await nextPanel.getByText("الفصل الأول: الرسالة التي لم تصل").waitFor({ state: "visible" });
     const originalSaveBeforeExpansion = await page.evaluate(() => localStorage.getItem("najat_saves_v2"));
